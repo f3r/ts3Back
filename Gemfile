@@ -27,3 +27,7 @@ group :test do
   gem 'turn', :require => false
   gem 'shoulda'
 end
+
+group :production do
+  gem 'rack-ssl-enforcer'
+end
