@@ -1,29 +1,30 @@
 class SessionsController < Devise::SessionsController
-
   skip_before_filter :verify_authenticity_token
 
-  # POST /users/sign_in
+  # ==Resource URL
+  # http://backend-heypal.heroku.com/users/sign_in.format
+  # ==Example
+  # POST http://backend-heypal.heroku.com/users/sign_in.json email=user@example.com&password=password
+  # === Parameters
+  # [:email]
+  # [:password]
   def create
-    resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#new")
-    set_flash_message(:notice, :signed_in) if is_navigational_format?
+    params[resource_name] = { :email => params[:email], :password => params[:password] }
+    resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
     respond_to do |format|
-      if sign_in(resource_name, resource)
-        format.any(*navigational_formats) { redirect_to after_sign_in_path_for(resource) }
-        format.json { render :json => { :success => true } }
-        format.xml { render :xml => { :success => true } }
+      if resource
+        response = { :stat => "ok", :user => { :id => resource.id }, :msg => I18n.t("devise.sessions.signed_in") }
+        format.json { render :status => 200, :json => response }
+        format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
       end
     end
   end
-
-  # DELETE /users/sign_out
-  def destroy
-    signed_in = signed_in?(resource_name)
-    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
-    set_flash_message :notice, :signed_out if signed_in
+  
+  def failure
     respond_to do |format|
-      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
-      format.json { render :json => { :success => true } }
-      format.xml { render :xml => { :success => true } }
+      response = { :stat => "fail", :err => error_message }
+      format.json { render :status => 401, :json => response }
+      format.xml { render :status => 401, :xml => response.to_xml(:root => "rsp") }
     end
   end
 

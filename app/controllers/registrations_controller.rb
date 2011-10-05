@@ -16,7 +16,7 @@ class RegistrationsController < Devise::RegistrationsController
     resource = resource_class.new_with_session(parameters, session)
     respond_to do |format|
       if resource.save
-          response = { :stat => "ok", :user_id => resource.id, :msg => I18n.t("devise.registrations.signed_up") }
+          response = { :stat => "ok", :user => { :id => resource.id }, :msg => I18n.t("devise.registrations.signed_up") }
           format.json { render :status => 200, :json => response }
           format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
       else
