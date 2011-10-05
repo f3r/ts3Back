@@ -19,4 +19,26 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
+
+  with_options :if => :email_validations_required? do |p|
+    p.validates_presence_of :email    
+    p.validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i
+  end
+
+  with_options :if => :password_validations_required? do |p|
+    p.validates_presence_of :password
+    p.validates_presence_of :password_confirmation
+    p.validates_length_of :password, :within => 6..40
+    p.validates_confirmation_of :password
+  end
+
+  def password_validations_required?
+    # encrypted_password.blank?
+    true
+  end
+
+  def email_validations_required?
+    true
+  end
+
 end
