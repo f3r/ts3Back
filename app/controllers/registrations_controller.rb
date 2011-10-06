@@ -28,9 +28,9 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   # ==Resource URL
-  # http://backend-heypal.heroku.com/users.format
+  # http://backend-heypal.heroku.com/users/:id.format
   # ==Example
-  # DELETE http://backend-heypal.heroku.com/users.json id=id
+  # DELETE http://backend-heypal.heroku.com/users/1337.json
   # === Parameters
   # [:id]
   def destroy

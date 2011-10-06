@@ -13,7 +13,7 @@ class SessionsController < Devise::SessionsController
     resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
     respond_to do |format|
       if resource
-        response = { :stat => "ok", :user => { :id => resource.id }, :msg => I18n.t("devise.sessions.signed_in") }
+        response = { :stat => "ok", :user => { :id => resource.id, :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.sessions.signed_in") }
         format.json { render :status => 200, :json => response }
         format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
       end

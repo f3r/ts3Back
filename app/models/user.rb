@@ -18,6 +18,9 @@ class User < ActiveRecord::Base
          :token_authenticatable     # Generate auth token and validates it
 
   # Setup accessible (or protected) attributes for your model
+
+  before_save :ensure_authentication_token
+
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
   with_options :if => :email_validations_required? do |p|
