@@ -2,11 +2,12 @@ class RegistrationsController < Devise::RegistrationsController
   prepend_before_filter :require_no_authentication, :only => [ :new, :create, :cancel, :destroy ]
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update]
   skip_before_filter :verify_authenticity_token
+  respond_to :xml, :json
 
   # ==Resource URL
-  # http://backend-heypal.heroku.com/users.format
+  # http://backend-heypal.heroku.com/users/sign_up.format
   # ==Example
-  # POST http://backend-heypal.heroku.com/users.json email=user@example.com&password=password&password_confirmation=password
+  # POST http://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password&password_confirmation=password
   # === Parameters
   # [:email]
   # [:password]
@@ -14,7 +15,7 @@ class RegistrationsController < Devise::RegistrationsController
   def create
     parameters = {:email => params[:email], :password => params[:password], :password_confirmation => params[:password_confirmation]}
     resource = resource_class.new_with_session(parameters, session)
-    respond_to do |format|
+    respond_with do |format|
       if resource.save
           response = { :stat => "ok", :user => { :id => resource.id }, :msg => I18n.t("devise.registrations.signed_up") }
           format.json { render :status => 200, :json => response }
@@ -28,19 +29,18 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   # ==Resource URL
-  # http://backend-heypal.heroku.com/users/:id.format
+  # http://backend-heypal.heroku.com/users.format
   # ==Example
-  # DELETE http://backend-heypal.heroku.com/users/1337.json
+  # DELETE http://backend-heypal.heroku.com/users.json
   # === Parameters
-  # [:id]
+  # [:authentication_token]
   def destroy
-    parameters = {:id => params[:id]}
     begin
-      resource = User.find(params[:id])
+      resource = User.find_by_authentication_token(params[:authentication_token])
     rescue Exception => e
       error_message = e.message
     end
-    respond_to do |format|
+    respond_with do |format|
       if resource && resource.destroy
         response = { :stat => "ok", :msg => I18n.t("devise.registrations.destroyed") }
         format.json { render :status => 200, :json => response }
