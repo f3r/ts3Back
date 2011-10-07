@@ -3,7 +3,7 @@ class SessionsController < Devise::SessionsController
   respond_to :xml, :json
 
   # ==Resource URL
-  # http://backend-heypal.heroku.com/users/sign_in.format
+  # /users/sign_in.format
   # ==Example
   # POST http://backend-heypal.heroku.com/users/sign_in.json email=user@example.com&password=password
   # === Parameters
