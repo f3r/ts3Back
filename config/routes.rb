@@ -6,6 +6,8 @@ HeyPalBackEnd::Application.routes.draw do
     delete "users", :to => "registrations#destroy"
     post "users/confirmation", :to => "confirmations#create"
     get "users/confirmation", :to => "confirmations#show"
+    post "users/password", :to => "passwords#create"
+    put "users/password", :to => "passwords#update"
   end
 
 end

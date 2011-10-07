@@ -29,7 +29,7 @@ class ConfirmationsController < Devise::ConfirmationsController
     self.resource = resource_class.confirm_by_token(params[:confirmation_token])
     respond_with do |format|
       if resource.errors.empty?
-        format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :id => resource.id }, :msg => I18n.t("devise.confirmations.confirmed") },request.format.to_sym) }
+        format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.confirmations.confirmed") },request.format.to_sym) }
       else
         format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
       end
