@@ -7,7 +7,7 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Resource URL
   # /users/sign_up.format
   # ==Example
-  # POST http://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password&password_confirmation=password
+  # POST https://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password&password_confirmation=password
   # === Parameters
   # [:email]
   # [:password]
@@ -31,7 +31,7 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Resource URL
   # /users.format
   # ==Example
-  # DELETE http://backend-heypal.heroku.com/users.json
+  # DELETE https://backend-heypal.heroku.com/users.json
   # === Parameters
   # [:authentication_token]
   def destroy

@@ -5,7 +5,7 @@ class SessionsController < Devise::SessionsController
   # ==Resource URL
   # /users/sign_in.format
   # ==Example
-  # POST http://backend-heypal.heroku.com/users/sign_in.json email=user@example.com&password=password
+  # POST https://backend-heypal.heroku.com/users/sign_in.json email=user@example.com&password=password
   # === Parameters
   # [:email]
   # [:password]
