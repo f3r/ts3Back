@@ -14,7 +14,7 @@ class SessionsController < Devise::SessionsController
     resource = warden.authenticate!(:scope => resource_name)
     respond_with do |format|
       if resource
-          format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.sessions.signed_in") },request.format.to_sym) }
+          format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.sessions.signed_in") },request.format.to_sym) }
       end
     end
   end

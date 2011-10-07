@@ -1,18 +1,30 @@
 class ApplicationController < ActionController::Base
-  # rescue_from ActionController::RoutingError, :with => :not_found
   protect_from_forgery
 
   def format_response(response,format)
-    response = request.format == "xml" ? response.to_xml(:root => "rsp", :dasherize => false) : response
-    return response
+    method = "to_#{format}"
+    if method == "to_xml"
+      response.to_xml(:root => "rsp", :dasherize => false)
+    else
+      response.send(method)
+    end
   end
 
-  # private
-  #   def not_found(exception = nil)
-  #     if exception
-  #         logger.info "Rendering 404: #{exception.message}"
-  #     end
-  #     render :status => 404, :json => {:error=>"not found"}, :layout => false
-  #   end
+  def authenticated?
+    if warden.authenticated?
+      return true
+    elsif params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
+      return true
+    else
+      self.status = 401
+      self.content_type = request.format.to_s
+      self.response_body = format_response({:stat => "fail", :err => I18n.t("devise.failure.invalid_token")},params[:format])
+      return false
+    end
+  end
+
+  def current_user
+    warden.user || User.find_for_token_authentication(:auth_token => params[:access_token])
+  end
 
 end

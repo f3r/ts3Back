@@ -12,9 +12,9 @@ class PasswordsController < Devise::PasswordsController
     self.resource = resource_class.send_reset_password_instructions({:email => params[:email]})
     respond_with do |format|
       if successful_and_sane?(resource)
-        format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :msg => I18n.t("devise.passwords.send_instructions") },request.format.to_sym) }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :msg => I18n.t("devise.passwords.send_instructions") },request.format.to_sym) }
       else
-        format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
       end
     end
   end
@@ -36,9 +36,9 @@ class PasswordsController < Devise::PasswordsController
         else
           response = { :stat => "ok", :msg => I18n.t("devise.passwords.updated_not_active") }
         end
-        format.any { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
       else
-        format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
       end
     end
   end
