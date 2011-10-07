@@ -11,22 +11,13 @@ class SessionsController < Devise::SessionsController
   # [:password]
   def create
     params[resource_name] = { :email => params[:email], :password => params[:password] }
-    resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
-    if resource
-      respond_with do |format|
-        response = { :stat => "ok", :user => { :id => resource.id, :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.sessions.signed_in") }
-        format.json { render :status => 200, :json => response }
-        format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
+    resource = warden.authenticate!(:scope => resource_name)
+    respond_with do |format|
+      if resource
+          format.any { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.sessions.signed_in") },request.format.to_sym) }
       end
     end
   end
+  # Error message override is at /lib/custom_failure.rb
   
-  def failure
-    respond_with do |format|
-      response = { :stat => "fail", :err => error_message }
-      format.json { render :status => 401, :json => response }
-      format.xml { render :status => 401, :xml => response.to_xml(:root => "rsp") }
-    end
-  end
-
 end
