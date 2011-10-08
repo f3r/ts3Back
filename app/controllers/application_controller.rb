@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Exceptions
   protect_from_forgery
 
   def format_response(response,format)
@@ -16,10 +17,13 @@ class ApplicationController < ActionController::Base
     elsif params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
       return true
     else
-      self.status = 401
-      self.content_type = request.format.to_s
-      self.response_body = format_response({:stat => "fail", :err => I18n.t("devise.failure.invalid_token")},params[:format])
       return false
+    end
+  end
+
+  def unauthorized_access
+    respond_with do |format|
+      format.any(:xml, :json) { render :status => 401, request.format.to_sym => format_response({ :stat => "fail", :msg => I18n.t("devise.failure.invalid_token") },request.format.to_sym) }
     end
   end
 
