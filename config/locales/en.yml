@@ -3,3 +3,9 @@
 
 en:
   hello: "Hello world"
+  no_results: No results
+  not_found: Not found
+  successfully_updated: "The %{object_name} '%{name}' was successfully updated"
+  successfully_created: "The %{object_name} '%{name}' was successfully created"
+  successfully_deleted: "The %{object_name} '%{name}' was successfully deleted"
+  category: category

@@ -28,6 +28,8 @@ class ApplicationController < ActionController::Base
   def current_user
     warden.user || User.find_for_token_authentication(:auth_token => params[:access_token])
   end
+  
+  private
 
   def unauthorized_access
     respond_with do |format|
