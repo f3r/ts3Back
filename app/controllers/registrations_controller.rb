@@ -17,13 +17,9 @@ class RegistrationsController < Devise::RegistrationsController
     resource = resource_class.new(parameters)
     respond_with do |format|
       if resource.save
-          response = { :stat => "ok", :user => { :id => resource.id, :confirmation_token => resource.confirmation_token }, :msg => I18n.t("devise.registrations.signed_up") }
-          format.json { render :status => 200, :json => response }
-          format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :id => resource.id, :confirmation_token => resource.confirmation_token }, :msg => I18n.t("devise.registrations.signed_up") },request.format.to_sym) }
       else
-          response = { :stat => "fail", :err => resource.errors }
-          format.json { render :status => 200, :json => response.to_json }
-          format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
       end
     end
   end
@@ -31,24 +27,17 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Resource URL
   # /users.format
   # ==Example
-  # DELETE https://backend-heypal.heroku.com/users.json
+  # DELETE https://backend-heypal.heroku.com/users.json access_token=access_token
   # === Parameters
-  # [:authentication_token]
+  # [:access_token]
   def destroy
-    begin
-      resource = User.find_by_authentication_token(params[:authentication_token])
-    rescue Exception => e
-      error_message = e.message
-    end
+    raise Exceptions::UnauthorizedAccess unless authenticated?
+    @user = current_user
     respond_with do |format|
-      if resource && resource.destroy
-        response = { :stat => "ok", :msg => I18n.t("devise.registrations.destroyed") }
-        format.json { render :status => 200, :json => response }
-        format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
+      if @user.destroy
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :msg => I18n.t("devise.registrations.destroyed") },request.format.to_sym) }
       else
-        response = { :stat => "fail", :err => error_message }
-        format.json { render :status => 200, :json => response }
-        format.xml { render :status => 200, :xml => response.to_xml(:root => "rsp") }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => @user.errors },request.format.to_sym) }
       end
     end
   end
