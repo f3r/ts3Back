@@ -26,7 +26,9 @@ group :test do
   # Pretty printed test output
   gem 'turn', :require => false
   gem 'shoulda'
+  gem "shoulda-matchers"
   gem 'factory_girl'
+  gem 'faker'
 end
 
 group :production do

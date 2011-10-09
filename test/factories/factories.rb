@@ -1,12 +1,11 @@
 FactoryGirl.define do
   factory :user do
-    sequence(:email) { |n| "foo#{n}@geekvoice.com" }
-    password "foobar"
+    email  { Faker::Internet.email }
+    password { Faker::Lorem.words(2).to_sentence }
     password_confirmation { |u| u.password }
-    sequence(:authentication_token) { |n| "testing#{n}" }
   end
 
   factory :category do
-    sequence(:name) { |n| "Category#{n}" }
+    name { Faker::Lorem.sentence(1) }
   end
 end
