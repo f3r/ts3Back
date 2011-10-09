@@ -31,7 +31,7 @@ class RegistrationsController < Devise::RegistrationsController
   # === Parameters
   # [:access_token]
   def destroy
-    raise Exceptions::UnauthorizedAccess unless authenticated?
+    check_token
     @user = current_user
     respond_with do |format|
       if @user.destroy

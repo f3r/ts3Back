@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
     warden.user || User.find_for_token_authentication(:auth_token => params[:access_token])
   end
   
+  def check_token
+    raise Exceptions::UnauthorizedAccess unless authenticated?
+  end
+  
   private
 
   def unauthorized_access

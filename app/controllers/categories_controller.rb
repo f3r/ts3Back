@@ -5,11 +5,10 @@ class CategoriesController < ApplicationController
   # ==Resource URL
   # /categories.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/categories.json access_token=access_token
+  # GET https://backend-heypal.heroku.com/categories.json
   # === Parameters
-  # [:access_token]
+  # None
   def index
-    raise Exceptions::UnauthorizedAccess unless authenticated?
     @categories = Category.all
     respond_with do |format|
       response = @categories.count > 0 ? { :stat => "ok", :categories => @categories } : { :stat => "ok", :err => I18n.t("no_results") }
@@ -20,12 +19,10 @@ class CategoriesController < ApplicationController
   # ==Resource URL
   # /categories/:id.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/categories/id.json access_token=access_token
+  # GET https://backend-heypal.heroku.com/categories/id.json
   # === Parameters
-  # [:access_token]
   # [:id]  
   def show
-    raise Exceptions::UnauthorizedAccess unless authenticated?
     @category = Category.find(params[:id])
     respond_with do |format|
       response = @category ? { :stat => "ok", :category => @category } : { :stat => "fail", :err => @category.errors }
@@ -41,7 +38,7 @@ class CategoriesController < ApplicationController
   # [:access_token]
   # [:name]
   def create
-    raise Exceptions::UnauthorizedAccess unless authenticated?
+    check_token
     @category = Category.new(:name => params[:name])
     respond_with do |format|
       if @category.save
@@ -60,7 +57,7 @@ class CategoriesController < ApplicationController
   # [:access_token]
   # [:name]
   def update
-    raise Exceptions::UnauthorizedAccess unless authenticated?
+    check_token
     @category = Category.find(params[:id])
     respond_with do |format|
       if @category.update_attributes(:name => params[:name])
@@ -78,7 +75,7 @@ class CategoriesController < ApplicationController
   # === Parameters
   # [:access_token]
   def destroy
-    raise Exceptions::UnauthorizedAccess unless authenticated?
+    check_token
     @category = Category.find(params[:id])
     respond_with do |format|
       if @category.destroy
