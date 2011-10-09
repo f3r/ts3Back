@@ -1,7 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
-
-one:
-  name: Category <%= rand(1000-0) %>
-
-two:
-  name: Category <%= rand(1000-0) %>
