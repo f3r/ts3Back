@@ -26,9 +26,8 @@ class PasswordsController < Devise::PasswordsController
   # === Parameters
   # [:reset_password_token]
   # [:password]
-  # [:password_confirmation]
   def update
-    self.resource = resource_class.reset_password_by_token({:reset_password_token => params[:reset_password_token],:password => params[:password],:password_confirmation => params[:password_confirmation]})
+    self.resource = resource_class.reset_password_by_token({:reset_password_token => params[:reset_password_token],:password => params[:password],:password_confirmation => params[:password]})
     respond_with do |format|
       if resource.errors.empty?
         if resource.active_for_authentication?

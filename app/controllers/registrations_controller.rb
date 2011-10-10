@@ -11,13 +11,12 @@ class RegistrationsController < Devise::RegistrationsController
   # === Parameters
   # [:email]
   # [:password]
-  # [:password_confirmation]
   def create
-    parameters = {:email => params[:email], :password => params[:password], :password_confirmation => params[:password_confirmation]}
+    parameters = {:email => params[:email], :password => params[:password], :password_confirmation => params[:password]}
     resource = resource_class.new(parameters)
     respond_with do |format|
       if resource.save
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :id => resource.id, :confirmation_token => resource.confirmation_token }, :msg => I18n.t("devise.registrations.signed_up") },request.format.to_sym) }
+        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :id => resource.id }, :msg => I18n.t("devise.registrations.signed_up") },request.format.to_sym) }
       else
         format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
       end

@@ -16,13 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticated?
-    if warden.authenticated?
-      return true
-    elsif params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
-      return true
-    else
-      return false
-    end
+    params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
   end
 
   def current_user
