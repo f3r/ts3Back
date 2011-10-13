@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
     p.validates_confirmation_of :password
   end
   
-  has_many :authentications
+  has_many :authentications, :dependent => :destroy
 
   def password_validations_required?
     # encrypted_password.blank?
