@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
     p.validates_length_of :password, :within => 6..40
     p.validates_confirmation_of :password
   end
+  
+  has_many :authentications
 
   def password_validations_required?
     # encrypted_password.blank?
@@ -42,6 +44,18 @@ class User < ActiveRecord::Base
 
   def email_validations_required?
     true
+  end
+  
+  def self.find_for_facebook_oauth(token, user=nil)
+  end
+
+  def self.find_for_twitter_oauth(token=nil, user=nil)
+    if user && token['credentials']
+      authentication = user.authentications.find_or_create_by_provider_and_uid_and_oauth_token_and_oauth_token_secret(:provider => "twitter", :uid => token['uid'], :oauth_token => token['credentials']['token'], :oauth_token_secret => token['credentials']['secret'])
+    elsif token['credentials']
+      authentication = Authentication.find_by_provider_and_uid("twitter", token['uid'])
+    end
+    return authentication.user if authentication
   end
 
 end

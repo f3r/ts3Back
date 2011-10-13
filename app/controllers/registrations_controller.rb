@@ -10,19 +10,33 @@ class RegistrationsController < Devise::RegistrationsController
   # POST https://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password&password_confirmation=password
   # === Parameters
   # [:email]
+  #   User email address
+  #   Example values: user@example.com
+  #
   # [:password]
+  #   User password
+  #
+  # [:oauth_token]
+  #   Optional oauth token
+  #
+  # === Response
+  # [:user]
+  #   An array containing the users ID
   def create
     parameters = {:email => params[:email], :password => params[:password], :password_confirmation => params[:password]}
     resource = resource_class.new(parameters)
     respond_with do |format|
       if resource.save
+        if params[:oauth_token]
+          authentication = resource.authentications.create(:provider => params[:oauth_token]['provider'], :uid => params[:oauth_token]['uid'], :oauth_token => params[:oauth_token]['credentials']['token'], :oauth_token_secret => params[:oauth_token]['credentials']['secret'])
+        end
         format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :id => resource.id }, :msg => I18n.t("devise.registrations.signed_up") },request.format.to_sym) }
       else
         format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
       end
     end
   end
-
+  
   # ==Resource URL
   # /users.format
   # ==Example
