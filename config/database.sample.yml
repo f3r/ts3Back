@@ -9,7 +9,7 @@ development:
   encoding: utf8
   database: heypal_development
   username: root
-  password: root
+  password: 
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -20,7 +20,7 @@ test:
   encoding: utf8
   database: heypal_test
   username: root
-  password: root
+  password: 
 
 production:
   adapter: sqlite3
