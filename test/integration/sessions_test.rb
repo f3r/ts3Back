@@ -5,7 +5,6 @@ class SessionsTest < ActionController::IntegrationTest
     @parameters = { :name => Faker::Name.name, 
                     :email => Faker::Internet.email, 
                     :password => "FSls26ESKaaJzADP" }
-    @user = Factory(:user)
   end
 
   should "sign in with email and password and get token (xml)" do

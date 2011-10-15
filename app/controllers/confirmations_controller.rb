@@ -31,7 +31,7 @@ class ConfirmationsController < Devise::ConfirmationsController
       if resource.errors.empty?
         format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.confirmations.confirmed") },request.format.to_sym) }
       else
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
+        format.any(:xml, :json) { render :status => 401, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
       end
     end
   end
