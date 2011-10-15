@@ -6,6 +6,7 @@ gem 'rack', '1.3.3'
 gem 'mysql2'
 gem 'devise', "1.4.7"
 
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -15,6 +16,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'asin'
 
 # Deploy with Capistrano
 # gem 'capistrano'
