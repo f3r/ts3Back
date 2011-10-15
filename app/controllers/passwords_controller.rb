@@ -22,7 +22,7 @@ class PasswordsController < Devise::PasswordsController
   # ==Resource URL
   # /users/password.format
   # ==Example
-  # PUT https://backend-heypal.heroku.com/users/password.json reset_password_token=reset_password_token&password=password&password_confirmation=password_confirmation
+  # PUT https://backend-heypal.heroku.com/users/password.json reset_password_token=reset_password_token&password=password
   # === Parameters
   # [:reset_password_token]
   # [:password]
