@@ -17,7 +17,7 @@ class SessionsTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
-    assert_tag 'user', :child => {:tag => 'authentication_token', :content => user.authentication_token}
+    assert_tag 'rsp', :child => {:tag => 'authentication_token', :content => user.authentication_token}
   end
 
   should "sign in with email and password and get token (json)" do
@@ -32,7 +32,7 @@ class SessionsTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_equal user.authentication_token, json['user']['authentication_token']
+    assert_equal user.authentication_token, json['authentication_token']
   end
 
   should "not sign in with email and password (xml)" do
@@ -40,6 +40,7 @@ class SessionsTest < ActionController::IntegrationTest
     assert_response(401)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+    assert_tag 'err', :child => { :tag => "user", :content => "109" }
   end
 
   should "not sign in with email and password (json)" do
@@ -49,6 +50,7 @@ class SessionsTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "fail", json['stat']
+    assert_equal 109, json['err']['user']
   end
 
 end

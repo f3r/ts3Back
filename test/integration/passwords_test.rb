@@ -26,6 +26,7 @@ class PasswordsTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+    assert_tag 'err', :child => { :tag => "email", :content => "106" }
   end
 
   should "update password with reset token (xml)" do
@@ -55,6 +56,7 @@ class PasswordsTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+    assert_tag 'err', :child => { :tag => "reset_password_token", :content => "103" }
   end
 
 end

@@ -26,6 +26,7 @@ class ConfirmationsTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+    assert_tag 'err', :child => { :tag => "email", :content => "106" }
   end
 
   should "confirm account (xml)" do
@@ -33,7 +34,7 @@ class ConfirmationsTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
-    assert_tag 'user', :child => {:tag => 'authentication_token', :content => @user.authentication_token}
+    assert_tag 'rsp', :child => { :tag => 'authentication_token', :content => @user.authentication_token }
   end
 
   should "confirm account (json)" do
@@ -43,7 +44,7 @@ class ConfirmationsTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_equal @user.authentication_token, json['user']['authentication_token']
+    assert_equal @user.authentication_token, json['authentication_token']
   end
 
   should "no confirm account (xml)" do
@@ -51,6 +52,7 @@ class ConfirmationsTest < ActionController::IntegrationTest
     assert_response(401)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+    assert_tag 'err', :child => { :tag => "confirmation_token", :content => "103" }
   end
 
 end

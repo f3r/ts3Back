@@ -7,7 +7,7 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Resource URL
   # /users/sign_up.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password&password_confirmation=password
+  # POST https://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password
   # === Parameters
   # [:name]
   #   User full name
@@ -25,47 +25,55 @@ class RegistrationsController < Devise::RegistrationsController
   #
   # === Response
   # [:user]
-  #   An array containing the users ID
+  #   An array containing the user ID
   #
   # === Error codes
-  # [1]
-  # "has already been taken"
+  # [100]
+  #   has already been taken
   #
-  # [2]
-  # "password too short"
-  
-  
+  # [101]
+  #   can't be blank
+  #
+  # [102]
+  #   too short
+  #
+  # [103]
+  #   is invalid
+  #
+  # [104]
+  #   doesn't match
   def create
-    parameters = { :name => params[:name], :email => params[:email], :password => params[:password], :password_confirmation => params[:password]}
+    parameters = {  :name => params[:name], 
+                    :email => params[:email], 
+                    :password => params[:password], 
+                    :password_confirmation => params[:password] }
+
     resource = resource_class.new(parameters)
     respond_with do |format|
       if resource.save
         if params[:oauth_token]
           authentication = resource.authentications.create(
-                              :provider => params[:oauth_token]['provider'], 
-                              :uid => params[:oauth_token]['uid'], 
-                              :oauth_token => params[:oauth_token]['credentials']['token'], 
-                              :oauth_token_secret => params[:oauth_token]['credentials']['secret'])
+            :provider => params[:oauth_token]['provider'], 
+            :uid => params[:oauth_token]['uid'], 
+            :oauth_token => params[:oauth_token]['credentials']['token'], 
+            :oauth_token_secret => params[:oauth_token]['credentials']['secret'])
         end
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response(
-                                      { 
-                                        :stat => "ok", 
-                                        :user => { :id => resource.id }, 
-                                        :msg => I18n.t("devise.registrations.signed_up")
-                                      },
-                                      request.format.to_sym) }
+            { 
+              :stat => "ok", 
+              :user_id => resource.id,  
+              :msg => I18n.t("devise.registrations.signed_up")
+            },
+            request.format.to_sym) }
       else
         format.any(:xml, :json) { 
           render :status => 200, 
-          request.format.to_sym => format_response(
-                                    { 
-                                      :stat => "fail", 
-                                      :error_codes => resource.errors
-                                    },
-                                    request.format.to_sym) }
-                                    puts resource.errors.inspect
+          request.format.to_sym => format_response({ 
+              :stat => "fail", 
+              :err => format_errors(resource.errors.messages)},
+            request.format.to_sym) }
       end
     end
   end
@@ -76,14 +84,27 @@ class RegistrationsController < Devise::RegistrationsController
   # DELETE https://backend-heypal.heroku.com/users.json access_token=access_token
   # === Parameters
   # [:access_token]
+  #   User access token
+  # === Error codes
+  # [105]
+  #   invalid access token
   def destroy
     check_token
     @user = current_user
     respond_with do |format|
       if @user.destroy
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :msg => I18n.t("devise.registrations.destroyed") },request.format.to_sym) }
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok" },
+            request.format.to_sym) }
       else
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => @user.errors },request.format.to_sym) }
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => format_errors(resource.errors.messages)},
+          request.format.to_sym) }
       end
     end
   end

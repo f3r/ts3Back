@@ -14,6 +14,15 @@ class ApplicationController < ActionController::Base
       response.send(method)
     end
   end
+  
+  def format_errors(errors)
+    error_list = {}
+    for error in errors
+      codes = error[1].map {|x| Integer(x) rescue nil }.compact
+      error_list = error_list.merge({error[0] => codes})
+    end
+    return error_list
+  end
 
   def authenticated?
     params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
@@ -31,7 +40,12 @@ class ApplicationController < ActionController::Base
 
   def unauthorized_access
     respond_with do |format|
-      format.any(:xml, :json) { render :status => 401, request.format.to_sym => format_response({ :stat => "fail", :msg => I18n.t("devise.failure.invalid_token") },request.format.to_sym) }
+      format.any(:xml, :json) { 
+        render :status => 401, 
+        request.format.to_sym => format_response({ 
+          :stat => "fail", 
+          :err => {:access_token => [105]}},
+          request.format.to_sym) }
     end
   end
 

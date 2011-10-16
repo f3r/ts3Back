@@ -8,13 +8,26 @@ class ConfirmationsController < Devise::ConfirmationsController
   # POST https://backend-heypal.heroku.com/users/confirmation.json email=user@example.com
   # === Parameters
   # [:email]
+  #   Email used on registration
+  # === Error codes
+  # [106]
+  #   email not found
   def create
     self.resource = resource_class.send_confirmation_instructions({:email => params[:email]})
     respond_with do |format|
       if successful_and_sane?(resource)
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :msg => I18n.t("devise.confirmations.send_instructions") },request.format.to_sym) }
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok"}, 
+            request.format.to_sym) }
       else
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }        
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => { :email => "106" } },
+            request.format.to_sym) }
       end
     end
   end
@@ -25,13 +38,30 @@ class ConfirmationsController < Devise::ConfirmationsController
   # GET https://backend-heypal.heroku.com/users/confirmation.json confirmation_token=confirmation_token
   # === Parameters
   # [:confirmation_token]
+  #   Confirmation token sent by email
+  # === Response
+  # [:authentication_token]
+  #   The user authentication_token
+  # === Error codes
+  # [103]
+  #   invalid confirmation_token
   def show
     self.resource = resource_class.confirm_by_token(params[:confirmation_token])
     respond_with do |format|
       if resource.errors.empty?
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :user => { :authentication_token => resource.authentication_token }, :msg => I18n.t("devise.confirmations.confirmed") },request.format.to_sym) }
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok", 
+            :authentication_token => resource.authentication_token }, 
+            request.format.to_sym) }
       else
-        format.any(:xml, :json) { render :status => 401, request.format.to_sym => format_response({ :stat => "fail", :err => resource.errors },request.format.to_sym) }
+        format.any(:xml, :json) { 
+          render :status => 401, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => {:confirmation_token => "103"} },
+            request.format.to_sym) }
       end
     end
   end

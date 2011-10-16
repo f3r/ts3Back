@@ -24,16 +24,16 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
 
   with_options :if => :email_validations_required? do |p|
-    p.validates_presence_of :email, :message => 3
-    p.validates_uniqueness_of :email, :message => 1
-    p.validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i
+    p.validates_presence_of :email, :message => 101
+    p.validates_uniqueness_of :email, :message => 100
+    p.validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => 103
   end
 
   with_options :if => :password_validations_required? do |p|
-    p.validates_presence_of :password
-    p.validates_presence_of :password_confirmation
-    p.validates_length_of :password, :within => 6..40, :message => 2
-    p.validates_confirmation_of :password
+    p.validates_presence_of :password, :message => 101
+    p.validates_presence_of :password_confirmation, :message => 101
+    p.validates_length_of :password, :within => 6..40, :message => 102
+    p.validates_confirmation_of :password, :message => 104
   end
   
   has_many :authentications, :dependent => :destroy
