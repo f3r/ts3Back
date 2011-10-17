@@ -50,8 +50,7 @@ class SessionsController < Devise::SessionsController
   #   Optional oauth token
   #
   def oauth_create
-    # TODO: Twitter is hardcoded, must add facebook validation
-    @user = User.find_for_twitter_oauth(params[:oauth_token], current_user) if params[:oauth_token]
+    @user = User.find_for_oauth(params[:oauth_token], current_user) if params[:oauth_token]
     respond_with do |format|
       if @user
         format.any(:xml, :json) { 

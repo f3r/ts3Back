@@ -46,15 +46,16 @@ class User < ActiveRecord::Base
   def email_validations_required?
     true
   end
-  
-  def self.find_for_facebook_oauth(token, user=nil)
-  end
 
-  def self.find_for_twitter_oauth(token=nil, user=nil)
+  def self.find_for_oauth(token, user=nil)
     if user && token['credentials']
-      authentication = user.authentications.find_or_create_by_provider_and_uid_and_oauth_token_and_oauth_token_secret(:provider => "twitter", :uid => token['uid'], :oauth_token => token['credentials']['token'], :oauth_token_secret => token['credentials']['secret'])
+      authentication = user.authentications.find_or_create_by_provider_and_uid_and_oauth_token_and_oauth_token_secret(
+        :provider => token['provider'], 
+        :uid => token['uid'], 
+        :oauth_token => token['credentials']['token'], 
+        :oauth_token_secret => token['credentials']['secret'])
     elsif token['credentials']
-      authentication = Authentication.find_by_provider_and_uid("twitter", token['uid'])
+      authentication = Authentication.find_by_provider_and_uid(token['provider'], token['uid'])
     end
     return authentication.user if authentication
   end
