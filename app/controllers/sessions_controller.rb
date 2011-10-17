@@ -49,6 +49,9 @@ class SessionsController < Devise::SessionsController
   # [:oauth_token]
   #   Optional oauth token
   #
+  # === Error codes
+  # [110]
+  #   Must sign up
   def oauth_create
     @user = User.find_for_oauth(params[:oauth_token], current_user) if params[:oauth_token]
     respond_with do |format|
@@ -64,7 +67,7 @@ class SessionsController < Devise::SessionsController
           render :status => 401, 
           request.format.to_sym => format_response({ 
             :stat => "fail", 
-            :msg => "register please" },
+            :err => {:user => [110]} },
             request.format.to_sym) }
       end
     end
