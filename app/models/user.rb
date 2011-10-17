@@ -52,8 +52,8 @@ class User < ActiveRecord::Base
       authentication = user.authentications.find_or_create_by_provider_and_uid_and_oauth_token_and_oauth_token_secret(
         :provider => token['provider'], 
         :uid => token['uid'], 
-        :oauth_token => token['credentials']['token'], 
-        :oauth_token_secret => token['credentials']['secret'])
+        :token => token['credentials']['token'], 
+        :secret => token['credentials']['secret'])
     elsif token['credentials']
       authentication = Authentication.find_by_provider_and_uid(token['provider'], token['uid'])
     end

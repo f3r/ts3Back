@@ -55,8 +55,8 @@ class RegistrationsController < Devise::RegistrationsController
           authentication = resource.authentications.create(
             :provider => params[:oauth_token]['provider'], 
             :uid => params[:oauth_token]['uid'], 
-            :oauth_token => params[:oauth_token]['credentials']['token'], 
-            :oauth_token_secret => params[:oauth_token]['credentials']['secret'])
+            :token => params[:oauth_token]['credentials']['token'], 
+            :secret => params[:oauth_token]['credentials']['secret'])
         end
         format.any(:xml, :json) { 
           render :status => 200, 
