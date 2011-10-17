@@ -17,6 +17,21 @@ class CategoriesController < ApplicationController
   end
 
   # ==Resource URL
+  # /categories/list.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/categories/list.json
+  # === Parameters
+  # None
+  def list
+    cat_list = Category.first.category_tree(Category.first)
+    
+    respond_with do |format|
+      response =  { :stat => "ok", :categories => cat_list }
+      format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
+    end
+  end
+  
+  # ==Resource URL
   # /categories/:id.format
   # ==Example
   # GET https://backend-heypal.heroku.com/categories/id.json
@@ -85,5 +100,4 @@ class CategoriesController < ApplicationController
       end
     end
   end
-
 end

@@ -17,6 +17,7 @@ end
 
 gem 'jquery-rails'
 gem 'asin'
+gem 'ancestry'
 
 # Deploy with Capistrano
 # gem 'capistrano'

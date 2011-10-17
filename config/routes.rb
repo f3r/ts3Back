@@ -15,6 +15,7 @@ HeyPalBackEnd::Application.routes.draw do
     # CATEGORIES
     ##############################################################################
     get    "categories",              :to => "categories#index"
+    get    "categories/list",         :to => "categories#list"
     get    "categories/:id",          :to => "categories#show"
     post   "categories",              :to => "categories#create"
     put    "categories/:id",          :to => "categories#update"
