@@ -23,7 +23,7 @@ class CategoriesController < ApplicationController
   # === Parameters
   # None
   def list
-    cat_list = Category.first.category_tree(Category.first)
+    cat_list = Category.category_tree
     
     respond_with do |format|
       response =  { :stat => "ok", :categories => cat_list }
@@ -48,18 +48,38 @@ class CategoriesController < ApplicationController
   # ==Resource URL
   # /categories.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/categories.json access_token=access_token&name=name
+  # POST https://backend-heypal.heroku.com/categories.json access_token=access_token&name=name&parent=parentid
   # === Parameters
   # [:access_token]
   # [:name]
+  # [:parent]
   def create
     check_token
-    @category = Category.new(:name => params[:name])
+    if params[:parent]
+      @parent = Category.find(params[:parent])
+    else 
+      @category = Category.new(:name => params[:name])
+    end
+
     respond_with do |format|
       if @category.save
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "ok", :category => @category, :msg => I18n.t("successfully_created", :object_name => t(@category.class.to_s.downcase), :name => @category.name) },request.format.to_sym) }
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok", 
+            :category => @category, 
+            :msg => I18n.t("successfully_created"), 
+            :object_name => t(@category.class.to_s.downcase), 
+            :name => @category.name
+          },
+          request.format.to_sym)}
       else
-        format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response({ :stat => "fail", :err => @category.errors },request.format.to_sym) }
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => @category.errors },
+          request.format.to_sym)}
       end
     end
   end

@@ -4,11 +4,15 @@ class Category < ActiveRecord::Base
   attr_accessible :name
   has_ancestry :cache_depth => true
 
-  def category_tree(cat)
+  def self.category_tree
+    return self.first.category_tree_rec(self.first)
+  end
+  
+  def category_tree_rec(cat)
     if cat.has_children?
       children = []
       cat.children.each {|child|
-        children << category_tree(child)
+        children << category_tree_rec(child)
       }
       return {:id => cat.id, :name => cat.name, :children => children}
     else
