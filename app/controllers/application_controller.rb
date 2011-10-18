@@ -51,7 +51,12 @@ class ApplicationController < ActionController::Base
 
   def not_found
     respond_with do |format|
-      format.any(:xml, :json) { render :status => 404, request.format.to_sym => format_response({ :stat => "fail", :err => I18n.t("not_found") },request.format.to_sym) }
+      format.any(:xml, :json) { 
+        render :status => 404, 
+        request.format.to_sym => format_response({ 
+          :stat => "fail", 
+          :err => {:record => [106]} },
+          request.format.to_sym) }
     end
   end
 

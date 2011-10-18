@@ -6,9 +6,9 @@ class CustomFailure < Devise::FailureApp
     message = warden.message || warden_options[:message] || default || :unauthenticated
     if message.is_a?(Symbol)
       case
-        when message == :unconfirmed then {:user => 107}
-        when message == :unauthenticated then {:user => 108}
-        when message == :invalid then {:user => 109}
+        when message == :unconfirmed then {:user => [107]}
+        when message == :unauthenticated then {:user => [108]}
+        when message == :invalid then {:user => [109]}
         else message
       end
     else

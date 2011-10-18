@@ -25,6 +25,8 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     post   "users/:provider/sign_in", :to => "sessions#oauth_create"
     post   "users/:provider/sign_up", :to => "registrations#create"
+    get    "users/authentications",   :to => "authentications#list"
+    delete "users/authentications/:authentication_id",  :to => "authentications#delete"
     ##############################################################################
     # ITEMS
     ##############################################################################
