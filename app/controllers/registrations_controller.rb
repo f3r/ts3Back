@@ -9,39 +9,18 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password
   # === Parameters
-  # [:name]
-  #   User full name
-  #   Example values: John Smith
-  #
-  # [:email]
-  #   User email address
-  #   Example values: user@example.com
-  #
-  # [:password]
-  #   User password
-  #
-  # [:oauth_token]
-  #   Optional oauth token
-  #
+  # [:name] User full name (Example values: John Smith)
+  # [:email] User email address (Example values: user@example.com)
+  # [:password] User password
+  # [:oauth_token] Optional oauth token
   # === Response
-  # [:user]
-  #   An array containing the user ID
-  #
+  # [:user]  An array containing the user ID
   # === Error codes
-  # [100]
-  #   has already been taken
-  #
-  # [101]
-  #   can't be blank
-  #
-  # [102]
-  #   too short
-  #
-  # [103]
-  #   is invalid
-  #
-  # [104]
-  #   doesn't match
+  # [100] has already been taken
+  # [101] can't be blank
+  # [102] too short
+  # [103] is invalid
+  # [104] doesn't match
   def create
     parameters = {  :name => params[:name], 
                     :email => params[:email], 
@@ -83,16 +62,48 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Example
   # DELETE https://backend-heypal.heroku.com/users.json access_token=access_token
   # === Parameters
-  # [:access_token]
-  #   User access token
+  # [:access_token]  User access token
   # === Error codes
-  # [105]
-  #   invalid access token
+  # [105] invalid access token
   def destroy
     check_token
     @user = current_user
     respond_with do |format|
       if @user.destroy
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok" },
+            request.format.to_sym) }
+      else
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => format_errors(resource.errors.messages)},
+          request.format.to_sym) }
+      end
+    end
+  end
+
+  # ==Resource URL
+  # /users/check_email.format
+  # ==Example
+  # DELETE https://backend-heypal.heroku.com/users/check_email.json email=fer@heypal.com
+  # === Parameters
+  # [:email]
+  #   User email
+  # === Error codes
+  # [100] has already been taken
+  # [101] can't be blank
+  # [103] is invalid
+  # [104] doesn't match
+  def check_email
+    params[:email]!
+      
+    user = User.find_by_email(params[:email])
+    respond_with do |format|
+      if user.empty?
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 

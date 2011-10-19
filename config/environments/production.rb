@@ -34,10 +34,11 @@ HeyPalBackEnd::Application.configure do
   # config.log_level = :debug
 
   # Use a different logger for distributed setups
+  # TODO: Check other loggers that can log only specific classes
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  # config.cache_store = :mem_cache_store
+  config.cache_store = :dalli_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
