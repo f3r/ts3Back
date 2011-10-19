@@ -13,6 +13,13 @@ HeyPalBackEnd::Application.routes.draw do
     post   "users/password",          :to => "passwords#create"
     put    "users/password",          :to => "passwords#update"
     ##############################################################################
+    # ADDRESSES
+    ##############################################################################
+    get    "users/addresses",         :to => "addresses#index"
+    post   "users/addresses",         :to => "addresses#create"
+    put    "users/addresses/:id",     :to => "addresses#update"
+    delete "users/addresses/:id",     :to => "addresses#destroy"
+    ##############################################################################
     # CATEGORIES
     ##############################################################################
     get    "categories",              :to => "categories#index"

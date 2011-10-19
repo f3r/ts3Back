@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :addresses
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, # Encrypting Password and validating authenticity of user
