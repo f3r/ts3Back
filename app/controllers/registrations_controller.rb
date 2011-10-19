@@ -89,21 +89,15 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Resource URL
   # /users/check_email.format
   # ==Example
-  # DELETE https://backend-heypal.heroku.com/users/check_email.json email=fer@heypal.com
+  # GET https://backend-heypal.heroku.com/users/email_exists.json email=fer@heypal.com
   # === Parameters
-  # [:email]
-  #   User email
+  # [:email] User email
   # === Error codes
   # [100] has already been taken
-  # [101] can't be blank
-  # [103] is invalid
-  # [104] doesn't match
-  def check_email
-    params[:email]!
-      
-    user = User.find_by_email(params[:email])
+  def email_exists
     respond_with do |format|
-      if user.empty?
+      user = User.find_by_email(params[:email])
+      if user != nil
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 
@@ -113,8 +107,7 @@ class RegistrationsController < Devise::RegistrationsController
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(resource.errors.messages)},
+            :stat => "not found"},
           request.format.to_sym) }
       end
     end
