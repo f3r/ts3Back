@@ -50,7 +50,7 @@ class SessionsTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "fail", json['stat']
-    assert_equal 109, json['err']['user']
+    assert (json['err']['user'].include? 109)    
   end
 
 end

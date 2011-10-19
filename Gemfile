@@ -5,7 +5,9 @@ gem 'rack', '1.3.3'
 
 gem 'mysql2'
 gem 'devise', "1.4.7"
-gem 'oauth2'
+gem 'oauth2', "0.4.1"
+gem "paperclip", "~> 2.4"
+gem "aws-s3"
 
 # Gems used only for assets and not required
 # in production environments by default.
