@@ -4,7 +4,9 @@ gem 'rails', '3.1.1'
 gem 'rack', '1.3.3'
 gem 'mysql2'
 gem 'devise', "1.4.7"
-gem 'oauth2'
+gem 'oauth2', "0.4.1"
+gem "paperclip", "~> 2.4"
+gem "aws-s3"
 gem 'jquery-rails'
 gem 'asin'          # Amazon Search API
 gem 'ancestry'      # Categories Tree

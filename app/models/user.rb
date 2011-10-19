@@ -38,6 +38,21 @@ class User < ActiveRecord::Base
   
   has_many :authentications, :dependent => :destroy
 
+  has_attached_file :avatar, 
+     :styles => {
+       :thumb  => "100x100#",
+       :medium => "300x300#",
+       :large  => "600x600>" },
+     :storage => :s3,
+     :s3_protocol => 'https',
+     :s3_credentials => "#{Rails.root}/config/s3.yml",
+     :path => "avatars/:id_partition/:style.:extension",
+     :default_url => "none",
+     :convert_options => { 
+       :large => "-quality 80", 
+       :medium => "-quality 80", 
+       :thumb => "-quality 80" }
+
   def password_validations_required?
     # encrypted_password.blank?
     true
