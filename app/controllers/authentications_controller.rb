@@ -124,4 +124,8 @@ class AuthenticationsController < ApplicationController
     end
   end
   
+  def get_facebook_friends
+    
+  end
+  
 end

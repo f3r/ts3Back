@@ -7,11 +7,9 @@ class ConfirmationsController < Devise::ConfirmationsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/confirmation.json email=user@example.com
   # === Parameters
-  # [:email]
-  #   Email used on registration
+  # [:email] Email used on registration
   # === Error codes
-  # [106]
-  #   email not found
+  # [106] email not found
   def create
     self.resource = resource_class.send_confirmation_instructions({:email => params[:email]})
     respond_with do |format|
@@ -40,11 +38,9 @@ class ConfirmationsController < Devise::ConfirmationsController
   # [:confirmation_token]
   #   Confirmation token sent by email
   # === Response
-  # [:authentication_token]
-  #   The user authentication_token
+  # [:authentication_token] The user authentication_token
   # === Error codes
-  # [103]
-  #   invalid confirmation_token
+  # [103] invalid confirmation_token
   def show
     self.resource = resource_class.confirm_by_token(params[:confirmation_token])
     respond_with do |format|
