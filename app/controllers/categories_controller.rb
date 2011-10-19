@@ -1,6 +1,7 @@
 class CategoriesController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  #TODO: protect everything but /list with admin token
 
   # ==Resource URL
   # /categories.format
@@ -23,8 +24,10 @@ class CategoriesController < ApplicationController
   # === Parameters
   # None
   def list
-    cat_list = Category.category_tree
-    
+    if (cat_list = Rails.cache.read('category/list')).nil?
+       cat_list = Category.category_tree
+       Rails.cache.write('category/list', cat_list)
+    end
     respond_with do |format|
       response =  { :stat => "ok", :categories => cat_list }
       format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
