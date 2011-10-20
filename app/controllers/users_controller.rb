@@ -3,6 +3,47 @@ class UsersController < ApplicationController
   respond_to :xml, :json
 
   # ==Resource URL
+  # /users/:id/info.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/users/:id/info.json
+  # === Parameters
+  # [:id] User id
+  # === Response
+  # [:user]  An array containing {id, profile_pic, name, review_count, badges_count}
+  # === Error codes
+  # TODO: Add error code if no user exists
+  # [10X] no user exists
+  def info
+    #TODO: scope response only for fields needed
+    #TODO: add memcached
+    @user = User.find(params[:id]) 
+    respond_with do |format|
+      if @user
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok",
+            :user_info => {
+              :id            => @user.id,
+              :profile_pic   => @user.avatar_file_name,
+              :name          => @user.name #,
+              # TODO: Add review/badges when implemented
+              # :review_count  => @user.review_count,
+              # :badges_count  => @user.badges.count
+            }},
+            request.format.to_sym) }
+      else
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => {:user => [112]}},
+            request.format.to_sym) }
+      end
+    end
+  end
+
+  # ==Resource URL
   # /users.format
   # ==Example
   # GET https://backend-heypal.heroku.com/users.json access_token=access_token

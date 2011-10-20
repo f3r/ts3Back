@@ -12,6 +12,10 @@ HeyPalBackEnd::Application.routes.draw do
     get    "users/confirmation",      :to => "confirmations#show"
     post   "users/password",          :to => "passwords#create"
     put    "users/password",          :to => "passwords#update"
+    ##############################################################################
+    # USER INFO
+    ##############################################################################
+    get    "users/:id/info",          :to => "users#info"
     get    "users",                   :to => "users#show"
     put    "users",                   :to => "users#update"
     ##############################################################################
