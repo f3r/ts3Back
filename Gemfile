@@ -25,6 +25,7 @@ group :test do
   gem "shoulda-matchers"
   gem 'factory_girl'
   gem 'faker'
+  gem 'minitest'
 end
 
 group :production do

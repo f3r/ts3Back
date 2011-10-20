@@ -16,9 +16,8 @@ class ApplicationController < ActionController::Base
   end
   
   def format_errors(errors)
-    puts errors.messages.inspect
     error_list = {}
-    for error in errors.messages
+    for error in errors
       codes = error[1].map {|x| x.to_i if (Float(x) or Integer(x)) rescue nil }.compact
       error_list = error_list.merge({error[0] => codes})
     end

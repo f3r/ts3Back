@@ -56,7 +56,7 @@ class UsersController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "fail", 
-            :err => format_errors(@user.errors) },
+            :err => format_errors(@user.errors.messages) },
             request.format.to_sym) }
       end
     end

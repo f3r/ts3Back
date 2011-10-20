@@ -47,7 +47,8 @@ class User < ActiveRecord::Base
   validates_presence_of :email, :message => "101"
   validates_uniqueness_of :email, :message => "100"
   validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
-  validates_date :birthdate, :invalid_date_message => "113"
+
+  validates_date :birthdate, :invalid_date_message => "113", :allow_blank => true
 
   has_many :authentications, :dependent => :destroy
   has_many :addresses

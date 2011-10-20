@@ -47,8 +47,8 @@ ActiveRecord::Schema.define(:version => 20111019224711) do
   add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                   :default => "", :null => false
-    t.string   "encrypted_password",     :limit => 128,   :default => "", :null => false
+    t.string   "email",                                                  :null => false
+    t.string   "encrypted_password",     :limit => 128,                  :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "remember_token"
