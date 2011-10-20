@@ -7,21 +7,14 @@ class SessionsController < Devise::SessionsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/sign_in.json email=user@example.com&password=password
   # === Parameters
-  # [:email]
-  #   User email
-  # [:password]
-  #   User password
+  # [:email]    User email
+  # [:password] User password
   # === Response
-  # [:authentication_token]
-  #   Returns the user authentication_token
-  #   
+  # [:authentication_token] Returns the user authentication_token
   # === Error codes
-  # [107]
-  #   unconfirmed user
-  # [108]
-  #   unauthenticated user
-  # [109]
-  #   Invalid email or password
+  # [107] unconfirmed user
+  # [108] unauthenticated user
+  # [109] Invalid email or password
   def create
     params[resource_name] = { :email => params[:email], :password => params[:password] }
     resource = warden.authenticate!(:scope => resource_name)
@@ -43,15 +36,10 @@ class SessionsController < Devise::SessionsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/twitter/sign_in.json access_token=access_token&oauth_token=oauth_token
   # === Parameters
-  # [:access_token]
-  #   Optional access token
-  #
-  # [:oauth_token]
-  #   Optional oauth token
-  #
+  # [:access_token] Optional access token
+  # [:oauth_token]  Optional oauth token
   # === Error codes
-  # [110]
-  #   Must sign up
+  # [110] Must sign up
   def oauth_create
     @user = User.find_for_oauth(params[:oauth_token], current_user) if params[:oauth_token]
     respond_with do |format|
@@ -71,7 +59,5 @@ class SessionsController < Devise::SessionsController
             request.format.to_sym) }
       end
     end
-    
   end
-  
 end

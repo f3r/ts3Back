@@ -5,6 +5,7 @@ HeyPalBackEnd::Application.routes.draw do
     # ACCOUNTS & REGISTRATION
     ##############################################################################
     post   "users/sign_up",           :to => "registrations#create"
+    get    "users/email_exists",      :to => "registrations#email_exists"
     post   "users/sign_in",           :to => "sessions#create"
     delete "users",                   :to => "registrations#destroy"
     post   "users/confirmation",      :to => "confirmations#create"
@@ -13,6 +14,13 @@ HeyPalBackEnd::Application.routes.draw do
     put    "users/password",          :to => "passwords#update"
     get    "users",                   :to => "users#show"
     put    "users",                   :to => "users#update"
+    ##############################################################################
+    # ADDRESSES
+    ##############################################################################
+    get    "users/addresses",         :to => "addresses#index"
+    post   "users/addresses",         :to => "addresses#create"
+    put    "users/addresses/:id",     :to => "addresses#update"
+    delete "users/addresses/:id",     :to => "addresses#destroy"
     ##############################################################################
     # CATEGORIES
     ##############################################################################

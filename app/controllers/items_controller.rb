@@ -15,6 +15,7 @@ class ItemsController < ApplicationController
       if images.nil?
         response = { :stat => "ok", :images => images }
         format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
+      end
     end
   end
 end

@@ -13,8 +13,8 @@ class User < ActiveRecord::Base
                                     #   * last_sign_in_ip    - Holds the remote ip of the previous sign in
          :validatable,              # Email/Pwd validation
          :confirmable,              # Verify account already confirmed, send email with instructions
-         # :encryptable,              # Encrypts Password (bcript)
-         # :invitable,                # Send invites: https://github.com/scambra/devise_invitable
+         # :encryptable,            # Encrypts Password (bcript)
+         # :invitable,              # Send invites: https://github.com/scambra/devise_invitable
          :token_authenticatable     # Generate auth token and validates it
 
   # Setup accessible (or protected) attributes for your model
@@ -32,7 +32,10 @@ class User < ActiveRecord::Base
                   :avatar, 
                   :password, 
                   :password_confirmation, 
-                  :remember_me
+                  :remember_me,
+                  :friends
+
+  serialize :friends
 
   with_options :if => :password_validations_required? do |p|
     p.validates_presence_of :password, :message => "101"
@@ -40,13 +43,15 @@ class User < ActiveRecord::Base
     p.validates_length_of :password, :within => 6..40, :message => "102"
     p.validates_confirmation_of :password, :message => "104"
   end
+
   validates_presence_of :email, :message => "101"
   validates_uniqueness_of :email, :message => "100"
   validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
   validates_date :birthdate, :invalid_date_message => "113"
 
   has_many :authentications, :dependent => :destroy
-
+  has_many :addresses
+  
   has_attached_file :avatar, 
      :styles => {
        :thumb  => "100x100#",
@@ -66,6 +71,23 @@ class User < ActiveRecord::Base
     encrypted_password.blank?
   end
 
+  def get_facebook_friends  
+    begin
+      authentication = self.authentications.where(:provider => "facebook").first
+      puts "AUTH: #{authentication}"
+      if authentication
+        client = OAuth2::Client.new("221413484589066", "719daf903365b4bab445a2ef5c54c2ea", :site => 'https://graph.facebook.com')
+        facebook = OAuth2::AccessToken.new(client, authentication.token)
+        info = JSON.parse(facebook.get('/me/friends'))
+        if info
+          self.update_attribute(:friends, info['data'])
+        end
+      end
+    rescue Exception => e
+      return e
+    end
+  end
+  
   def self.find_for_oauth(token, user=nil)
     if user && token['credentials']
       authentication = user.authentications.find_or_create_by_provider_and_uid_and_oauth_token_and_oauth_token_secret(

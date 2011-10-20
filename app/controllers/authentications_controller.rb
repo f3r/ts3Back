@@ -3,15 +3,13 @@ class AuthenticationsController < ApplicationController
   respond_to :xml, :json
   
   # ==Resource URL
-  # /users/authentications/list.format
+  # /users/authentications.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/users/authentications/list.json access_token=access_token
+  # GET https://backend-heypal.heroku.com/users/authentications.json access_token=access_token
   # === Parameters
-  # [:access_token]
-  #   Access token
+  # [:access_token] Access token
   # === Response
-  # [:authentications]
-  #   Array containing a list authentications for the selected user
+  # [:authentications] Array containing a list authentications for the selected user
   def list
     check_token
     @authentications = current_user.authentications
@@ -32,13 +30,10 @@ class AuthenticationsController < ApplicationController
   # ==Example
   # DELETE https://backend-heypal.heroku.com/users/authentications/1.json access_token=access_token
   # === Parameters
-  # [:access_token]
-  #   Access token
-  # [:authentication_id]
-  #   Id number of the authentication to be deleted
+  # [:access_token] Access token
+  # [:authentication_id] Id number of the authentication to be deleted
   # === Error codes
-  # [106]
-  #   Record not found
+  # [106] Record not found
   def delete
     check_token
     authentication = current_user.authentications.find(params[:authentication_id])
@@ -65,20 +60,14 @@ class AuthenticationsController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/users/facebook/info.json access_token=access_token
   # === Parameters
-  # [:access_token]
-  #   User access token
-  # [:image_size]
-  #   Optional image size. Accepted values: small, normal, large
+  # [:access_token] User access token
+  # [:image_size]   Optional image size. Accepted values: small, normal, large
   # === Response
-  # [:user_info]
-  #   Array containing the users information and picture url
+  # [:user_info] Array containing the users information and picture url
   # === Error codes
-  # [105]
-  #   Invalid access token
-  # [:111]
-  #   Invalid oauth request
-  # [:112]
-  #   This user doesn't have a linked Facebook account
+  # [105] Invalid access token
+  # [111] Invalid oauth request
+  # [112] This user doesn't have a linked Facebook account
   #
   # TODO: Move api keys to settings file
   def get_facebook_info
@@ -123,5 +112,4 @@ class AuthenticationsController < ApplicationController
       end
     end
   end
-  
 end
