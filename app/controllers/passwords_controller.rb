@@ -2,6 +2,9 @@ class PasswordsController < Devise::PasswordsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
+  # ==Description
+  # If a user forgets the password, you call this url with the email
+  # and we will send him an email with a special token to reset it
   # ==Resource URL
   # /users/password.format
   # ==Example
@@ -30,6 +33,9 @@ class PasswordsController < Devise::PasswordsController
     end
   end
 
+  # ==Description
+  # Once the user receives a "forget password" email, you can call this method to reset
+  # the password. It requires the sent token and the new password.
   # ==Resource URL
   # /users/password.format
   # ==Example

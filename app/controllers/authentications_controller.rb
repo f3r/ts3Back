@@ -2,6 +2,8 @@ class AuthenticationsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
+  # == Description
+  # Returns a list of all the authentications of the current_user
   # ==Resource URL
   # /authentications.format
   # ==Example
@@ -12,6 +14,7 @@ class AuthenticationsController < ApplicationController
   # [:authentications] Array containing a list authentications for the selected user
   def list
     check_token
+    # TODO: Check if we need to return all parameters or just (id, provider, uid)
     @authentications = current_user.authentications
     respond_with do |format|
       if @authentications
@@ -25,6 +28,8 @@ class AuthenticationsController < ApplicationController
     end
   end
 
+  # == Description
+  # Deletes one of the authentications of the current user
   # ==Resource URL
   # /authentications/:authentication_id.format
   # ==Example
@@ -55,6 +60,9 @@ class AuthenticationsController < ApplicationController
     end
   end
 
+  # == Description
+  # Returns all the info from the facebook profile of the current user
+  # including name, gender, birthday and picture_url
   # ==Resource URL
   # /users/facebook/info.format
   # ==Example

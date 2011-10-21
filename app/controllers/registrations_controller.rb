@@ -4,6 +4,12 @@ class RegistrationsController < Devise::RegistrationsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
+  # ==Description
+  # This is the first step for a registration of new user. Just give us the name, email and password,
+  # and we will send the user an email with a token to confirm the email address.
+  #
+  # Optionally, you can also send an oauth_token. We will save that authentication method and once
+  # the account is confirmed, they can sign in with that account as well.
   # ==Resource URL
   # /users/sign_up.format
   # ==Example
@@ -57,6 +63,10 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
   
+  # ==Description
+  # Deactivates a user account. Deactivation means that the user account will be "soft deleted" for 1 month.
+  # If they sign in, they will see a button that says "reactivate account".
+  # After 1 month, all their data will be deleted for good.
   # ==Resource URL
   # /users.format
   # ==Example
@@ -65,10 +75,12 @@ class RegistrationsController < Devise::RegistrationsController
   # [:access_token]  User access token
   # === Error codes
   # [105] invalid access token
+  # TODO: Create a "reactivation" method!
   def destroy
     check_token
     @user = current_user
     respond_with do |format|
+      # TODO: Do we actually want to delete user or acts_as_paranoid? delete also it's data? transactions?
       if @user.destroy
         format.any(:xml, :json) { 
           render :status => 200, 
@@ -86,10 +98,12 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  # ==Description
+  # Checks whether an email is already registered with us already
   # ==Resource URL
-  # /check_email.format
+  # /users/check_email.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/check_email.json email=fer@heypal.com
+  # GET https://backend-heypal.heroku.com/users/check_email.json email=fer@heypal.com
   # === Parameters
   # [:email] User email
   # === Error codes

@@ -1,11 +1,20 @@
 class ItemsController < ApplicationController
   respond_to :xml, :json
   
-  #TODO: very good candidate for adding caching --> Rails.cache.write('amazon/#{query}', images)
+  # == Description
+  # Returns and array of product images relating to a certain query
+  # ==Resource URL
+  # /items/image_search.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/items/image_search.json query=Harry Potter
+  # === Parameters
+  # [:query]
   def image_search
     client = ASIN::Client.instance
     #TODO: Check if the split(' ') is good or rather we have to do: split('%20')
-    amazon_response = client.search_keywords params[:query].split(' ')
+    amazon_response = Rails.cache.fetch("image_search/#{params[:query]}") {
+       client.search_keywords params[:query].split(' ')
+     }
     images = []
     amazon_response.each {|item|
        images << {:image => item.image_url}

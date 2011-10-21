@@ -2,6 +2,8 @@ class AddressesController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
+  # == Description
+  # Returns all the addresses of the current user
   # ==Resource URL
   # /users/addresses.format
   # ==Example
@@ -17,6 +19,8 @@ class AddressesController < ApplicationController
     end
   end
 
+  # == Description
+  # Creates a new address for the current user, must include street name, city, country and zip code
   # ==Resource URL
   # /users/addresses.format
   # ==Example
@@ -58,6 +62,8 @@ class AddressesController < ApplicationController
     end
   end
 
+  # == Description
+  # Updates one of the current user's Addresses
   # ==Resource URL
   # /users/addresses/:id.format
   # ==Example
@@ -95,6 +101,8 @@ class AddressesController < ApplicationController
     end
   end
 
+  # == Description
+  # Deletes one of the addresses of the current user
   # ==Resource URL
   # /users/addresses/:id.format
   # ==Example
