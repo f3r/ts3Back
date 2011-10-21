@@ -1,2 +1,18 @@
-Use this README file to introduce your application and point to useful places in the API for learning more.
-Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+Errors list
+
+error codes
+
+[100] has already been taken
+[101] can't be blank
+[102] too short
+[103] is invalid
+[104] doesn't match
+[105] invalid access token
+[106] not found
+[107] unconfirmed
+[108] unauthenticated
+[109] invalid: 'Invalid email or password.'
+[110] must sign up
+[111] invalid oauth request
+[112] This user doesn't have a linked Facebook account
+[113] invalid date
