@@ -7,7 +7,7 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Resource URL
   # /users/sign_up.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/users/sign_up.json email=user@example.com&password=password
+  # POST https://backend-heypal.heroku.com/users/sign_up.json name=John+Smith&email=user@example.com&password=password
   # === Parameters
   # [:name] User full name (Example values: John Smith)
   # [:email] User email address (Example values: user@example.com)

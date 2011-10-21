@@ -24,6 +24,22 @@ class ApplicationController < ActionController::Base
     return error_list
   end
 
+  def user_fields(options={})
+    object_filtered = {}
+    fields = options[:fields]
+    object = options[:object]
+    for field in fields
+      if field == :avatar_file_name
+        style = options[:style] if options[:style] rescue :large
+        avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
+        object_filtered = object_filtered.merge({:avatar => avatar })
+      else
+        object_filtered = object_filtered.merge({field => object["#{field}"]})
+      end
+    end
+    return object_filtered
+  end
+
   def authenticated?
     params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
   end

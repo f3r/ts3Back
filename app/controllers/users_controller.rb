@@ -11,26 +11,21 @@ class UsersController < ApplicationController
   # === Response
   # [:user]  An array containing {id, profile_pic, name, review_count, badges_count}
   # === Error codes
-  # TODO: Add error code if no user exists
-  # [10X] no user exists
+  # [106] no user exists
   def info
-    #TODO: scope response only for fields needed
-    #TODO: add memcached
-    @user = User.find(params[:id]) 
+    fields = [:id, :name, :avatar_file_name]
+    @user = Rails.cache.fetch("user_info_" + params[:id].to_s) { User.select(fields).find(params[:id]) }
     respond_with do |format|
       if @user
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok",
-            :user_info => {
-              :id            => @user.id,
-              :profile_pic   => @user.avatar_file_name,
-              :name          => @user.name #,
-              # TODO: Add review/badges when implemented
-              # :review_count  => @user.review_count,
-              # :badges_count  => @user.badges.count
-            }},
+            :user => user_fields(:object => @user, :fields => fields, :style => :thumb)
+            # TODO: Add review/badges when implemented
+            # :review_count  => @user.review_count,
+            # :badges_count  => @user.badges.count
+            },
             request.format.to_sym) }
       else
         format.any(:xml, :json) { 
@@ -51,18 +46,19 @@ class UsersController < ApplicationController
   # [:access_token]
   #   Access token
   # === Response
-  # [:user] User array containing the new data
+  # [:user] User array containing the user data
   # === Error codes
   # [105] invalid access token
   def show
     check_token
-    @user = current_user
+    fields = [:id, :name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
+    @user = Rails.cache.fetch("user_full_info_" + current_user.id.to_s) { User.select(fields).find(current_user.id) }
     respond_with do |format|
       format.any(:xml, :json) { 
         render :status => 200, 
         request.format.to_sym => format_response({ 
           :stat => "ok",
-          :user => @user },
+          :user => user_fields(:object => @user, :fields => fields) },
           request.format.to_sym) }
     end
   end

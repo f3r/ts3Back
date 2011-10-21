@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include GeneralHelper
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, # Encrypting Password and validating authenticity of user
@@ -20,6 +21,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
 
   before_save :ensure_authentication_token
+  after_save :delete_cache
 
   attr_accessible :name, 
                   :email, 
@@ -48,7 +50,10 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :message => "100"
   validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
 
-  validates_date :birthdate, :invalid_date_message => "113", :allow_blank => true
+  validates_date :birthdate, 
+    :invalid_date_message => "113", 
+    :on => :update, 
+    :before => lambda { Date.current } 
 
   has_many :authentications, :dependent => :destroy
   has_many :addresses
@@ -101,5 +106,11 @@ class User < ActiveRecord::Base
     end
     return authentication.user if authentication
   end
-
+  
+  private
+  
+  def delete_cache
+    delete_caches(["user_info_" + self.id.to_s, "user_full_info_" + self.id.to_s])
+  end
+  
 end
