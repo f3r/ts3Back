@@ -34,22 +34,31 @@ class SessionsController < Devise::SessionsController
   # ==Resource URL
   # /users/:provider/sign_in.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/users/twitter/sign_in.json access_token=access_token&oauth_token=oauth_token
+  # POST https://backend-heypal.heroku.com/users/twitter/sign_in.json oauth_token=oauth_token
   # === Parameters
-  # [:access_token] Optional access token
-  # [:oauth_token]  Optional oauth token
+  # [:provider]     Name of the oAuth provider
+  # [:oauth_token]  oAuth token
   # === Error codes
   # [110] Must sign up
   def oauth_create
-    @user = User.find_for_oauth(params[:oauth_token], current_user) if params[:oauth_token]
+    user_id = Authentication.find_by_provider_and_token(params[:provider], params[:oauth_token], :select => "user_id")
     respond_with do |format|
-      if @user
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :authentication_token => @user.authentication_token },
-            request.format.to_sym) }
+      if user_id
+        if @user = User.find(user_id['user_id'])
+          format.any(:xml, :json) { 
+            render :status => 200, 
+            request.format.to_sym => format_response({ 
+              :stat => "ok", 
+              :authentication_token => @user.authentication_token },
+              request.format.to_sym) }
+        else
+          format.any(:xml, :json) { 
+            render :status => 401, 
+            request.format.to_sym => format_response({ 
+              :stat => "fail", 
+              :err => {:user => [110]} }, #TODO: This error must be oauth_token exists, but user doesn't... wierd but true!
+              request.format.to_sym) }
+        end
       else
         format.any(:xml, :json) { 
           render :status => 401, 

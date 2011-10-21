@@ -82,6 +82,7 @@ class User < ActiveRecord::Base
       authentication = self.authentications.where(:provider => "facebook").first
       puts "AUTH: #{authentication}"
       if authentication
+        # TODO: Perhaps move appId and SecretID to some config file?
         client = OAuth2::Client.new("221413484589066", "719daf903365b4bab445a2ef5c54c2ea", :site => 'https://graph.facebook.com')
         facebook = OAuth2::AccessToken.new(client, authentication.token)
         info = JSON.parse(facebook.get('/me/friends'))
@@ -94,13 +95,14 @@ class User < ActiveRecord::Base
     end
   end
   
+  # TODO: Check /users/facebook/sign_in.json if we really need this anymore...
   def self.find_for_oauth(token, user=nil)
     if user && token['credentials']
       authentication = user.authentications.find_or_create_by_provider_and_uid_and_oauth_token_and_oauth_token_secret(
         :provider => token['provider'], 
-        :uid => token['uid'], 
-        :token => token['credentials']['token'], 
-        :secret => token['credentials']['secret'])
+        :uid      => token['uid'], 
+        :token    => token['credentials']['token'], 
+        :secret   => token['credentials']['secret'])
     elsif token['credentials']
       authentication = Authentication.find_by_provider_and_uid(token['provider'], token['uid'])
     end

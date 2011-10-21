@@ -5,7 +5,7 @@ HeyPalBackEnd::Application.routes.draw do
     # ACCOUNTS & REGISTRATION
     ##############################################################################
     post   "users/sign_up",           :to => "registrations#create"
-    get    "check_email",            :to => "registrations#check_email"
+    get    "users/check_email",       :to => "registrations#check_email"
     post   "users/sign_in",           :to => "sessions#create"
     delete "users",                   :to => "registrations#destroy"
     post   "users/confirmation",      :to => "confirmations#create"
@@ -40,12 +40,12 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     post   "users/:provider/sign_in", :to => "sessions#oauth_create"
     post   "users/:provider/sign_up", :to => "registrations#create"
-    get    "authentications",   :to => "authentications#list"
+    get    "authentications",         :to => "authentications#list"
+    get    "users/facebook/info",     :to => "authentications#get_facebook_info"
     delete "authentications/:authentication_id",  :to => "authentications#delete"
-    get    "users/facebook/info",  :to => "authentications#get_facebook_info"
     ##############################################################################
     # ITEMS
     ##############################################################################
-    get    "items/image_search/",     :to => "items#image_search"
+    get    "items/image_search",      :to => "items#image_search"
   end
 end
