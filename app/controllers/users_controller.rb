@@ -40,19 +40,22 @@ class UsersController < ApplicationController
 
   # ==Resource URL
   # /users.format
+  # /users/:id.format
   # ==Example
   # GET https://backend-heypal.heroku.com/users.json access_token=access_token
+  # GET https://backend-heypal.heroku.com/users/1.json access_token=access_token
   # === Parameters
-  # [:access_token]
-  #   Access token
+  # [:access_token] Access token
+  # [:id] Optional user id
   # === Response
   # [:user] User array containing the user data
   # === Error codes
   # [105] invalid access token
   def show
     check_token
+    id = params[:id].nil? ? current_user.id : params[:id]
     fields = [:id, :name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
-    @user = Rails.cache.fetch("user_full_info_" + current_user.id.to_s) { User.select(fields).find(current_user.id) }
+    @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.select(fields).find(id) }
     respond_with do |format|
       format.any(:xml, :json) { 
         render :status => 200, 

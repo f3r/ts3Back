@@ -12,7 +12,7 @@ class AuthenticationsTest < ActionController::IntegrationTest
 
   should "list user authentications (json)" do
     @user.confirm!
-    get '/users/authentications.json', {:access_token => @user.authentication_token}
+    get '/authentications.json', {:access_token => @user.authentication_token}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)

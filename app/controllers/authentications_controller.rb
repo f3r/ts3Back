@@ -3,9 +3,9 @@ class AuthenticationsController < ApplicationController
   respond_to :xml, :json
   
   # ==Resource URL
-  # /users/authentications.format
+  # /authentications.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/users/authentications.json access_token=access_token
+  # GET https://backend-heypal.heroku.com/authentications.json access_token=access_token
   # === Parameters
   # [:access_token] Access token
   # === Response
@@ -26,9 +26,9 @@ class AuthenticationsController < ApplicationController
   end
 
   # ==Resource URL
-  # /users/authentications/:authentication_id.format
+  # /authentications/:authentication_id.format
   # ==Example
-  # DELETE https://backend-heypal.heroku.com/users/authentications/1.json access_token=access_token
+  # DELETE https://backend-heypal.heroku.com/authentications/1.json access_token=access_token
   # === Parameters
   # [:access_token] Access token
   # [:authentication_id] Id number of the authentication to be deleted

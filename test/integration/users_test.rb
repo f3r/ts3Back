@@ -6,8 +6,19 @@ class UsersTest < ActionController::IntegrationTest
     @user.confirm!
   end
 
-  should "show full user information (json)" do
+  should "show full current user information (json)" do
     get '/users.json', {:access_token => @user.authentication_token}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @user.id, json['user']['id']
+    assert_equal @user.name, json['user']['name']
+  end
+
+  should "show full user information (json)" do
+    get "/users/#{@user.id}.json", {:access_token => @user.authentication_token}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)

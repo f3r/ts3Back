@@ -16,6 +16,7 @@ HeyPalBackEnd::Application.routes.draw do
     # USER INFO
     ##############################################################################
     get    "users/:id/info",          :to => "users#info"
+    get    "users/:id",               :to => "users#show"
     get    "users",                   :to => "users#show"
     put    "users",                   :to => "users#update"
     ##############################################################################
@@ -39,8 +40,8 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     post   "users/:provider/sign_in", :to => "sessions#oauth_create"
     post   "users/:provider/sign_up", :to => "registrations#create"
-    get    "users/authentications",   :to => "authentications#list"
-    delete "users/authentications/:authentication_id",  :to => "authentications#delete"
+    get    "authentications",   :to => "authentications#list"
+    delete "authentications/:authentication_id",  :to => "authentications#delete"
     get    "users/facebook/info",  :to => "authentications#get_facebook_info"
     ##############################################################################
     # ITEMS
