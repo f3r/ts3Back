@@ -2,6 +2,7 @@ require 'test_helper'
 class RegistrationsTest < ActionController::IntegrationTest
 
   setup do
+    @user = Factory(:user)
     @parameters = { :name => Faker::Name.name, 
                     :email => Faker::Internet.email, 
                     :password => "FSls26ESKaaJzADP" }
@@ -59,6 +60,40 @@ class RegistrationsTest < ActionController::IntegrationTest
     assert_response(401)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+  end
+
+  should "check email availability, taken (json)" do
+    get '/check_email.json', {:email => @user.email}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+    assert (json['err']['email'].include? 100)
+  end
+
+  should "check email availability, available (json)" do
+    get '/check_email.json', {:email => Faker::Internet.email}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+  end
+
+  should "check email availability, taken (xml)" do
+    get '/check_email.xml', {:email => @user.email}
+    assert_response(200)
+    assert_equal 'application/xml', @response.content_type
+    assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+    assert_tag 'err', :child => { :tag => "email", :content => "100" }
+  end
+
+  should "check email availability, available (xml)" do
+    get '/check_email.xml', {:email => Faker::Internet.email}
+    assert_response(200)
+    assert_equal 'application/xml', @response.content_type
+    assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
   end
 
 end

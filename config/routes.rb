@@ -5,7 +5,7 @@ HeyPalBackEnd::Application.routes.draw do
     # ACCOUNTS & REGISTRATION
     ##############################################################################
     post   "users/sign_up",           :to => "registrations#create"
-    get    "users/email_exists",      :to => "registrations#email_exists"
+    get    "check_email",            :to => "registrations#check_email"
     post   "users/sign_in",           :to => "sessions#create"
     delete "users",                   :to => "registrations#destroy"
     post   "users/confirmation",      :to => "confirmations#create"
