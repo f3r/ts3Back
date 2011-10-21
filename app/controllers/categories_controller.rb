@@ -1,7 +1,8 @@
 class CategoriesController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
-  #TODO: protect everything but /list with admin token
+  # TODO: protect everything but /list with admin token
+  # TODO: Create tests
 
   # ==Resource URL
   # /categories.format
@@ -24,13 +25,12 @@ class CategoriesController < ApplicationController
   # === Parameters
   # None
   def list
-    if (cat_list = Rails.cache.read('category/list')).nil?
-       cat_list = Category.category_tree
-       Rails.cache.write('category/list', cat_list)
-    end
+    cat_list = Rails.cache.fetch("category/list") { Category.category_tree }
     respond_with do |format|
       response =  { :stat => "ok", :categories => cat_list }
-      format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
+      format.any(:xml, :json) { 
+        render :status => 200, 
+        request.format.to_sym => format_response(response,request.format.to_sym) }
     end
   end
   
@@ -51,37 +51,31 @@ class CategoriesController < ApplicationController
   # ==Resource URL
   # /categories.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/categories.json access_token=access_token&name=name&parent=parentid
+  # POST https://backend-heypal.heroku.com/categories.json access_token=access_token&name=name&parent_id=parent_id
   # === Parameters
   # [:access_token]
   # [:name]
-  # [:parent]
+  # [:parent_id]
   def create
     check_token
-    if params[:parent]
-      @parent = Category.find(params[:parent])
-    else 
-      @category = Category.new(:name => params[:name])
-    end
-
+    parent = Category.find(params[:parent_id]) if params[:parent_id]
+    new_category = { :name => params[:name] }
+    new_category.merge!({:parent => parent}) if parent
+    @category = Category.new(new_category)
     respond_with do |format|
       if @category.save
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok", 
-            :category => @category, 
-            :msg => I18n.t("successfully_created"), 
-            :object_name => t(@category.class.to_s.downcase), 
-            :name => @category.name
-          },
+            :category => @category },
           request.format.to_sym)}
       else
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "fail", 
-            :err => @category.errors },
+            :err => format_errors(@category.errors.messages) },
           request.format.to_sym)}
       end
     end

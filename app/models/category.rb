@@ -1,22 +1,31 @@
 class Category < ActiveRecord::Base
-  validates_uniqueness_of :name
-  validates_presence_of :name
-  attr_accessible :name
+  include GeneralHelper
+  validates_uniqueness_of :name, :scope => :ancestry, :message => "100"
+  validates_presence_of :name, :message => "101"
+  attr_accessible :name, :parent
   has_ancestry :cache_depth => true
+  after_commit :delete_cache
 
   def self.category_tree
-    return self.first.category_tree_rec(self.first)
+    tree = []
+    roots.map{|x| tree << category_tree_rec(x)}
+    return tree
   end
   
-  def category_tree_rec(cat)
+  def self.category_tree_rec(cat)
     if cat.has_children?
       children = []
-      cat.children.each {|child|
-        children << category_tree_rec(child)
-      }
+      cat.children.map{ |x| children << category_tree_rec(x) }
       return {:id => cat.id, :name => cat.name, :children => children}
     else
       return {:id => cat.id, :name => cat.name}
     end
   end
+
+  private
+  
+  def delete_cache
+    delete_caches(["category/list"])
+  end
+
 end
