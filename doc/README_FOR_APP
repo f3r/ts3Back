@@ -16,3 +16,4 @@ error codes
 [111] invalid oauth request
 [112] This user doesn't have a linked Facebook account
 [113] invalid date
+[114] Amazon API error
