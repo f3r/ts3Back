@@ -8,9 +8,12 @@ class ItemsController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/items/image_search.json query=harry potter goblet of fire
   # === Parameters
-  # [:query]
+  # [:query] Example: harry potter goblet of fire
+  # === Response
+  # [:images] Array containing image urls
   def image_search
     # TODO: Caching is not working Error: "singleton can't be dumped / You are trying to cache a Ruby object which cannot be serialized to memcached."
+    # TODO: Find a way to disable HTTPI.log
     # images = Rails.cache.fetch("image_search/#{query.parameterize("_")}") {
     #   amazon_search(params[:query], :All)
     # }
