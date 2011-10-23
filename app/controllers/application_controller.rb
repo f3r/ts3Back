@@ -1,3 +1,4 @@
+include GeneralHelper
 class ApplicationController < ActionController::Base
   rescue_from Exceptions::UnauthorizedAccess, :with => :unauthorized_access
   rescue_from ActiveRecord::RecordNotFound, :with => :not_found
@@ -5,40 +6,6 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::UnknownAction, :with => :not_found
 
   protect_from_forgery
-
-  def format_response(response,format)
-    method = "to_#{format}"
-    if method == "to_xml"
-      response.to_xml(:root => "rsp", :dasherize => false)
-    else
-      response.send(method)
-    end
-  end
-  
-  def format_errors(errors)
-    error_list = {}
-    for error in errors
-      codes = error[1].map {|x| x.to_i if (Float(x) or Integer(x)) rescue nil }.compact
-      error_list = error_list.merge({error[0] => codes})
-    end
-    return error_list
-  end
-
-  def user_fields(options={})
-    object_filtered = {}
-    fields = options[:fields]
-    object = options[:object]
-    for field in fields
-      if field == :avatar_file_name
-        style = options[:style] if options[:style] rescue :large
-        avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
-        object_filtered = object_filtered.merge({:avatar => avatar })
-      else
-        object_filtered = object_filtered.merge({field => object["#{field}"]})
-      end
-    end
-    return object_filtered
-  end
 
   def authenticated?
     params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
