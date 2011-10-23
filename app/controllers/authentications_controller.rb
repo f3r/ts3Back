@@ -18,8 +18,7 @@ class AuthenticationsController < ApplicationController
   # [:authentications] Array containing a list authentications for the selected user
   def list
     check_token
-    # TODO: Check if we need to return all parameters or just (id, provider, uid)
-    @authentications = current_user.authentications
+    @authentications = current_user.authentications.select(@fields)
     respond_with do |format|
       if @authentications
         format.any(:xml, :json) { 

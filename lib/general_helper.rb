@@ -25,7 +25,7 @@ module GeneralHelper
   end
 
   def filter_fields(object, fields, options={})
-    if object.class == Array
+    if object.class == Array or object.class == ActiveRecord::Relation
       array = []
       object.map{|new_object| array << filter_object(new_object, fields, options) }
       return array

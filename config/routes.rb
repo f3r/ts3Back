@@ -13,12 +13,13 @@ HeyPalBackEnd::Application.routes.draw do
     post   "users/password",          :to => "passwords#create"
     put    "users/password",          :to => "passwords#update"
     ##############################################################################
-    # USER INFO
+    # PROVIDERS
     ##############################################################################
-    get    "users/:id/info",          :to => "users#info"
-    get    "users/:id",               :to => "users#show"
-    get    "users",                   :to => "users#show"
-    put    "users",                   :to => "users#update"
+    post   "users/:provider/sign_in", :to => "sessions#oauth_create"
+    post   "users/:provider/sign_up", :to => "registrations#create"
+    get    "authentications",         :to => "authentications#list"
+    get    "users/facebook/info",     :to => "authentications#get_facebook_info"
+    delete "authentications/:authentication_id",  :to => "authentications#delete"
     ##############################################################################
     # ADDRESSES
     ##############################################################################
@@ -36,16 +37,15 @@ HeyPalBackEnd::Application.routes.draw do
     put    "categories/:id",          :to => "categories#update"
     delete "categories/:id",          :to => "categories#destroy"
     ##############################################################################
-    # PROVIDERS
-    ##############################################################################
-    post   "users/:provider/sign_in", :to => "sessions#oauth_create"
-    post   "users/:provider/sign_up", :to => "registrations#create"
-    get    "authentications",         :to => "authentications#list"
-    get    "users/facebook/info",     :to => "authentications#get_facebook_info"
-    delete "authentications/:authentication_id",  :to => "authentications#delete"
-    ##############################################################################
     # ITEMS
     ##############################################################################
     get    "items/image_search",      :to => "items#image_search"
+    ##############################################################################
+    # USER INFO
+    ##############################################################################
+    get    "users/:id/info",          :to => "users#info"
+    get    "users/:id",               :to => "users#show"
+    get    "users",                   :to => "users#show"
+    put    "users",                   :to => "users#update"
   end
 end
