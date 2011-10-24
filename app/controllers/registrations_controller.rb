@@ -36,7 +36,7 @@ class RegistrationsController < Devise::RegistrationsController
     resource = resource_class.new(parameters)
     respond_with do |format|
       if resource.save
-        if params[:oauth_token]
+        if params[:oauth_token] && params[:oauth_token]['credentials']
           authentication = resource.authentications.create(
             :provider => params[:oauth_token]['provider'], 
             :uid => params[:oauth_token]['uid'], 
@@ -48,8 +48,7 @@ class RegistrationsController < Devise::RegistrationsController
           request.format.to_sym => format_response(
             { 
               :stat => "ok", 
-              :user_id => resource.id,  
-              :msg => I18n.t("devise.registrations.signed_up")
+              :user_id => resource.id
             },
             request.format.to_sym) }
       else

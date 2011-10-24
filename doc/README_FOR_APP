@@ -19,3 +19,4 @@ error codes
 [114] Amazon API error
 [115] no results
 [116] duplicate
+[117] invalid oauth token

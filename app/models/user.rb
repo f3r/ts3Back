@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
     :before => lambda { Date.current } 
 
   has_many :authentications, :dependent => :destroy
-  has_many :addresses
+  has_many :addresses, :dependent => :destroy
   
   has_attached_file :avatar, 
      :styles => {
@@ -93,20 +93,6 @@ class User < ActiveRecord::Base
     rescue Exception => e
       return e
     end
-  end
-  
-  # TODO: Check /users/facebook/sign_in.json if we really need this anymore...
-  def self.find_for_oauth(token, user=nil)
-    if user && token['credentials']
-      authentication = user.authentications.find_or_create_by_provider_and_uid_and_oauth_token_and_oauth_token_secret(
-        :provider => token['provider'], 
-        :uid      => token['uid'], 
-        :token    => token['credentials']['token'], 
-        :secret   => token['credentials']['secret'])
-    elsif token['credentials']
-      authentication = Authentication.find_by_provider_and_uid(token['provider'], token['uid'])
-    end
-    return authentication.user if authentication
   end
   
   private

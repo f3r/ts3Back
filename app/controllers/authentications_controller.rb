@@ -7,6 +7,55 @@ class AuthenticationsController < ApplicationController
   end
 
   # == Description
+  # Adds an authentication method to the current_user
+  # ==Resource URL
+  # /authentications.format
+  # ==Example
+  # POST https://backend-heypal.heroku.com/authentications.json access_token=access_token&oauth_token=oauth_token
+  # === Parameters
+  # [:access_token] Access token
+  # [:oauth_token] oauth token
+  # === Response
+  # [:authentication] id, provider, uid  
+  # === Error codes
+  # [117] Invalid oauth token
+  # [100] has already been taken
+  def create
+    check_token
+    if params[:oauth_token] && params[:oauth_token]['credentials']
+      authentication = current_user.authentications.new(
+        :provider => params[:oauth_token]['provider'], 
+        :uid      => params[:oauth_token]['uid'], 
+        :token    => params[:oauth_token]['credentials']['token'], 
+        :secret   => params[:oauth_token]['credentials']['secret'])
+    end
+    respond_with do |format|
+      if authentication && authentication.save
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok",
+            :authentication => filter_fields(authentication,@fields) },
+            request.format.to_sym) }
+      elsif authentication
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail",
+            :err => format_errors(authentication.errors.messages) },
+            request.format.to_sym) }
+      else
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail",
+            :err => {:oauth_token=>[117]} },
+            request.format.to_sym) }
+      end
+    end
+  end
+
+  # == Description
   # Returns a list of all the authentications of the current_user
   # ==Resource URL
   # /authentications.format

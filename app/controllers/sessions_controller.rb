@@ -32,39 +32,34 @@ class SessionsController < Devise::SessionsController
   # Error message override is at /lib/custom_failure.rb
   
   # ==Resource URL
-  # /users/:provider/sign_in.format
+  # /users/oauth/sign_in.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/users/twitter/sign_in.json oauth_token=oauth_token
+  # POST https://backend-heypal.heroku.com/users/oauth/sign_in.json oauth_token=oauth_token
   # === Parameters
-  # [:provider]     Name of the oAuth provider
   # [:oauth_token]  oAuth token
   # === Error codes
   # [110] Must sign up
   def oauth_create
-    user_id = Authentication.find_by_provider_and_token(params[:provider], params[:oauth_token], :select => "user_id")
+    if params[:oauth_token]
+      authentication = Authentication.find_by_provider_and_token(
+        params[:oauth_token]['provider'], 
+        params[:oauth_token]['credentials']['token']
+      )
+    end
     respond_with do |format|
-      if user_id
-        if @user = User.find(user_id['user_id'])
-          format.any(:xml, :json) { 
-            render :status => 200, 
-            request.format.to_sym => format_response({ 
-              :stat => "ok", 
-              :authentication_token => @user.authentication_token },
-              request.format.to_sym) }
-        else
-          format.any(:xml, :json) { 
-            render :status => 401, 
-            request.format.to_sym => format_response({ 
-              :stat => "fail", 
-              :err => {:user => [110]} }, #TODO: This error must be oauth_token exists, but user doesn't... wierd but true!
-              request.format.to_sym) }
-        end
+      if authentication
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok", 
+            :authentication_token => authentication.user.authentication_token },
+            request.format.to_sym) }
       else
         format.any(:xml, :json) { 
           render :status => 401, 
           request.format.to_sym => format_response({ 
             :stat => "fail", 
-            :err => {:user => [110]} },
+            :err => {:user => [110]} }, #TODO: This error must be oauth_token exists, but user doesn't... wierd but true!
             request.format.to_sym) }
       end
     end
