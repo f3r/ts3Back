@@ -60,5 +60,11 @@ HeyPalBackEnd::Application.configure do
   config.active_support.deprecation = :notify
   
   # config.middleware.use Rack::SslEnforcer
-  
+
+  #Facebook authentications
+  #TODO: Change to production facebook app!
+  FB = {
+    :app_id => '221413484589066', 
+    :app_secret => '719daf903365b4bab445a2ef5c54c2ea', 
+    :app_url => 'https://graph.facebook.com'}
 end

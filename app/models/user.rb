@@ -81,14 +81,11 @@ class User < ActiveRecord::Base
     begin
       authentication = self.authentications.where(:provider => "facebook").first
       if authentication
-        # TODO: Perhaps move appId and SecretID to some config file?
-        client   = OAuth2::Client.new("221413484589066", "719daf903365b4bab445a2ef5c54c2ea", :site => 'https://graph.facebook.com')
+        # CHANGED: Moved appId, SecretID, etc to config/environments/*.rb
+        client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => FB[:app_url])
         facebook = OAuth2::AccessToken.new(client, authentication.token)
         info     = JSON.parse(facebook.get('/me/friends'))
         if info
-          # TODO: remove migration/column 'friends' from mysql
-          # Update the serialized object into the friends column in mysql
-          # self.update_attribute(:friends, info['data'])
           # Update the REDIS information: delete all and create one by one... sigh
           REDIS.multi do
             REDIS.del(self.redis_key(:friend))
