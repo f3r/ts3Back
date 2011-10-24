@@ -1,5 +1,4 @@
 class Category < ActiveRecord::Base
-  include GeneralHelper
   validates_uniqueness_of :name, :scope => :ancestry, :message => "100"
   validates_presence_of :name, :message => "101"
   attr_accessible :name, :parent

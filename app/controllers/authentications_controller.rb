@@ -2,6 +2,10 @@ class AuthenticationsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
+  def initialize
+    @fields = [:id, :provider, :uid]
+  end
+
   # == Description
   # Returns a list of all the authentications of the current_user
   # ==Resource URL
@@ -14,15 +18,14 @@ class AuthenticationsController < ApplicationController
   # [:authentications] Array containing a list authentications for the selected user
   def list
     check_token
-    # TODO: Check if we need to return all parameters or just (id, provider, uid)
-    @authentications = current_user.authentications
+    @authentications = current_user.authentications.select(@fields)
     respond_with do |format|
       if @authentications
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok", 
-            :authentications => @authentications },
+            :authentications => filter_fields(@authentications,@fields) },
             request.format.to_sym) }
       end
     end

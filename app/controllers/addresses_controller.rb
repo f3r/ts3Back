@@ -2,6 +2,10 @@ class AddressesController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
+  def initialize
+    @fields = [:id, :street, :city, :country, :zip]
+  end
+  
   # == Description
   # Returns all the addresses of the current user
   # ==Resource URL
@@ -12,10 +16,12 @@ class AddressesController < ApplicationController
   # [:access_token]
   def index
     check_token
-    @addresses = current_user.addresses
+    @addresses = current_user.addresses.select(@fields)
     respond_with do |format|
-      response = @addresses.count > 0 ? { :stat => "ok", :addresses => @addresses } : { :stat => "ok", :err => I18n.t("no_results") }
-      format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
+      response = @addresses.count > 0 ? { :stat => "ok", :addresses => @addresses } : { :stat => "ok", :err => {:address => [115]} }
+      format.any(:xml, :json) { 
+        render :status => 200, 
+        request.format.to_sym => format_response(response,request.format.to_sym) }
     end
   end
 
@@ -31,6 +37,9 @@ class AddressesController < ApplicationController
   # [:city]    City name
   # [:country] Country Name
   # [:zip]     Zip Code
+  # == Errors
+  # [:101] can't be blank 
+  # [:116] Duplicate address
   def create
     check_token
     @address = current_user.addresses.new(
@@ -46,9 +55,7 @@ class AddressesController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat        => "ok", 
-            :address     => @address, 
-            :msg         => I18n.t("successfully_created"), 
-            :object_name => t(@category.class.to_s.downcase)
+            :address     => filter_fields(@address, @fields)
           },
           request.format.to_sym)}
       else
@@ -56,7 +63,7 @@ class AddressesController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "fail", 
-            :err => @address.errors },
+            :err => format_errors(@address.errors.messages) },
           request.format.to_sym)}
       end
     end
@@ -74,9 +81,12 @@ class AddressesController < ApplicationController
   # [:city]    City name
   # [:country] Country Name
   # [:zip]     Zip Code
+  # == Errors
+  # [:101] can't be blank 
+  # [:116] Duplicate address
   def update
     check_token
-    @address = Address.find(params[:id])
+    @address = current_user.addresses.find(params[:id])
     respond_with do |format|
       if @address.update_attributes(
           :street  => params[:street],
@@ -88,15 +98,16 @@ class AddressesController < ApplicationController
           request.format.to_sym => format_response(
             {  
               :stat        => "ok", 
-              :address     => @address, 
-              :msg         => I18n.t("successfully_updated"), 
-              :object_name => t(@address.class.to_s.downcase)
+              :address     => filter_fields(@address, @fields)
             },
             request.format.to_sym) }
       else
         format.any(:xml, :json) { 
           render :status => 200, 
-          request.format.to_sym => format_response({ :stat => "fail", :err => @address.errors },request.format.to_sym) }
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => format_errors(@address.errors.messages) },
+          request.format.to_sym) }
       end
     end
   end
@@ -111,23 +122,21 @@ class AddressesController < ApplicationController
   # [:access_token]
   def destroy
     check_token
-    @address = Address.find(params[:id])
+    @address = current_user.addresses.find(params[:id])
     respond_with do |format|
       if @address.destroy
         format.any(:xml, :json) { 
           render :status => 200, 
-          request.format.to_sym => format_response(
-            { 
-              :stat        => "ok", 
-              :category    => @address, 
-              :msg         => I18n.t("successfully_deleted"), 
-              :object_name => t(@address.class.to_s.downcase)
-            },
-            request.format.to_sym) }
+          request.format.to_sym => format_response({ 
+            :stat => "ok"},
+          request.format.to_sym) }
       else
         format.any(:xml, :json) { 
           render :status => 200, 
-          request.format.to_sym => format_response({ :stat => "fail", :err => @category.errors },request.format.to_sym) }
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => format_errors(@address.errors.messages) },
+            request.format.to_sym) }
       end
     end
   end

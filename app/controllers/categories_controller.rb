@@ -2,6 +2,10 @@ class CategoriesController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   # TODO: protect everything but /list with admin token
+  
+  def initialize
+    @fields = [:id, :name]
+  end
 
   # TODO: Do we need this method?
   # ==Resource URL
@@ -41,13 +45,13 @@ class CategoriesController < ApplicationController
   # === Parameters
   # [:id]  
   def show
-    @category = Category.find(params[:id])
+    @category = Category.select(@fields).find(params[:id])
     respond_with do |format|
       format.any(:xml, :json) { 
         render :status => 200, 
         request.format.to_sym => format_response({ 
           :stat => "ok", 
-          :category => @category },
+          :category => filter_fields(@category,@fields) },
           request.format.to_sym) }
     end
   end

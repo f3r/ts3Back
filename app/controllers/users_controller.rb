@@ -23,7 +23,7 @@ class UsersController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok",
-            :user => user_fields(:object => @user, :fields => fields, :style => :thumb)
+            :user => filter_fields(@user, fields, {:style => :thumb})
             # TODO: Add review/badges when implemented
             # :review_count  => @user.review_count,
             # :badges_count  => @user.badges.count
@@ -65,7 +65,7 @@ class UsersController < ApplicationController
         render :status => 200, 
         request.format.to_sym => format_response({ 
           :stat => "ok",
-          :user => user_fields(:object => @user, :fields => fields) },
+          :user => filter_fields(@user,fields) },
           request.format.to_sym) }
     end
   end

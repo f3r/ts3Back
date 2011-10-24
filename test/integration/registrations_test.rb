@@ -63,7 +63,7 @@ class RegistrationsTest < ActionController::IntegrationTest
   end
 
   should "check email availability, taken (json)" do
-    get '/check_email.json', {:email => @user.email}
+    get '/users/check_email.json', {:email => @user.email}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -73,7 +73,7 @@ class RegistrationsTest < ActionController::IntegrationTest
   end
 
   should "check email availability, available (json)" do
-    get '/check_email.json', {:email => Faker::Internet.email}
+    get '/users/check_email.json', {:email => Faker::Internet.email}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -82,7 +82,7 @@ class RegistrationsTest < ActionController::IntegrationTest
   end
 
   should "check email availability, taken (xml)" do
-    get '/check_email.xml', {:email => @user.email}
+    get '/users/check_email.xml', {:email => @user.email}
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
@@ -90,7 +90,7 @@ class RegistrationsTest < ActionController::IntegrationTest
   end
 
   should "check email availability, available (xml)" do
-    get '/check_email.xml', {:email => Faker::Internet.email}
+    get '/users/check_email.xml', {:email => Faker::Internet.email}
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
