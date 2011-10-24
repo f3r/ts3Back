@@ -17,3 +17,5 @@ error codes
 [112] This user doesn't have a linked Facebook account
 [113] invalid date
 [114] Amazon API error
+[115] no results
+[116] duplicate

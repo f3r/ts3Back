@@ -10,4 +10,13 @@ FactoryGirl.define do
   factory :category do
     name { Faker::Lorem.sentence(1) }
   end
+
+  factory :address do
+    street { Faker::Address.street_address }
+    city { Faker::Address.city }
+    country { Faker::Address.country }
+    zip { Faker::Address.zip }
+    user { @user }
+  end
+
 end

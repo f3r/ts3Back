@@ -11,6 +11,8 @@ class ItemsController < ApplicationController
   # [:query] Example: harry potter goblet of fire
   # === Response
   # [:images] Array containing image urls
+  # == Errors
+  # [:114] Amazon API error
   def image_search
     # FIXME: Caching is not working Error: "singleton can't be dumped / You are trying to cache a Ruby object which cannot be serialized to memcached."
     # TODO: Find a way to disable HTTPI.log
