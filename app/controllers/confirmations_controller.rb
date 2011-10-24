@@ -30,6 +30,11 @@ class ConfirmationsController < Devise::ConfirmationsController
     end
   end
 
+  # ==Description
+  # Once a user receives the registration email, this method activates the account.
+  #
+  # The token sent in the email must be passed along. If it is correct, we will send
+  # the user a welcome email, because we are THAT nice :)
   # ==Resource URL
   # /users/confirmation.format
   # ==Example
@@ -45,8 +50,10 @@ class ConfirmationsController < Devise::ConfirmationsController
     self.resource = resource_class.confirm_by_token(params[:confirmation_token])
     respond_with do |format|
       if resource.errors.empty?
+        # New user! Now we send them a nice welcome email
+        UserMailer.welcome_note(resource).deliver
         format.any(:xml, :json) { 
-          render :status => 200, 
+          render :status => 200,
           request.format.to_sym => format_response({ 
             :stat => "ok", 
             :authentication_token => resource.authentication_token }, 

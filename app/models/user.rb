@@ -77,28 +77,48 @@ class User < ActiveRecord::Base
     encrypted_password.blank?
   end
 
-  def get_facebook_friends  
+  def import_facebook_friends  
     begin
       authentication = self.authentications.where(:provider => "facebook").first
-      puts "AUTH: #{authentication}"
       if authentication
-        # TODO: Perhaps move appId and SecretID to some config file?
-        client = OAuth2::Client.new("221413484589066", "719daf903365b4bab445a2ef5c54c2ea", :site => 'https://graph.facebook.com')
+        # CHANGED: Moved appId, SecretID, etc to config/environments/*.rb
+        client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => FB[:app_url])
         facebook = OAuth2::AccessToken.new(client, authentication.token)
-        info = JSON.parse(facebook.get('/me/friends'))
+        info     = JSON.parse(facebook.get('/me/friends'))
         if info
-          self.update_attribute(:friends, info['data'])
+          # Update the REDIS information: delete all and create one by one... sigh
+          REDIS.multi do
+            REDIS.del(self.redis_key(:friend))
+            info['data'].each { |friend|
+               REDIS.sadd(self.redis_key(:friend), friend['id'])
+            }
+          end
         end
       end
     rescue Exception => e
       return e
     end
   end
+
+  # Returns true if the current user is friends with the given user
+  def friends?(user)
+    REDIS.sismember(self.redis_key(:friend), user.id)
+  end
   
-  private
-  
+  # Returns true if the current user and the given user have a common friend
+  def fof?(user)
+    REDIS.sinter(self.redis_key(:friend), user.redis_key(:friends))
+  end
+    
+  # helper method to generate redis keys
+  def redis_key(str)
+    "user:#{self.id}:#{str}"
+  end
+
+  private  
+
+  # Expires the cache when the user info is updated
   def delete_cache
     delete_caches(["user_info_" + self.id.to_s, "user_full_info_" + self.id.to_s])
   end
-  
 end

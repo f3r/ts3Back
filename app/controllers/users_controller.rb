@@ -2,6 +2,8 @@ class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
+  # ==Description
+  # Returns all the public information of a specific user (id, profile_pict, name)
   # ==Resource URL
   # /users/:id/info.format
   # ==Example
@@ -38,6 +40,8 @@ class UsersController < ApplicationController
     end
   end
 
+  # ==Description
+  # Returns all the information of the current user
   # ==Resource URL
   # /users.format
   # /users/:id.format

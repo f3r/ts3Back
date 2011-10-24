@@ -11,6 +11,7 @@ gem 'jquery-rails'
 gem 'asin'          # Amazon Search API
 gem 'ancestry'      # Categories Tree
 gem 'validates_timeliness', '~> 3.0.2'
+gem 'redis'
 
 group :assets do
   gem 'sass-rails', "  ~> 3.1.0"
