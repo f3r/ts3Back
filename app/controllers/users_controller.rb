@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   # === Error codes
   # [106] no user exists
   def info
-    fields = [:id, :name, :avatar_file_name]
+    fields = [:id, :first_name, :last_name, :avatar_file_name]
     @user = Rails.cache.fetch("user_info_" + params[:id].to_s) { User.select(fields).find(params[:id]) }
     respond_with do |format|
       if @user
@@ -58,7 +58,7 @@ class UsersController < ApplicationController
   def show
     check_token
     id = params[:id].nil? ? current_user.id : params[:id]
-    fields = [:id, :name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
+    fields = [:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
     @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.select(fields).find(id) }
     respond_with do |format|
       format.any(:xml, :json) { 
@@ -86,7 +86,7 @@ class UsersController < ApplicationController
   # [113] invalid date
   def update
     check_token
-    fields = [:id, :name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
+    fields = [:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
     @user = current_user
     respond_with do |format|
       if @user.update_attributes(params[:user])

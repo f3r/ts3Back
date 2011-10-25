@@ -13,9 +13,10 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Resource URL
   # /users/sign_up.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/users/sign_up.json name=John+Smith&email=user@example.com&password=password
+  # POST https://backend-heypal.heroku.com/users/sign_up.json first_name=John&last_name=Smith&email=user@example.com&password=password
   # === Parameters
-  # [:name] User full name (Example values: John Smith)
+  # [:first_name] User first name (Example values: John)
+  # [:last_name] User last name (Example values: Smith)
   # [:email] User email address (Example values: user@example.com)
   # [:password] User password
   # [:oauth_token] Optional oauth token
@@ -28,7 +29,8 @@ class RegistrationsController < Devise::RegistrationsController
   # [103] is invalid
   # [104] doesn't match
   def create
-    parameters = {  :name => params[:name], 
+    parameters = {  :first_name => params[:first_name], 
+                    :last_name => params[:last_name], 
                     :email => params[:email], 
                     :password => params[:password], 
                     :password_confirmation => params[:password] }

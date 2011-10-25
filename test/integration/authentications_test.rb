@@ -8,7 +8,7 @@ class AuthenticationsTest < ActionController::IntegrationTest
       :provider=>"twitter", 
       :uid=>"1111111111", 
       :credentials=>{"token"=>"aaaaa", "secret"=>"bbbbb"}, 
-      :user_info=>{"name"=>Faker::Name.name, "email" => Faker::Internet.email}}
+      :user_info=>{"first_name"=>Faker::Name.first_name,"last_name"=>Faker::Name.last_name, "email" => Faker::Internet.email}}
   end
 
   should "list user authentications (json)" do

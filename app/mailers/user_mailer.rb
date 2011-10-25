@@ -9,7 +9,7 @@ class UserMailer < ActionMailer::Base
 def welcome_note(user)
   begin
     @user      = user
-    recipients = "#{user.name} <#{user.email}>"
+    recipients = "#{user.full_name} <#{user.email}>"
     subject    = 'Welcome to Heypal!'
     sent_on    =  Time.now
     mail(:to => recipients, :subject => subject, :date => sent_on) do |format|

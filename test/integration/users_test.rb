@@ -14,7 +14,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
     assert_equal @user.id, json['user']['id']
-    assert_equal @user.name, json['user']['name']
+    assert_equal @user.first_name, json['user']['first_name']
   end
   
   should "show full user information (json)" do
@@ -25,7 +25,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
     assert_equal @user.id, json['user']['id']
-    assert_equal @user.name, json['user']['name']
+    assert_equal @user.first_name, json['user']['first_name']
   end
   
   should "show full user information (xml)" do
@@ -33,7 +33,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
-    assert_tag 'user', :child => { :tag => "name", :content => @user.name }
+    assert_tag 'user', :child => { :tag => "first_name", :content => @user.first_name }
   end
   
   should "not show full user information (json)" do
@@ -54,7 +54,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
     assert_equal @user.id, json['user']['id']
-    assert_equal @user.name, json['user']['name']
+    assert_equal @user.first_name, json['user']['first_name']
   end
   
   should "show user badge info (xml)" do
@@ -62,7 +62,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
-    assert_tag 'user', :child => { :tag => "name", :content => @user.name }
+    assert_tag 'user', :child => { :tag => "first_name", :content => @user.first_name }
   end
   
   should "not show user badge info (json)" do
@@ -76,7 +76,7 @@ class UsersTest < ActionController::IntegrationTest
   end
   
   should "update user profile information (json)" do
-    put "/users.json", {:access_token => @user.authentication_token, :user => { :name => "Test Name", :gender => "male" } }
+    put "/users.json", {:access_token => @user.authentication_token, :user => { :first_name => "Test Name", :gender => "male" } }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -86,11 +86,11 @@ class UsersTest < ActionController::IntegrationTest
   end
   
   should "update user profile information (xml)" do
-    put "/users.xml", {:access_token => @user.authentication_token, :user => { :name => "Test Name", :gender => "male" } }
+    put "/users.xml", {:access_token => @user.authentication_token, :user => { :first_name => "Test Name", :gender => "male" } }
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
-    assert_tag 'user', :child => { :tag => "name", :content => "Test Name" }
+    assert_tag 'user', :child => { :tag => "first_name", :content => "Test Name" }
     assert_tag 'user', :child => { :tag => "gender", :content => "male" }
   end
   

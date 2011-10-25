@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   before_save :ensure_authentication_token
   after_save :delete_cache
 
-  attr_accessible :name, 
+  attr_accessible :first_name,
+                  :last_name,
                   :email, 
                   :gender, 
                   :birthdate, 

@@ -3,7 +3,8 @@ class RegistrationsTest < ActionController::IntegrationTest
 
   setup do
     @user = Factory(:user)
-    @parameters = { :name => Faker::Name.name, 
+    @parameters = { :first_name => Faker::Name.first_name, 
+                    :last_name => Faker::Name.last_name, 
                     :email => Faker::Internet.email, 
                     :password => "FSls26ESKaaJzADP" }
   end
@@ -13,7 +14,7 @@ class RegistrationsTest < ActionController::IntegrationTest
       post '/users/sign_up.xml', @parameters
     end
     user = User.first(:order => 'id DESC')
-    assert_equal @parameters[:name], user.name
+    assert_equal @parameters[:first_name], user.first_name
     assert_equal @parameters[:email], user.email
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
@@ -25,7 +26,7 @@ class RegistrationsTest < ActionController::IntegrationTest
       post '/users/sign_up.json', @parameters
     end
     user = User.first(:order => 'id DESC')
-    assert_equal @parameters[:name], user.name
+    assert_equal @parameters[:first_name], user.first_name
     assert_equal @parameters[:email], user.email
     assert_response(200)
     assert_equal 'application/json', @response.content_type
