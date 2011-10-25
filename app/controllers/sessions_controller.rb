@@ -2,6 +2,9 @@ class SessionsController < Devise::SessionsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
+  # ==Description
+  # Given an email and password, this method returns the authentication token of the user so you can
+  # send requests on their behalf
   # ==Resource URL
   # /users/sign_in.format
   # ==Example
@@ -31,6 +34,9 @@ class SessionsController < Devise::SessionsController
   end
   # Error message override is at /lib/custom_failure.rb
   
+  # ==Description
+  # Given an provider and provider token, this method returns the authentication token of the user so you can
+  # send requests on their behalf
   # ==Resource URL
   # /users/oauth/sign_in.format
   # ==Example
@@ -59,7 +65,7 @@ class SessionsController < Devise::SessionsController
           render :status => 401, 
           request.format.to_sym => format_response({ 
             :stat => "fail", 
-            :err => {:user => [110]} }, #TODO: This error must be oauth_token exists, but user doesn't... wierd but true!
+            :err => {:user => [110]} },
             request.format.to_sym) }
       end
     end
