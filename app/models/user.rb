@@ -94,16 +94,15 @@ class User < ActiveRecord::Base
     begin
       authentication = self.authentications.where(:provider => "facebook").first
       if authentication
-        # CHANGED: Moved appId, SecretID, etc to config/environments/*.rb
         client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => FB[:app_url])
         facebook = OAuth2::AccessToken.new(client, authentication.token)
-        info     = JSON.parse(facebook.get('/me/friends'))
-        if info
+        friends     = JSON.parse(facebook.get('/me/friends'))
+        if friends
           # Update the REDIS information: delete all and create one by one... sigh
           REDIS.multi do
             REDIS.del(self.redis_key(:friend))
-            info['data'].each { |friend|
-               REDIS.sadd(self.redis_key(:friend), friend['id'])
+            friends['data'].each { |friend|
+              REDIS.sadd(self.redis_key(:friend), friend['id'])
             }
           end
         end
@@ -115,12 +114,12 @@ class User < ActiveRecord::Base
 
   # Returns true if the current user is friends with the given user
   def friends?(user)
-    REDIS.sismember(self.redis_key(:friend), user.id)
+    REDIS.sismember(self.redis_key(:friend), user.facebook.uid)
   end
   
   # Returns true if the current user and the given user have a common friend
   def fof?(user)
-    REDIS.sinter(self.redis_key(:friend), user.redis_key(:friends))
+    REDIS.sinter(self.redis_key(:friend), user.redis_key(:friend))
   end
     
   # helper method to generate redis keys
@@ -145,8 +144,19 @@ class User < ActiveRecord::Base
       self.update_attributes(info) if auto_import
       return info
     rescue Exception => e
+      logger.error { "Error [user.rb/facebook_info] #{e.message}" }
       return nil
     end
+  end
+  
+  # gets users facebook authentication object, if exists
+  def facebook
+    Rails.cache.fetch("user_#{self.id.to_s}_provider_facebook") { self.authentications.find_by_provider("facebook") }
+  end
+  
+  # gets users twitter authentication object, if exists
+  def twitter
+    Rails.cache.fetch("user_#{self.id.to_s}_provider_twitter") { self.authentications.find_by_provider("twitter") }
   end
   
   private  
@@ -165,6 +175,7 @@ class User < ActiveRecord::Base
           self.avatar = remote_avatar
         end
       rescue Exception => e
+        logger.error { "Error [user.rb/check_avatar_url] #{e.message}" }
         return nil
       end
     end
