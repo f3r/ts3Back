@@ -73,9 +73,10 @@ class UsersController < ApplicationController
   # ==Resource URL
   # /users.format
   # ==Example
-  # PUT https://backend-heypal.heroku.com/users.json access_token=access_token
+  # PUT https://backend-heypal.heroku.com/users.json access_token=access_token&user[avatar_url]=http://example.com/image.jpg
   # === Parameters
   # [:access_token]
+  # [:avatar_url] avatar can be uploaded from url using user[avatar_url]
   #   Access token
   # === Response
   # [:user] User array containing the new data

@@ -19,7 +19,7 @@ HeyPalBackEnd::Application.routes.draw do
     post   "users/oauth/sign_up",     :to => "registrations#create"
     get    "authentications",         :to => "authentications#list"
     post   "authentications",         :to => "authentications#create"
-    get    "users/facebook/info",     :to => "authentications#get_facebook_info"
+    get    "users/facebook/info",     :to => "authentications#get_facebook_oauth_info"
     delete "authentications/:authentication_id",  :to => "authentications#delete"
     ##############################################################################
     # ADDRESSES

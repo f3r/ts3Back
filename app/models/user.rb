@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
 
-  before_save :ensure_authentication_token
+  before_save :ensure_authentication_token, :check_avatar_url
   after_save :delete_cache
 
   attr_accessible :first_name,
@@ -33,10 +33,13 @@ class User < ActiveRecord::Base
                   :phone_mobile, 
                   :phone_work, 
                   :avatar, 
+                  :avatar_url,
                   :password, 
                   :password_confirmation, 
                   :remember_me,
                   :friends
+
+  attr_accessor :avatar_url
 
   serialize :friends
 
@@ -125,10 +128,46 @@ class User < ActiveRecord::Base
     "user:#{self.id}:#{str}"
   end
 
+  def facebook_info(auto_import=false)
+    begin
+      authentication = self.authentications.where(:provider => "facebook").first
+      client = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => 'https://graph.facebook.com')
+      facebook = OAuth2::AccessToken.new(client, authentication.token)
+      info = JSON.parse(facebook.get("/#{authentication.uid}"))
+      birthday = Date.strptime(info['birthday'], "%m/%d/%Y")
+      info = {
+        :first_name => info['first_name'],
+        :last_name => info['last_name'],
+        :gender => info['gender'],
+        :birthdate => birthday,
+        :avatar_url => "http://graph.facebook.com/" + info['id'] + "/picture?type=large"
+      }
+      self.update_attributes(info) if auto_import
+      return info
+    rescue Exception => e
+      return nil
+    end
+  end
+  
   private  
 
   # Expires the cache when the user info is updated
   def delete_cache
     delete_caches(["user_info_" + self.id.to_s, "user_full_info_" + self.id.to_s])
   end
+  
+  # checks if avatar_url is set and updates the avatar if avatar_url is an image
+  def check_avatar_url
+    if self.avatar_url
+      begin
+        remote_avatar = open(self.avatar_url)
+        if remote_avatar.content_type.match(/image/)
+          self.avatar = remote_avatar
+        end
+      rescue Exception => e
+        return nil
+      end
+    end
+  end
+
 end
