@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: AuthenticationsController</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/authentications_controller.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-create">#create</a>
+    
+    <li><a href="#method-i-delete">#delete</a>
+    
+    <li><a href="#method-i-get_facebook_oauth_info">#get_facebook_oauth_info</a>
+    
+    <li><a href="#method-i-list">#list</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./CategoriesController.html">CategoriesController</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./ItemsController.html">ItemsController</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class AuthenticationsController</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File app/controllers/authentications_controller.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
+  <span class="ruby-ivar">@fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:provider</span>, <span class="ruby-value">:uid</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-create-label-Description">Description</h2>
+
+<p>Adds an authentication method to the current_user</p>
+
+<h2 id="method-i-create-label-Resource+URL">Resource URL</h2>
+
+<p>/authentications.format</p>
+
+<h2 id="method-i-create-label-Example">Example</h2>
+
+<p>POST <a
+href="https://backend-heypal.heroku.com/authentications.json">backend-heypal.heroku.com/authentications.json</a>
+access_token=access_token&amp;oauth_token=oauth_token</p>
+
+<h3 id="method-i-create-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>Access token</p>
+</dd><dt>:oauth_token
+<dd>
+<p>oauth token</p>
+</dd></dl>
+
+<h3 id="method-i-create-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>:authentication
+<dd>
+<p>id, provider, uid</p>
+</dd></dl>
+
+<h3 id="method-i-create-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>117
+<dd>
+<p>Invalid oauth token</p>
+</dd><dt>100
+<dd>
+<p>has already been taken</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="create-source">
+            <pre><span class="ruby-comment"># File app/controllers/authentications_controller.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>]
+    <span class="ruby-identifier">authentication</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">new</span>(
+      <span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'provider'</span>], 
+      <span class="ruby-value">:uid</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'uid'</span>], 
+      <span class="ruby-value">:token</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>][<span class="ruby-string">'token'</span>], 
+      <span class="ruby-value">:secret</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>][<span class="ruby-string">'secret'</span>])
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">authentication</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">authentication</span>.<span class="ruby-identifier">save</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>,
+          <span class="ruby-value">:authentication</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-identifier">authentication</span>,<span class="ruby-ivar">@fields</span>) },
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">authentication</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;fail&quot;</span>,
+          <span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-identifier">authentication</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>) },
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;fail&quot;</span>,
+          <span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:oauth_token=</span><span class="ruby-operator">&gt;</span>[<span class="ruby-value">117</span>]} },
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create-method -->
+
+    
+      <div id="method-i-delete" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-delete-label-Description">Description</h2>
+
+<p>Deletes one of the authentications of the current user</p>
+
+<h2 id="method-i-delete-label-Resource+URL">Resource URL</h2>
+
+<p>/authentications/:authentication_id.format</p>
+
+<h2 id="method-i-delete-label-Example">Example</h2>
+
+<p>DELETE <a
+href="https://backend-heypal.heroku.com/authentications/1.json">backend-heypal.heroku.com/authentications/1.json</a>
+access_token=access_token</p>
+
+<h3 id="method-i-delete-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>Access token</p>
+</dd><dt>:authentication_id
+<dd>
+<p>Id number of the authentication to be deleted</p>
+</dd></dl>
+
+<h3 id="method-i-delete-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>Record not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="delete-source">
+            <pre><span class="ruby-comment"># File app/controllers/authentications_controller.rb, line 94</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-identifier">authentication</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:authentication_id</span>])
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">authentication</span>.<span class="ruby-identifier">destroy</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span> },
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;fail&quot;</span>,
+          <span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-identifier">authentication</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>) },
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delete-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- delete-method -->
+
+    
+      <div id="method-i-get_facebook_oauth_info" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_facebook_oauth_info</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-get_facebook_oauth_info-label-Description">Description</h2>
+
+<p>Returns all the info from the facebook profile of the current user
+including name, gender, birthday and picture_url</p>
+
+<h2 id="method-i-get_facebook_oauth_info-label-Resource+URL">Resource URL</h2>
+
+<p>/users/facebook/info.format</p>
+
+<h2 id="method-i-get_facebook_oauth_info-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/users/facebook/info.json">backend-heypal.heroku.com/users/facebook/info.json</a>
+access_token=access_token</p>
+
+<h3 id="method-i-get_facebook_oauth_info-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>User access token</p>
+</dd><dt>:auto_import
+<dd>
+<p>boolean value, if true, it will auto import the facebook information into
+the user</p>
+</dd></dl>
+
+<h3 id="method-i-get_facebook_oauth_info-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>:user_info
+<dd>
+<p>Array containing the users information and picture url</p>
+</dd></dl>
+
+<h3 id="method-i-get_facebook_oauth_info-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>105
+<dd>
+<p>Invalid access token</p>
+</dd><dt>111
+<dd>
+<p>Invalid oauth request</p>
+</dd><dt>112
+<dd>
+<p>This user doesn’t have a linked Facebook account</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="get_facebook_oauth_info-source">
+            <pre><span class="ruby-comment"># File app/controllers/authentications_controller.rb, line 131</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_facebook_oauth_info</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-identifier">auto_import</span> = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:auto_import</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;1&quot;</span>
+  <span class="ruby-identifier">user_info</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">facebook_info</span>(<span class="ruby-identifier">auto_import</span>)
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">user_info</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, <span class="ruby-value">:user_info</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">user_info</span> },
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;fail&quot;</span>, 
+          <span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">112</span>]}},
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_facebook_oauth_info-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_facebook_oauth_info-method -->
+
+    
+      <div id="method-i-list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">list</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-list-label-Description">Description</h2>
+
+<p>Returns a list of all the authentications of the current_user</p>
+
+<h2 id="method-i-list-label-Resource+URL">Resource URL</h2>
+
+<p>/authentications.format</p>
+
+<h2 id="method-i-list-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/authentications.json">backend-heypal.heroku.com/authentications.json</a>
+access_token=access_token</p>
+
+<h3 id="method-i-list-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>Access token</p>
+</dd></dl>
+
+<h3 id="method-i-list-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>:authentications
+<dd>
+<p>Array containing a list authentications for the selected user</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="list-source">
+            <pre><span class="ruby-comment"># File app/controllers/authentications_controller.rb, line 68</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">list</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-ivar">@authentications</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">select</span>(<span class="ruby-ivar">@fields</span>)
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@authentications</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, 
+          <span class="ruby-value">:authentications</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@authentications</span>,<span class="ruby-ivar">@fields</span>) },
+          <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- list-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- list-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
