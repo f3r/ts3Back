@@ -77,6 +77,15 @@ class User < ActiveRecord::Base
     encrypted_password.blank?
   end
 
+  def full_name
+    [first_name,last_name].join(' ')
+  end
+
+  def age
+    now = Time.now.utc.to_date
+    now.year - birthdate.year - (birthdate.to_date.change(:year => now.year) > now ? 1 : 0)
+  end
+
   def import_facebook_friends  
     begin
       authentication = self.authentications.where(:provider => "facebook").first
