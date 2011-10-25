@@ -86,6 +86,7 @@ class UsersController < ApplicationController
   # [113] invalid date
   def update
     check_token
+    fields = [:id, :name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
     @user = current_user
     respond_with do |format|
       if @user.update_attributes(params[:user])
@@ -93,7 +94,7 @@ class UsersController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok",
-            :user => @user },
+            :user => filter_fields(@user,fields) },
             request.format.to_sym) }
       else
         format.any(:xml, :json) { 
