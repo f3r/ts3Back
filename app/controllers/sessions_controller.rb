@@ -43,6 +43,8 @@ class SessionsController < Devise::SessionsController
   # POST https://backend-heypal.heroku.com/users/oauth/sign_in.json oauth_token=oauth_token
   # === Parameters
   # [:oauth_token]  oAuth token
+  #   oauth_token[provider]=facebook&
+  #   oauth_token[credentials][token]=token
   # === Error codes
   # [110] Must sign up
   def oauth_create
