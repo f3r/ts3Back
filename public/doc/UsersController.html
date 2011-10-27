@@ -175,19 +175,19 @@ href="https://backend-heypal.heroku.com/users/:id/info.json">backend-heypal.hero
 <h3 id="method-i-info-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>:user
 <dd>
-<p>An array containing {id, profile_pic, name, review_count, badges_count}</p>
-</dd></dl>
+<p>{id, profile_pic, name, review_count, badges_count}</p>
 
 <h3 id="method-i-info-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>106
 <dd>
 <p>no user exists</p>
 </dd></dl>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="info-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 17</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">info</span>
   <span class="ruby-identifier">fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:avatar_file_name</span>]
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;user_info_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">to_s</span>) { <span class="ruby-constant">User</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">fields</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]) }
@@ -262,19 +262,20 @@ access_token=access_token</p>
 <h3 id="method-i-show-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>:user
 <dd>
-<p>User array containing the user data</p>
-</dd></dl>
+<p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home,
+:phone_mobile, :phone_work, :avatar_file_name}</p>
 
 <h3 id="method-i-show-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>105
 <dd>
 <p>invalid access token</p>
 </dd></dl>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 58</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 60</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
@@ -310,7 +311,14 @@ access_token=access_token</p>
 
         <div class="method-description">
           
-          <h2 id="method-i-update-label-Resource+URL">Resource URL</h2>
+          <h2 id="method-i-update-label-Description">Description</h2>
+
+<p>Updates the information for an authenticated user.</p>
+
+<p><strong>Note:</strong> User fields must be enclosed with square brackets,
+not with periods</p>
+
+<h2 id="method-i-update-label-Resource+URL">Resource URL</h2>
 
 <p>/users.format</p>
 
@@ -318,23 +326,49 @@ access_token=access_token</p>
 
 <p>PUT <a
 href="https://backend-heypal.heroku.com/users.json">backend-heypal.heroku.com/users.json</a>
-<a href="http://avatar_url">access_token=access_token&user</a>=<img
-src="http://example.com/image.jpg" /></p>
+access_token=access_token&amp;user.avatar_url=<a
+href="http://url/image_file">url/image_file</a></p>
 
 <h3 id="method-i-update-label-Parameters">Parameters</h3>
 <dl class="rdoc-list label-list"><dt>:access_token
-<dd></dd><dt>:avatar_url
 <dd>
-<p>avatar can be uploaded from url using <a href="http://avatar_url">user</a></p>
+<p>Access token</p>
+</dd><dt>user.first_name
+<dd>
+<p>First name of the user</p>
+</dd><dt>user.last_name
+<dd>
+<p>Last name of the user</p>
+</dd><dt>user.gender
+<dd>
+<p>Gender: unkown/male/female</p>
+</dd><dt>user.birthdate
+<dd>
+<p>Birthdate of the user, stored in same format as ruby::Date</p>
+</dd><dt>user.timezone
+<dd>
+<p>Based on TimeZone::to_s <a
+href="http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048">tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048</a></p>
+</dd><dt>user.phone_home
+<dd>
+<p>Home Phone number, including country code</p>
+</dd><dt>user.phone_mobile
+<dd>
+<p>Mobile Phone number, including country code</p>
+</dd><dt>user.phone_work
+<dd>
+<p>Work Phone number, including country code</p>
+</dd><dt>user.avatar_url
+<dd>
+<p>avatar picture from url, i.e. <a
+href="http://url/image_file">url/image_file</a></p>
 </dd></dl>
-
-<pre>Access token</pre>
 
 <h3 id="method-i-update-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>:user
 <dd>
-<p>User array containing the new data</p>
-</dd></dl>
+<p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home,
+:phone_mobile, :phone_work, :avatar_file_name}</p>
 
 <h3 id="method-i-update-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>105
@@ -350,11 +384,12 @@ src="http://example.com/image.jpg" /></p>
 <dd>
 <p>invalid date</p>
 </dd></dl>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 88</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:gender</span>, <span class="ruby-value">:birthdate</span>, <span class="ruby-value">:timezone</span>, <span class="ruby-value">:phone_home</span>, <span class="ruby-value">:phone_mobile</span>, <span class="ruby-value">:phone_work</span>, <span class="ruby-value">:avatar_file_name</span>]
