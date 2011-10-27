@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
 
   before_save :ensure_authentication_token, :check_avatar_url
-  after_save :delete_cache
+  after_save  :delete_cache
 
   attr_accessible :first_name,
                   :last_name,
@@ -36,12 +36,9 @@ class User < ActiveRecord::Base
                   :avatar_url,
                   :password, 
                   :password_confirmation, 
-                  :remember_me,
-                  :friends
+                  :remember_me
 
   attr_accessor :avatar_url
-
-  serialize :friends
 
   with_options :if => :password_validations_required? do |p|
     p.validates_presence_of :password, :message => "101"
@@ -96,7 +93,7 @@ class User < ActiveRecord::Base
       if authentication
         client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => FB[:app_url])
         facebook = OAuth2::AccessToken.new(client, authentication.token)
-        friends     = JSON.parse(facebook.get('/me/friends'))
+        friends  = JSON.parse(facebook.get('/me/friends'))
         if friends
           # Update the REDIS information: delete all and create one by one... sigh
           REDIS.multi do
