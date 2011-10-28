@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   respond_to :xml, :json
 
   # ==Description
-  # Returns all the public information of a specific user (id, profile_pict, name)
+  # Returns all the public information of a specific user
   # ==Resource URL
   # /users/:id/info.format
   # ==Example
@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   # [:id] User id
   # === Response
   # [:user]
-  # {id, profile_pic, name, review_count, badges_count}
+  # {id, first_name, last_name, avatar_file_name}
   # === Error codes
   # [106] no user exists
   def info
@@ -60,7 +60,18 @@ class UsersController < ApplicationController
   def show
     check_token
     id = params[:id].nil? ? current_user.id : params[:id]
-    fields = [:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
+    fields = [
+      :id, 
+      :first_name, 
+      :last_name, 
+      :gender, 
+      :birthdate, 
+      :timezone, 
+      :phone_home, 
+      :phone_mobile, 
+      :phone_work, 
+      :avatar_file_name
+    ]
     @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.select(fields).find(id) }
     respond_with do |format|
       format.any(:xml, :json) { 
@@ -101,7 +112,18 @@ class UsersController < ApplicationController
   # [113] invalid date
   def update
     check_token
-    fields = [:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name]
+    fields = [
+      :id, 
+      :first_name, 
+      :last_name, 
+      :gender, 
+      :birthdate, 
+      :timezone, 
+      :phone_home, 
+      :phone_mobile, 
+      :phone_work, 
+      :avatar_file_name
+    ]
     @user = current_user
     respond_with do |format|
       if @user.update_attributes(params[:user])
