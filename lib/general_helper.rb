@@ -49,8 +49,8 @@ module GeneralHelper
         filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:location])})
         options[:additional_fields][:location].map{|x| remove_fields << x }
       elsif field == :reviews
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:reviews])})
-        options[:additional_fields][:reviews].map{|x| remove_fields << x }
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:reviews], "reviews")})
+        options[:additional_fields][:reviews].map{|x| remove_fields << "reviews_#{x}".to_sym }
       else
         filtered_object = filtered_object.merge({field => object["#{field}"]})
       end
@@ -68,7 +68,7 @@ module GeneralHelper
   def group_attributes(attributes, prefix = nil)
     attributes_array = {}
     if prefix
-      attributes.map{|amenity| attributes_array.merge!(amenity => self["#{prefix}_#{amenity.to_s}"]) if self["#{prefix}_#{amenity.to_s}"]}
+      attributes.map{|attribute| attributes_array.merge!(attribute => self["#{prefix}_#{attribute.to_s}"]) if self["#{prefix}_#{attribute.to_s}"]}
     else
       attributes.map{|attribute| attributes_array.merge!(attribute => self[attribute]) if self[attribute]}
     end

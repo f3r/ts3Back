@@ -24,9 +24,9 @@ class PlacesController < ApplicationController
       :smoking_allowed,:suitable_events,:tennis,:tv,:washer]
 
     @reviews_fields = [
-      :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
-      :reviews_checkin_avg,:reviews_communication_avg,:reviews_location_avg,
-      :reviews_value_avg
+      :overall,:accuracy_avg,:cleanliness_avg,
+      :checkin_avg,:communication_avg,:location_avg,
+      :value_avg
     ]
 
   end
