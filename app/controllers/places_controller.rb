@@ -28,6 +28,11 @@ class PlacesController < ApplicationController
       :checkin_avg,:communication_avg,:location_avg,
       :value_avg
     ]
+    
+    @terms_of_offer_fields = [
+      :check_in_after, :check_out_before, :minimum_stay_days, :maximum_stay_days, :house_rules,
+      :cancellation_policy
+    ]
 
   end
 
@@ -47,7 +52,11 @@ class PlacesController < ApplicationController
         render :status => 200, 
         request.format.to_sym => format_response({ 
           :stat => "ok", 
-          :place => filter_fields(@place, @fields, { :additional_fields => { :amenities => @amenities_fields, :location => @location_fields, :reviews => @reviews_fields } }) },
+          :place => filter_fields(@place, @fields, { :additional_fields => { 
+            :amenities => @amenities_fields, 
+            :location => @location_fields, 
+            :reviews => @reviews_fields,
+            :terms_of_offer => @terms_of_offer_fields } }) },
           request.format.to_sym) }
     end
   end
@@ -88,7 +97,12 @@ class PlacesController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok", 
-            :place => filter_fields(@place,@fields, { :additional_fields => { :amenities => @amenities_fields, :location => @location_fields, :reviews => @reviews_fields } }) },
+            :place => filter_fields(@place,[:id,
+              :title,
+              :place_type_id,
+              :num_bedrooms,
+              :max_guests,
+              :city_id]) },
           request.format.to_sym)}
       else
         format.any(:xml, :json) { 
@@ -161,7 +175,11 @@ class PlacesController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok", 
-            :place => filter_fields(@place,@fields, { :additional_fields => { :amenities => @amenities_fields, :location => @location_fields, :reviews => @reviews_fields } }) },
+            :place => filter_fields(@place,@fields, { :additional_fields => {
+              :amenities => @amenities_fields, 
+              :location => @location_fields, 
+              :reviews => @reviews_fields,
+              :terms_of_offer => @terms_of_offer_fields} }) },
           request.format.to_sym)}
       else
         format.any(:xml, :json) { 

@@ -35,7 +35,7 @@ module GeneralHelper
   end
 
   def filter_object(object, fields, options={})
-    options[:additional_fields].each_pair{ |field,v| fields << field.to_sym }
+    options[:additional_fields].each_pair{ |field,v| fields << field.to_sym } if options[:additional_fields]
     filtered_object = {}
     remove_fields = []
     for field in fields
@@ -44,13 +44,16 @@ module GeneralHelper
         avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
         filtered_object = filtered_object.merge({:avatar => avatar })
       elsif field == :amenities
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:amenities], "amenities")})
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field], field.to_s)})
       elsif field == :location
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:location])})
-        options[:additional_fields][:location].map{|x| remove_fields << x }
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field])})
+        options[:additional_fields][field].map{|x| remove_fields << x }
       elsif field == :reviews
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:reviews], "reviews")})
-        options[:additional_fields][:reviews].map{|x| remove_fields << "reviews_#{x}".to_sym }
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field], field.to_s)})
+        options[:additional_fields][field].map{|x| remove_fields << "#{field.to_s}_#{x}".to_sym }
+      elsif field == :terms_of_offer
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field])})
+        options[:additional_fields][field].map{|x| remove_fields << x }
       else
         filtered_object = filtered_object.merge({field => object["#{field}"]})
       end

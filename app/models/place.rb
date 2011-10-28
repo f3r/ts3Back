@@ -19,7 +19,7 @@ class Place < ActiveRecord::Base
     :maximum_stay_days
   ], :allow_nil => true, :message => "118"
 
-  attr_accessor :amenities, :location
+  attr_accessor :amenities, :location, :terms_of_offer
 
   belongs_to :user
 
