@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111028155152) do
+ActiveRecord::Schema.define(:version => 20111028170612) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -35,16 +35,6 @@ ActiveRecord::Schema.define(:version => 20111028155152) do
 
   add_index "authentications", ["provider"], :name => "index_authentications_on_provider"
   add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id"
-
-  create_table "categories", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "ancestry"
-    t.integer  "ancestry_depth", :default => 0
-  end
-
-  add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"
 
   create_table "place_types", :force => true do |t|
     t.string   "name"

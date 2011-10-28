@@ -8,7 +8,6 @@ gem 'oauth2', "0.4.1"
 gem "paperclip", "~> 2.4"
 gem "aws-s3"
 gem 'jquery-rails'
-gem 'ancestry'      # Categories Tree
 gem 'validates_timeliness', '~> 3.0.2'
 gem 'redis'
 

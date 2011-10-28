@@ -29,15 +29,6 @@ HeyPalBackEnd::Application.routes.draw do
     put    "users/addresses/:id",     :to => "addresses#update"
     delete "users/addresses/:id",     :to => "addresses#destroy"
     ##############################################################################
-    # CATEGORIES
-    ##############################################################################
-    get    "categories",              :to => "categories#index"
-    get    "categories/list",         :to => "categories#list"
-    get    "categories/:id",          :to => "categories#show"
-    post   "categories",              :to => "categories#create"
-    put    "categories/:id",          :to => "categories#update"
-    delete "categories/:id",          :to => "categories#destroy"
-    ##############################################################################
     # PLACES
     ##############################################################################
     get     "places",                 :to => "places#search"
