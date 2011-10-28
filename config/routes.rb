@@ -38,10 +38,6 @@ HeyPalBackEnd::Application.routes.draw do
     put    "categories/:id",          :to => "categories#update"
     delete "categories/:id",          :to => "categories#destroy"
     ##############################################################################
-    # ITEMS
-    ##############################################################################
-    get    "items/image_search",      :to => "items#image_search"
-    ##############################################################################
     # PLACES
     ##############################################################################
     get     "places",                 :to => "places#search"
