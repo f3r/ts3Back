@@ -35,17 +35,44 @@ module GeneralHelper
   end
 
   def filter_object(object, fields, options={})
+    options[:additional_fields].each_pair{ |field,v| fields << field.to_sym }
     filtered_object = {}
+    remove_fields = []
     for field in fields
       if field == :avatar_file_name
         style = options[:style] if options[:style] rescue :large
         avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
         filtered_object = filtered_object.merge({:avatar => avatar })
+      elsif field == :amenities
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:amenities], "amenities")})
+      elsif field == :location
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:location])})
+        options[:additional_fields][:location].map{|x| remove_fields << x }
+      elsif field == :reviews
+        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][:reviews])})
+        options[:additional_fields][:reviews].map{|x| remove_fields << x }
       else
         filtered_object = filtered_object.merge({field => object["#{field}"]})
       end
     end
+    remove_fields.map{|x| filtered_object.delete(x) }
     return filtered_object
+  end
+  
+  def filter_params(params, fields, options={})
+    new_params = {}
+    fields.map{|param| new_params.merge!(param => params[param]) if params.has_key?(param) && param != :id }
+    return new_params
+  end
+
+  def group_attributes(attributes, prefix = nil)
+    attributes_array = {}
+    if prefix
+      attributes.map{|amenity| attributes_array.merge!(amenity => self["#{prefix}_#{amenity.to_s}"]) if self["#{prefix}_#{amenity.to_s}"]}
+    else
+      attributes.map{|attribute| attributes_array.merge!(attribute => self[attribute]) if self[attribute]}
+    end
+    return attributes_array    
   end
 
 end

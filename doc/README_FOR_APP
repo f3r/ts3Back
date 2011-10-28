@@ -20,3 +20,4 @@ error codes
 [115] no results
 [116] duplicate
 [117] invalid oauth token
+[118] must be a number

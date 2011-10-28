@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111025034945) do
+ActiveRecord::Schema.define(:version => 20111026174128) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -45,6 +45,109 @@ ActiveRecord::Schema.define(:version => 20111025034945) do
   end
 
   add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"
+
+  create_table "places", :force => true do |t|
+    t.integer  "user_id"
+    t.boolean  "published",                  :default => false
+    t.string   "title"
+    t.text     "description"
+    t.integer  "place_type_id"
+    t.integer  "num_bedrooms"
+    t.integer  "num_beds"
+    t.integer  "num_bathrooms"
+    t.float    "sqm"
+    t.integer  "max_guests"
+    t.text     "photos"
+    t.integer  "city_id"
+    t.integer  "province_id"
+    t.integer  "country_id"
+    t.string   "address_1"
+    t.string   "address_2"
+    t.string   "zip"
+    t.float    "lat"
+    t.float    "lon"
+    t.text     "directions"
+    t.boolean  "amenities_aircon",           :default => false
+    t.boolean  "amenities_breakfast",        :default => false
+    t.boolean  "amenities_buzzer_intercom",  :default => false
+    t.boolean  "amenities_cable_tv",         :default => false
+    t.boolean  "amenities_dryer",            :default => false
+    t.boolean  "amenities_doorman",          :default => false
+    t.boolean  "amenities_elevator",         :default => false
+    t.boolean  "amenities_family_friendly",  :default => false
+    t.boolean  "amenities_gym",              :default => false
+    t.boolean  "amenities_hot_tub",          :default => false
+    t.boolean  "amenities_kitchen",          :default => false
+    t.boolean  "amenities_handicap",         :default => false
+    t.boolean  "amenities_heating",          :default => false
+    t.boolean  "amenities_hot_water",        :default => false
+    t.boolean  "amenities_internet",         :default => false
+    t.boolean  "amenities_internet_wifi",    :default => false
+    t.boolean  "amenities_jacuzzi",          :default => false
+    t.boolean  "amenities_parking_included", :default => false
+    t.boolean  "amenities_pets_allowed",     :default => false
+    t.boolean  "amenities_pool",             :default => false
+    t.boolean  "amenities_smoking_allowed",  :default => false
+    t.boolean  "amenities_suitable_events",  :default => false
+    t.boolean  "amenities_tennis",           :default => false
+    t.boolean  "amenities_tv",               :default => false
+    t.boolean  "amenities_washer",           :default => false
+    t.string   "currency"
+    t.integer  "price_per_night"
+    t.integer  "price_per_week"
+    t.integer  "price_per_month"
+    t.integer  "price_final_cleanup",        :default => 0
+    t.integer  "price_security_deposit",     :default => 0
+    t.integer  "price_per_night_usd"
+    t.integer  "price_per_week_usd"
+    t.integer  "price_per_month_usd"
+    t.string   "check_in_after"
+    t.string   "check_out_before"
+    t.integer  "minimum_stay_days",          :default => 0
+    t.integer  "maximum_stay_days",          :default => 0
+    t.text     "house_rules"
+    t.integer  "cancellation_policy",        :default => 1
+    t.float    "reviews_overall",            :default => 0.0
+    t.float    "reviews_accuracy_avg",       :default => 0.0
+    t.float    "reviews_cleanliness_avg",    :default => 0.0
+    t.float    "reviews_checkin_avg",        :default => 0.0
+    t.float    "reviews_communication_avg",  :default => 0.0
+    t.float    "reviews_location_avg",       :default => 0.0
+    t.float    "reviews_value_avg",          :default => 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"
+  add_index "places", ["amenities_breakfast"], :name => "index_places_on_amenities_breakfast"
+  add_index "places", ["amenities_buzzer_intercom"], :name => "index_places_on_amenities_buzzer_intercom"
+  add_index "places", ["amenities_cable_tv"], :name => "index_places_on_amenities_cable_tv"
+  add_index "places", ["amenities_doorman"], :name => "index_places_on_amenities_doorman"
+  add_index "places", ["amenities_dryer"], :name => "index_places_on_amenities_dryer"
+  add_index "places", ["amenities_elevator"], :name => "index_places_on_amenities_elevator"
+  add_index "places", ["amenities_family_friendly"], :name => "index_places_on_amenities_family_friendly"
+  add_index "places", ["amenities_gym"], :name => "index_places_on_amenities_gym"
+  add_index "places", ["amenities_handicap"], :name => "index_places_on_amenities_handicap"
+  add_index "places", ["amenities_heating"], :name => "index_places_on_amenities_heating"
+  add_index "places", ["amenities_hot_tub"], :name => "index_places_on_amenities_hot_tub"
+  add_index "places", ["amenities_hot_water"], :name => "index_places_on_amenities_hot_water"
+  add_index "places", ["amenities_internet"], :name => "index_places_on_amenities_internet"
+  add_index "places", ["amenities_internet_wifi"], :name => "index_places_on_amenities_internet_wifi"
+  add_index "places", ["amenities_jacuzzi"], :name => "index_places_on_amenities_jacuzzi"
+  add_index "places", ["amenities_kitchen"], :name => "index_places_on_amenities_kitchen"
+  add_index "places", ["amenities_parking_included"], :name => "index_places_on_amenities_parking_included"
+  add_index "places", ["amenities_pets_allowed"], :name => "index_places_on_amenities_pets_allowed"
+  add_index "places", ["amenities_pool"], :name => "index_places_on_amenities_pool"
+  add_index "places", ["amenities_smoking_allowed"], :name => "index_places_on_amenities_smoking_allowed"
+  add_index "places", ["amenities_suitable_events"], :name => "index_places_on_amenities_suitable_events"
+  add_index "places", ["amenities_tennis"], :name => "index_places_on_amenities_tennis"
+  add_index "places", ["amenities_tv"], :name => "index_places_on_amenities_tv"
+  add_index "places", ["amenities_washer"], :name => "index_places_on_amenities_washer"
+  add_index "places", ["city_id"], :name => "index_places_on_city_id"
+  add_index "places", ["country_id"], :name => "index_places_on_country_id"
+  add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
+  add_index "places", ["province_id"], :name => "index_places_on_province_id"
+  add_index "places", ["user_id"], :name => "index_places_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false

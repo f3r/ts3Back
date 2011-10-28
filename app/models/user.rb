@@ -61,6 +61,7 @@ class User < ActiveRecord::Base
 
   has_many :authentications, :dependent => :destroy
   has_many :addresses, :dependent => :destroy
+  has_many :places, :dependent => :destroy
   
   has_attached_file :avatar, 
      :styles => {

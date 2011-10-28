@@ -42,6 +42,14 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     get    "items/image_search",      :to => "items#image_search"
     ##############################################################################
+    # PLACES
+    ##############################################################################
+    get     "places",                 :to => "places#search"
+    post    "places",                 :to => "places#create"
+    put     "places/:id",             :to => "places#update"
+    get     "places/:id",             :to => "places#show"
+    delete  "places",                 :to => "places#destroy"
+    ##############################################################################
     # USER INFO
     ##############################################################################
     get    "users/:id/info",          :to => "users#info"
