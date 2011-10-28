@@ -35,27 +35,39 @@ module GeneralHelper
   end
 
   def filter_object(object, fields, options={})
-    options[:additional_fields].each_pair{ |field,v| fields << field.to_sym } if options[:additional_fields]
+    if options[:additional_fields]
+      additional_fields = options[:additional_fields]
+      additional_fields.each_pair{ |field,v| fields << field.to_sym }
+    end
     filtered_object = {}
     remove_fields = []
     for field in fields
       if field == :avatar_file_name
         style = options[:style] if options[:style] rescue :large
         avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
-        filtered_object = filtered_object.merge({:avatar => avatar })
+        filtered_object.merge!({:avatar => avatar })
+        puts filtered_object
       elsif field == :amenities
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field], field.to_s)})
+        filtered_object.merge!({field => object.group_attributes(additional_fields[field], field.to_s)})
       elsif field == :location
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field])})
-        options[:additional_fields][field].map{|x| remove_fields << x }
+        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
+        additional_fields[field].map{|x| remove_fields << x }
       elsif field == :reviews
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field], field.to_s)})
-        options[:additional_fields][field].map{|x| remove_fields << "#{field.to_s}_#{x}".to_sym }
+        filtered_object.merge!({field => object.group_attributes(additional_fields[field], field.to_s)})
+        additional_fields[field].map{|x| remove_fields << "#{field.to_s}_#{x}".to_sym }
       elsif field == :terms_of_offer
-        filtered_object = filtered_object.merge({field => object.group_attributes(options[:additional_fields][field])})
-        options[:additional_fields][field].map{|x| remove_fields << x }
+        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
+        additional_fields[field].map{|x| remove_fields << x }
+      elsif field == :pricing
+        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
+        additional_fields[field].map{|x| remove_fields << x }
+      elsif field == :details
+        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
+        additional_fields[field].map{|x| remove_fields << x }
+      elsif field == :user
+        filtered_object.merge!({field => filter_object(object.user,additional_fields[field]).group_attributes(additional_fields[field] << :avatar)})
       else
-        filtered_object = filtered_object.merge({field => object["#{field}"]})
+        filtered_object.merge!({field => object["#{field}"]})
       end
     end
     remove_fields.map{|x| filtered_object.delete(x) }

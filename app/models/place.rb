@@ -23,12 +23,17 @@ class Place < ActiveRecord::Base
 
   belongs_to :user
 
+  before_update :save_amenities
   after_commit :delete_cache
     
   private
   
   def delete_cache
     delete_caches([])
+  end
+  
+  def save_amenities
+    amenities.each_pair{ |field,v| self["amenities_#{field}"] = v } if self.amenities
   end
 
 end

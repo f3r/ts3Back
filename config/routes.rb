@@ -48,7 +48,7 @@ HeyPalBackEnd::Application.routes.draw do
     post    "places",                 :to => "places#create"
     put     "places/:id",             :to => "places#update"
     get     "places/:id",             :to => "places#show"
-    delete  "places",                 :to => "places#destroy"
+    delete  "places/:id",             :to => "places#destroy"
     ##############################################################################
     # USER INFO
     ##############################################################################

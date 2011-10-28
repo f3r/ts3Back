@@ -7,8 +7,7 @@ class PlacesController < ApplicationController
       :id, :title, :description, :place_type_id, :num_bedrooms, :num_beds, 
       :num_bathrooms, :sqm, :max_guests, :photos, :city_id, :address_1, 
       :address_2, :zip, :lat, :lon, :directions, 
-      :currency, :price_per_night, :price_per_week, 
-      :price_per_month, :price_final_cleanup, :price_security_deposit, 
+      :price_final_cleanup, :price_security_deposit, 
       :check_in_after, :check_out_before, :minimum_stay_days, 
       :maximum_stay_days, :house_rules, :cancellation_policy,
       :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
@@ -34,6 +33,16 @@ class PlacesController < ApplicationController
       :cancellation_policy
     ]
 
+    @pricing_fields = [
+      :price_final_cleanup, :price_security_deposit, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
+    ]
+
+    @details_fields = [
+      :num_bedrooms, :num_beds, :num_bathrooms, :sqm, :max_guests, :title, :description, :place_type_id
+    ]
+    
+    @user_fields = [:id, :first_name, :last_name, :avatar_file_name]
+
   end
 
   def search
@@ -58,7 +67,10 @@ class PlacesController < ApplicationController
             :amenities => @amenities_fields, 
             :location => @location_fields, 
             :reviews => @reviews_fields,
-            :terms_of_offer => @terms_of_offer_fields } }) },
+            :terms_of_offer => @terms_of_offer_fields,
+            :pricing => @pricing_fields,
+            :details => @details_fields,
+            :user => @user_fields } }) },
           request.format.to_sym) }
     end
   end
@@ -97,12 +109,11 @@ class PlacesController < ApplicationController
           render :status => 200, 
           request.format.to_sym => format_response({ 
             :stat => "ok", 
-            :place => filter_fields(@place,[:id,
-              :title,
-              :place_type_id,
-              :num_bedrooms,
-              :max_guests,
-              :city_id]) },
+            :place => filter_fields(@place, [:id], :additional_fields => {
+                :details => [:title,:place_type_id,:num_bedrooms,:max_guests],
+                :location => [:city_id],
+                :user => @user_fields
+              }) },
           request.format.to_sym)}
       else
         format.any(:xml, :json) { 
@@ -168,7 +179,7 @@ class PlacesController < ApplicationController
   def update
     check_token
     @place = Place.find(params[:id])
-    place = filter_params(params, @fields)
+    place = filter_params(params, @fields << :amenities)
     respond_with do |format|
       if @place.update_attributes(place)
         format.any(:xml, :json) { 
@@ -179,7 +190,10 @@ class PlacesController < ApplicationController
               :amenities => @amenities_fields, 
               :location => @location_fields, 
               :reviews => @reviews_fields,
-              :terms_of_offer => @terms_of_offer_fields} }) },
+              :terms_of_offer => @terms_of_offer_fields,
+              :pricing => @pricing_fields,
+              :details => @details_fields,
+              :user => @user_fields } }) },
           request.format.to_sym)}
       else
         format.any(:xml, :json) { 
@@ -192,7 +206,33 @@ class PlacesController < ApplicationController
     end
   end
   
+  # == Description
+  # Deletes a place
+  # ==Resource URL
+  # /places/:id.format
+  # ==Example
+  # DELETE https://backend-heypal.heroku.com/places/:id.json access_token=access_token
+  # === Parameters
+  # [:access_token]
   def destroy
+    check_token
+    place = Place.find(params[:id])
+    respond_with do |format|
+      if place.destroy
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok" },
+          request.format.to_sym) }
+      else
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "fail", 
+            :err => format_errors(place.errors.messages) },
+          request.format.to_sym) }
+      end
+    end
   end
   
 end
