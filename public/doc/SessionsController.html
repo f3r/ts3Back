@@ -252,6 +252,9 @@ oauth_token=oauth_token</p>
 <p>oAuth token</p>
 </dd></dl>
 
+<pre>oauth_token[provider]=facebook&amp;
+oauth_token[credentials][token]=token</pre>
+
 <h3 id="method-i-oauth_create-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>110
 <dd>
@@ -261,7 +264,7 @@ oauth_token=oauth_token</p>
 
           
           <div class="method-source-code" id="oauth_create-source">
-            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 48</span>
+            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">oauth_create</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>]
     <span class="ruby-identifier">authentication</span> = <span class="ruby-constant">Authentication</span>.<span class="ruby-identifier">find_by_provider_and_token</span>(
