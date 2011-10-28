@@ -35,8 +35,6 @@ module GeneralHelper
   end
 
   def filter_object(object, fields, options={})
-    logger.error { "object: #{object.first_name.to_s}" }
-    logger.error { "fields: #{fields.to_s}" }
     options[:additional_fields].each_pair{ |field,v| fields << field.to_sym } if options[:additional_fields]
     filtered_object = {}
     remove_fields = []
