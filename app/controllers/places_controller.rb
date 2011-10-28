@@ -38,13 +38,15 @@ class PlacesController < ApplicationController
 
   def search
   end
-  
+
+  # ==Description
+  # Returns all the information about a place
   # ==Resource URL
   # /places/:id.format
   # ==Example
   # GET https://backend-heypal.heroku.com/places/id.json
   # === Parameters
-  # [:id]  
+  # [:id] if of the place
   def show
     @place = Place.find(params[:id])
     respond_with do |format|
@@ -69,15 +71,13 @@ class PlacesController < ApplicationController
   # POST https://backend-heypal.heroku.com/places.json access_token=access_token&title=Joe's Apartment&type_id=2&num_bedrooms=3&max_guests=5&city_id=62
   # === Parameters
   # [:access_token] Access token
-  # [title]
-  # [type_id] ID from the PlaceType model, Integer
-  # [num_bedrooms] Integer
-  # [max_guests] Integer
-  # [city_id] ID from the City model, Integer
-  # 
+  # [title]         Title for the place
+  # [type_id]       ID from the PlaceType model, Integer
+  # [num_bedrooms]  Integer
+  # [max_guests]    Integer
+  # [city_id]       ID from the City model, Integer
   # === Response
   # [place] Array containing the recently created place
-  # 
   # == Error codes
   # [101] can't be blank 
   # [103] is invalid
@@ -123,39 +123,39 @@ class PlacesController < ApplicationController
   # PUT https://backend-heypal.heroku.com/places/1.json access_token=access_token&num_beds=5&description=Nam luctus feugiat
   # === Parameters
   # [:access_token] Access token
-  # [title]
-  # [description]
-  # [place_type_id] Integer
-  # [num_bedrooms] Integer
-  # [num_beds] Integer
-  # [num_bathrooms] Integer
-  # [sqm]
-  # [max_guests] Integer
-  # [city_id] Integer
-  # [address_1]
-  # [address_2]
-  # [zip]
-  # [lat]
-  # [lon]
-  # [directions]
+  # [title]         String,  title of the place
+  # [description]   Text,    long description of the place
+  # [place_type_id] Integer, ID from the PlaceType model
+  # [num_bedrooms]  Integer, number of bedrooms
+  # [num_beds]      Integer, number of beds
+  # [num_bathrooms] Integer, number of bathrooms
+  # [sqm]           Float,   square meters of the entire place
+  # [max_guests]    Integer, maximum number of guests the place can fit
+  # [city_id]       Integer, ID from the Cities model
+  # [address_1]     String,  text description of address
+  # [address_2]     String
+  # [zip]           String,  postal code
+  # [lat]           Double,  latitude coordinates
+  # [lon]           Double,  longitude coordinates
+  # [directions]    Text,    description on how to find the place
   # [amenities]
   #   Array of boolean values with the following options.
   #   aircon,breakfast,buzzer_intercom,cable_tv,dryer,doorman,elevator,
   #   family_friendly,gym,hot_tub,kitchen,handicap,heating,hot_water,
   #   internet,internet_wifi,jacuzzi,parking_included,pets_allowed,pool,
   #   smoking_allowed,suitable_events,tennis,tv,washer
-  # [currency] Currency ISO code, Ex. USD
-  # [price_per_night] Currency Units, not cents 1=$1, Integer
-  # [price_per_week] Currency Units, not cents 1=$1, Integer
-  # [price_per_month] Currency Units, not cents 1=$1, Integer
-  # [price_final_cleanup] Currency Units, not cents 1=$1, Integer
+  # [currency]               Currency ISO code, Ex. USD
+  # [price_per_night]        Currency Units, not cents 1=$1, Integer
+  # [price_per_week]         Currency Units, not cents 1=$1, Integer
+  # [price_per_month]        Currency Units, not cents 1=$1, Integer
+  # [price_final_cleanup]    Currency Units, not cents 1=$1, Integer
   # [price_security_deposit] Currency Units, not cents 1=$1, Integer
-  # [check_in_after] Ex. 11:00 / 11:30 / 13:30, String
-  # [check_out_before] Ex. 11:00 / 11:30 / 13:30, String
-  # [minimum_stay_days] 0 means no minimum, Integer
-  # [maximum_stay_days] 0 means no maximum, Integer
-  # [house_rules]
-  # [cancellation_policy] should align with frontend, 1=flexible, 2=moderate, 3=strict, Integer
+  # [check_in_after]         String, ie. 11:00 / 11:30 / 13:30
+  # [check_out_before]       String, ie. 11:00 / 11:30 / 13:30
+  # [minimum_stay_days]      Integer, 0 means no minimum
+  # [maximum_stay_days]      Integer, 0 means no maximum
+  # [house_rules]            Text, rules for the user to follow when staying at a place
+  # [cancellation_policy]    Integer. Should align with frontend, 1=flexible, 2=moderate, 3=strict
   # 
   # === Response
   # [place] Array containing the recently created place

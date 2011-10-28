@@ -156,8 +156,7 @@
           
           <h2 id="method-i-info-label-Description">Description</h2>
 
-<p>Returns all the public information of a specific user (id, profile_pict,
-name)</p>
+<p>Returns all the public information of a specific user</p>
 
 <h2 id="method-i-info-label-Resource+URL">Resource URL</h2>
 
@@ -177,7 +176,7 @@ href="https://backend-heypal.heroku.com/users/:id/info.json">backend-heypal.hero
 <h3 id="method-i-info-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>:user
 <dd>
-<p>{id, profile_pic, name, review_count, badges_count}</p>
+<p>{id, first_name, last_name, avatar_file_name}</p>
 
 <h3 id="method-i-info-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>106
@@ -281,7 +280,18 @@ access_token=access_token</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
-  <span class="ruby-identifier">fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:gender</span>, <span class="ruby-value">:birthdate</span>, <span class="ruby-value">:timezone</span>, <span class="ruby-value">:phone_home</span>, <span class="ruby-value">:phone_mobile</span>, <span class="ruby-value">:phone_work</span>, <span class="ruby-value">:avatar_file_name</span>]
+  <span class="ruby-identifier">fields</span> = [
+    <span class="ruby-value">:id</span>, 
+    <span class="ruby-value">:first_name</span>, 
+    <span class="ruby-value">:last_name</span>, 
+    <span class="ruby-value">:gender</span>, 
+    <span class="ruby-value">:birthdate</span>, 
+    <span class="ruby-value">:timezone</span>, 
+    <span class="ruby-value">:phone_home</span>, 
+    <span class="ruby-value">:phone_mobile</span>, 
+    <span class="ruby-value">:phone_work</span>, 
+    <span class="ruby-value">:avatar_file_name</span>
+  ]
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;user_full_info_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>) { <span class="ruby-constant">User</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">fields</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>) }
   <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
@@ -391,10 +401,21 @@ href="http://url/image_file">url/image_file</a></p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 102</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 113</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
-  <span class="ruby-identifier">fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:gender</span>, <span class="ruby-value">:birthdate</span>, <span class="ruby-value">:timezone</span>, <span class="ruby-value">:phone_home</span>, <span class="ruby-value">:phone_mobile</span>, <span class="ruby-value">:phone_work</span>, <span class="ruby-value">:avatar_file_name</span>]
+  <span class="ruby-identifier">fields</span> = [
+    <span class="ruby-value">:id</span>, 
+    <span class="ruby-value">:first_name</span>, 
+    <span class="ruby-value">:last_name</span>, 
+    <span class="ruby-value">:gender</span>, 
+    <span class="ruby-value">:birthdate</span>, 
+    <span class="ruby-value">:timezone</span>, 
+    <span class="ruby-value">:phone_home</span>, 
+    <span class="ruby-value">:phone_mobile</span>, 
+    <span class="ruby-value">:phone_work</span>, 
+    <span class="ruby-value">:avatar_file_name</span>
+  ]
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user</span>])

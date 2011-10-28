@@ -48,6 +48,7 @@
   <h3 class="section-header">Defined In</h3>
   <ul>
     <li>app/controllers/places_controller.rb
+    <li>app/controllers/places_controller_mod.rb
   </ul>
 </nav>
 
@@ -188,9 +189,14 @@
     <span class="ruby-value">:smoking_allowed</span>,<span class="ruby-value">:suitable_events</span>,<span class="ruby-value">:tennis</span>,<span class="ruby-value">:tv</span>,<span class="ruby-value">:washer</span>]
 
   <span class="ruby-ivar">@reviews_fields</span> = [
-    <span class="ruby-value">:reviews_overall</span>,<span class="ruby-value">:reviews_accuracy_avg</span>,<span class="ruby-value">:reviews_cleanliness_avg</span>,
-    <span class="ruby-value">:reviews_checkin_avg</span>,<span class="ruby-value">:reviews_communication_avg</span>,<span class="ruby-value">:reviews_location_avg</span>,
-    <span class="ruby-value">:reviews_value_avg</span>
+    <span class="ruby-value">:overall</span>,<span class="ruby-value">:accuracy_avg</span>,<span class="ruby-value">:cleanliness_avg</span>,
+    <span class="ruby-value">:checkin_avg</span>,<span class="ruby-value">:communication_avg</span>,<span class="ruby-value">:location_avg</span>,
+    <span class="ruby-value">:value_avg</span>
+  ]
+  
+  <span class="ruby-ivar">@terms_of_offer_fields</span> = [
+    <span class="ruby-value">:check_in_after</span>, <span class="ruby-value">:check_out_before</span>, <span class="ruby-value">:minimum_stay_days</span>, <span class="ruby-value">:maximum_stay_days</span>, <span class="ruby-value">:house_rules</span>,
+    <span class="ruby-value">:cancellation_policy</span>
   ]
 
 <span class="ruby-keyword">end</span></pre>
@@ -241,7 +247,9 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 <dd>
 <p>Access token</p>
 </dd><dt>title
-<dd></dd><dt>type_id
+<dd>
+<p>Title for the place</p>
+</dd><dt>type_id
 <dd>
 <p>ID from the PlaceType model, Integer</p>
 </dd><dt>num_bedrooms
@@ -276,7 +284,7 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 76</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 85</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">place</span> = { 
@@ -292,7 +300,12 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
         <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
         <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
           <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, 
-          <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>,<span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span> } }) },
+          <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>,[<span class="ruby-value">:id</span>,
+            <span class="ruby-value">:title</span>,
+            <span class="ruby-value">:place_type_id</span>,
+            <span class="ruby-value">:num_bedrooms</span>,
+            <span class="ruby-value">:max_guests</span>,
+            <span class="ruby-value">:city_id</span>]) },
         <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>)}
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
@@ -330,7 +343,7 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 177</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 195</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- destroy-source -->
@@ -359,7 +372,7 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 
           
           <div class="method-source-code" id="search-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 34</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">search</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- search-source -->
@@ -383,7 +396,11 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 
         <div class="method-description">
           
-          <h2 id="method-i-show-label-Resource+URL">Resource URL</h2>
+          <h2 id="method-i-show-label-Description">Description</h2>
+
+<p>Returns all the information about a place</p>
+
+<h2 id="method-i-show-label-Resource+URL">Resource URL</h2>
 
 <p>/places/:id.format</p>
 
@@ -394,12 +411,14 @@ href="https://backend-heypal.heroku.com/places/id.json">backend-heypal.heroku.co
 
 <h3 id="method-i-show-label-Parameters">Parameters</h3>
 <dl class="rdoc-list label-list"><dt>:id
-<dd></dd></dl>
+<dd>
+<p>if of the place</p>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 43</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -407,7 +426,11 @@ href="https://backend-heypal.heroku.com/places/id.json">backend-heypal.heroku.co
       <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
       <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
         <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, 
-        <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span> } }) },
+        <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
+          <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, 
+          <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, 
+          <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span>,
+          <span class="ruby-value">:terms_of_offer</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@terms_of_offer_fields</span> } }) },
         <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -451,33 +474,51 @@ access_token=access_token&amp;num_beds=5&amp;description=Nam luctus feugiat</p>
 <dd>
 <p>Access token</p>
 </dd><dt>title
-<dd></dd><dt>description
-<dd></dd><dt>place_type_id
 <dd>
-<p>Integer</p>
+<p>String,  title of the place</p>
+</dd><dt>description
+<dd>
+<p>Text,    long description of the place</p>
+</dd><dt>place_type_id
+<dd>
+<p>Integer, ID from the PlaceType model</p>
 </dd><dt>num_bedrooms
 <dd>
-<p>Integer</p>
+<p>Integer, number of bedrooms</p>
 </dd><dt>num_beds
 <dd>
-<p>Integer</p>
+<p>Integer, number of beds</p>
 </dd><dt>num_bathrooms
 <dd>
-<p>Integer</p>
+<p>Integer, number of bathrooms</p>
 </dd><dt>sqm
-<dd></dd><dt>max_guests
 <dd>
-<p>Integer</p>
+<p>Float,   square meters of the entire place</p>
+</dd><dt>max_guests
+<dd>
+<p>Integer, maximum number of guests the place can fit</p>
 </dd><dt>city_id
 <dd>
-<p>Integer</p>
+<p>Integer, ID from the Cities model</p>
 </dd><dt>address_1
-<dd></dd><dt>address_2
-<dd></dd><dt>zip
-<dd></dd><dt>lat
-<dd></dd><dt>lon
-<dd></dd><dt>directions
-<dd></dd><dt>amenities
+<dd>
+<p>String,  text description of address</p>
+</dd><dt>address_2
+<dd>
+<p>String</p>
+</dd><dt>zip
+<dd>
+<p>String,  postal code</p>
+</dd><dt>lat
+<dd>
+<p>Double,  latitude coordinates</p>
+</dd><dt>lon
+<dd>
+<p>Double,  longitude coordinates</p>
+</dd><dt>directions
+<dd>
+<p>Text,    description on how to find the place</p>
+</dd><dt>amenities
 <dd>
 <p>Array of boolean values with the following options.
 aircon,breakfast,buzzer_intercom,cable_tv,dryer,doorman,elevator,
@@ -504,20 +545,22 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
 <p>Currency Units, not cents 1=$1, Integer</p>
 </dd><dt>check_in_after
 <dd>
-<p>Ex. 11:00 / 11:30 / 13:30, String</p>
+<p>String, ie. 11:00 / 11:30 / 13:30</p>
 </dd><dt>check_out_before
 <dd>
-<p>Ex. 11:00 / 11:30 / 13:30, String</p>
+<p>String, ie. 11:00 / 11:30 / 13:30</p>
 </dd><dt>minimum_stay_days
 <dd>
-<p>0 means no minimum, Integer</p>
+<p>Integer, 0 means no minimum</p>
 </dd><dt>maximum_stay_days
 <dd>
-<p>0 means no maximum, Integer</p>
+<p>Integer, 0 means no maximum</p>
 </dd><dt>house_rules
-<dd></dd><dt>cancellation_policy
 <dd>
-<p>should align with frontend, 1=flexible, 2=moderate, 3=strict, Integer</p>
+<p>Text, rules for the user to follow when staying at a place</p>
+</dd><dt>cancellation_policy
+<dd>
+<p>Integer. Should align with frontend, 1=flexible, 2=moderate, 3=strict</p>
 </dd></dl>
 
 <h3 id="method-i-update-label-Response">Response</h3>
@@ -544,7 +587,7 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 154</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 168</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -555,7 +598,11 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
         <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
         <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
           <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, 
-          <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>,<span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span> } }) },
+          <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>,<span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> {
+            <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, 
+            <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, 
+            <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span>,
+            <span class="ruby-value">:terms_of_offer</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@terms_of_offer_fields</span>} }) },
         <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>)}
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 

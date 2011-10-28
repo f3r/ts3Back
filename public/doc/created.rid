@@ -1,12 +1,13 @@
-Thu, 27 Oct 2011 20:26:29 -0500
-app/controllers/addresses_controller.rb	Mon, 24 Oct 2011 00:14:34 -0500
-app/controllers/application_controller.rb	Sun, 23 Oct 2011 16:25:08 -0500
-app/controllers/authentications_controller.rb	Tue, 25 Oct 2011 01:45:59 -0500
-app/controllers/categories_controller.rb	Sun, 23 Oct 2011 17:36:17 -0500
-app/controllers/confirmations_controller.rb	Mon, 24 Oct 2011 17:41:24 -0500
-app/controllers/items_controller.rb	Sun, 23 Oct 2011 18:44:11 -0500
-app/controllers/passwords_controller.rb	Fri, 21 Oct 2011 12:52:54 -0500
-app/controllers/places_controller.rb	Thu, 27 Oct 2011 19:43:11 -0500
-app/controllers/registrations_controller.rb	Mon, 24 Oct 2011 23:01:08 -0500
-app/controllers/sessions_controller.rb	Thu, 27 Oct 2011 20:20:47 -0500
-app/controllers/users_controller.rb	Thu, 27 Oct 2011 20:20:47 -0500
+Fri, 28 Oct 2011 13:13:39 +0800
+app/controllers/addresses_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/application_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/authentications_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/categories_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/confirmations_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/items_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/passwords_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/places_controller.rb	Fri, 28 Oct 2011 13:12:41 +0800
+app/controllers/places_controller_mod.rb	Fri, 28 Oct 2011 13:05:53 +0800
+app/controllers/registrations_controller.rb	Tue, 25 Oct 2011 17:16:04 +0800
+app/controllers/sessions_controller.rb	Thu, 27 Oct 2011 14:23:34 +0800
+app/controllers/users_controller.rb	Fri, 28 Oct 2011 11:13:43 +0800
