@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: PlacesController</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/places_controller.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-create">#create</a>
+    
+    <li><a href="#method-i-destroy">#destroy</a>
+    
+    <li><a href="#method-i-search">#search</a>
+    
+    <li><a href="#method-i-show">#show</a>
+    
+    <li><a href="#method-i-update">#update</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./CategoriesController.html">CategoriesController</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./ItemsController.html">ItemsController</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./PlacesController.html">PlacesController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class PlacesController</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
+  <span class="ruby-ivar">@fields</span> = [
+    <span class="ruby-value">:id</span>, <span class="ruby-value">:title</span>, <span class="ruby-value">:description</span>, <span class="ruby-value">:place_type_id</span>, <span class="ruby-value">:num_bedrooms</span>, <span class="ruby-value">:num_beds</span>, 
+    <span class="ruby-value">:num_bathrooms</span>, <span class="ruby-value">:sqm</span>, <span class="ruby-value">:max_guests</span>, <span class="ruby-value">:photos</span>, <span class="ruby-value">:city_id</span>, <span class="ruby-value">:address_1</span>, 
+    <span class="ruby-value">:address_2</span>, <span class="ruby-value">:zip</span>, <span class="ruby-value">:lat</span>, <span class="ruby-value">:lon</span>, <span class="ruby-value">:directions</span>, 
+    <span class="ruby-value">:currency</span>, <span class="ruby-value">:price_per_night</span>, <span class="ruby-value">:price_per_week</span>, 
+    <span class="ruby-value">:price_per_month</span>, <span class="ruby-value">:price_final_cleanup</span>, <span class="ruby-value">:price_security_deposit</span>, 
+    <span class="ruby-value">:check_in_after</span>, <span class="ruby-value">:check_out_before</span>, <span class="ruby-value">:minimum_stay_days</span>, 
+    <span class="ruby-value">:maximum_stay_days</span>, <span class="ruby-value">:house_rules</span>, <span class="ruby-value">:cancellation_policy</span>,
+    <span class="ruby-value">:reviews_overall</span>,<span class="ruby-value">:reviews_accuracy_avg</span>,<span class="ruby-value">:reviews_cleanliness_avg</span>,
+    <span class="ruby-value">:reviews_checkin_avg</span>,<span class="ruby-value">:reviews_communication_avg</span>,<span class="ruby-value">:reviews_location_avg</span>,
+    <span class="ruby-value">:reviews_value_avg</span>
+  ]
+
+  <span class="ruby-ivar">@location_fields</span> = [<span class="ruby-value">:country_id</span>, <span class="ruby-value">:province_id</span>, <span class="ruby-value">:city_id</span>, <span class="ruby-value">:address_1</span>, <span class="ruby-value">:address_2</span>, <span class="ruby-value">:zip</span>, <span class="ruby-value">:lat</span>, <span class="ruby-value">:lon</span>, <span class="ruby-value">:directions</span>]
+
+  <span class="ruby-ivar">@amenities_fields</span> = [<span class="ruby-value">:aircon</span>,<span class="ruby-value">:breakfast</span>,<span class="ruby-value">:buzzer_intercom</span>,<span class="ruby-value">:cable_tv</span>,<span class="ruby-value">:dryer</span>,<span class="ruby-value">:doorman</span>,<span class="ruby-value">:elevator</span>,
+    <span class="ruby-value">:family_friendly</span>,<span class="ruby-value">:gym</span>,<span class="ruby-value">:hot_tub</span>,<span class="ruby-value">:kitchen</span>,<span class="ruby-value">:handicap</span>,<span class="ruby-value">:heating</span>,<span class="ruby-value">:hot_water</span>,
+    <span class="ruby-value">:internet</span>,<span class="ruby-value">:internet_wifi</span>,<span class="ruby-value">:jacuzzi</span>,<span class="ruby-value">:parking_included</span>,<span class="ruby-value">:pets_allowed</span>,<span class="ruby-value">:pool</span>,
+    <span class="ruby-value">:smoking_allowed</span>,<span class="ruby-value">:suitable_events</span>,<span class="ruby-value">:tennis</span>,<span class="ruby-value">:tv</span>,<span class="ruby-value">:washer</span>]
+
+  <span class="ruby-ivar">@reviews_fields</span> = [
+    <span class="ruby-value">:reviews_overall</span>,<span class="ruby-value">:reviews_accuracy_avg</span>,<span class="ruby-value">:reviews_cleanliness_avg</span>,
+    <span class="ruby-value">:reviews_checkin_avg</span>,<span class="ruby-value">:reviews_communication_avg</span>,<span class="ruby-value">:reviews_location_avg</span>,
+    <span class="ruby-value">:reviews_value_avg</span>
+  ]
+
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-create-label-Description">Description</h2>
+
+<p>Crates a new place with basic information</p>
+
+<h2 id="method-i-create-label-Resource+URL">Resource URL</h2>
+
+<p>/places.format</p>
+
+<h2 id="method-i-create-label-Example">Example</h2>
+
+<p>POST <a
+href="https://backend-heypal.heroku.com/places.json">backend-heypal.heroku.com/places.json</a>
+access_token=access_token&amp;title=Joe’s
+Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
+
+<h3 id="method-i-create-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>Access token</p>
+</dd><dt>title
+<dd></dd><dt>type_id
+<dd>
+<p>ID from the PlaceType model, Integer</p>
+</dd><dt>num_bedrooms
+<dd>
+<p>Integer</p>
+</dd><dt>max_guests
+<dd>
+<p>Integer</p>
+</dd><dt>city_id
+<dd>
+<p>ID from the City model, Integer</p>
+</dd></dl>
+
+<h3 id="method-i-create-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>place
+<dd>
+<p>Array containing the recently created place</p>
+</dd></dl>
+
+<h2 id="method-i-create-label-Error+codes">Error codes</h2>
+<dl class="rdoc-list label-list"><dt>101
+<dd>
+<p>can’t be blank</p>
+</dd><dt>103
+<dd>
+<p>is invalid</p>
+</dd><dt>105
+<dd>
+<p>invalid access token</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="create-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 76</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-identifier">place</span> = { 
+    <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:title</span>],
+    <span class="ruby-value">:place_type_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:place_type_id</span>],
+    <span class="ruby-value">:num_bedrooms</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:num_bedrooms</span>],
+    <span class="ruby-value">:max_guests</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:max_guests</span>],
+    <span class="ruby-value">:city_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:city_id</span>] }
+  <span class="ruby-ivar">@place</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">places</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">place</span>)
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">save</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, 
+          <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>,<span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span> } }) },
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>)}
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;fail&quot;</span>, 
+          <span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-ivar">@place</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>) },
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>)}
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create-method -->
+
+    
+      <div id="method-i-destroy" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">destroy</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="destroy-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 177</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- destroy-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- destroy-method -->
+
+    
+      <div id="method-i-search" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">search</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="search-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">search</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- search-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- search-method -->
+
+    
+      <div id="method-i-show" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">show</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-show-label-Resource+URL">Resource URL</h2>
+
+<p>/places/:id.format</p>
+
+<h2 id="method-i-show-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/places/id.json">backend-heypal.heroku.com/places/id.json</a></p>
+
+<h3 id="method-i-show-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:id
+<dd></dd></dl>
+          
+
+          
+          <div class="method-source-code" id="show-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+      <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+      <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+        <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, 
+        <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span> } }) },
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>) }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- show-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- show-method -->
+
+    
+      <div id="method-i-update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-update-label-Description">Description</h2>
+
+<p>Updates a place with additional information</p>
+
+<h2 id="method-i-update-label-Resource+URL">Resource URL</h2>
+
+<p>/places/:id.format</p>
+
+<h2 id="method-i-update-label-Example">Example</h2>
+
+<p>PUT <a
+href="https://backend-heypal.heroku.com/places/1.json">backend-heypal.heroku.com/places/1.json</a>
+access_token=access_token&amp;num_beds=5&amp;description=Nam luctus feugiat</p>
+
+<h3 id="method-i-update-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>Access token</p>
+</dd><dt>title
+<dd></dd><dt>description
+<dd></dd><dt>place_type_id
+<dd>
+<p>Integer</p>
+</dd><dt>num_bedrooms
+<dd>
+<p>Integer</p>
+</dd><dt>num_beds
+<dd>
+<p>Integer</p>
+</dd><dt>num_bathrooms
+<dd>
+<p>Integer</p>
+</dd><dt>sqm
+<dd></dd><dt>max_guests
+<dd>
+<p>Integer</p>
+</dd><dt>city_id
+<dd>
+<p>Integer</p>
+</dd><dt>address_1
+<dd></dd><dt>address_2
+<dd></dd><dt>zip
+<dd></dd><dt>lat
+<dd></dd><dt>lon
+<dd></dd><dt>directions
+<dd></dd><dt>amenities
+<dd>
+<p>Array of boolean values with the following options.
+aircon,breakfast,buzzer_intercom,cable_tv,dryer,doorman,elevator,
+family_friendly,gym,hot_tub,kitchen,handicap,heating,hot_water,
+internet,internet_wifi,jacuzzi,parking_included,pets_allowed,pool,
+smoking_allowed,suitable_events,tennis,tv,washer</p>
+</dd><dt>currency
+<dd>
+<p>Currency ISO code, Ex. USD</p>
+</dd><dt>price_per_night
+<dd>
+<p>Currency Units, not cents 1=$1, Integer</p>
+</dd><dt>price_per_week
+<dd>
+<p>Currency Units, not cents 1=$1, Integer</p>
+</dd><dt>price_per_month
+<dd>
+<p>Currency Units, not cents 1=$1, Integer</p>
+</dd><dt>price_final_cleanup
+<dd>
+<p>Currency Units, not cents 1=$1, Integer</p>
+</dd><dt>price_security_deposit
+<dd>
+<p>Currency Units, not cents 1=$1, Integer</p>
+</dd><dt>check_in_after
+<dd>
+<p>Ex. 11:00 / 11:30 / 13:30, String</p>
+</dd><dt>check_out_before
+<dd>
+<p>Ex. 11:00 / 11:30 / 13:30, String</p>
+</dd><dt>minimum_stay_days
+<dd>
+<p>0 means no minimum, Integer</p>
+</dd><dt>maximum_stay_days
+<dd>
+<p>0 means no maximum, Integer</p>
+</dd><dt>house_rules
+<dd></dd><dt>cancellation_policy
+<dd>
+<p>should align with frontend, 1=flexible, 2=moderate, 3=strict, Integer</p>
+</dd></dl>
+
+<h3 id="method-i-update-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>place
+<dd>
+<p>Array containing the recently created place</p>
+</dd></dl>
+
+<h2 id="method-i-update-label-Error+codes">Error codes</h2>
+<dl class="rdoc-list label-list"><dt>101
+<dd>
+<p>can’t be blank</p>
+</dd><dt>103
+<dd>
+<p>is invalid</p>
+</dd><dt>105
+<dd>
+<p>invalid access token</p>
+</dd><dt>118
+<dd>
+<p>must be a number</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="update-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 154</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-identifier">place</span> = <span class="ruby-identifier">filter_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-ivar">@fields</span>)
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">place</span>)
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ok&quot;</span>, 
+          <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>,<span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:amenities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@amenities_fields</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@location_fields</span>, <span class="ruby-value">:reviews</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@reviews_fields</span> } }) },
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>)}
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">any</span>(<span class="ruby-value">:xml</span>, <span class="ruby-value">:json</span>) { 
+        <span class="ruby-identifier">render</span> <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>, 
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_response</span>({ 
+          <span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;fail&quot;</span>, 
+          <span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-ivar">@place</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>) },
+        <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span>.<span class="ruby-identifier">to_sym</span>)}
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- update-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- update-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
