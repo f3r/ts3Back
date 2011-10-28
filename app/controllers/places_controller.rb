@@ -40,8 +40,10 @@ class PlacesController < ApplicationController
     @details_fields = [
       :num_bedrooms, :num_beds, :num_bathrooms, :sqm, :max_guests, :title, :description, :place_type_id
     ]
-    
+
+    # Assosiations
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name]
+    @place_type_fields = [:id,:name]
 
   end
 
@@ -70,7 +72,8 @@ class PlacesController < ApplicationController
             :terms_of_offer => @terms_of_offer_fields,
             :pricing => @pricing_fields,
             :details => @details_fields,
-            :user => @user_fields } }) },
+            :user => @user_fields,
+            :place_type => @place_type_fields } }) },
           request.format.to_sym) }
     end
   end
@@ -112,7 +115,8 @@ class PlacesController < ApplicationController
             :place => filter_fields(@place, [:id], :additional_fields => {
                 :details => [:title,:place_type_id,:num_bedrooms,:max_guests],
                 :location => [:city_id],
-                :user => @user_fields
+                :user => @user_fields,
+                :place_type => @place_type_fields
               }) },
           request.format.to_sym)}
       else
@@ -193,7 +197,8 @@ class PlacesController < ApplicationController
               :terms_of_offer => @terms_of_offer_fields,
               :pricing => @pricing_fields,
               :details => @details_fields,
-              :user => @user_fields } }) },
+              :user => @user_fields,
+              :place_type => @place_type_fields } }) },
           request.format.to_sym)}
       else
         format.any(:xml, :json) { 

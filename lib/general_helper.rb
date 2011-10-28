@@ -66,6 +66,8 @@ module GeneralHelper
         additional_fields[field].map{|x| remove_fields << x }
       elsif field == :user
         filtered_object.merge!({field => filter_object(object.user,additional_fields[field]).group_attributes(additional_fields[field] << :avatar)})
+      elsif field == :place_type
+        filtered_object.merge!({field => filter_object(object.place_type,additional_fields[field]).group_attributes(additional_fields[field])})
       else
         filtered_object.merge!({field => object["#{field}"]})
       end

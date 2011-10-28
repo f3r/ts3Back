@@ -22,6 +22,7 @@ class Place < ActiveRecord::Base
   attr_accessor :amenities, :location, :terms_of_offer
 
   belongs_to :user
+  belongs_to :place_type
 
   before_update :save_amenities
   after_commit :delete_cache
