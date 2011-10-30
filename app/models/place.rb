@@ -2,6 +2,8 @@ require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
 class Place < ActiveRecord::Base
+  
+  serialize :photos
 
   validates_presence_of [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id], :message => "101"
 
@@ -28,13 +30,17 @@ class Place < ActiveRecord::Base
   belongs_to :user
   belongs_to :place_type
 
-  before_update :save_amenities, :convert_prices_in_usd_cents
+  before_update :save_amenities, :convert_prices_in_usd_cents, :convert_json_photos_to_array
   after_commit :delete_cache
     
   private
   
   def delete_cache
     delete_caches([])
+  end
+  
+  def convert_json_photos_to_array
+    self.photos = ActiveSupport::JSON.decode(self.photos) if self.photos
   end
   
   def save_amenities
