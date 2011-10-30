@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111028170612) do
+ActiveRecord::Schema.define(:version => 20111030162258) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(:version => 20111028170612) do
     t.float    "reviews_value_avg",          :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "price_final_cleanup_usd"
+    t.integer  "price_security_deposit_usd"
   end
 
   add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"

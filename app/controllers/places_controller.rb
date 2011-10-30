@@ -7,7 +7,6 @@ class PlacesController < ApplicationController
       :id, :title, :description, :place_type_id, :num_bedrooms, :num_beds, 
       :num_bathrooms, :sqm, :max_guests, :photos, :city_id, :address_1, 
       :address_2, :zip, :lat, :lon, :directions, 
-      :price_final_cleanup, :price_security_deposit, 
       :check_in_after, :check_out_before, :minimum_stay_days, 
       :maximum_stay_days, :house_rules, :cancellation_policy,
       :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
@@ -34,7 +33,7 @@ class PlacesController < ApplicationController
     ]
 
     @pricing_fields = [
-      :price_final_cleanup, :price_security_deposit, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
+      :price_final_cleanup_usd, :price_security_deposit_usd, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
     ]
 
     @details_fields = [
@@ -183,9 +182,12 @@ class PlacesController < ApplicationController
   def update
     check_token
     @place = Place.find(params[:id])
-    place = filter_params(params, @fields << :amenities)
+    [:price_per_night, :price_per_week, :price_per_month, :price_final_cleanup, :price_security_deposit, :currency, :amenities].map{|x| @fields << x}
+    place = filter_params(params, @fields)
     respond_with do |format|
       if @place.update_attributes(place)
+        # remove from array private fields
+        [:price_per_night, :price_per_week, :price_per_month, :price_final_cleanup, :price_security_deposit, :currency].map{|x| @fields.delete(x) }
         format.any(:xml, :json) { 
           render :status => 200, 
           request.format.to_sym => format_response({ 

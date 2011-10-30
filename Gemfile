@@ -10,6 +10,8 @@ gem "aws-s3"
 gem 'jquery-rails'
 gem 'validates_timeliness', '~> 3.0.2'
 gem 'redis'
+gem 'money'
+gem 'google_currency'
 
 group :assets do
   gem 'sass-rails', "  ~> 3.1.0"

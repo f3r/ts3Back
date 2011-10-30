@@ -46,7 +46,6 @@ module GeneralHelper
         style = options[:style] if options[:style] rescue :large
         avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
         filtered_object.merge!({:avatar => avatar })
-        puts filtered_object
       elsif field == :amenities
         filtered_object.merge!({field => object.group_attributes(additional_fields[field], field.to_s)})
       elsif field == :location
