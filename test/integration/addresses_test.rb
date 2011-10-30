@@ -4,7 +4,7 @@ class AddressesTest < ActionController::IntegrationTest
   setup do
     @user = Factory(:user)
     @user.confirm!
-    @address = Factory(:address)
+    @address = Factory(:address, :user => @user)
     @fake_address = { 
       :street => Faker::Address.street_address,
       :city => Faker::Address.city,

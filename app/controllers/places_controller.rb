@@ -4,7 +4,7 @@ class PlacesController < ApplicationController
   
   def initialize
     @fields = [
-      :id, :title, :description, :place_type_id, :num_bedrooms, :num_beds, 
+      :id, :title, :description, :num_bedrooms, :num_beds, 
       :num_bathrooms, :sqm, :max_guests, :photos, :city_id, :address_1, 
       :address_2, :zip, :lat, :lon, :directions, 
       :check_in_after, :check_out_before, :minimum_stay_days, 
@@ -37,7 +37,7 @@ class PlacesController < ApplicationController
     ]
 
     @details_fields = [
-      :num_bedrooms, :num_beds, :num_bathrooms, :sqm, :max_guests, :title, :description, :place_type_id
+      :num_bedrooms, :num_beds, :num_bathrooms, :sqm, :max_guests, :title, :description
     ]
 
     # Assosiations
@@ -86,7 +86,7 @@ class PlacesController < ApplicationController
   # === Parameters
   # [:access_token] Access token
   # [title]         Title for the place
-  # [type_id]       ID from the PlaceType model, Integer
+  # [place_type_id] ID from the PlaceType model, Integer
   # [num_bedrooms]  Integer
   # [max_guests]    Integer
   # [city_id]       ID from the City model, Integer
@@ -112,7 +112,7 @@ class PlacesController < ApplicationController
           request.format.to_sym => format_response({ 
             :stat => "ok", 
             :place => filter_fields(@place, [:id], :additional_fields => {
-                :details => [:title,:place_type_id,:num_bedrooms,:max_guests],
+                :details => [:title,:num_bedrooms,:max_guests],
                 :location => [:city_id],
                 :user => @user_fields,
                 :place_type => @place_type_fields
