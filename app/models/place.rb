@@ -52,11 +52,11 @@ class Place < ActiveRecord::Base
   
   # Convert all price fields into USD cents
   def convert_prices_in_usd_cents
-    self.price_per_night_usd = money_to_usd_cents(self.price_per_night,currency) if price_per_night_changed? or currency_changed?
-    self.price_per_week_usd = money_to_usd_cents(self.price_per_week,currency) if price_per_week_changed? or currency_changed?
-    self.price_per_month_usd = money_to_usd_cents(self.price_per_month,currency) if price_per_month_changed? or currency_changed?
-    self.price_final_cleanup_usd = money_to_usd_cents(self.price_final_cleanup,currency) if price_final_cleanup_changed? or currency_changed?
-    self.price_security_deposit_usd = money_to_usd_cents(self.price_security_deposit,currency) if price_security_deposit_changed? or currency_changed?
+    self.price_per_night_usd        = money_to_usd_cents(self.price_per_night,currency)         if price_per_night_changed? or currency_changed?
+    self.price_per_week_usd         = money_to_usd_cents(self.price_per_week,currency)          if price_per_week_changed? or currency_changed?
+    self.price_per_month_usd        = money_to_usd_cents(self.price_per_month,currency)         if price_per_month_changed? or currency_changed?
+    self.price_final_cleanup_usd    = money_to_usd_cents(self.price_final_cleanup,currency)     if price_final_cleanup_changed? or currency_changed?
+    self.price_security_deposit_usd = money_to_usd_cents(self.price_security_deposit,currency)  if price_security_deposit_changed? or currency_changed?
   end
   
   # Convert currency/money into USD cents
@@ -66,7 +66,7 @@ class Place < ActiveRecord::Base
   
   def update_location_fields
     if self.city_id_changed?
-      self.province_id = self.city.state.id
+      self.state_id = self.city.state.id
       self.country_id = self.city.country.id
     end
   end

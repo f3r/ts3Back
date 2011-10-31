@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111030230209) do
+ActiveRecord::Schema.define(:version => 20111031211115) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(:version => 20111030230209) do
     t.integer  "max_guests"
     t.text     "photos"
     t.integer  "city_id"
-    t.integer  "province_id"
+    t.integer  "state_id"
     t.integer  "country_id"
     t.string   "address_1"
     t.string   "address_2"
@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(:version => 20111030230209) do
   add_index "places", ["city_id"], :name => "index_places_on_city_id"
   add_index "places", ["country_id"], :name => "index_places_on_country_id"
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
-  add_index "places", ["province_id"], :name => "index_places_on_province_id"
+  add_index "places", ["state_id"], :name => "index_places_on_province_id"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
 
   create_table "states", :force => true do |t|

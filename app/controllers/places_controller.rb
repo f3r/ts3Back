@@ -11,10 +11,11 @@ class PlacesController < ApplicationController
       :maximum_stay_days, :house_rules, :cancellation_policy,
       :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
       :reviews_checkin_avg,:reviews_communication_avg,:reviews_location_avg,
-      :reviews_value_avg
+      :reviews_value_avg, :currency, :price_final_cleanup, 
+      :price_security_deposit, :price_per_night, :price_per_week, :price_per_month
     ]
 
-    @location_fields = [:country_id, :province_id, :city_id, :address_1, :address_2, :zip, :lat, :lon, :directions]
+    @location_fields = [:country_id, :state_id, :city_id, :address_1, :address_2, :zip, :lat, :lon, :directions]
 
     @amenities_fields = [:aircon,:breakfast,:buzzer_intercom,:cable_tv,:dryer,:doorman,:elevator,
       :family_friendly,:gym,:hot_tub,:kitchen,:handicap,:heating,:hot_water,
@@ -33,6 +34,7 @@ class PlacesController < ApplicationController
     ]
 
     @pricing_fields = [
+      :price_final_cleanup, :price_security_deposit, :price_per_night, :price_per_week, :price_per_month, :currency,
       :price_final_cleanup_usd, :price_security_deposit_usd, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
     ]
 
