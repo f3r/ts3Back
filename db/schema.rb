@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111030162258) do
+ActiveRecord::Schema.define(:version => 20111030230209) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -35,6 +35,60 @@ ActiveRecord::Schema.define(:version => 20111030162258) do
 
   add_index "authentications", ["provider"], :name => "index_authentications_on_provider"
   add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id"
+
+  create_table "cities", :force => true do |t|
+    t.integer "geo_id"
+    t.string  "geo_name",            :limit => 200,  :default => "",  :null => false
+    t.string  "geo_ansiname",        :limit => 200,  :default => "",  :null => false
+    t.string  "geo_alternate_names", :limit => 2000, :default => "",  :null => false
+    t.float   "geo_latitude",                        :default => 0.0, :null => false
+    t.float   "geo_longitude",                       :default => 0.0, :null => false
+    t.string  "geo_feature_class",   :limit => 1
+    t.string  "geo_feature_code",    :limit => 10
+    t.string  "geo_country_code",    :limit => 2
+    t.string  "geo_country_code2",   :limit => 60
+    t.string  "geo_admin1_code",     :limit => 20,   :default => ""
+    t.string  "geo_admin2_code",     :limit => 80,   :default => ""
+    t.string  "geo_admin3_code",     :limit => 20,   :default => ""
+    t.string  "geo_admin4_code",     :limit => 20,   :default => ""
+    t.integer "geo_population",      :limit => 8,    :default => 0
+    t.integer "geo_elevation",                       :default => 0
+    t.integer "geo_gtopo30",                         :default => 0
+    t.string  "geo_timezone",        :limit => 40
+    t.date    "geo_mod_date"
+  end
+
+  add_index "cities", ["geo_country_code"], :name => "index_cities_on_geo_country_code"
+  add_index "cities", ["geo_feature_class"], :name => "index_cities_on_geo_feature_class"
+  add_index "cities", ["geo_feature_code"], :name => "index_cities_on_geo_feature_code"
+  add_index "cities", ["geo_id"], :name => "index_cities_on_geo_id"
+
+  create_table "countries", :force => true do |t|
+    t.string  "code_iso",             :limit => 2
+    t.string  "code_iso3",            :limit => 3
+    t.integer "code_iso_numeric",                    :default => 0
+    t.string  "fips",                 :limit => 2
+    t.string  "name",                 :limit => 200, :default => "", :null => false
+    t.string  "capital",              :limit => 200, :default => "", :null => false
+    t.integer "area",                 :limit => 8,   :default => 0
+    t.integer "population",           :limit => 8,   :default => 0
+    t.string  "continent",            :limit => 2
+    t.string  "tld",                  :limit => 3
+    t.string  "currency_code",        :limit => 3
+    t.string  "currency_name",        :limit => 200
+    t.string  "phone",                :limit => 80
+    t.string  "postal_code_format",   :limit => 80
+    t.string  "postal_code_regex",    :limit => 200
+    t.string  "languages",            :limit => 200
+    t.integer "geonameid"
+    t.string  "neighbours",           :limit => 200
+    t.string  "equivalent_fips_code", :limit => 2
+  end
+
+  add_index "countries", ["code_iso"], :name => "index_countries_on_code_iso"
+  add_index "countries", ["code_iso3"], :name => "index_countries_on_code_iso3"
+  add_index "countries", ["continent"], :name => "index_countries_on_continent"
+  add_index "countries", ["geonameid"], :name => "index_countries_on_geonameid"
 
   create_table "place_types", :force => true do |t|
     t.string   "name"
@@ -146,6 +200,33 @@ ActiveRecord::Schema.define(:version => 20111030162258) do
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
   add_index "places", ["province_id"], :name => "index_places_on_province_id"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
+
+  create_table "states", :force => true do |t|
+    t.integer "geo_id"
+    t.string  "geo_name",            :limit => 200,  :default => "",  :null => false
+    t.string  "geo_ansiname",        :limit => 200,  :default => "",  :null => false
+    t.string  "geo_alternate_names", :limit => 2000, :default => "",  :null => false
+    t.float   "geo_latitude",                        :default => 0.0, :null => false
+    t.float   "geo_longitude",                       :default => 0.0, :null => false
+    t.string  "geo_feature_class",   :limit => 1
+    t.string  "geo_feature_code",    :limit => 10
+    t.string  "geo_country_code",    :limit => 2
+    t.string  "geo_country_code2",   :limit => 60
+    t.string  "geo_admin1_code",     :limit => 20,   :default => ""
+    t.string  "geo_admin2_code",     :limit => 80,   :default => ""
+    t.string  "geo_admin3_code",     :limit => 20,   :default => ""
+    t.string  "geo_admin4_code",     :limit => 20,   :default => ""
+    t.integer "geo_population",      :limit => 8,    :default => 0
+    t.integer "geo_elevation",                       :default => 0
+    t.integer "geo_gtopo30",                         :default => 0
+    t.string  "geo_timezone",        :limit => 40
+    t.date    "geo_mod_date"
+  end
+
+  add_index "states", ["geo_country_code"], :name => "index_states_on_geo_country_code"
+  add_index "states", ["geo_feature_class"], :name => "index_states_on_geo_feature_class"
+  add_index "states", ["geo_feature_code"], :name => "index_states_on_geo_feature_code"
+  add_index "states", ["geo_id"], :name => "index_states_on_geo_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false

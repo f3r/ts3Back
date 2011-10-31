@@ -37,6 +37,13 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id",             :to => "places#show"
     delete  "places/:id",             :to => "places#destroy"
     ##############################################################################
+    # GEO
+    ##############################################################################
+    get     "geo/countries",          :to => "geo#get_countries"
+    get     "geo/states",             :to => "geo#get_states"
+    get     "geo/cities",             :to => "geo#get_cities"
+    get     "geo/cities/:id",         :to => "geo#get_city"
+    ##############################################################################
     # USER INFO
     ##############################################################################
     get    "users/:id/info",          :to => "users#info"
