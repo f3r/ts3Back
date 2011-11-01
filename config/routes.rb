@@ -43,6 +43,13 @@ HeyPalBackEnd::Application.routes.draw do
     post    "places/:id/availabilities", :to => "availabilities#create"
     put     "places/:place_id/availabilities/:id", :to => "availabilities#update"
     ##############################################################################
+    # PLACE TYPES
+    ##############################################################################
+    get    "place_types",              :to => "place_types#index"
+    post   "place_types",              :to => "place_types#create"
+    put    "place_types/:id",          :to => "place_types#update"
+    delete "place_types/:id",          :to => "place_types#destroy"
+    ##############################################################################
     # GEO
     ##############################################################################
     get     "geo/countries",          :to => "geo#get_countries"
@@ -52,9 +59,10 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # USER INFO
     ##############################################################################
-    get    "users/:id/info",          :to => "users#info"
-    get    "users/:id",               :to => "users#show"
-    get    "users",                   :to => "users#show"
-    put    "users",                   :to => "users#update"
+    get     "users/:id/info",         :to => "users#info"
+    get     "users/:id/places",       :to => "places#user_places"
+    get     "users/:id",              :to => "users#show"
+    get     "users",                  :to => "users#show"
+    put     "users",                  :to => "users#update"
   end
 end

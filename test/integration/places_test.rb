@@ -115,4 +115,15 @@ class PlacesTest < ActionController::IntegrationTest
     assert_tag "place", :child => { :tag => "pricing", :child => { :tag => "price_per_month_usd", :content => @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s } }
   end
 
+  should "get a users unpublished places" do
+    get "/users/#{@user.id}/places.json", {:access_token => @user.authentication_token, :published => 0}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @place.id, json['places'][0]['id']
+    assert_equal @place.title, json['places'][0]['details']['title']
+  end
+
 end
