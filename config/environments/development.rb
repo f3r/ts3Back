@@ -38,5 +38,9 @@ HeyPalBackEnd::Application.configure do
   FB = {
     :app_id => '221413484589066', 
     :app_secret => '719daf903365b4bab445a2ef5c54c2ea', 
-    :app_url => 'https://graph.facebook.com'}
+    :app_url => 'https://graph.facebook.com'
+  }
+
+  config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "heypal", :expires_in => 1.minute, :compress => false }
+
 end

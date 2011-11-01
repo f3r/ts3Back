@@ -12,5 +12,7 @@ class State < ActiveRecord::Base
       "AND states.geo_admin1_code = cities.geo_admin1_code " +
       "AND states.id = #{id}"
     }
+
+  alias_attribute :name, :geo_name
   
 end

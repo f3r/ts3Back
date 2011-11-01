@@ -12,6 +12,7 @@ gem 'validates_timeliness', '~> 3.0.2'
 gem 'redis'
 gem 'money'
 gem 'google_currency'
+gem 'dalli'               # Memcached
 
 group :assets do
   gem 'sass-rails', "  ~> 3.1.0"
@@ -31,5 +32,4 @@ end
 
 group :production do
   gem 'rack-ssl-enforcer'
-  gem 'dalli'               # Memcached
 end

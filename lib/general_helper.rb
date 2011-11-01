@@ -67,6 +67,10 @@ module GeneralHelper
         filtered_object.merge!({field => filter_object(object.user,additional_fields[field]).group_attributes(additional_fields[field] << :avatar)})
       elsif field == :place_type
         filtered_object.merge!({field => filter_object(object.place_type,additional_fields[field]).group_attributes(additional_fields[field])})
+      elsif field == :state
+        filtered_object.merge!({field => filter_object(object.state,additional_fields[field]).group_attributes(additional_fields[field])})
+      elsif field == :country
+        filtered_object.merge!({field => filter_object(object.country,additional_fields[field]).group_attributes(additional_fields[field])})
       else
         filtered_object.merge!({field => object["#{field}"]})
       end

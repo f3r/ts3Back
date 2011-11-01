@@ -12,7 +12,8 @@ class PlacesController < ApplicationController
       :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
       :reviews_checkin_avg,:reviews_communication_avg,:reviews_location_avg,
       :reviews_value_avg, :currency, :price_final_cleanup, 
-      :price_security_deposit, :price_per_night, :price_per_week, :price_per_month
+      :price_security_deposit, :price_per_night, :price_per_week, :price_per_month,
+      :published
     ]
 
     @location_fields = [:country_id, :state_id, :city_id, :address_1, :address_2, :zip, :lat, :lon, :directions]
