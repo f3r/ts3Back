@@ -245,4 +245,46 @@ class PlacesController < ApplicationController
     end
   end
   
+  # == Description
+  # Shows a users places
+  # ==Resource URL
+  # /users/:id/places.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/users/:id/places.json access_token=access_token&published=0
+  # === Parameters
+  # [access_token]  Access token
+  # [published]     Shows or hides unpublished places (shows published places by default), Boolean value
+  # Error codes
+  # [115]           no results
+  def user_places
+    check_token
+    @places = current_user.places
+    @places = @places.where(:published => true) unless params[:published] == "0"
+    respond_with do |format|
+      if !@places.blank?
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok", 
+            :places => filter_fields(@places,@fields, { :additional_fields => {
+              :amenities => @amenities_fields, 
+              :location => @location_fields, 
+              :reviews => @reviews_fields,
+              :terms_of_offer => @terms_of_offer_fields,
+              :pricing => @pricing_fields,
+              :details => @details_fields,
+              :place_type => @place_type_fields } }) },
+          request.format.to_sym)}
+      else
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok", 
+            :err => {:places => [115]} },
+          request.format.to_sym)
+        }
+      end
+    end
+
+  end
 end

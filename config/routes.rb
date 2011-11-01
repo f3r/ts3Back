@@ -53,9 +53,10 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # USER INFO
     ##############################################################################
-    get    "users/:id/info",          :to => "users#info"
-    get    "users/:id",               :to => "users#show"
-    get    "users",                   :to => "users#show"
-    put    "users",                   :to => "users#update"
+    get     "users/:id/info",         :to => "users#info"
+    get     "users/:id/places",       :to => "places#user_places"
+    get     "users/:id",              :to => "users#show"
+    get     "users",                  :to => "users#show"
+    put     "users",                  :to => "users#update"
   end
 end
