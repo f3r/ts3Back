@@ -21,3 +21,7 @@ error codes
 [116] duplicate
 [117] invalid oauth token
 [118] must be a number
+[119] date must be future, after today
+[120] end date must be after initial date
+[121] interval overlaps with existing interval for the place
+[122] unmatching parent resource and child resource
