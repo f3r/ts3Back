@@ -17,11 +17,10 @@ class AddressesController < ApplicationController
   def index
     check_token
     @addresses = current_user.addresses.select(@fields)
-    respond_with do |format|
-      response = @addresses.count > 0 ? { :stat => "ok", :addresses => @addresses } : { :stat => "ok", :err => {:address => [115]} }
-      format.any(:xml, :json) { 
-        render :status => 200, 
-        request.format.to_sym => format_response(response,request.format.to_sym) }
+    if @addresses.count > 0
+      return_message(200, :ok, {:addresses => @addresses})
+    else
+      return_message(200, :ok, {:err => {:address => [115]}})
     end
   end
 
@@ -48,24 +47,10 @@ class AddressesController < ApplicationController
       :country => params[:country],
       :zip     => params[:zip]
       )
-
-    respond_with do |format|
-      if @address.save
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat        => "ok", 
-            :address     => filter_fields(@address, @fields)
-          },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@address.errors.messages) },
-          request.format.to_sym)}
-      end
+    if @address.save
+      return_message(200, :ok, {:address => filter_fields(@address, @fields)} )
+    else
+      return_message(200, :fail, {:err => format_errors(@address.errors.messages)})
     end
   end
 
@@ -87,28 +72,14 @@ class AddressesController < ApplicationController
   def update
     check_token
     @address = current_user.addresses.find(params[:id])
-    respond_with do |format|
-      if @address.update_attributes(
-          :street  => params[:street],
-          :city    => params[:city],
-          :country => params[:country],
-          :zip     => params[:zip])
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response(
-            {  
-              :stat        => "ok", 
-              :address     => filter_fields(@address, @fields)
-            },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@address.errors.messages) },
-          request.format.to_sym) }
-      end
+    if @address.update_attributes(
+        :street  => params[:street],
+        :city    => params[:city],
+        :country => params[:country],
+        :zip     => params[:zip])
+      return_message(200, :ok, {:address => filter_fields(@address, @fields)} )  
+    else
+      return_message(200, :fail, {:err => format_errors(@address.errors.messages)})
     end
   end
 
@@ -123,21 +94,10 @@ class AddressesController < ApplicationController
   def destroy
     check_token
     @address = current_user.addresses.find(params[:id])
-    respond_with do |format|
-      if @address.destroy
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok"},
-          request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@address.errors.messages) },
-            request.format.to_sym) }
-      end
+    if @address.destroy
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => format_errors(@address.errors.messages)})
     end
   end
 end

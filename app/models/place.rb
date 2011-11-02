@@ -34,6 +34,7 @@ class Place < ActiveRecord::Base
   belongs_to :city
   belongs_to :state
   belongs_to :country
+  has_many   :availabilities
     
   before_update :save_amenities, :convert_prices_in_usd_cents, :convert_json_photos_to_array, :update_location_fields
   validate :validate_publishing

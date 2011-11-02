@@ -15,21 +15,10 @@ class PasswordsController < Devise::PasswordsController
   # [106] email not found
   def create
     self.resource = resource_class.send_reset_password_instructions({:email => params[:email]})
-    respond_with do |format|
-      if successful_and_sane?(resource)
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok" },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => { :email => "106" } },
-            request.format.to_sym) }
-      end
+    if successful_and_sane?(resource)
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => { :email => "106" }})
     end
   end
 
@@ -52,25 +41,15 @@ class PasswordsController < Devise::PasswordsController
       :reset_password_token => params[:reset_password_token],
       :password => params[:password],
       :password_confirmation => params[:password]})
-    respond_with do |format|
-      if resource.errors.empty?
-        if resource.active_for_authentication?
-          response = { :stat => "ok", :authentication_token => resource.authentication_token }
-        else
-          response = { :stat => "ok" }
-        end
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response(response,request.format.to_sym) }
+
+    if resource.errors.empty?
+      if resource.active_for_authentication?
+        return_message(200, :ok, {:authentication_token => resource.authentication_token})
       else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => { :reset_password_token => "103" } },
-            request.format.to_sym) }
+        return_message(200, :ok)
       end
+    else
+      return_message(200, :fail, {:err => { :reset_password_token => "103" }})
     end
   end
-
 end

@@ -29,29 +29,13 @@ class AuthenticationsController < ApplicationController
         :token    => params[:oauth_token]['credentials']['token'], 
         :secret   => params[:oauth_token]['credentials']['secret'])
     end
-    respond_with do |format|
-      if authentication && authentication.save
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok",
-            :authentication => filter_fields(authentication,@fields) },
-            request.format.to_sym) }
-      elsif authentication
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail",
-            :err => format_errors(authentication.errors.messages) },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail",
-            :err => {:oauth_token=>[117]} },
-            request.format.to_sym) }
-      end
+
+    if authentication && authentication.save
+      return_message(200, :ok, {:authentication => filter_fields(authentication,@fields)})
+    elsif authentication
+      return_message(200, :fail, {:err => format_errors(authentication.errors.messages)})
+    else
+      return_message(200, :fail, {:err => {:oauth_token=>[117]}})
     end
   end
 
@@ -68,15 +52,8 @@ class AuthenticationsController < ApplicationController
   def list
     check_token
     @authentications = current_user.authentications.select(@fields)
-    respond_with do |format|
-      if @authentications
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :authentications => filter_fields(@authentications,@fields) },
-            request.format.to_sym) }
-      end
+    if @authentications
+      return_message(200, :ok, {:authentications => filter_fields(@authentications,@fields)})
     end
   end
 
@@ -94,21 +71,11 @@ class AuthenticationsController < ApplicationController
   def delete
     check_token
     authentication = current_user.authentications.find(params[:authentication_id])
-    respond_with do |format|
-      if authentication.destroy
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok" },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail",
-            :err => format_errors(authentication.errors.messages) },
-            request.format.to_sym) }
-      end
+
+    if authentication.destroy
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => format_errors(authentication.errors.messages)})
     end
   end
 
@@ -132,21 +99,10 @@ class AuthenticationsController < ApplicationController
     check_token
     auto_import = true if params[:auto_import] == "1"
     user_info = current_user.facebook_info(auto_import)
-    respond_with do |format|
-      if user_info
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", :user_info => user_info },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => {:user => [112]}},
-            request.format.to_sym) }
-      end
+    if user_info
+      return_message(200, :ok, {:user_info => user_info})
+    else
+      return_message(200, :fail, {:err => {:user => [112]}})
     end
   end
 end
