@@ -42,6 +42,7 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id/availabilities", :to => "availabilities#list"
     post    "places/:id/availabilities", :to => "availabilities#create"
     put     "places/:place_id/availabilities/:id", :to => "availabilities#update"
+    delete  "places/:place_id/availabilities/:id", :to => "availabilities#destroy"
     ##############################################################################
     # PLACE TYPES
     ##############################################################################
