@@ -77,6 +77,39 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_month_usd']
   end  
 
+  should "update place, publish it and unpublish it" do
+    put "/places/#{@place.id}.json", @place_new_info.merge({:access_token => @user.authentication_token})
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']    
+    get "/places/#{@place.id}/publish.json", {:access_token => @user.authentication_token }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']    
+    assert_equal true, json['place']['published']
+    get "/places/#{@place.id}/unpublish.json", {:access_token => @user.authentication_token }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']    
+    assert_equal false, json['place']['published']
+  end
+  
+  should "not publish place with incomplete information" do
+    get "/places/#{@place.id}/publish.json", {:access_token => @user.authentication_token }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']    
+    assert_not_nil false, json['err']['publish']
+  end
+
   should "create a place and update it's information (json)" do
     assert_difference 'Place.count', +1 do
       post '/places.json', @new_place.merge({:access_token => @user.authentication_token})
@@ -125,5 +158,5 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @place.id, json['places'][0]['id']
     assert_equal @place.title, json['places'][0]['details']['title']
   end
-
+  
 end

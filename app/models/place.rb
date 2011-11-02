@@ -1,3 +1,4 @@
+include GeneralHelper
 require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
@@ -26,6 +27,7 @@ class Place < ActiveRecord::Base
   ], :allow_nil => true, :message => "118"
 
   attr_accessor :amenities, :location, :terms_of_offer
+  attr_protected :published
 
   belongs_to :user
   belongs_to :place_type
@@ -34,8 +36,20 @@ class Place < ActiveRecord::Base
   belongs_to :country
     
   before_update :save_amenities, :convert_prices_in_usd_cents, :convert_json_photos_to_array, :update_location_fields
+  validate :validate_publishing
+
   after_commit :delete_cache
-    
+
+  def publish!
+    self.published = true
+    self.save
+  end
+
+  def unpublish!
+    self.published = false
+    self.save
+  end
+
   private
   
   def delete_cache
@@ -61,13 +75,26 @@ class Place < ActiveRecord::Base
   
   # Convert currency/money into USD cents
   def money_to_usd_cents(money, currency)
-    money.to_money(currency).exchange_to(:USD).cents
+    money.to_money(currency).exchange_to(:USD).cents if money && currency
   end
   
   def update_location_fields
     if self.city_id_changed?
       self.state_id = self.city.state.id
       self.country_id = self.city.country.id
+    end
+  end
+  
+  # Adds validation errors if published column is affected and the place doesn't meet the requirements
+  def validate_publishing
+    if published_changed? && published == true
+      errors.add(:publish, "123") if self.photos && self.photos.count < 1 # 1 picture
+      errors.add(:publish, "124") if self.description.split.size < 5 # 5 words
+      # TODO: Wait for availabilities model
+      # errors.add(:publish, "125") if self.availabilities.count < 1
+      errors.add(:publish, "126") if self.price_per_night.blank? && self.price_per_week.blank? && self.price_per_month.blank?
+      errors.add(:publish, "127") if self.currency.blank?
+      errors.add(:publish, "128") if self.price_security_deposit.blank?
     end
   end
 

@@ -285,6 +285,63 @@ class PlacesController < ApplicationController
         }
       end
     end
+  end
 
+  # == Description
+  # Shows a users places
+  # ==Resource URL
+  # /places/:id/:status.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/places/:id/publish.json access_token=access_token
+  # GET https://backend-heypal.heroku.com/places/:id/unpublish.json access_token=access_token
+  # === Parameters
+  # [access_token]  Access token
+  # [status]        Publish status, options: publish, unpublish
+  # Error codes
+  # [106] Record not found
+  # [123] not enough pictures
+  # [124] description is too short
+  # [125] no availability
+  # [126] no price
+  # [127] no currency
+  # [128] no security deposit
+  def publish
+    method = "#{params[:status]}!" if params[:status] == "publish" or params[:status] == "unpublish"
+    @place = Place.find(params[:id])
+    respond_with do |format|
+      if method        
+        if @place.send(method)
+          format.any(:xml, :json) { 
+            render :status => 200, 
+            request.format.to_sym => format_response({ 
+              :stat => "ok", 
+              :place => filter_fields(@place,@fields, { :additional_fields => {
+                :amenities => @amenities_fields, 
+                :location => @location_fields, 
+                :reviews => @reviews_fields,
+                :terms_of_offer => @terms_of_offer_fields,
+                :pricing => @pricing_fields,
+                :details => @details_fields,
+                :place_type => @place_type_fields } }) },
+            request.format.to_sym)}
+        else
+          format.any(:xml, :json) { 
+            render :status => 200, 
+            request.format.to_sym => format_response({ 
+              :stat => "ok", 
+              :err => format_errors(@place.errors.messages) },
+            request.format.to_sym)
+          }
+        end
+      else
+        format.any(:xml, :json) { 
+          render :status => 200, 
+          request.format.to_sym => format_response({ 
+            :stat => "ok", 
+            :err => {:status => [103]} },
+          request.format.to_sym)
+        }
+      end
+    end
   end
 end
