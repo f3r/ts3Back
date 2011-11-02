@@ -35,7 +35,8 @@ class Place < ActiveRecord::Base
   belongs_to :state
   belongs_to :country
   has_many   :availabilities
-    
+
+  before_create :update_location_fields
   before_update :save_amenities, :convert_prices_in_usd_cents, :convert_json_photos_to_array, :update_location_fields
   validate :validate_publishing
 
@@ -91,7 +92,7 @@ class Place < ActiveRecord::Base
     if published_changed? && published == true
       errors.add(:publish, "123") if self.photos && self.photos.count < 1 # 1 picture
       errors.add(:publish, "124") if self.description.split.size < 5 # 5 words
-      # TODO: Wait for availabilities model
+      # TODO: enable this after availabilities is ready
       # errors.add(:publish, "125") if self.availabilities.count < 1
       errors.add(:publish, "126") if self.price_per_night.blank? && self.price_per_week.blank? && self.price_per_month.blank?
       errors.add(:publish, "127") if self.currency.blank?

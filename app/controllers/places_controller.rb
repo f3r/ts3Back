@@ -106,7 +106,7 @@ class PlacesController < ApplicationController
     if @place.save
       place_return = filter_fields(@place, [:id], :additional_fields => {
           :details => [:title,:num_bedrooms,:max_guests],
-          :location => [:city_id],
+          :location => @location_fields, 
           :user => @user_fields,
           :place_type => @place_type_fields
         })
@@ -257,7 +257,11 @@ class PlacesController < ApplicationController
   # [127] no currency
   # [128] no security deposit
   def publish
-    method = "#{params[:status]}!" if params[:status] == "publish" or params[:status] == "unpublish"
+    if params[:status] == "publish" or params[:status] == "unpublish"
+      method = "#{params[:status]}!" 
+    else
+      raise ActionController::UnknownAction
+    end
     @place = Place.find(params[:id])
     respond_with do |format|
       if method        
