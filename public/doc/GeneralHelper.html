@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+<title>Module: GeneralHelper</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="module">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>lib/general_helper.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-delete_caches">#delete_caches</a>
+    
+    <li><a href="#method-i-filter_fields">#filter_fields</a>
+    
+    <li><a href="#method-i-filter_object">#filter_object</a>
+    
+    <li><a href="#method-i-filter_params">#filter_params</a>
+    
+    <li><a href="#method-i-format_errors">#format_errors</a>
+    
+    <li><a href="#method-i-format_response">#format_response</a>
+    
+    <li><a href="#method-i-group_attributes">#group_attributes</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Exceptions.html">Exceptions</a>
+  
+    <li><a href="./Exceptions/UnauthorizedAccess.html">Exceptions::UnauthorizedAccess</a>
+  
+    <li><a href="./Address.html">Address</a>
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./AdressesHelper.html">AdressesHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./Authentication.html">Authentication</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./AvailabilitiesController.html">AvailabilitiesController</a>
+  
+    <li><a href="./Availability.html">Availability</a>
+  
+    <li><a href="./City.html">City</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./Country.html">Country</a>
+  
+    <li><a href="./CustomFailure.html">CustomFailure</a>
+  
+    <li><a href="./GeneralHelper.html">GeneralHelper</a>
+  
+    <li><a href="./GeoController.html">GeoController</a>
+  
+    <li><a href="./ItemsHelper.html">ItemsHelper</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./Place.html">Place</a>
+  
+    <li><a href="./PlaceType.html">PlaceType</a>
+  
+    <li><a href="./PlaceTypesController.html">PlaceTypesController</a>
+  
+    <li><a href="./PlacesController.html">PlacesController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./State.html">State</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="module">module GeneralHelper</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-delete_caches" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_caches</span><span
+            class="method-args">(caches)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="delete_caches-source">
+            <pre><span class="ruby-comment"># File lib/general_helper.rb, line 21</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_caches</span>(<span class="ruby-identifier">caches</span>)
+  <span class="ruby-keyword">for</span> <span class="ruby-identifier">cache</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">caches</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">cache</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delete_caches-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- delete_caches-method -->
+
+    
+      <div id="method-i-filter_fields" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">filter_fields</span><span
+            class="method-args">(object, fields, options={})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="filter_fields-source">
+            <pre><span class="ruby-comment"># File lib/general_helper.rb, line 27</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-identifier">object</span>, <span class="ruby-identifier">fields</span>, <span class="ruby-identifier">options</span>={})
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Array</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Relation</span>
+    <span class="ruby-identifier">array</span> = []
+    <span class="ruby-identifier">object</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">new_object</span><span class="ruby-operator">|</span> <span class="ruby-identifier">array</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">filter_object</span>(<span class="ruby-identifier">new_object</span>, <span class="ruby-identifier">fields</span>, <span class="ruby-identifier">options</span>) }
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">array</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">filter_object</span>(<span class="ruby-identifier">object</span>, <span class="ruby-identifier">fields</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- filter_fields-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- filter_fields-method -->
+
+    
+      <div id="method-i-filter_object" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">filter_object</span><span
+            class="method-args">(object, fields, options={})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="filter_object-source">
+            <pre><span class="ruby-comment"># File lib/general_helper.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">filter_object</span>(<span class="ruby-identifier">object</span>, <span class="ruby-identifier">fields</span>, <span class="ruby-identifier">options</span>={})
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:additional_fields</span>]
+    <span class="ruby-identifier">additional_fields</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:additional_fields</span>]
+    <span class="ruby-identifier">additional_fields</span>.<span class="ruby-identifier">each_pair</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">field</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">fields</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">field</span>.<span class="ruby-identifier">to_sym</span> }
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">filtered_object</span> = {}
+  <span class="ruby-identifier">remove_fields</span> = []
+
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;OBJECT = #{object.to_yaml}&quot;</span> }
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;FIELDS = #{fields.to_yaml}&quot;</span> }
+  
+  <span class="ruby-keyword">for</span> <span class="ruby-identifier">field</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">fields</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:avatar_file_name</span>
+      <span class="ruby-identifier">style</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:style</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:style</span>] <span class="ruby-keyword">rescue</span> <span class="ruby-value">:large</span>
+      <span class="ruby-identifier">avatar</span> = <span class="ruby-identifier">object</span>.<span class="ruby-identifier">avatar</span>.<span class="ruby-identifier">url</span>(<span class="ruby-identifier">style</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">avatar</span>.<span class="ruby-identifier">url</span>(<span class="ruby-identifier">style</span>) <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;none&quot;</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-value">:avatar</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">avatar</span> })
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:amenities</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>], <span class="ruby-identifier">field</span>.<span class="ruby-identifier">to_s</span>)})
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:location</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>])})
+      <span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_fields</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span> }
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:reviews</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>], <span class="ruby-identifier">field</span>.<span class="ruby-identifier">to_s</span>)})
+      <span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_fields</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{field.to_s}_#{x}&quot;</span>.<span class="ruby-identifier">to_sym</span> }
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:terms_of_offer</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>])})
+      <span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_fields</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span> }
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:pricing</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>])})
+      <span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_fields</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span> }
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:details</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>])})
+      <span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_fields</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span> }
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:user</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_object</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">user</span>,<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>]).<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">:avatar</span>)})
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:place_type</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_object</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">place_type</span>,<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>]).<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>])})
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:state</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_object</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">state</span>,<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>]).<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>])})
+    <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">field</span> <span class="ruby-operator">==</span> <span class="ruby-value">:country</span>) <span class="ruby-keyword">and</span> (<span class="ruby-identifier">object</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;Address&quot;</span>)
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_object</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">country</span>,<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>]).<span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">additional_fields</span>[<span class="ruby-identifier">field</span>])})
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">field</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>[<span class="ruby-node">&quot;#{field}&quot;</span>]})
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">remove_fields</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">filtered_object</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">x</span>) }
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">filtered_object</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- filter_object-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- filter_object-method -->
+
+    
+      <div id="method-i-filter_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">filter_params</span><span
+            class="method-args">(params, fields, options={})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="filter_params-source">
+            <pre><span class="ruby-comment"># File lib/general_helper.rb, line 86</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">filter_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">fields</span>, <span class="ruby-identifier">options</span>={})
+  <span class="ruby-identifier">new_params</span> = {}
+  <span class="ruby-identifier">fields</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">param</span><span class="ruby-operator">|</span> <span class="ruby-identifier">new_params</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">param</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">param</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">param</span> <span class="ruby-operator">!=</span> <span class="ruby-value">:id</span> }
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">new_params</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- filter_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- filter_params-method -->
+
+    
+      <div id="method-i-format_errors" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">format_errors</span><span
+            class="method-args">(errors)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="format_errors-source">
+            <pre><span class="ruby-comment"># File lib/general_helper.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-identifier">errors</span>)
+  <span class="ruby-identifier">error_list</span> = {}
+  <span class="ruby-keyword">for</span> <span class="ruby-identifier">error</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">errors</span>
+    <span class="ruby-identifier">codes</span> = <span class="ruby-identifier">error</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-keyword">if</span> (<span class="ruby-constant">Float</span>(<span class="ruby-identifier">x</span>) <span class="ruby-keyword">or</span> <span class="ruby-constant">Integer</span>(<span class="ruby-identifier">x</span>)) <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span> }.<span class="ruby-identifier">compact</span>
+    <span class="ruby-identifier">error_list</span> = <span class="ruby-identifier">error_list</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-identifier">error</span>[<span class="ruby-value">0</span>] =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">codes</span>})
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">error_list</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- format_errors-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- format_errors-method -->
+
+    
+      <div id="method-i-format_response" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">format_response</span><span
+            class="method-args">(response,format)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="format_response-source">
+            <pre><span class="ruby-comment"># File lib/general_helper.rb, line 3</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">format_response</span>(<span class="ruby-identifier">response</span>,<span class="ruby-identifier">format</span>)
+  <span class="ruby-identifier">method</span> = <span class="ruby-node">&quot;to_#{format}&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">method</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;to_xml&quot;</span>
+    <span class="ruby-identifier">response</span>.<span class="ruby-identifier">to_xml</span>(<span class="ruby-value">:root</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;rsp&quot;</span>, <span class="ruby-value">:dasherize</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">response</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- format_response-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- format_response-method -->
+
+    
+      <div id="method-i-group_attributes" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_attributes</span><span
+            class="method-args">(attributes, prefix = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="group_attributes-source">
+            <pre><span class="ruby-comment"># File lib/general_helper.rb, line 92</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">group_attributes</span>(<span class="ruby-identifier">attributes</span>, <span class="ruby-identifier">prefix</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">attributes_array</span> = {}
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">prefix</span>
+    <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">attribute</span><span class="ruby-operator">|</span> <span class="ruby-identifier">attributes_array</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">attribute</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>[<span class="ruby-node">&quot;#{prefix}_#{attribute.to_s}&quot;</span>]) <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>[<span class="ruby-node">&quot;#{prefix}_#{attribute.to_s}&quot;</span>]}
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">attribute</span><span class="ruby-operator">|</span> <span class="ruby-identifier">attributes_array</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">attribute</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>[<span class="ruby-identifier">attribute</span>]) <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>[<span class="ruby-identifier">attribute</span>]}
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">attributes_array</span>    
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- group_attributes-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- group_attributes-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

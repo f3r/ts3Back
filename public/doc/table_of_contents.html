@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 
 <title>Table of Contents</title>
 
@@ -23,14 +23,39 @@
 <body class="indexpage">
 <h1>Table of Contents</h1>
 
+<h2>Pages</h2>
+<ul>
+  <li class="file">
+    <a href="doc/README_FOR_APP.html">README_FOR_APP</a>
+  </li>
+  
+</ul>
 
 <h2 id="classes">Classes/Modules</h2>
 <ul>
-  <li class="class">
+  <li class="module">
+    <a href="Exceptions.html">Exceptions</a>
+  </li>
+    <li class="class">
+    <a href="Exceptions/UnauthorizedAccess.html">Exceptions::UnauthorizedAccess</a>
+  </li>
+    <li class="class">
+    <a href="Address.html">Address</a>
+  </li>
+    <li class="class">
     <a href="AddressesController.html">AddressesController</a>
+  </li>
+    <li class="module">
+    <a href="AdressesHelper.html">AdressesHelper</a>
   </li>
     <li class="class">
     <a href="ApplicationController.html">ApplicationController</a>
+  </li>
+    <li class="module">
+    <a href="ApplicationHelper.html">ApplicationHelper</a>
+  </li>
+    <li class="class">
+    <a href="Authentication.html">Authentication</a>
   </li>
     <li class="class">
     <a href="AuthenticationsController.html">AuthenticationsController</a>
@@ -39,16 +64,40 @@
     <a href="AvailabilitiesController.html">AvailabilitiesController</a>
   </li>
     <li class="class">
+    <a href="Availability.html">Availability</a>
+  </li>
+    <li class="class">
+    <a href="City.html">City</a>
+  </li>
+    <li class="class">
     <a href="ConfirmationsController.html">ConfirmationsController</a>
   </li>
     <li class="class">
+    <a href="Country.html">Country</a>
+  </li>
+    <li class="class">
+    <a href="CustomFailure.html">CustomFailure</a>
+  </li>
+    <li class="module">
+    <a href="GeneralHelper.html">GeneralHelper</a>
+  </li>
+    <li class="class">
     <a href="GeoController.html">GeoController</a>
+  </li>
+    <li class="module">
+    <a href="ItemsHelper.html">ItemsHelper</a>
   </li>
     <li class="class">
     <a href="Object.html">Object</a>
   </li>
     <li class="class">
     <a href="PasswordsController.html">PasswordsController</a>
+  </li>
+    <li class="class">
+    <a href="Place.html">Place</a>
+  </li>
+    <li class="class">
+    <a href="PlaceType.html">PlaceType</a>
   </li>
     <li class="class">
     <a href="PlaceTypesController.html">PlaceTypesController</a>
@@ -63,6 +112,15 @@
     <a href="SessionsController.html">SessionsController</a>
   </li>
     <li class="class">
+    <a href="State.html">State</a>
+  </li>
+    <li class="class">
+    <a href="User.html">User</a>
+  </li>
+    <li class="class">
+    <a href="UserMailer.html">UserMailer</a>
+  </li>
+    <li class="class">
     <a href="UsersController.html">UsersController</a>
   </li>
   
@@ -73,11 +131,13 @@
   
     <li class="method"><a href="AddressesController.html#method-c-new">::new &mdash; AddressesController</a>
   
-    <li class="method"><a href="PlaceTypesController.html#method-c-new">::new &mdash; PlaceTypesController</a>
-  
     <li class="method"><a href="AuthenticationsController.html#method-c-new">::new &mdash; AuthenticationsController</a>
   
+    <li class="method"><a href="PlaceTypesController.html#method-c-new">::new &mdash; PlaceTypesController</a>
+  
     <li class="method"><a href="PlacesController.html#method-c-new">::new &mdash; PlacesController</a>
+  
+    <li class="method"><a href="User.html#method-i-age">#age &mdash; User</a>
   
     <li class="method"><a href="ApplicationController.html#method-i-authenticated-3F">#authenticated? &mdash; ApplicationController</a>
   
@@ -85,35 +145,59 @@
   
     <li class="method"><a href="ApplicationController.html#method-i-check_token">#check_token &mdash; ApplicationController</a>
   
+    <li class="method"><a href="ConfirmationsController.html#method-i-create">#create &mdash; ConfirmationsController</a>
+  
     <li class="method"><a href="RegistrationsController.html#method-i-create">#create &mdash; RegistrationsController</a>
-  
-    <li class="method"><a href="PasswordsController.html#method-i-create">#create &mdash; PasswordsController</a>
-  
-    <li class="method"><a href="SessionsController.html#method-i-create">#create &mdash; SessionsController</a>
   
     <li class="method"><a href="AuthenticationsController.html#method-i-create">#create &mdash; AuthenticationsController</a>
   
-    <li class="method"><a href="PlaceTypesController.html#method-i-create">#create &mdash; PlaceTypesController</a>
+    <li class="method"><a href="SessionsController.html#method-i-create">#create &mdash; SessionsController</a>
   
-    <li class="method"><a href="ConfirmationsController.html#method-i-create">#create &mdash; ConfirmationsController</a>
+    <li class="method"><a href="PlaceTypesController.html#method-i-create">#create &mdash; PlaceTypesController</a>
   
     <li class="method"><a href="AddressesController.html#method-i-create">#create &mdash; AddressesController</a>
   
-    <li class="method"><a href="PlacesController.html#method-i-create">#create &mdash; PlacesController</a>
+    <li class="method"><a href="PasswordsController.html#method-i-create">#create &mdash; PasswordsController</a>
   
     <li class="method"><a href="AvailabilitiesController.html#method-i-create">#create &mdash; AvailabilitiesController</a>
+  
+    <li class="method"><a href="PlacesController.html#method-i-create">#create &mdash; PlacesController</a>
   
     <li class="method"><a href="ApplicationController.html#method-i-current_user">#current_user &mdash; ApplicationController</a>
   
     <li class="method"><a href="AuthenticationsController.html#method-i-delete">#delete &mdash; AuthenticationsController</a>
   
-    <li class="method"><a href="PlacesController.html#method-i-destroy">#destroy &mdash; PlacesController</a>
+    <li class="method"><a href="GeneralHelper.html#method-i-delete_caches">#delete_caches &mdash; GeneralHelper</a>
   
-    <li class="method"><a href="PlaceTypesController.html#method-i-destroy">#destroy &mdash; PlaceTypesController</a>
+    <li class="method"><a href="AvailabilitiesController.html#method-i-destroy">#destroy &mdash; AvailabilitiesController</a>
   
     <li class="method"><a href="AddressesController.html#method-i-destroy">#destroy &mdash; AddressesController</a>
   
+    <li class="method"><a href="PlaceTypesController.html#method-i-destroy">#destroy &mdash; PlaceTypesController</a>
+  
+    <li class="method"><a href="PlacesController.html#method-i-destroy">#destroy &mdash; PlacesController</a>
+  
     <li class="method"><a href="RegistrationsController.html#method-i-destroy">#destroy &mdash; RegistrationsController</a>
+  
+    <li class="method"><a href="User.html#method-i-facebook">#facebook &mdash; User</a>
+  
+    <li class="method"><a href="User.html#method-i-facebook_info">#facebook_info &mdash; User</a>
+  
+    <li class="method"><a href="GeneralHelper.html#method-i-filter_fields">#filter_fields &mdash; GeneralHelper</a>
+  
+    <li class="method"><a href="GeneralHelper.html#method-i-filter_object">#filter_object &mdash; GeneralHelper</a>
+  
+    <li class="method"><a href="GeneralHelper.html#method-i-filter_params">#filter_params &mdash; GeneralHelper</a>
+  
+    <li class="method"><a href="User.html#method-i-fof-3F">#fof? &mdash; User</a>
+  
+    <li class="method"><a href="GeneralHelper.html#method-i-format_errors">#format_errors &mdash; GeneralHelper</a>
+  
+    <li class="method"><a href="GeneralHelper.html#method-i-format_response">#format_response &mdash; GeneralHelper</a>
+  
+    <li class="method"><a href="User.html#method-i-friends-3F">#friends? &mdash; User</a>
+  
+    <li class="method"><a href="User.html#method-i-full_name">#full_name &mdash; User</a>
   
     <li class="method"><a href="GeoController.html#method-i-get_cities">#get_cities &mdash; GeoController</a>
   
@@ -125,6 +209,14 @@
   
     <li class="method"><a href="GeoController.html#method-i-get_states">#get_states &mdash; GeoController</a>
   
+    <li class="method"><a href="GeneralHelper.html#method-i-group_attributes">#group_attributes &mdash; GeneralHelper</a>
+  
+    <li class="method"><a href="CustomFailure.html#method-i-http_auth_body">#http_auth_body &mdash; CustomFailure</a>
+  
+    <li class="method"><a href="CustomFailure.html#method-i-i18n_message">#i18n_message &mdash; CustomFailure</a>
+  
+    <li class="method"><a href="User.html#method-i-import_facebook_friends">#import_facebook_friends &mdash; User</a>
+  
     <li class="method"><a href="PlaceTypesController.html#method-i-index">#index &mdash; PlaceTypesController</a>
   
     <li class="method"><a href="AddressesController.html#method-i-index">#index &mdash; AddressesController</a>
@@ -135,7 +227,13 @@
   
     <li class="method"><a href="AuthenticationsController.html#method-i-list">#list &mdash; AuthenticationsController</a>
   
+    <li class="method"><a href="Exceptions/UnauthorizedAccess.html#method-i-message">#message &mdash; Exceptions::UnauthorizedAccess</a>
+  
     <li class="method"><a href="SessionsController.html#method-i-oauth_create">#oauth_create &mdash; SessionsController</a>
+  
+    <li class="method"><a href="User.html#method-i-password_validations_required-3F">#password_validations_required? &mdash; User</a>
+  
+    <li class="method"><a href="User.html#method-i-redis_key">#redis_key &mdash; User</a>
   
     <li class="method"><a href="ApplicationController.html#method-i-return_message">#return_message &mdash; ApplicationController</a>
   
@@ -143,23 +241,31 @@
   
     <li class="method"><a href="UsersController.html#method-i-show">#show &mdash; UsersController</a>
   
-    <li class="method"><a href="ConfirmationsController.html#method-i-show">#show &mdash; ConfirmationsController</a>
-  
     <li class="method"><a href="PlacesController.html#method-i-show">#show &mdash; PlacesController</a>
   
+    <li class="method"><a href="ConfirmationsController.html#method-i-show">#show &mdash; ConfirmationsController</a>
+  
+    <li class="method"><a href="City.html#method-i-state">#state &mdash; City</a>
+  
+    <li class="method"><a href="User.html#method-i-twitter">#twitter &mdash; User</a>
+  
     <li class="method"><a href="PlacesController.html#method-i-update">#update &mdash; PlacesController</a>
+  
+    <li class="method"><a href="PasswordsController.html#method-i-update">#update &mdash; PasswordsController</a>
   
     <li class="method"><a href="AddressesController.html#method-i-update">#update &mdash; AddressesController</a>
   
     <li class="method"><a href="UsersController.html#method-i-update">#update &mdash; UsersController</a>
   
-    <li class="method"><a href="AvailabilitiesController.html#method-i-update">#update &mdash; AvailabilitiesController</a>
-  
-    <li class="method"><a href="PasswordsController.html#method-i-update">#update &mdash; PasswordsController</a>
-  
     <li class="method"><a href="PlaceTypesController.html#method-i-update">#update &mdash; PlaceTypesController</a>
   
+    <li class="method"><a href="AvailabilitiesController.html#method-i-update">#update &mdash; AvailabilitiesController</a>
+  
     <li class="method"><a href="PlacesController.html#method-i-user_places">#user_places &mdash; PlacesController</a>
+  
+    <li class="method"><a href="Availability.html#method-i-validates_overlapping">#validates_overlapping &mdash; Availability</a>
+  
+    <li class="method"><a href="UserMailer.html#method-i-welcome_note">#welcome_note &mdash; UserMailer</a>
   
 </ul>
 

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+<title>Class: User</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/models/user.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">ActiveRecord::Base
+  
+</nav>
+
+    <!-- Included Modules -->
+<nav id="includes-section" class="section">
+  <h3 class="section-header">Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><a class="include" href="GeneralHelper.html">GeneralHelper</a>
+  
+  
+  </ul>
+</nav>
+
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-age">#age</a>
+    
+    <li><a href="#method-i-facebook">#facebook</a>
+    
+    <li><a href="#method-i-facebook_info">#facebook_info</a>
+    
+    <li><a href="#method-i-fof-3F">#fof?</a>
+    
+    <li><a href="#method-i-friends-3F">#friends?</a>
+    
+    <li><a href="#method-i-full_name">#full_name</a>
+    
+    <li><a href="#method-i-import_facebook_friends">#import_facebook_friends</a>
+    
+    <li><a href="#method-i-password_validations_required-3F">#password_validations_required?</a>
+    
+    <li><a href="#method-i-redis_key">#redis_key</a>
+    
+    <li><a href="#method-i-twitter">#twitter</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Exceptions.html">Exceptions</a>
+  
+    <li><a href="./Exceptions/UnauthorizedAccess.html">Exceptions::UnauthorizedAccess</a>
+  
+    <li><a href="./Address.html">Address</a>
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./AdressesHelper.html">AdressesHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./Authentication.html">Authentication</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./AvailabilitiesController.html">AvailabilitiesController</a>
+  
+    <li><a href="./Availability.html">Availability</a>
+  
+    <li><a href="./City.html">City</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./Country.html">Country</a>
+  
+    <li><a href="./CustomFailure.html">CustomFailure</a>
+  
+    <li><a href="./GeneralHelper.html">GeneralHelper</a>
+  
+    <li><a href="./GeoController.html">GeoController</a>
+  
+    <li><a href="./ItemsHelper.html">ItemsHelper</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./Place.html">Place</a>
+  
+    <li><a href="./PlaceType.html">PlaceType</a>
+  
+    <li><a href="./PlaceTypesController.html">PlaceTypesController</a>
+  
+    <li><a href="./PlacesController.html">PlacesController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./State.html">State</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class User</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+    <!-- Attributes -->
+    <section id="attribute-method-details" class="method-section section">
+      <h3 class="section-header">Attributes</h3>
+
+      
+      <div id="attribute-i-avatar_url" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">avatar_url</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section><!-- attribute-method-details -->
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-age" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">age</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="age-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 86</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">age</span>
+  <span class="ruby-identifier">now</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">to_date</span>
+  <span class="ruby-identifier">now</span>.<span class="ruby-identifier">year</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">birthdate</span>.<span class="ruby-identifier">year</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">birthdate</span>.<span class="ruby-identifier">to_date</span>.<span class="ruby-identifier">change</span>(<span class="ruby-value">:year</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">now</span>.<span class="ruby-identifier">year</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">now</span> <span class="ruby-operator">?</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- age-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- age-method -->
+
+    
+      <div id="method-i-facebook" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">facebook</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>gets users facebook authentication object, if exists</p>
+          
+
+          
+          <div class="method-source-code" id="facebook-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 151</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">facebook</span>
+  <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-node">&quot;user_#{self.id.to_s}_provider_facebook&quot;</span>) { <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">find_by_provider</span>(<span class="ruby-string">&quot;facebook&quot;</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- facebook-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- facebook-method -->
+
+    
+      <div id="method-i-facebook_info" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">facebook_info</span><span
+            class="method-args">(auto_import=false)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="facebook_info-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 128</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">facebook_info</span>(<span class="ruby-identifier">auto_import</span>=<span class="ruby-keyword">false</span>)
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">authentication</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;facebook&quot;</span>).<span class="ruby-identifier">first</span>
+    <span class="ruby-identifier">client</span> = <span class="ruby-constant">OAuth2</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">FB</span>[<span class="ruby-value">:app_id</span>], <span class="ruby-constant">FB</span>[<span class="ruby-value">:app_secret</span>], <span class="ruby-value">:site</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'https://graph.facebook.com'</span>)
+    <span class="ruby-identifier">facebook</span> = <span class="ruby-constant">OAuth2</span><span class="ruby-operator">::</span><span class="ruby-constant">AccessToken</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">client</span>, <span class="ruby-identifier">authentication</span>.<span class="ruby-identifier">token</span>)
+    <span class="ruby-identifier">info</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">facebook</span>.<span class="ruby-identifier">get</span>(<span class="ruby-node">&quot;/#{authentication.uid}&quot;</span>))
+    <span class="ruby-identifier">birthday</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">strptime</span>(<span class="ruby-identifier">info</span>[<span class="ruby-string">'birthday'</span>], <span class="ruby-string">&quot;%m/%d/%Y&quot;</span>)
+    <span class="ruby-identifier">info</span> = {
+      <span class="ruby-value">:first_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">info</span>[<span class="ruby-string">'first_name'</span>],
+      <span class="ruby-value">:last_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">info</span>[<span class="ruby-string">'last_name'</span>],
+      <span class="ruby-value">:gender</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">info</span>[<span class="ruby-string">'gender'</span>],
+      <span class="ruby-value">:birthdate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">birthday</span>,
+      <span class="ruby-value">:avatar_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;http://graph.facebook.com/&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">info</span>[<span class="ruby-string">'id'</span>] <span class="ruby-operator">+</span> <span class="ruby-string">&quot;/picture?type=large&quot;</span>
+    }
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">info</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">auto_import</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">info</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [user.rb/facebook_info] #{e.message}&quot;</span> }
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- facebook_info-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- facebook_info-method -->
+
+    
+      <div id="method-i-fof-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fof?</span><span
+            class="method-args">(user)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns true if the current user and the given user have a common friend</p>
+          
+
+          
+          <div class="method-source-code" id="fof-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 119</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fof?</span>(<span class="ruby-identifier">user</span>)
+  <span class="ruby-constant">REDIS</span>.<span class="ruby-identifier">sinter</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:friend</span>), <span class="ruby-identifier">user</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:friend</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- fof-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- fof-3F-method -->
+
+    
+      <div id="method-i-friends-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">friends?</span><span
+            class="method-args">(user)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns true if the current user is friends with the given user</p>
+          
+
+          
+          <div class="method-source-code" id="friends-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 114</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">friends?</span>(<span class="ruby-identifier">user</span>)
+  <span class="ruby-constant">REDIS</span>.<span class="ruby-identifier">sismember</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:friend</span>), <span class="ruby-identifier">user</span>.<span class="ruby-identifier">facebook</span>.<span class="ruby-identifier">uid</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- friends-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- friends-3F-method -->
+
+    
+      <div id="method-i-full_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">full_name</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="full_name-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 82</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">full_name</span>
+  [<span class="ruby-identifier">first_name</span>,<span class="ruby-identifier">last_name</span>].<span class="ruby-identifier">join</span>(<span class="ruby-string">' '</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- full_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- full_name-method -->
+
+    
+      <div id="method-i-import_facebook_friends" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">import_facebook_friends</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="import_facebook_friends-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 91</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">import_facebook_friends</span>  
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">authentication</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;facebook&quot;</span>).<span class="ruby-identifier">first</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">authentication</span>
+      <span class="ruby-identifier">client</span>   = <span class="ruby-constant">OAuth2</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">FB</span>[<span class="ruby-value">:app_id</span>], <span class="ruby-constant">FB</span>[<span class="ruby-value">:app_secret</span>], <span class="ruby-value">:site</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">FB</span>[<span class="ruby-value">:app_url</span>])
+      <span class="ruby-identifier">facebook</span> = <span class="ruby-constant">OAuth2</span><span class="ruby-operator">::</span><span class="ruby-constant">AccessToken</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">client</span>, <span class="ruby-identifier">authentication</span>.<span class="ruby-identifier">token</span>)
+      <span class="ruby-identifier">friends</span>  = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">facebook</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">'/me/friends'</span>))
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">friends</span>
+        <span class="ruby-comment"># Update the REDIS information: delete all and create one by one... sigh</span>
+        <span class="ruby-constant">REDIS</span>.<span class="ruby-identifier">multi</span> <span class="ruby-keyword">do</span>
+          <span class="ruby-constant">REDIS</span>.<span class="ruby-identifier">del</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:friend</span>))
+          <span class="ruby-identifier">friends</span>[<span class="ruby-string">'data'</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">friend</span><span class="ruby-operator">|</span>
+            <span class="ruby-constant">REDIS</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:friend</span>), <span class="ruby-identifier">friend</span>[<span class="ruby-string">'id'</span>])
+          }
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- import_facebook_friends-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- import_facebook_friends-method -->
+
+    
+      <div id="method-i-password_validations_required-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">password_validations_required?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="password_validations_required-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">password_validations_required?</span>
+  <span class="ruby-identifier">encrypted_password</span>.<span class="ruby-identifier">blank?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- password_validations_required-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- password_validations_required-3F-method -->
+
+    
+      <div id="method-i-redis_key" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">redis_key</span><span
+            class="method-args">(str)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>helper method to generate redis keys</p>
+          
+
+          
+          <div class="method-source-code" id="redis_key-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 124</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">redis_key</span>(<span class="ruby-identifier">str</span>)
+  <span class="ruby-node">&quot;user:#{self.id}:#{str}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- redis_key-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- redis_key-method -->
+
+    
+      <div id="method-i-twitter" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">twitter</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>gets users twitter authentication object, if exists</p>
+          
+
+          
+          <div class="method-source-code" id="twitter-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 156</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">twitter</span>
+  <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-node">&quot;user_#{self.id.to_s}_provider_twitter&quot;</span>) { <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">find_by_provider</span>(<span class="ruby-string">&quot;twitter&quot;</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- twitter-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- twitter-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
