@@ -41,9 +41,6 @@ module GeneralHelper
     end
     filtered_object = {}
     remove_fields = []
-
-    logger.error { "OBJECT = #{object.to_yaml}" }
-    logger.error { "FIELDS = #{fields.to_yaml}" }
     
     for field in fields
       if field == :avatar_file_name

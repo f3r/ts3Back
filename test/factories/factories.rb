@@ -33,4 +33,22 @@ FactoryGirl.define do
     place_type   { @place_type }
     user         { @user }
   end
+  
+  factory :country do
+    code_iso  { "US" }
+    name      { "United States" }
+  end
+
+  factory :state do
+    geo_country_code      { "US" }
+    geo_name              { "Illinois" }
+    geo_admin1_code       { "IL" }
+  end
+
+  factory :city do
+    geo_country_code      { "US" }
+    geo_name              { "Chicago" }
+    geo_admin1_code       { "IL" }
+  end
+
 end

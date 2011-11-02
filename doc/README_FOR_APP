@@ -25,3 +25,9 @@ error codes
 [120] end date must be after initial date
 [121] interval overlaps with existing interval for the place
 [122] unmatching parent resource and child resource
+[123] not enough pictures
+[124] description is too short
+[125] no availability
+[126] no price
+[127] no currency
+[128] no security deposit
