@@ -19,6 +19,22 @@ class ApplicationController < ActionController::Base
     raise Exceptions::UnauthorizedAccess unless authenticated?
   end
   
+  # Status = HTTP Status code (ie. 200)
+  # Stat   = Message status code (ie. :ok or :fail)
+  # Fields = Array of key/value fields passed in the message
+  #          {:err => {:availabilities => [115]} }
+  def return_message(status,stat,fields={})
+    response = {}
+    response.merge!(:stat => stat)
+    response.merge!(fields)
+    respond_with do |format|
+      format.any(:xml, :json) { 
+        render :status => status, 
+        request.format.to_sym => format_response(response, request.format.to_sym)
+      }
+    end
+  end
+  
   private
 
   def unauthorized_access

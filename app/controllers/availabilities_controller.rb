@@ -14,22 +14,10 @@ class AvailabilitiesController < ApplicationController
   # [106] not found
   def list    
     @place = Place.find(params[:id])
-    respond_with do |format|
-      if !@place.availabilities.blank?
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :availabilities => @place.availabilities.select("id,date_start,date_end,comment,price_per_night,comment") },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :err => {:availabilities => [115]} },
-          request.format.to_sym)}
-      end
+    if !@place.availabilities.blank?
+      return_message(200, :ok, {:availabilities => @place.availabilities.select("id,date_start,date_end,comment,price_per_night,comment")})
+    else
+      return_message(200, :ok, {:err=>{:availabilities => [115]}} )
     end
   end
   
@@ -53,31 +41,20 @@ class AvailabilitiesController < ApplicationController
   # [105] invalid access token
   def create
     check_token
-    availability = { 
-      :date_start => params[:date_start],
-      :date_end   => params[:date_end]
-    }
+    #TODO: Check that the availability is for a place the user owns...
+    
+    availability = {}     
+    availability.merge!({ :date_start      => params[:date_start]})
+    availability.merge!({ :date_end        => params[:date_end]})
     availability.merge!({ :price_per_night => params[:price_per_night]}) if params[:price_per_night]
     availability.merge!({ :comment         => params[:comment]})         if params[:comment]
     
-    #TODO: Check that the availability is for a place the user owns...
     @availability = Place.find(params[:id]).availabilities.new(availability)
-    respond_with do |format|
-      if @availability.save
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :availability => @availability },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@availability.errors.messages) },
-          request.format.to_sym)}
-      end
+
+    if @availability.save
+      return_message(200, :ok, {:availability => @availability})
+    else
+      return_message(200, :fail, {:err => format_errors(@availability.errors.messages)})
     end
   end
   
@@ -105,36 +82,21 @@ class AvailabilitiesController < ApplicationController
     check_token
 
     #TODO: Check that the availability is for a place the user owns...
-    @place = Place.find(params[:place_id])
+    @place        = Place.find(params[:place_id])
+    @availability = @place.availabilities.find(params[:id])
+          
+    availability = {}
+    availability.merge!({ :date_start      => @availability['date_start'] })
+    availability.merge!({ :date_end        => @availability['date_end']   })
+    availability.merge!({ :date_start      => params[:date_start]})      if params[:date_start]
+    availability.merge!({ :date_end        => params[:date_end]})        if params[:date_end]
+    availability.merge!({ :price_per_night => params[:price_per_night]}) if params[:price_per_night]
+    availability.merge!({ :comment         => params[:comment]})         if params[:comment]
 
-    respond_with do |format|
-      @availability = @place.availabilities.find(params[:id])
-            
-      availability = {}
-      availability.merge!({ :date_start  => @availability['date_start'] })
-      availability.merge!({ :date_end    => @availability['date_end']   })
-
-      # Check if date_start/end is updated, otherwise take original
-      availability.merge!({ :date_start      => params[:date_start]})      if params[:date_start]
-      availability.merge!({ :date_end        => params[:date_end]})        if params[:date_end]
-      availability.merge!({ :price_per_night => params[:price_per_night]}) if params[:price_per_night]
-      availability.merge!({ :comment         => params[:comment]})         if params[:comment]
-
-      if @availability.update_attribute(availability)
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :availability => @availability },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@availability.errors.messages) },
-          request.format.to_sym)}
-      end
+    if @availability.update_attribute(availability)
+      return_message(200, :ok, {:availability => @availability})
+    else
+      return_message(200, :fail, {:err => format_errors(@availability.errors.messages)})
     end
   end
   

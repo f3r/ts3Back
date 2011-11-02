@@ -14,9 +14,10 @@ class PlaceTypesController < ApplicationController
   # None
   def index
     @place_types = PlaceType.select(@fields).all
-    respond_with do |format|
-      response = @place_types.count > 0 ? { :stat => "ok", :place_types => @place_types } : { :stat => "ok", :err => {:states => [115]} }
-      format.any(:xml, :json) { render :status => 200, request.format.to_sym => format_response(response,request.format.to_sym) }
+    if @place_types.count > 0
+      return_message(200, :ok, {:place_types => @place_types})
+    else
+      return_message(200, :ok, {:err => {:states => [115]}})
     end
   end
 
@@ -30,22 +31,11 @@ class PlaceTypesController < ApplicationController
   def create
     check_token
     @place_type = PlaceType.new(:name => params[:name])
-    respond_with do |format|
-      if @place_type.save
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :place_type => filter_fields(@place_type, @fields) },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@place_type.errors.messages) },
-          request.format.to_sym)}
-      end
+
+    if @place_type.save
+      return_message(200, :ok, {:place_type => filter_fields(@place_type, @fields)})
+    else
+      return_message(200, :fail, {:err => format_errors(@place_type.errors.messages)})
     end
   end
 
@@ -59,22 +49,10 @@ class PlaceTypesController < ApplicationController
   def update
     check_token
     @place_type = PlaceType.find(params[:id])
-    respond_with do |format|
-      if @place_type.update_attributes(:name => params[:name])
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :place_type => filter_fields(@place_type, @fields) },
-          request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@place_type.errors.messages) },
-          request.format.to_sym) }
-      end
+    if @place_type.update_attributes(:name => params[:name])
+      return_message(200, :ok, {:place_type => filter_fields(@place_type, @fields)})
+    else
+      return_message(200, :fail, {:err => format_errors(@place_type.errors.messages)})
     end
   end
 
@@ -87,22 +65,10 @@ class PlaceTypesController < ApplicationController
   def destroy
     check_token
     @place_type = PlaceType.find(params[:id])
-    respond_with do |format|
-      if @place_type.destroy
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :place_type => filter_fields(@place_type, @fields) },
-          request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@place_type.errors.messages) },
-          request.format.to_sym) }
-      end
+    if @place_type.destroy
+      return_message(200, :ok, {:place_type => filter_fields(@place_type, @fields)})
+    else
+      return_message(200, :fail, {:err => format_errors(@place_type.errors.messages)})
     end
   end
 end

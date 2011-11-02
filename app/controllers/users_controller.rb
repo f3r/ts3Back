@@ -18,26 +18,10 @@ class UsersController < ApplicationController
   def info
     fields = [:id, :first_name, :last_name, :avatar_file_name]
     @user = Rails.cache.fetch("user_info_" + params[:id].to_s) { User.select(fields).find(params[:id]) }
-    respond_with do |format|
-      if @user
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok",
-            :user => filter_fields(@user, fields, {:style => :thumb})
-            # TODO: Add review/badges when implemented
-            # :review_count  => @user.review_count,
-            # :badges_count  => @user.badges.count
-            },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => {:user => [112]}},
-            request.format.to_sym) }
-      end
+    if @user
+      return_message(200, :ok, {:user => filter_fields(@user, fields, {:style => :thumb})})
+    else
+      return_message(200, :fail, {:err => {:user => [112]}})
     end
   end
 
@@ -73,14 +57,7 @@ class UsersController < ApplicationController
       :avatar_file_name
     ]
     @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.select(fields).find(id) }
-    respond_with do |format|
-      format.any(:xml, :json) { 
-        render :status => 200, 
-        request.format.to_sym => format_response({ 
-          :stat => "ok",
-          :user => filter_fields(@user,fields) },
-          request.format.to_sym) }
-    end
+    return_message(200, :ok, {:user => filter_fields(@user,fields)})
   end
 
   # ==Description
@@ -125,22 +102,10 @@ class UsersController < ApplicationController
       :avatar_file_name
     ]
     @user = current_user
-    respond_with do |format|
-      if @user.update_attributes(params[:user])
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok",
-            :user => filter_fields(@user,fields) },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@user.errors.messages) },
-            request.format.to_sym) }
-      end
+    if @user.update_attributes(params[:user])
+      return_message(200, :ok, {:user => filter_fields(@user,fields)})
+    else
+      return_message(200, :fail, {:err => format_errors(@user.errors.messages)})
     end
   end
 

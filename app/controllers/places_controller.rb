@@ -62,22 +62,16 @@ class PlacesController < ApplicationController
   # [:id] if of the place
   def show
     @place = Place.find(params[:id])
-    respond_with do |format|
-      format.any(:xml, :json) { 
-        render :status => 200, 
-        request.format.to_sym => format_response({ 
-          :stat => "ok", 
-          :place => filter_fields(@place, @fields, { :additional_fields => { 
-            :amenities => @amenities_fields, 
-            :location => @location_fields, 
-            :reviews => @reviews_fields,
-            :terms_of_offer => @terms_of_offer_fields,
-            :pricing => @pricing_fields,
-            :details => @details_fields,
-            :user => @user_fields,
-            :place_type => @place_type_fields } }) },
-          request.format.to_sym) }
-    end
+    place = filter_fields(@place, @fields, { :additional_fields => { 
+      :amenities => @amenities_fields, 
+      :location => @location_fields, 
+      :reviews => @reviews_fields,
+      :terms_of_offer => @terms_of_offer_fields,
+      :pricing => @pricing_fields,
+      :details => @details_fields,
+      :user => @user_fields,
+      :place_type => @place_type_fields } })
+    return_message(200, :ok, {:place => place})
   end
   
   # == Description
@@ -102,33 +96,23 @@ class PlacesController < ApplicationController
   def create
     check_token
     place = { 
-      :title => params[:title],
+      :title         => params[:title],
       :place_type_id => params[:place_type_id],
-      :num_bedrooms => params[:num_bedrooms],
-      :max_guests => params[:max_guests],
-      :city_id => params[:city_id] }
+      :num_bedrooms  => params[:num_bedrooms],
+      :max_guests    => params[:max_guests],
+      :city_id       => params[:city_id] }
     @place = current_user.places.new(place)
-    respond_with do |format|
-      if @place.save
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :place => filter_fields(@place, [:id], :additional_fields => {
-                :details => [:title,:num_bedrooms,:max_guests],
-                :location => [:city_id],
-                :user => @user_fields,
-                :place_type => @place_type_fields
-              }) },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@place.errors.messages) },
-          request.format.to_sym)}
-      end
+
+    if @place.save
+      place_return = filter_fields(@place, [:id], :additional_fields => {
+          :details => [:title,:num_bedrooms,:max_guests],
+          :location => [:city_id],
+          :user => @user_fields,
+          :place_type => @place_type_fields
+        })
+      return_message(200, :ok, {:place => place_return})
+    else
+      return_message(200, :fail, {:err => format_errors(@place.errors.messages)})
     end
   end
   
@@ -187,32 +171,22 @@ class PlacesController < ApplicationController
     @place = Place.find(params[:id])
     [:price_per_night, :price_per_week, :price_per_month, :price_final_cleanup, :price_security_deposit, :currency, :amenities].map{|x| @fields << x}
     place = filter_params(params, @fields)
-    respond_with do |format|
-      if @place.update_attributes(place)
-        # remove from array private fields
-        [:price_per_night, :price_per_week, :price_per_month, :price_final_cleanup, :price_security_deposit, :currency].map{|x| @fields.delete(x) }
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :place => filter_fields(@place,@fields, { :additional_fields => {
-              :amenities => @amenities_fields, 
-              :location => @location_fields, 
-              :reviews => @reviews_fields,
-              :terms_of_offer => @terms_of_offer_fields,
-              :pricing => @pricing_fields,
-              :details => @details_fields,
-              :user => @user_fields,
-              :place_type => @place_type_fields } }) },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(@place.errors.messages) },
-          request.format.to_sym)}
-      end
+
+    if @place.update_attributes(place)
+      # remove from array private fields
+      [:price_per_night, :price_per_week, :price_per_month, :price_final_cleanup, :price_security_deposit, :currency].map{|x| @fields.delete(x) }
+      place_return = filter_fields(@place,@fields, { :additional_fields => {
+        :amenities => @amenities_fields, 
+        :location => @location_fields, 
+        :reviews => @reviews_fields,
+        :terms_of_offer => @terms_of_offer_fields,
+        :pricing => @pricing_fields,
+        :details => @details_fields,
+        :user => @user_fields,
+        :place_type => @place_type_fields } })
+      return_message(200, :ok, {:place => place_return})
+    else
+      return_message(200, :fail, {:err => format_errors(@place.errors.messages)})
     end
   end
   
@@ -227,21 +201,10 @@ class PlacesController < ApplicationController
   def destroy
     check_token
     place = Place.find(params[:id])
-    respond_with do |format|
-      if place.destroy
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok" },
-          request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(place.errors.messages) },
-          request.format.to_sym) }
-      end
+    if place.destroy
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => format_errors(place.errors.messages)})
     end
   end
   
@@ -260,31 +223,19 @@ class PlacesController < ApplicationController
     check_token
     @places = current_user.places
     @places = @places.where(:published => true) unless params[:published] == "0"
-    respond_with do |format|
-      if !@places.blank?
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :places => filter_fields(@places,@fields, { :additional_fields => {
-              :amenities => @amenities_fields, 
-              :location => @location_fields, 
-              :reviews => @reviews_fields,
-              :terms_of_offer => @terms_of_offer_fields,
-              :pricing => @pricing_fields,
-              :details => @details_fields,
-              :place_type => @place_type_fields } }) },
-          request.format.to_sym)}
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :err => {:places => [115]} },
-          request.format.to_sym)
-        }
-      end
-    end
 
+    if !@places.blank?
+      places_return = filter_fields(@places,@fields, { :additional_fields => {
+        :amenities => @amenities_fields, 
+        :location => @location_fields, 
+        :reviews => @reviews_fields,
+        :terms_of_offer => @terms_of_offer_fields,
+        :pricing => @pricing_fields,
+        :details => @details_fields,
+        :place_type => @place_type_fields}})
+      return_message(200, :ok, {:places => places_return})
+    else
+      return_message(200, :ok, { :err => {:places => [115]}})
+    end
   end
 end

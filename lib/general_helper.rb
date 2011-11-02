@@ -41,6 +41,10 @@ module GeneralHelper
     end
     filtered_object = {}
     remove_fields = []
+
+    logger.error { "OBJECT = #{object.to_yaml}" }
+    logger.error { "FIELDS = #{fields.to_yaml}" }
+    
     for field in fields
       if field == :avatar_file_name
         style = options[:style] if options[:style] rescue :large
@@ -69,7 +73,7 @@ module GeneralHelper
         filtered_object.merge!({field => filter_object(object.place_type,additional_fields[field]).group_attributes(additional_fields[field])})
       elsif field == :state
         filtered_object.merge!({field => filter_object(object.state,additional_fields[field]).group_attributes(additional_fields[field])})
-      elsif field == :country
+      elsif (field == :country) and (object.class.to_s != "Address")
         filtered_object.merge!({field => filter_object(object.country,additional_fields[field]).group_attributes(additional_fields[field])})
       else
         filtered_object.merge!({field => object["#{field}"]})

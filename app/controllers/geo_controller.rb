@@ -13,14 +13,7 @@ class GeoController < ApplicationController
   # id, code_iso and name
   def get_countries
     @countries = Rails.cache.fetch('geo_countries_list') { Country.select([:id, :code_iso, :name]).all }
-    respond_with do |format|
-      format.any(:xml, :json) { 
-        render :status => 200, 
-        request.format.to_sym => format_response({ 
-          :stat => "ok", 
-          :countries => @countries },
-        request.format.to_sym) }
-    end
+    return_message(200, :ok, {:countries => @countries})
   end
 
   # == Description
@@ -53,24 +46,11 @@ class GeoController < ApplicationController
         .all
       }
     end
-    respond_with do |format|
-      if !@states.empty?
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :states => filter_fields(@states,@fields) },
-          request.format.to_sym)
-        }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :err => {:states => [115]} },
-          request.format.to_sym)
-        }
-      end
+
+    if !@states.empty?
+      return_message(200, :ok, {:states => filter_fields(@states,@fields)})
+    else
+      return_message(200, :ok, {:err => {:states => [115]}})
     end
   end
 
@@ -113,24 +93,11 @@ class GeoController < ApplicationController
         ])
       }
     end
-    respond_with do |format|
-      if !@cities.empty?
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :states => filter_fields(@cities,@fields) },
-          request.format.to_sym)
-        }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :err => {:cities => [115]} },
-          request.format.to_sym)
-        }
-      end
+
+    if !@cities.empty?
+      return_message(200, :ok, {:states => filter_fields(@cities,@fields)})
+    else
+      return_message(200, :ok, {:err => {:cities => [115]}})
     end
   end
 
@@ -150,19 +117,13 @@ class GeoController < ApplicationController
     @city = Rails.cache.fetch('geo_cities_' + city_id) { 
       City.select("id, geo_name as name, geo_latitude as lat, geo_longitude as lon, geo_country_code, geo_admin1_code").find(city_id)
     }
-    respond_with do |format|
-      format.any(:xml, :json) { 
-        render :status => 200, 
-        request.format.to_sym => format_response({ 
-          :stat => "ok", 
-          :city => filter_fields(@city, @fields, { 
-            :additional_fields => { 
-              :state => [:id, :name],
-              :country => [:id, :name, :code_iso]
-            } 
-        }) },
-        request.format.to_sym) }
-    end
+    response_city = filter_fields(@city, @fields, { 
+      :additional_fields => { 
+        :state => [:id, :name],
+        :country => [:id, :name, :code_iso]
+      } 
+    })
+    return_message(200, :ok, {:city => response_city})
   end
 
 end

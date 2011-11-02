@@ -34,33 +34,18 @@ class RegistrationsController < Devise::RegistrationsController
                     :email => params[:email], 
                     :password => params[:password], 
                     :password_confirmation => params[:password] }
-
     resource = resource_class.new(parameters)
-    respond_with do |format|
-      if resource.save
-        if params[:oauth_token] && params[:oauth_token]['credentials']
-          authentication = resource.authentications.create(
-            :provider => params[:oauth_token]['provider'], 
-            :uid => params[:oauth_token]['uid'], 
-            :token => params[:oauth_token]['credentials']['token'], 
-            :secret => params[:oauth_token]['credentials']['secret'])
-        end
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response(
-            { 
-              :stat => "ok", 
-              :user_id => resource.id
-            },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-              :stat => "fail", 
-              :err => format_errors(resource.errors.messages)},
-            request.format.to_sym) }
+    if resource.save
+      if params[:oauth_token] && params[:oauth_token]['credentials']
+        authentication = resource.authentications.create(
+          :provider => params[:oauth_token]['provider'], 
+          :uid => params[:oauth_token]['uid'], 
+          :token => params[:oauth_token]['credentials']['token'], 
+          :secret => params[:oauth_token]['credentials']['secret'])
       end
+      return_message(200, :ok, {:user_id => resource.id})
+    else
+      return_message(200, :fail, {:err => format_errors(resource.errors.messages)})
     end
   end
   
@@ -80,22 +65,11 @@ class RegistrationsController < Devise::RegistrationsController
   def destroy
     check_token
     @user = current_user
-    respond_with do |format|
-      # TODO: Do we actually want to delete user or acts_as_paranoid? delete also it's data? transactions?
-      if @user.destroy
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok" },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail", 
-            :err => format_errors(resource.errors.messages)},
-          request.format.to_sym) }
-      end
+    # TODO: Do we actually want to delete user or acts_as_paranoid? delete also it's data? transactions?
+    if @user.destroy
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => format_errors(resource.errors.messages)})
     end
   end
 
@@ -110,23 +84,11 @@ class RegistrationsController < Devise::RegistrationsController
   # === Error codes
   # [100] has already been taken
   def check_email
-    respond_with do |format|
-      user = User.find_by_email(params[:email])
-      if user == nil
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok" },
-            request.format.to_sym) }
-      else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "fail",
-            :err => {:email => [100]} },
-          request.format.to_sym) }
-      end
+    user = User.find_by_email(params[:email])
+    if user == nil
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => {:email => [100]}})
     end
   end
-
 end
