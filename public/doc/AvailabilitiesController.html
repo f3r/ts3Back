@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: AvailabilitiesController</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/availabilities_controller.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-create">#create</a>
+    
+    <li><a href="#method-i-list">#list</a>
+    
+    <li><a href="#method-i-update">#update</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./AvailabilitiesController.html">AvailabilitiesController</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./GeoController.html">GeoController</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./PlaceTypesController.html">PlaceTypesController</a>
+  
+    <li><a href="./PlacesController.html">PlacesController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class AvailabilitiesController</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-create-label-Description">Description</h2>
+
+<p>Creates a new availability for a place</p>
+
+<h2 id="method-i-create-label-Resource+URL">Resource URL</h2>
+
+<p>/places/:id/availabilities.format</p>
+
+<h2 id="method-i-create-label-Example">Example</h2>
+
+<p>POST <a
+href="https://backend-heypal.heroku.com/places/123/availabilities.json">backend-heypal.heroku.com/places/123/availabilities.json</a>
+access_token=access_token&amp;date_start=23/01/2011&amp;date_end=12/02/2011</p>
+
+<h3 id="method-i-create-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>Access token</p>
+</dd><dt>:date_start
+<dd>
+<p>Date (dd/mm/yyyy), Starting date</p>
+</dd><dt>:date_end
+<dd>
+<p>Date (dd/mm/yyyy), Ending Date</p>
+</dd><dt>:price_per_night
+<dd>
+<p>Integer, Price for the period in original currency cents, optional</p>
+</dd><dt>:comment
+<dd>
+<p>String, Comment to describe the period, optional</p>
+</dd></dl>
+
+<h3 id="method-i-create-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>availability
+<dd>
+<p>Array containing the recently created availability</p>
+</dd></dl>
+
+<h2 id="method-i-create-label-Error+codes">Error codes</h2>
+<dl class="rdoc-list label-list"><dt>101
+<dd>
+<p>can’t be blank</p>
+</dd><dt>103
+<dd>
+<p>is invalid</p>
+</dd><dt>105
+<dd>
+<p>invalid access token</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="create-source">
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-comment">#TODO: Check that the availability is for a place the user owns...</span>
+  
+  <span class="ruby-identifier">availability</span> = {}     
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:date_start</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:date_start</span>]})
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:date_end</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:date_end</span>]})
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:price_per_night</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:price_per_night</span>]}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:price_per_night</span>]
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:comment</span>         =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>]})         <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>]
+  
+  <span class="ruby-ivar">@availability</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]).<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">availability</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@availability</span>.<span class="ruby-identifier">save</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:availability</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@availability</span>})
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-ivar">@availability</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>)})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create-method -->
+
+    
+      <div id="method-i-list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">list</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-list-label-Description">Description</h2>
+
+<p>List all availabilities of a place</p>
+
+<h2 id="method-i-list-label-Resource+URL">Resource URL</h2>
+
+<p>/places/:id/availabilities.format</p>
+
+<h2 id="method-i-list-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/places/123/availabilities.json">backend-heypal.heroku.com/places/123/availabilities.json</a></p>
+
+<h3 id="method-i-list-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>availability
+<dd>
+<p>Array containing the all availabilities</p>
+</dd></dl>
+
+<h2 id="method-i-list-label-Error+codes">Error codes</h2>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="list-source">
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">list</span>    
+  <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@place</span>.<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:availabilities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;id,date_start,date_end,comment,price_per_night,comment&quot;</span>)})
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err=</span><span class="ruby-operator">&gt;</span>{<span class="ruby-value">:availabilities</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}} )
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- list-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- list-method -->
+
+    
+      <div id="method-i-update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-update-label-Description">Description</h2>
+
+<p>Updates an availability of a place</p>
+
+<h2 id="method-i-update-label-Resource+URL">Resource URL</h2>
+
+<p>/places/:place_id/availabilities/:id.format</p>
+
+<h2 id="method-i-update-label-Example">Example</h2>
+
+<p>PUT <a
+href="https://backend-heypal.heroku.com/places/123/availabilities/2.json">backend-heypal.heroku.com/places/123/availabilities/2.json</a>
+access_token=access_token&amp;date_start=23/01/2011&amp;date_end=12/02/2011</p>
+
+<h3 id="method-i-update-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<p>Access token</p>
+</dd><dt>:date_start
+<dd>
+<p>Date (dd/mm/yyyy), Starting date</p>
+</dd><dt>:date_end
+<dd>
+<p>Date (dd/mm/yyyy), Ending Date</p>
+</dd><dt>:price_per_night
+<dd>
+<p>Integer, Price for the period in original currency cents</p>
+</dd><dt>:comment
+<dd>
+<p>String, Comment to describe the period</p>
+</dd></dl>
+
+<h3 id="method-i-update-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>availability
+<dd>
+<p>Array containing the recently updated availability</p>
+</dd></dl>
+
+<h2 id="method-i-update-label-Error+codes">Error codes</h2>
+<dl class="rdoc-list label-list"><dt>101
+<dd>
+<p>can’t be blank</p>
+</dd><dt>103
+<dd>
+<p>is invalid</p>
+</dd><dt>105
+<dd>
+<p>invalid access token</p>
+</dd><dt>106
+<dd>
+<p>not found</p>
+</dd><dt>122
+<dd>
+<p>unmatching parent resource and child resource</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="update-source">
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 81</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
+  <span class="ruby-identifier">check_token</span>
+
+  <span class="ruby-comment">#TODO: Check that the availability is for a place the user owns...</span>
+  <span class="ruby-ivar">@place</span>        = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
+  <span class="ruby-ivar">@availability</span> = <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+        
+  <span class="ruby-identifier">availability</span> = {}
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:date_start</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@availability</span>[<span class="ruby-string">'date_start'</span>] })
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:date_end</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@availability</span>[<span class="ruby-string">'date_end'</span>]   })
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:date_start</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:date_start</span>]})      <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:date_start</span>]
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:date_end</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:date_end</span>]})        <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:date_end</span>]
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:price_per_night</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:price_per_night</span>]}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:price_per_night</span>]
+  <span class="ruby-identifier">availability</span>.<span class="ruby-identifier">merge!</span>({ <span class="ruby-value">:comment</span>         =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>]})         <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>]
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@availability</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-identifier">availability</span>)
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:availability</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@availability</span>})
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-ivar">@availability</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>)})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- update-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- update-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
