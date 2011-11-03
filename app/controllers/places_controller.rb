@@ -5,7 +5,7 @@ class PlacesController < ApplicationController
   def initialize
     @fields = [
       :id, :title, :description, :num_bedrooms, :num_beds, 
-      :num_bathrooms, :sqm, :max_guests, :photos, :city_id, :address_1, 
+      :num_bathrooms, :size, :size_sqm, :size_sqf, :size_unit, :max_guests, :photos, :city_id, :address_1, 
       :address_2, :zip, :lat, :lon, :directions, 
       :check_in_after, :check_out_before, :minimum_stay_days, 
       :maximum_stay_days, :house_rules, :cancellation_policy,
@@ -43,6 +43,10 @@ class PlacesController < ApplicationController
       :num_bedrooms, :num_beds, :num_bathrooms, :sqm, :max_guests, :title, :description
     ]
 
+    @dimensions_fields = [
+      :size, :size_sqm, :size_sqf, :size_unit
+    ]
+
     # Assosiations
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name]
     @place_type_fields = [:id,:name]
@@ -69,6 +73,7 @@ class PlacesController < ApplicationController
       :terms_of_offer => @terms_of_offer_fields,
       :pricing => @pricing_fields,
       :details => @details_fields,
+      :dimensions => @dimensions_fields,
       :user => @user_fields,
       :place_type => @place_type_fields } })
     return_message(200, :ok, {:place => place})
@@ -130,7 +135,8 @@ class PlacesController < ApplicationController
   # [num_bedrooms]  Integer, number of bedrooms
   # [num_beds]      Integer, number of beds
   # [num_bathrooms] Integer, number of bathrooms
-  # [sqm]           Float,   square meters of the entire place
+  # [size]           Float,  square meters or square feet of the entire place
+  # [size_unit]     String,  Size unit, feet or meters
   # [max_guests]    Integer, maximum number of guests the place can fit
   # [city_id]       Integer, ID from the Cities model
   # [address_1]     String,  text description of address
@@ -182,6 +188,7 @@ class PlacesController < ApplicationController
         :terms_of_offer => @terms_of_offer_fields,
         :pricing => @pricing_fields,
         :details => @details_fields,
+        :dimensions => @dimensions_fields,
         :user => @user_fields,
         :place_type => @place_type_fields } })
       return_message(200, :ok, {:place => place_return})
@@ -231,6 +238,7 @@ class PlacesController < ApplicationController
         :terms_of_offer => @terms_of_offer_fields,
         :pricing => @pricing_fields,
         :details => @details_fields,
+        :dimensions => @dimensions_fields,
         :place_type => @place_type_fields}})
       return_message(200, :ok, {:places => places_return})
     else
@@ -263,40 +271,23 @@ class PlacesController < ApplicationController
       raise ActionController::UnknownAction
     end
     @place = Place.find(params[:id])
-    respond_with do |format|
       if method        
         if @place.send(method)
-          format.any(:xml, :json) { 
-            render :status => 200, 
-            request.format.to_sym => format_response({ 
-              :stat => "ok", 
-              :place => filter_fields(@place,@fields, { :additional_fields => {
+          place = filter_fields(@place,@fields, { :additional_fields => {
                 :amenities => @amenities_fields, 
                 :location => @location_fields, 
                 :reviews => @reviews_fields,
                 :terms_of_offer => @terms_of_offer_fields,
                 :pricing => @pricing_fields,
                 :details => @details_fields,
-                :place_type => @place_type_fields } }) },
-            request.format.to_sym)}
+                :dimensions => @dimensions_fields,
+                :place_type => @place_type_fields } })
+          return_message(200, :ok, {:place => place})
         else
-          format.any(:xml, :json) { 
-            render :status => 200, 
-            request.format.to_sym => format_response({ 
-              :stat => "ok", 
-              :err => format_errors(@place.errors.messages) },
-            request.format.to_sym)
-          }
+          return_message(200, :ok, { :err => format_errors(@place.errors.messages) })
         end
       else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :err => {:status => [103]} },
-          request.format.to_sym)
-        }
+        return_message(200, :ok, { :err => {:status => [103]} } )
       end
-    end
   end
 end
