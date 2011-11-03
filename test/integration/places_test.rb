@@ -136,7 +136,7 @@ class PlacesTest < ActionController::IntegrationTest
   # TODO: Must fix state error
   should "create a place and update it's information (xml)" do
     assert_difference 'Place.count', +1 do
-      post '/places.xml', { :title => "test title2", :place_type_id => @place_type.id, :num_bedrooms => 5, :max_guests => 10, :city_id => 1, :access_token => @user.authentication_token }
+      post '/places.xml', { :title => "test title2", :place_type_id => @place_type.id, :num_bedrooms => 5, :max_guests => 10, :city_id => @city.id, :access_token => @user.authentication_token }
     end
     place = Place.first(:order => 'id DESC')
     put "/places/#{place.id}.xml", @place_new_info.merge({:access_token => @user.authentication_token})

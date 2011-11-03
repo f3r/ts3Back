@@ -51,19 +51,19 @@ ActiveRecord::Schema.define(:version => 20111102171632) do
 
   create_table "cities", :force => true do |t|
     t.integer "geo_id"
-    t.string  "geo_name",            :limit => 200,  :default => "",  :null => false
-    t.string  "geo_ansiname",        :limit => 200,  :default => "",  :null => false
-    t.string  "geo_alternate_names", :limit => 2000, :default => "",  :null => false
+    t.string  "geo_name",            :limit => 200,                   :null => false
+    t.string  "geo_ansiname",        :limit => 200,                   :null => false
+    t.string  "geo_alternate_names", :limit => 2000,                  :null => false
     t.float   "geo_latitude",                        :default => 0.0, :null => false
     t.float   "geo_longitude",                       :default => 0.0, :null => false
     t.string  "geo_feature_class",   :limit => 1
     t.string  "geo_feature_code",    :limit => 10
     t.string  "geo_country_code",    :limit => 2
     t.string  "geo_country_code2",   :limit => 60
-    t.string  "geo_admin1_code",     :limit => 20,   :default => ""
-    t.string  "geo_admin2_code",     :limit => 80,   :default => ""
-    t.string  "geo_admin3_code",     :limit => 20,   :default => ""
-    t.string  "geo_admin4_code",     :limit => 20,   :default => ""
+    t.string  "geo_admin1_code",     :limit => 20
+    t.string  "geo_admin2_code",     :limit => 80
+    t.string  "geo_admin3_code",     :limit => 20
+    t.string  "geo_admin4_code",     :limit => 20
     t.integer "geo_population",      :limit => 8,    :default => 0
     t.integer "geo_elevation",                       :default => 0
     t.integer "geo_gtopo30",                         :default => 0
@@ -81,8 +81,8 @@ ActiveRecord::Schema.define(:version => 20111102171632) do
     t.string  "code_iso3",            :limit => 3
     t.integer "code_iso_numeric",                    :default => 0
     t.string  "fips",                 :limit => 2
-    t.string  "name",                 :limit => 200, :default => "", :null => false
-    t.string  "capital",              :limit => 200, :default => "", :null => false
+    t.string  "name",                 :limit => 200,                :null => false
+    t.string  "capital",              :limit => 200,                :null => false
     t.integer "area",                 :limit => 8,   :default => 0
     t.integer "population",           :limit => 8,   :default => 0
     t.string  "continent",            :limit => 2
@@ -216,19 +216,19 @@ ActiveRecord::Schema.define(:version => 20111102171632) do
 
   create_table "states", :force => true do |t|
     t.integer "geo_id"
-    t.string  "geo_name",            :limit => 200,  :default => "",  :null => false
-    t.string  "geo_ansiname",        :limit => 200,  :default => "",  :null => false
-    t.string  "geo_alternate_names", :limit => 2000, :default => "",  :null => false
+    t.string  "geo_name",            :limit => 200,                   :null => false
+    t.string  "geo_ansiname",        :limit => 200,                   :null => false
+    t.string  "geo_alternate_names", :limit => 2000,                  :null => false
     t.float   "geo_latitude",                        :default => 0.0, :null => false
     t.float   "geo_longitude",                       :default => 0.0, :null => false
     t.string  "geo_feature_class",   :limit => 1
     t.string  "geo_feature_code",    :limit => 10
     t.string  "geo_country_code",    :limit => 2
     t.string  "geo_country_code2",   :limit => 60
-    t.string  "geo_admin1_code",     :limit => 20,   :default => ""
-    t.string  "geo_admin2_code",     :limit => 80,   :default => ""
-    t.string  "geo_admin3_code",     :limit => 20,   :default => ""
-    t.string  "geo_admin4_code",     :limit => 20,   :default => ""
+    t.string  "geo_admin1_code",     :limit => 20
+    t.string  "geo_admin2_code",     :limit => 80
+    t.string  "geo_admin3_code",     :limit => 20
+    t.string  "geo_admin4_code",     :limit => 20
     t.integer "geo_population",      :limit => 8,    :default => 0
     t.integer "geo_elevation",                       :default => 0
     t.integer "geo_gtopo30",                         :default => 0
@@ -242,8 +242,8 @@ ActiveRecord::Schema.define(:version => 20111102171632) do
   add_index "states", ["geo_id"], :name => "index_states_on_geo_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                 :default => "", :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
+    t.string   "email",                                                :null => false
+    t.string   "encrypted_password",     :limit => 128,                :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "remember_token"

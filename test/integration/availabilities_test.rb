@@ -2,10 +2,13 @@ require 'test_helper'
 class AvailabilitiesTest < ActionController::IntegrationTest
 
   setup do
+    @country = Factory(:country)
+    @state = Factory(:state)
+    @city = Factory(:city)
     @user = Factory(:user)
     @user.confirm!
     @place_type = Factory(:place_type)
-    @place = Factory(:place, :user => @user, :place_type => @place_type)
+    @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
     
     @availability_occupied_new_info = { 
       :availability_type => 1, 

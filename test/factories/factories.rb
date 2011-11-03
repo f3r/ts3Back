@@ -37,18 +37,23 @@ FactoryGirl.define do
   factory :country do
     code_iso  { "US" }
     name      { "United States" }
+    capital   { "Washington" }
   end
 
   factory :state do
     geo_country_code      { "US" }
     geo_name              { "Illinois" }
     geo_admin1_code       { "IL" }
+    geo_alternate_names   { "Illinois" }
+    geo_ansiname          { "Illinois" }
   end
 
   factory :city do
     geo_country_code      { "US" }
     geo_name              { "Chicago" }
     geo_admin1_code       { "IL" }
+    geo_alternate_names   { "Chicago" }
+    geo_ansiname          { "Chicago" }
   end
 
 end
