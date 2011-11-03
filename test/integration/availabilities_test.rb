@@ -30,6 +30,13 @@ class AvailabilitiesTest < ActionController::IntegrationTest
       :date_end          => "#{(Date.current - 2.day).to_s}"
     }
     
+    @availability_occupied_new_info_overlap = { 
+      :availability_type => 1, 
+      :date_start        => "#{(Date.current + 2.year + 10.day).to_s}",
+      :date_end          => "#{(Date.current + 2.year + 25.day).to_s}",
+      :comment           => "new other comment"
+    }    
+    
     @availability_new_price_new_info = { 
       :availability_type => 2,
       :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
@@ -128,6 +135,22 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal [121],  json['err']['message']
   end
   
+  should "create place availability if begin/end overlaps a previous one for occupied type (json)" do
+    post "/places/#{@place.id}/availabilities.json", 
+      {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_equal @availability_occupied_new_info[:date_start], json['availability']['date_start']
+    assert_equal @availability_occupied_new_info[:date_end],   json['availability']['date_end']
+  
+    post "/places/#{@place.id}/availabilities.json", 
+      {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info_overlap)
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+  end
+  
   should "create place availability occupied and not update wrong dates (json)" do
     post "/places/#{@place.id}/availabilities.json", 
         {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)
@@ -151,6 +174,8 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     post "/places/#{@place.id}/availabilities.json", 
         {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)
     assert_response(200)
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_nil json #['availability']['err']
         
     availability = Availability.first(:order => 'id DESC')
   

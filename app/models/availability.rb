@@ -13,15 +13,20 @@ class Availability < ActiveRecord::Base
 
   # Checks if any other interval for the same place, overlaps this interval
   def validates_overlapping
-    if self['id']
-      list = Availability.where(["id <> ? AND place_id = ?", self['id'], place_id]).all
-    else
-      list = Availability.where(["place_id = ?", place_id]).all
-    end    
-    list.each {|foo|
-      if (self['date_start'] - foo['date_end']) * (foo['date_start'] - self['date_end']) >= 0
-          errors.add(:message, '121')
+    # Type = Price change
+    if self['availability_type'] == 2
+      # Checks if the object is already stored in db or not
+      if self['id']
+        list = Availability.where(["id <> ? AND place_id = ? AND availability_type = 2", self['id'], place_id]).all
+      else
+        list = Availability.where(["place_id = ? AND availability_type = 2", place_id]).all
       end
-    }
+      
+      list.each {|foo|
+        if (self['date_start'] - foo['date_end']) * (foo['date_start'] - self['date_end']) >= 0
+            errors.add(:message, '121')
+        end
+      }
+    end
   end
 end
