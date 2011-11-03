@@ -13,6 +13,7 @@ class PlacesTest < ActionController::IntegrationTest
     @user.confirm!
     @place_type = Factory(:place_type)
     @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
+    @availability = Factory(:availability, :place => @place )
     @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}]
     @place_new_info = { 
       :title => "Test title", 

@@ -263,40 +263,22 @@ class PlacesController < ApplicationController
       raise ActionController::UnknownAction
     end
     @place = Place.find(params[:id])
-    respond_with do |format|
       if method        
         if @place.send(method)
-          format.any(:xml, :json) { 
-            render :status => 200, 
-            request.format.to_sym => format_response({ 
-              :stat => "ok", 
-              :place => filter_fields(@place,@fields, { :additional_fields => {
+          place = filter_fields(@place,@fields, { :additional_fields => {
                 :amenities => @amenities_fields, 
                 :location => @location_fields, 
                 :reviews => @reviews_fields,
                 :terms_of_offer => @terms_of_offer_fields,
                 :pricing => @pricing_fields,
                 :details => @details_fields,
-                :place_type => @place_type_fields } }) },
-            request.format.to_sym)}
+                :place_type => @place_type_fields } })
+          return_message(200, :ok, {:place => place})
         else
-          format.any(:xml, :json) { 
-            render :status => 200, 
-            request.format.to_sym => format_response({ 
-              :stat => "ok", 
-              :err => format_errors(@place.errors.messages) },
-            request.format.to_sym)
-          }
+          return_message(200, :ok, { :err => format_errors(@place.errors.messages) })
         end
       else
-        format.any(:xml, :json) { 
-          render :status => 200, 
-          request.format.to_sym => format_response({ 
-            :stat => "ok", 
-            :err => {:status => [103]} },
-          request.format.to_sym)
-        }
+        return_message(200, :ok, { :err => {:status => [103]} } )
       end
-    end
   end
 end

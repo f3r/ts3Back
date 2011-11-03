@@ -34,6 +34,14 @@ FactoryGirl.define do
     user         { @user }
   end
   
+  factory :availability do
+    place               { @place }
+    availability_type   { 1 }
+    date_start          "#{(Date.current + 2.year + 1.day).to_s}"
+    date_end            "#{(Date.current + 2.year + 15.day).to_s}"
+    comment             "new comment"
+  end
+  
   factory :country do
     code_iso  { "US" }
     name      { "United States" }
