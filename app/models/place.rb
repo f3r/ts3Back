@@ -7,12 +7,13 @@ class Place < ActiveRecord::Base
   serialize :photos
 
   validates_presence_of [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id], :message => "101"
+  validates_inclusion_of :size_unit, :in => ["meters", "feet"], :allow_nil => true, :if => :size?, :message => "129"
 
   validates_numericality_of [
     :num_bedrooms,
     :num_beds,
     :num_bathrooms,
-    :sqm,
+    :size,
     :max_guests,
     :price_per_night,
     :price_per_week,
@@ -37,7 +38,7 @@ class Place < ActiveRecord::Base
   has_many   :availabilities
 
   before_create :update_location_fields
-  before_update :save_amenities, :convert_prices_in_usd_cents, :convert_json_photos_to_array, :update_location_fields
+  before_update :save_amenities, :convert_prices_in_usd_cents, :convert_json_photos_to_array, :update_location_fields, :update_size_fields
   validate :validate_publishing
 
   after_commit :delete_cache
@@ -84,6 +85,24 @@ class Place < ActiveRecord::Base
     if self.city_id_changed?
       self.state_id = self.city.state.id
       self.country_id = self.city.country.id
+    end
+  end
+  
+  def update_size_fields
+    if (self.size_changed? or self.size_unit_changed?) && !self.size.blank? && !self.size_unit.blank?
+      case size_unit
+      when "meters"
+        self.size_sqm = size
+        self.size_sqf = size * 10.7639104
+      when "feet"
+        self.size_sqf = size
+        self.size_sqm = size * 0.09290304
+      end
+    elsif (self.size_changed? or self.size_unit_changed?) && (self.size.blank? or self.size_unit.blank?)
+      self.size = nil
+      self.size_sqm = nil
+      self.size_sqf = nil
+      self.size_unit = nil
     end
   end
   

@@ -134,7 +134,6 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_month_usd']
   end
 
-  # TODO: Must fix state error
   should "create a place and update it's information (xml)" do
     assert_difference 'Place.count', +1 do
       post '/places.xml', { :title => "test title2", :place_type_id => @place_type.id, :num_bedrooms => 5, :max_guests => 10, :city_id => @city.id, :access_token => @user.authentication_token }
@@ -151,6 +150,40 @@ class PlacesTest < ActionController::IntegrationTest
     assert_tag "place", :child => { :tag => "pricing", :child => { :tag => "price_per_night_usd", :content => @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s } }
     assert_tag "place", :child => { :tag => "pricing", :child => { :tag => "price_per_week_usd", :content => @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s } }
     assert_tag "place", :child => { :tag => "pricing", :child => { :tag => "price_per_month_usd", :content => @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s } }
+  end
+
+  should "update place dimessions in meters (json)" do
+    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :size => 100, :size_unit => "meters"}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal "meters", json['place']['dimensions']['size_unit']
+    assert_equal 100, json['place']['dimensions']['size_sqm']
+    assert_equal 100 * 10.7639104, json['place']['dimensions']['size_sqf']
+  end
+
+  should "update place dimessions in feet (json)" do
+    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :size => 1000, :size_unit => "feet"}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal "feet", json['place']['dimensions']['size_unit']
+    assert_equal 1000, json['place']['dimensions']['size_sqf']
+    assert_equal 1000 * 0.09290304, json['place']['dimensions']['size_sqm']
+  end
+
+  should "not update place dimessions with invalid size_unit (json)" do
+    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :size => 1000, :size_unit => "zapatos"}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+    assert (json['err']['size_unit'].include? 129)
   end
 
   should "get a users unpublished places" do
