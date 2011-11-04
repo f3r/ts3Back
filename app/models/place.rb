@@ -33,8 +33,6 @@ class Place < ActiveRecord::Base
   belongs_to :user
   belongs_to :place_type
   belongs_to :city
-  belongs_to :state
-  belongs_to :country
   has_many   :availabilities
 
   before_create :update_location_fields
@@ -83,8 +81,10 @@ class Place < ActiveRecord::Base
   
   def update_location_fields
     if self.city_id_changed?
-      self.state_id = self.city.state.id
-      self.country_id = self.city.country.id
+      self.city_name = self.city.name
+      self.state_name = self.city.state
+      self.country_name = self.city.country
+      self.country_code = self.city.country_code
     end
   end
   

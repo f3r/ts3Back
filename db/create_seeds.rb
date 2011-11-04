@@ -1,3 +1,4 @@
+# TODO: It doesn't shows state-less countries like Singapore :(
 require 'mysql2'
 @client = Mysql2::Client.new(:host => "localhost", :database => "heypal_development", :username => "root", :password => "root")
 
@@ -11,7 +12,8 @@ def country_search(country)
     foo1.geo_latitude as lat, 
     foo1.geo_longitude as lon,
     foo3.geo_ansiname as state,
-    foo2.name as country
+    foo2.name as country,
+    foo2.code_iso as country_code
 
    FROM cities as foo1
 
@@ -28,11 +30,12 @@ def country_search(country)
   results = @client.query(query)
   f = File.new("seeds.rb", "a")
   results.each { |r|
-   f.write "City.create(id: #{r['id']}, name: \"#{r['name']}\", lat: #{r['lat']}, lon: #{r['lon']}, state: \"#{r['state']}\", country: \"#{r['country']}\" )\n"
+   f.write "City.create(name: \"#{r['name']}\", lat: #{r['lat']}, lon: #{r['lon']}, state: \"#{r['state']}\", country: \"#{r['country']}\", country_code: \"#{r['country_code']}\" )\n"
   }
   f.close
 end
 
+country_search("SG")
 country_search("PH")
 country_search("MY")
 country_search("ID")

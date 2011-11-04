@@ -2,8 +2,6 @@ require 'test_helper'
 class AvailabilitiesTest < ActionController::IntegrationTest
 
   setup do
-    @country = Factory(:country)
-    @state = Factory(:state)
     @city = Factory(:city)
     @user = Factory(:user)
     @user.confirm!

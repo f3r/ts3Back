@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103154348) do
+ActiveRecord::Schema.define(:version => 20111104172324) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -50,58 +50,17 @@ ActiveRecord::Schema.define(:version => 20111103154348) do
   add_index "availabilities", ["place_id"], :name => "index_availabilities_on_place_id"
 
   create_table "cities", :force => true do |t|
-    t.integer "geo_id"
-    t.string  "geo_name",            :limit => 200,                   :null => false
-    t.string  "geo_ansiname",        :limit => 200,                   :null => false
-    t.string  "geo_alternate_names", :limit => 2000,                  :null => false
-    t.float   "geo_latitude",                        :default => 0.0, :null => false
-    t.float   "geo_longitude",                       :default => 0.0, :null => false
-    t.string  "geo_feature_class",   :limit => 1
-    t.string  "geo_feature_code",    :limit => 10
-    t.string  "geo_country_code",    :limit => 2
-    t.string  "geo_country_code2",   :limit => 60
-    t.string  "geo_admin1_code",     :limit => 20
-    t.string  "geo_admin2_code",     :limit => 80
-    t.string  "geo_admin3_code",     :limit => 20
-    t.string  "geo_admin4_code",     :limit => 20
-    t.integer "geo_population",      :limit => 8,    :default => 0
-    t.integer "geo_elevation",                       :default => 0
-    t.integer "geo_gtopo30",                         :default => 0
-    t.string  "geo_timezone",        :limit => 40
-    t.date    "geo_mod_date"
+    t.string "name"
+    t.float  "lat"
+    t.float  "lon"
+    t.string "state"
+    t.string "country"
+    t.string "country_code"
   end
 
-  add_index "cities", ["geo_country_code"], :name => "index_cities_on_geo_country_code"
-  add_index "cities", ["geo_feature_class"], :name => "index_cities_on_geo_feature_class"
-  add_index "cities", ["geo_feature_code"], :name => "index_cities_on_geo_feature_code"
-  add_index "cities", ["geo_id"], :name => "index_cities_on_geo_id"
-
-  create_table "countries", :force => true do |t|
-    t.string  "code_iso",             :limit => 2
-    t.string  "code_iso3",            :limit => 3
-    t.integer "code_iso_numeric",                    :default => 0
-    t.string  "fips",                 :limit => 2
-    t.string  "name",                 :limit => 200,                :null => false
-    t.string  "capital",              :limit => 200,                :null => false
-    t.integer "area",                 :limit => 8,   :default => 0
-    t.integer "population",           :limit => 8,   :default => 0
-    t.string  "continent",            :limit => 2
-    t.string  "tld",                  :limit => 3
-    t.string  "currency_code",        :limit => 3
-    t.string  "currency_name",        :limit => 200
-    t.string  "phone",                :limit => 80
-    t.string  "postal_code_format",   :limit => 80
-    t.string  "postal_code_regex",    :limit => 200
-    t.string  "languages",            :limit => 200
-    t.integer "geonameid"
-    t.string  "neighbours",           :limit => 200
-    t.string  "equivalent_fips_code", :limit => 2
-  end
-
-  add_index "countries", ["code_iso"], :name => "index_countries_on_code_iso"
-  add_index "countries", ["code_iso3"], :name => "index_countries_on_code_iso3"
-  add_index "countries", ["continent"], :name => "index_countries_on_continent"
-  add_index "countries", ["geonameid"], :name => "index_countries_on_geonameid"
+  add_index "cities", ["country"], :name => "index_cities_on_country"
+  add_index "cities", ["country_code"], :name => "index_cities_on_country_code"
+  add_index "cities", ["state"], :name => "index_cities_on_state"
 
   create_table "place_types", :force => true do |t|
     t.string   "name"
@@ -111,7 +70,7 @@ ActiveRecord::Schema.define(:version => 20111103154348) do
 
   create_table "places", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "published",                  :default => false
+    t.boolean  "published",                               :default => false
     t.string   "title"
     t.text     "description"
     t.integer  "place_type_id"
@@ -122,61 +81,59 @@ ActiveRecord::Schema.define(:version => 20111103154348) do
     t.integer  "max_guests"
     t.text     "photos"
     t.integer  "city_id"
-    t.integer  "state_id"
-    t.integer  "country_id"
     t.string   "address_1"
     t.string   "address_2"
     t.string   "zip"
     t.float    "lat"
     t.float    "lon"
     t.text     "directions"
-    t.boolean  "amenities_aircon",           :default => false
-    t.boolean  "amenities_breakfast",        :default => false
-    t.boolean  "amenities_buzzer_intercom",  :default => false
-    t.boolean  "amenities_cable_tv",         :default => false
-    t.boolean  "amenities_dryer",            :default => false
-    t.boolean  "amenities_doorman",          :default => false
-    t.boolean  "amenities_elevator",         :default => false
-    t.boolean  "amenities_family_friendly",  :default => false
-    t.boolean  "amenities_gym",              :default => false
-    t.boolean  "amenities_hot_tub",          :default => false
-    t.boolean  "amenities_kitchen",          :default => false
-    t.boolean  "amenities_handicap",         :default => false
-    t.boolean  "amenities_heating",          :default => false
-    t.boolean  "amenities_hot_water",        :default => false
-    t.boolean  "amenities_internet",         :default => false
-    t.boolean  "amenities_internet_wifi",    :default => false
-    t.boolean  "amenities_jacuzzi",          :default => false
-    t.boolean  "amenities_parking_included", :default => false
-    t.boolean  "amenities_pets_allowed",     :default => false
-    t.boolean  "amenities_pool",             :default => false
-    t.boolean  "amenities_smoking_allowed",  :default => false
-    t.boolean  "amenities_suitable_events",  :default => false
-    t.boolean  "amenities_tennis",           :default => false
-    t.boolean  "amenities_tv",               :default => false
-    t.boolean  "amenities_washer",           :default => false
+    t.boolean  "amenities_aircon",                        :default => false
+    t.boolean  "amenities_breakfast",                     :default => false
+    t.boolean  "amenities_buzzer_intercom",               :default => false
+    t.boolean  "amenities_cable_tv",                      :default => false
+    t.boolean  "amenities_dryer",                         :default => false
+    t.boolean  "amenities_doorman",                       :default => false
+    t.boolean  "amenities_elevator",                      :default => false
+    t.boolean  "amenities_family_friendly",               :default => false
+    t.boolean  "amenities_gym",                           :default => false
+    t.boolean  "amenities_hot_tub",                       :default => false
+    t.boolean  "amenities_kitchen",                       :default => false
+    t.boolean  "amenities_handicap",                      :default => false
+    t.boolean  "amenities_heating",                       :default => false
+    t.boolean  "amenities_hot_water",                     :default => false
+    t.boolean  "amenities_internet",                      :default => false
+    t.boolean  "amenities_internet_wifi",                 :default => false
+    t.boolean  "amenities_jacuzzi",                       :default => false
+    t.boolean  "amenities_parking_included",              :default => false
+    t.boolean  "amenities_pets_allowed",                  :default => false
+    t.boolean  "amenities_pool",                          :default => false
+    t.boolean  "amenities_smoking_allowed",               :default => false
+    t.boolean  "amenities_suitable_events",               :default => false
+    t.boolean  "amenities_tennis",                        :default => false
+    t.boolean  "amenities_tv",                            :default => false
+    t.boolean  "amenities_washer",                        :default => false
     t.string   "currency"
     t.integer  "price_per_night"
     t.integer  "price_per_week"
     t.integer  "price_per_month"
-    t.integer  "price_final_cleanup",        :default => 0
-    t.integer  "price_security_deposit",     :default => 0
+    t.integer  "price_final_cleanup",                     :default => 0
+    t.integer  "price_security_deposit",                  :default => 0
     t.integer  "price_per_night_usd"
     t.integer  "price_per_week_usd"
     t.integer  "price_per_month_usd"
     t.string   "check_in_after"
     t.string   "check_out_before"
-    t.integer  "minimum_stay_days",          :default => 0
-    t.integer  "maximum_stay_days",          :default => 0
+    t.integer  "minimum_stay_days",                       :default => 0
+    t.integer  "maximum_stay_days",                       :default => 0
     t.text     "house_rules"
-    t.integer  "cancellation_policy",        :default => 1
-    t.float    "reviews_overall",            :default => 0.0
-    t.float    "reviews_accuracy_avg",       :default => 0.0
-    t.float    "reviews_cleanliness_avg",    :default => 0.0
-    t.float    "reviews_checkin_avg",        :default => 0.0
-    t.float    "reviews_communication_avg",  :default => 0.0
-    t.float    "reviews_location_avg",       :default => 0.0
-    t.float    "reviews_value_avg",          :default => 0.0
+    t.integer  "cancellation_policy",                     :default => 1
+    t.float    "reviews_overall",                         :default => 0.0
+    t.float    "reviews_accuracy_avg",                    :default => 0.0
+    t.float    "reviews_cleanliness_avg",                 :default => 0.0
+    t.float    "reviews_checkin_avg",                     :default => 0.0
+    t.float    "reviews_communication_avg",               :default => 0.0
+    t.float    "reviews_location_avg",                    :default => 0.0
+    t.float    "reviews_value_avg",                       :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "price_final_cleanup_usd"
@@ -184,6 +141,10 @@ ActiveRecord::Schema.define(:version => 20111103154348) do
     t.float    "size_sqm"
     t.float    "size_sqf"
     t.string   "size_unit"
+    t.string   "city_name"
+    t.string   "country_name"
+    t.string   "state_name"
+    t.string   "country_code",               :limit => 2
   end
 
   add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"
@@ -212,37 +173,12 @@ ActiveRecord::Schema.define(:version => 20111103154348) do
   add_index "places", ["amenities_tv"], :name => "index_places_on_amenities_tv"
   add_index "places", ["amenities_washer"], :name => "index_places_on_amenities_washer"
   add_index "places", ["city_id"], :name => "index_places_on_city_id"
-  add_index "places", ["country_id"], :name => "index_places_on_country_id"
+  add_index "places", ["city_name"], :name => "index_places_on_city_name"
+  add_index "places", ["country_code"], :name => "index_places_on_country_code"
+  add_index "places", ["country_name"], :name => "index_places_on_country_name"
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
-  add_index "places", ["state_id"], :name => "index_places_on_province_id"
+  add_index "places", ["state_name"], :name => "index_places_on_state_name"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
-
-  create_table "states", :force => true do |t|
-    t.integer "geo_id"
-    t.string  "geo_name",            :limit => 200,                   :null => false
-    t.string  "geo_ansiname",        :limit => 200,                   :null => false
-    t.string  "geo_alternate_names", :limit => 2000,                  :null => false
-    t.float   "geo_latitude",                        :default => 0.0, :null => false
-    t.float   "geo_longitude",                       :default => 0.0, :null => false
-    t.string  "geo_feature_class",   :limit => 1
-    t.string  "geo_feature_code",    :limit => 10
-    t.string  "geo_country_code",    :limit => 2
-    t.string  "geo_country_code2",   :limit => 60
-    t.string  "geo_admin1_code",     :limit => 20
-    t.string  "geo_admin2_code",     :limit => 80
-    t.string  "geo_admin3_code",     :limit => 20
-    t.string  "geo_admin4_code",     :limit => 20
-    t.integer "geo_population",      :limit => 8,    :default => 0
-    t.integer "geo_elevation",                       :default => 0
-    t.integer "geo_gtopo30",                         :default => 0
-    t.string  "geo_timezone",        :limit => 40
-    t.date    "geo_mod_date"
-  end
-
-  add_index "states", ["geo_country_code"], :name => "index_states_on_geo_country_code"
-  add_index "states", ["geo_feature_class"], :name => "index_states_on_geo_feature_class"
-  add_index "states", ["geo_feature_code"], :name => "index_states_on_geo_feature_code"
-  add_index "states", ["geo_id"], :name => "index_states_on_geo_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                                :null => false
