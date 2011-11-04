@@ -34,6 +34,12 @@ FactoryGirl.define do
     user         { @user }
   end
   
+  factory :comment do
+    place     { @place }
+    user      { @user  }
+    comment   { Faker::Lorem.paragraph }
+  end
+  
   factory :availability do
     place               { @place }
     availability_type   { 1 }

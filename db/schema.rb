@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103154348) do
+ActiveRecord::Schema.define(:version => 20111104202551) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -71,10 +71,23 @@ ActiveRecord::Schema.define(:version => 20111103154348) do
     t.date    "geo_mod_date"
   end
 
+  add_index "cities", ["geo_ansiname"], :name => "my_index_on_cities"
   add_index "cities", ["geo_country_code"], :name => "index_cities_on_geo_country_code"
   add_index "cities", ["geo_feature_class"], :name => "index_cities_on_geo_feature_class"
   add_index "cities", ["geo_feature_code"], :name => "index_cities_on_geo_feature_code"
   add_index "cities", ["geo_id"], :name => "index_cities_on_geo_id"
+
+  create_table "comments", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+    t.integer  "place_id"
+    t.text     "comment"
+    t.boolean  "owner"
+  end
+
+  add_index "comments", ["place_id"], :name => "index_comments_on_place_id"
+  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "countries", :force => true do |t|
     t.string  "code_iso",             :limit => 2

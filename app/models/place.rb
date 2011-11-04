@@ -3,7 +3,6 @@ require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
 class Place < ActiveRecord::Base
-  
   serialize :photos
 
   validates_presence_of [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id], :message => "101"
@@ -35,13 +34,18 @@ class Place < ActiveRecord::Base
   belongs_to :city
   belongs_to :state
   belongs_to :country
+
   has_many   :availabilities
+  has_many   :comments
 
   before_create :update_location_fields
-  before_update :save_amenities, :convert_prices_in_usd_cents, :convert_json_photos_to_array, :update_location_fields, :update_size_fields
-  validate :validate_publishing
-
-  after_commit :delete_cache
+  before_update :save_amenities, 
+                :convert_prices_in_usd_cents, 
+                :convert_json_photos_to_array, 
+                :update_location_fields, 
+                :update_size_fields
+  validate      :validate_publishing
+  after_commit  :delete_cache
 
   def publish!
     self.published = true
