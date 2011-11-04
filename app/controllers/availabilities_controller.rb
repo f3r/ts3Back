@@ -73,8 +73,7 @@ class AvailabilitiesController < ApplicationController
   # [:access_token]      Access token
   def destroy
     check_token
-    
-    @availability = Place.find(params[:id]).availabilities.find(params[:id])
+    @availability = Place.find(params[:place_id]).availabilities.find(params[:id])
     if @availability.destroy
       return_message(200, :ok)
     else
