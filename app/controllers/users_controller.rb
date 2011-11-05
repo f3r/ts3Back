@@ -67,18 +67,18 @@ class UsersController < ApplicationController
   # ==Resource URL
   # /users.format
   # ==Example
-  # PUT https://backend-heypal.heroku.com/users.json access_token=access_token&user.avatar_url=http://url/image_file
+  # PUT https://backend-heypal.heroku.com/users.json access_token=access_token&avatar_url=http://url/image_file
   # === Parameters
   # [:access_token]     Access token
-  # [user.first_name]   First name of the user
-  # [user.last_name]    Last name of the user
-  # [user.gender]       Gender: unkown/male/female
-  # [user.birthdate]    Birthdate of the user, stored in same format as ruby::Date, Ex. 1981-12-31, 1981/09/31
-  # [user.timezone]     Based on TimeZone::to_s http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048
-  # [user.phone_home]   Home Phone number, including country code
-  # [user.phone_mobile] Mobile Phone number, including country code
-  # [user.phone_work]   Work Phone number, including country code
-  # [user.avatar_url]   avatar picture from url, i.e. http://url/image_file
+  # [first_name]   First name of the user
+  # [last_name]    Last name of the user
+  # [gender]       Gender: unkown/male/female
+  # [birthdate]    Birthdate of the user, stored in same format as ruby::Date, Ex. 1981-12-31, 1981/09/31
+  # [timezone]     Based on TimeZone::to_s http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048
+  # [phone_home]   Home Phone number, including country code
+  # [phone_mobile] Mobile Phone number, including country code
+  # [phone_work]   Work Phone number, including country code
+  # [avatar_url]   avatar picture from url, i.e. http://url/image_file
   # === Response
   # [:user]
   # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name}
@@ -90,7 +90,7 @@ class UsersController < ApplicationController
   def update
     check_token
     fields = [
-      :id, 
+      :id,
       :first_name, 
       :last_name, 
       :gender, 
@@ -102,7 +102,8 @@ class UsersController < ApplicationController
       :avatar_file_name
     ]
     @user = current_user
-    if @user.update_attributes(params[:user])
+    new_params = filter_params(params, fields)
+    if @user.update_attributes(new_params)
       return_message(200, :ok, {:user => filter_fields(@user,fields)})
     else
       return_message(200, :fail, {:err => format_errors(@user.errors.messages)})

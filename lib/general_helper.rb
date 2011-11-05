@@ -58,7 +58,8 @@ module GeneralHelper
     remove_fields.map{|x| filtered_object.delete(x) }
     return filtered_object
   end
-  
+
+  # used to filter any additional paramaters sent that doesn't match the allowed fields
   def filter_params(params, fields, options={})
     new_params = {}
     fields.map{|param| new_params.merge!(param => params[param]) if params.has_key?(param) && param != :id }
