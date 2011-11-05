@@ -2,8 +2,6 @@ require 'test_helper'
 class CommentsTest < ActionController::IntegrationTest
 
   setup do
-    @country = Factory(:country)
-    @state   = Factory(:state)
     @city    = Factory(:city)
     @user    = Factory(:user)
     @user.confirm!

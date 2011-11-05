@@ -2,6 +2,10 @@ class CommentsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
+  def initialize
+    @fields = [:id, :user_id, :place_id, :comment, :owner, :created_at]
+  end
+  
   # == Description
   # Returns all the comments of a place
   # ==Resource URL
@@ -13,7 +17,7 @@ class CommentsController < ApplicationController
   def index
     @comments = Place.find(params[:id]).comments
     if @comments.count > 0
-      return_message(200, :ok, {:comments => @comments})
+      return_message(200, :ok, {:comments => filter_fields(@comments,@fields)})
     else
       return_message(200, :ok, {:err => {:comments => [115]}})
     end
@@ -40,7 +44,7 @@ class CommentsController < ApplicationController
       :owner   => owner
       )
     if @comment.save
-      return_message(200, :ok, {:comment => @comment} )
+      return_message(200, :ok, {:comment => filter_fields(@comment,@fields)} )
     else
       return_message(200, :fail, {:err => format_errors(@comment.errors.messages)})
     end
@@ -59,9 +63,9 @@ class CommentsController < ApplicationController
   # [:101] can't be blank 
   def update
     check_token
-    @comment = Comment.find(params[:id])
+    @comment = current_user.comments.find(params[:id])
     if @comment.update_attributes(:comment  => params[:comment])
-      return_message(200, :ok, {:comment => @comment})  
+      return_message(200, :ok, {:comment => filter_fields(@comment,@fields)})  
     else
       return_message(200, :fail, {:err => format_errors(@comment.errors.messages)})
     end
@@ -77,7 +81,7 @@ class CommentsController < ApplicationController
   # [:access_token]
   def destroy
     check_token
-    @comment = Comment.find(params[:id])
+    @comment = current_user.comments.find(params[:id])
     if @comment.destroy
       return_message(200, :ok)
     else
