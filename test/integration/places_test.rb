@@ -12,11 +12,12 @@ class PlacesTest < ActionController::IntegrationTest
     @place_type = Factory(:place_type)
     @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
     @availability = Factory(:availability, :place => @place )
-    @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}]
+    @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
     @place_new_info = { 
       :title => "Test title", 
-      :amenities => {:tennis => true, :kitchen => true}, 
-      :photos => @photos.to_json,
+      :amenities_kitchen => true, 
+      :amenities_tennis => true, 
+      :photos => @photos,
       :currency => "JPY",
       :price_per_night => "8000",
       :price_per_week => "128000",
@@ -70,13 +71,13 @@ class PlacesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']    
-    assert_equal @place_new_info[:title], json['place']['details']['title']
-    assert_equal true, json['place']['amenities']['kitchen']
-    assert_equal true, json['place']['amenities']['tennis']
+    assert_equal @place_new_info[:title], json['place']['title']
+    assert_equal true, json['place']['amenities_kitchen']
+    assert_equal true, json['place']['amenities_tennis']
     assert_not_nil json['place']['photos']
-    assert_equal @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_night_usd']
-    assert_equal @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_week_usd']
-    assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_month_usd']
+    assert_equal @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_night_usd']
+    assert_equal @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_week_usd']
+    assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_month_usd']
   end  
 
   should "update place, publish it and unpublish it" do
@@ -123,13 +124,13 @@ class PlacesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_equal @place_new_info[:title], json['place']['details']['title']
-    assert_equal true, json['place']['amenities']['kitchen']
-    assert_equal true, json['place']['amenities']['tennis']
+    assert_equal @place_new_info[:title], json['place']['title']
+    assert_equal true, json['place']['amenities_kitchen']
+    assert_equal true, json['place']['amenities_tennis']
     assert_not_nil json['place']['photos']
-    assert_equal @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_night_usd']
-    assert_equal @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_week_usd']
-    assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['pricing']['price_per_month_usd']
+    assert_equal @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_night_usd']
+    assert_equal @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_week_usd']
+    assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_month_usd']
   end
 
   should "create a place and update it's information (xml)" do
@@ -141,13 +142,13 @@ class PlacesTest < ActionController::IntegrationTest
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
-    assert_tag "place", :child => { :tag => "details", :child => { :tag => "title", :content => @place_new_info[:title] } }
-    assert_tag "place", :child => { :tag => "amenities", :child => { :tag => "kitchen", :content => "true" } }
-    assert_tag "place", :child => { :tag => "amenities", :child => { :tag => "tennis", :content => "true" } }
+    assert_tag "place", :child => { :tag => "title", :content => @place_new_info[:title] }
+    assert_tag "place", :child => { :tag => "amenities_kitchen", :content => "true" }
+    assert_tag "place", :child => { :tag => "amenities_tennis", :content => "true" }
     assert_not_nil "place", :child => { :tag => "photos" }
-    assert_tag "place", :child => { :tag => "pricing", :child => { :tag => "price_per_night_usd", :content => @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s } }
-    assert_tag "place", :child => { :tag => "pricing", :child => { :tag => "price_per_week_usd", :content => @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s } }
-    assert_tag "place", :child => { :tag => "pricing", :child => { :tag => "price_per_month_usd", :content => @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s } }
+    assert_tag "place", :child => { :tag => "price_per_night_usd", :content => @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s }
+    assert_tag "place", :child => { :tag => "price_per_week_usd", :content => @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s }
+    assert_tag "place", :child => { :tag => "price_per_month_usd", :content => @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s }
   end
 
   should "update place dimessions in meters (json)" do
@@ -157,9 +158,9 @@ class PlacesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_equal "meters", json['place']['dimensions']['size_unit']
-    assert_equal 100, json['place']['dimensions']['size_sqm']
-    assert_equal 100 * 10.7639104, json['place']['dimensions']['size_sqf']
+    assert_equal "meters", json['place']['size_unit']
+    assert_equal 100, json['place']['size_sqm']
+    assert_equal 100 * 10.7639104, json['place']['size_sqf']
   end
 
   should "update place dimessions in feet (json)" do
@@ -169,9 +170,9 @@ class PlacesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_equal "feet", json['place']['dimensions']['size_unit']
-    assert_equal 1000, json['place']['dimensions']['size_sqf']
-    assert_equal 1000 * 0.09290304, json['place']['dimensions']['size_sqm']
+    assert_equal "feet", json['place']['size_unit']
+    assert_equal 1000, json['place']['size_sqf']
+    assert_equal 1000 * 0.09290304, json['place']['size_sqm']
   end
 
   should "not update place dimessions with invalid size_unit (json)" do
@@ -192,7 +193,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
     assert_equal @place.id, json['places'][0]['id']
-    assert_equal @place.title, json['places'][0]['details']['title']
+    assert_equal @place.title, json['places'][0]['title']
   end
   
 end

@@ -47,36 +47,12 @@ module GeneralHelper
         style = options[:style] if options[:style] rescue :large
         avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
         filtered_object.merge!({:avatar => avatar })
-      elsif field == :amenities
-        filtered_object.merge!({field => object.group_attributes(additional_fields[field], field.to_s)})
-      elsif field == :location
-        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
-        additional_fields[field].map{|x| remove_fields << x }
-      elsif field == :reviews
-        filtered_object.merge!({field => object.group_attributes(additional_fields[field], field.to_s)})
-        additional_fields[field].map{|x| remove_fields << "#{field.to_s}_#{x}".to_sym }
-      elsif field == :terms_of_offer
-        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
-        additional_fields[field].map{|x| remove_fields << x }
-      elsif field == :pricing
-        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
-        additional_fields[field].map{|x| remove_fields << x }
-      elsif field == :details
-        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
-        additional_fields[field].map{|x| remove_fields << x }
-      elsif field == :dimensions
-        filtered_object.merge!({field => object.group_attributes(additional_fields[field])})
-        additional_fields[field].map{|x| remove_fields << x }
-      elsif field == :user
-        filtered_object.merge!({field => filter_object(object.user,additional_fields[field]).group_attributes(additional_fields[field] << :avatar)})
-      elsif field == :place_type
-        filtered_object.merge!({field => filter_object(object.place_type,additional_fields[field]).group_attributes(additional_fields[field])})
-      elsif field == :state
-        filtered_object.merge!({field => filter_object(object.state,additional_fields[field]).group_attributes(additional_fields[field])})
-      elsif (field == :country) and (object.class.to_s != "Address")
-        filtered_object.merge!({field => filter_object(object.country,additional_fields[field]).group_attributes(additional_fields[field])})
       else
         filtered_object.merge!({field => object["#{field}"]})
+      end
+      if !additional_fields.blank? && additional_fields[field].class == Array
+        filtered_object.merge!(get_additional_fields(field, object, additional_fields[field]))
+        # remove_fields << field
       end
     end
     remove_fields.map{|x| filtered_object.delete(x) }
@@ -88,15 +64,9 @@ module GeneralHelper
     fields.map{|param| new_params.merge!(param => params[param]) if params.has_key?(param) && param != :id }
     return new_params
   end
-
-  def group_attributes(attributes, prefix = nil)
-    attributes_array = {}
-    if prefix
-      attributes.map{|attribute| attributes_array.merge!(attribute => self["#{prefix}_#{attribute.to_s}"]) if self["#{prefix}_#{attribute.to_s}"]}
-    else
-      attributes.map{|attribute| attributes_array.merge!(attribute => self[attribute]) if self[attribute]}
-    end
-    return attributes_array    
+  
+  def get_additional_fields(field, object, fields)
+    {field.to_sym => filter_fields(object.send(field),fields) }
   end
 
 end

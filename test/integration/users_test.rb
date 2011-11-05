@@ -4,6 +4,7 @@ class UsersTest < ActionController::IntegrationTest
   setup do
     @user = Factory(:user)
     @user.confirm!
+    @birthday = "1981/01/01"
   end
 
   should "show full current user information (json)" do
@@ -102,6 +103,16 @@ class UsersTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "fail", json['stat']
     assert (json['err']['birthdate'].include? 113)
+  end
+
+  should "update user profile information, invalid birthdate (json)" do
+    put "/users.json", {:access_token => @user.authentication_token, :user => { :birthdate => @birthday } }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @birthday.to_date, json['user']['birthdate'].to_date
   end
   
   should "update avatar" do

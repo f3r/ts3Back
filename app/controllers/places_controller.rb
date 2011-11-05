@@ -13,47 +13,27 @@ class PlacesController < ApplicationController
       :reviews_checkin_avg,:reviews_communication_avg,:reviews_location_avg,
       :reviews_value_avg, :currency, :price_final_cleanup, 
       :price_security_deposit, :price_per_night, :price_per_week, :price_per_month,
-      :published
-    ]
-
-    @location_fields = [:country_id, :state_id, :city_id, :address_1, :address_2, :zip, :lat, :lon, :directions]
-
-    @amenities_fields = [:aircon,:breakfast,:buzzer_intercom,:cable_tv,:dryer,:doorman,:elevator,
-      :family_friendly,:gym,:hot_tub,:kitchen,:handicap,:heating,:hot_water,
-      :internet,:internet_wifi,:jacuzzi,:parking_included,:pets_allowed,:pool,
-      :smoking_allowed,:suitable_events,:tennis,:tv,:washer]
-
-    @reviews_fields = [
-      :overall,:accuracy_avg,:cleanliness_avg,
-      :checkin_avg,:communication_avg,:location_avg,
-      :value_avg
-    ]
-    
-    @terms_of_offer_fields = [
-      :check_in_after, :check_out_before, :minimum_stay_days, :maximum_stay_days, :house_rules,
-      :cancellation_policy
-    ]
-
-    @pricing_fields = [
-      :price_final_cleanup, :price_security_deposit, :price_per_night, :price_per_week, :price_per_month, :currency,
+      :published,
+      :country_name, :country_code, :state_name, :city_name,
       :price_final_cleanup_usd, :price_security_deposit_usd, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
     ]
-
-    @details_fields = [
-      :num_bedrooms, :num_beds, :num_bathrooms, :sqm, :max_guests, :title, :description
+    
+    @amenities = [
+      :amenities_aircon,:amenities_breakfast,:amenities_buzzer_intercom,:amenities_cable_tv,
+      :amenities_dryer,:amenities_doorman,:amenities_elevator,
+      :amenities_family_friendly,:amenities_gym,:amenities_hot_tub,:amenities_kitchen,
+      :amenities_handicap,:amenities_heating,:amenities_hot_water,
+      :amenities_internet,:amenities_internet_wifi,:amenities_jacuzzi,:amenities_parking_included,
+      :amenities_pets_allowed,:amenities_pool,:amenities_smoking_allowed,:amenities_suitable_events,
+      :amenities_tennis,:amenities_tv,:amenities_washer  
     ]
 
-    @dimensions_fields = [
-      :size, :size_sqm, :size_sqf, :size_unit
-    ]
+    @fields = @fields + @amenities
 
     # Assosiations
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name]
     @place_type_fields = [:id,:name]
 
-  end
-
-  def search
   end
 
   # ==Description
@@ -67,13 +47,6 @@ class PlacesController < ApplicationController
   def show
     @place = Place.find(params[:id])
     place = filter_fields(@place, @fields, { :additional_fields => { 
-      :amenities => @amenities_fields, 
-      :location => @location_fields, 
-      :reviews => @reviews_fields,
-      :terms_of_offer => @terms_of_offer_fields,
-      :pricing => @pricing_fields,
-      :details => @details_fields,
-      :dimensions => @dimensions_fields,
       :user => @user_fields,
       :place_type => @place_type_fields } })
     return_message(200, :ok, {:place => place})
@@ -109,9 +82,7 @@ class PlacesController < ApplicationController
     @place = current_user.places.new(place)
 
     if @place.save
-      place_return = filter_fields(@place, [:id], :additional_fields => {
-          :details => [:title,:num_bedrooms,:max_guests],
-          :location => @location_fields, 
+      place_return = filter_fields(@place, [:id, :title,:num_bedrooms,:max_guests,:country_name, :country_code, :state_name, :city_name, :city_id], :additional_fields => {
           :user => @user_fields,
           :place_type => @place_type_fields
         })
@@ -145,8 +116,8 @@ class PlacesController < ApplicationController
   # [lat]           Double,  latitude coordinates
   # [lon]           Double,  longitude coordinates
   # [directions]    Text,    description on how to find the place
-  # [amenities]
-  #   Array of boolean values with the following options.
+  # [amenities_name]
+  #   The following options are accepted (replace "name").
   #   aircon,breakfast,buzzer_intercom,cable_tv,dryer,doorman,elevator,
   #   family_friendly,gym,hot_tub,kitchen,handicap,heating,hot_water,
   #   internet,internet_wifi,jacuzzi,parking_included,pets_allowed,pool,
@@ -175,20 +146,9 @@ class PlacesController < ApplicationController
   def update
     check_token
     @place = Place.find(params[:id])
-    [:price_per_night, :price_per_week, :price_per_month, :price_final_cleanup, :price_security_deposit, :currency, :amenities].map{|x| @fields << x}
     place = filter_params(params, @fields)
-
     if @place.update_attributes(place)
-      # remove from array private fields
-      [:price_per_night, :price_per_week, :price_per_month, :price_final_cleanup, :price_security_deposit, :currency].map{|x| @fields.delete(x) }
       place_return = filter_fields(@place,@fields, { :additional_fields => {
-        :amenities => @amenities_fields, 
-        :location => @location_fields, 
-        :reviews => @reviews_fields,
-        :terms_of_offer => @terms_of_offer_fields,
-        :pricing => @pricing_fields,
-        :details => @details_fields,
-        :dimensions => @dimensions_fields,
         :user => @user_fields,
         :place_type => @place_type_fields } })
       return_message(200, :ok, {:place => place_return})
@@ -232,13 +192,6 @@ class PlacesController < ApplicationController
     @places = @places.where(:published => true) unless params[:published] == "0"
     if !@places.blank?
       places_return = filter_fields(@places,@fields, { :additional_fields => {
-        :amenities => @amenities_fields, 
-        :location => @location_fields, 
-        :reviews => @reviews_fields,
-        :terms_of_offer => @terms_of_offer_fields,
-        :pricing => @pricing_fields,
-        :details => @details_fields,
-        :dimensions => @dimensions_fields,
         :place_type => @place_type_fields}})
       return_message(200, :ok, {:places => places_return})
     else
@@ -273,15 +226,11 @@ class PlacesController < ApplicationController
     @place = Place.find(params[:id])
       if method        
         if @place.send(method)
-          place = filter_fields(@place,@fields, { :additional_fields => {
-                :amenities => @amenities_fields, 
-                :location => @location_fields, 
-                :reviews => @reviews_fields,
-                :terms_of_offer => @terms_of_offer_fields,
-                :pricing => @pricing_fields,
-                :details => @details_fields,
-                :dimensions => @dimensions_fields,
-                :place_type => @place_type_fields } })
+          place = filter_fields(@place,@fields, { 
+            :additional_fields => {
+              :place_type => @place_type_fields 
+            } 
+          })
           return_message(200, :ok, {:place => place})
         else
           return_message(200, :ok, { :err => format_errors(@place.errors.messages) })

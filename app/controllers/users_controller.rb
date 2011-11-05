@@ -73,7 +73,7 @@ class UsersController < ApplicationController
   # [user.first_name]   First name of the user
   # [user.last_name]    Last name of the user
   # [user.gender]       Gender: unkown/male/female
-  # [user.birthdate]    Birthdate of the user, stored in same format as ruby::Date
+  # [user.birthdate]    Birthdate of the user, stored in same format as ruby::Date, Ex. 1981-12-31, 1981/09/31
   # [user.timezone]     Based on TimeZone::to_s http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048
   # [user.phone_home]   Home Phone number, including country code
   # [user.phone_mobile] Mobile Phone number, including country code
