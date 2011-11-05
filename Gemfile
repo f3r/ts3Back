@@ -13,6 +13,8 @@ gem 'redis'
 gem 'money'
 gem 'google_currency'
 gem 'dalli'               # Memcached
+gem 'meta_search'
+gem 'will_paginate'
 
 group :assets do
   gem 'sass-rails', "  ~> 3.1.0"

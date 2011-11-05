@@ -36,6 +36,31 @@ class PlacesController < ApplicationController
 
   end
 
+  # TODO: Work in progress...
+
+  # ==Description
+  # Returns a list places matching the search parameters
+  # ==Resource URL
+  # /places/search.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/places/search.json
+  # === Parameters
+  # [city_id]
+  # [limit]
+  def search
+    # @places = Place.where(:city_id => params[:city_id])
+    # @places = @places.limit(params[:limit]) if params[:limit]
+    @places = Place.search(params[:search])
+    if !@places.blank?
+      # filtered_places = filter_fields(@places, @fields, { :additional_fields => { 
+      #   :user => @user_fields,
+      #   :place_type => @place_type_fields } })
+      return_message(200, :ok, {:places => @places})
+    else
+      return_message(200, :ok, {:err => {:places => [115]}})
+    end
+  end
+
   # ==Description
   # Returns all the information about a place
   # ==Resource URL
