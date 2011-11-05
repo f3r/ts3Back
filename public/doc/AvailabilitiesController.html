@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
 <title>Class: AvailabilitiesController</title>
 
@@ -84,64 +84,29 @@
   </div>
 
   <div id="project-metadata">
-    <nav id="fileindex-section" class="section project-section">
-  <h3 class="section-header">Pages</h3>
-
-  <ul>
-  
-    <li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a>
-  
-  </ul>
-</nav>
-
+    
     <nav id="classindex-section" class="section project-section">
   <h3 class="section-header">Class and Module Index</h3>
 
   <ul class="link-list">
   
-    <li><a href="./Exceptions.html">Exceptions</a>
-  
-    <li><a href="./Exceptions/UnauthorizedAccess.html">Exceptions::UnauthorizedAccess</a>
-  
-    <li><a href="./Address.html">Address</a>
-  
     <li><a href="./AddressesController.html">AddressesController</a>
   
-    <li><a href="./AdressesHelper.html">AdressesHelper</a>
-  
     <li><a href="./ApplicationController.html">ApplicationController</a>
-  
-    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
-  
-    <li><a href="./Authentication.html">Authentication</a>
   
     <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
   
     <li><a href="./AvailabilitiesController.html">AvailabilitiesController</a>
   
-    <li><a href="./Availability.html">Availability</a>
-  
-    <li><a href="./City.html">City</a>
+    <li><a href="./CommentsController.html">CommentsController</a>
   
     <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
   
-    <li><a href="./Country.html">Country</a>
-  
-    <li><a href="./CustomFailure.html">CustomFailure</a>
-  
-    <li><a href="./GeneralHelper.html">GeneralHelper</a>
-  
     <li><a href="./GeoController.html">GeoController</a>
-  
-    <li><a href="./ItemsHelper.html">ItemsHelper</a>
   
     <li><a href="./Object.html">Object</a>
   
     <li><a href="./PasswordsController.html">PasswordsController</a>
-  
-    <li><a href="./Place.html">Place</a>
-  
-    <li><a href="./PlaceType.html">PlaceType</a>
   
     <li><a href="./PlaceTypesController.html">PlaceTypesController</a>
   
@@ -150,12 +115,6 @@
     <li><a href="./RegistrationsController.html">RegistrationsController</a>
   
     <li><a href="./SessionsController.html">SessionsController</a>
-  
-    <li><a href="./State.html">State</a>
-  
-    <li><a href="./User.html">User</a>
-  
-    <li><a href="./UserMailer.html">UserMailer</a>
   
     <li><a href="./UsersController.html">UsersController</a>
   
@@ -333,8 +292,7 @@ access_token=access_token</p>
             <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 74</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">check_token</span>
-  
-  <span class="ruby-ivar">@availability</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]).<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-ivar">@availability</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>]).<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@availability</span>.<span class="ruby-identifier">destroy</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
   <span class="ruby-keyword">else</span>
@@ -486,7 +444,7 @@ Price)</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 106</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 105</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
 
