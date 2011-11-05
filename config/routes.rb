@@ -29,6 +29,20 @@ HeyPalBackEnd::Application.routes.draw do
     put    "users/addresses/:id",     :to => "addresses#update"
     delete "users/addresses/:id",     :to => "addresses#destroy"
     ##############################################################################
+    # PLACE AVAILABILITIES
+    ##############################################################################
+    get     "places/:id/availabilities",           :to => "availabilities#list"
+    post    "places/:id/availabilities",           :to => "availabilities#create"
+    put     "places/:place_id/availabilities/:id", :to => "availabilities#update"
+    delete  "places/:place_id/availabilities/:id", :to => "availabilities#destroy"
+    ##############################################################################
+    # PLACE COMMENTS
+    ##############################################################################
+    get     "places/:id/comments",           :to => "comments#index"
+    post    "places/:id/comments",           :to => "comments#create"
+    put     "places/:place_id/comments/:id", :to => "comments#update"
+    delete  "places/:place_id/comments/:id", :to => "comments#destroy"
+    ##############################################################################
     # PLACES
     ##############################################################################
     post    "search",                 :to => "places#search"
@@ -38,13 +52,6 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id",             :to => "places#show"
     delete  "places/:id",             :to => "places#destroy"
     get     "places/:id/:status",     :to => "places#publish"
-    ##############################################################################
-    # AVAILABILITIES
-    ##############################################################################
-    get     "places/:id/availabilities", :to => "availabilities#list"
-    post    "places/:id/availabilities", :to => "availabilities#create"
-    put     "places/:place_id/availabilities/:id", :to => "availabilities#update"
-    delete  "places/:place_id/availabilities/:id", :to => "availabilities#destroy"
     ##############################################################################
     # PLACE TYPES
     ##############################################################################

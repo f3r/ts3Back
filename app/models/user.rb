@@ -18,8 +18,6 @@ class User < ActiveRecord::Base
          # :invitable,              # Send invites: https://github.com/scambra/devise_invitable
          :token_authenticatable     # Generate auth token and validates it
 
-  # Setup accessible (or protected) attributes for your model
-
   before_save :ensure_authentication_token, :check_avatar_url
   after_save  :delete_cache
 
@@ -41,24 +39,23 @@ class User < ActiveRecord::Base
   attr_accessor :avatar_url
 
   with_options :if => :password_validations_required? do |p|
-    p.validates_presence_of :password, :message => "101"
-    p.validates_presence_of :password_confirmation, :message => "101"
-    p.validates_length_of :password, :within => 6..40, :message => "102"
-    p.validates_confirmation_of :password, :message => "104"
+    p.validates_presence_of     :password,                   :message => "101"
+    p.validates_presence_of     :password_confirmation,      :message => "101"
+    p.validates_length_of       :password, :within => 6..40, :message => "102"
+    p.validates_confirmation_of :password,                   :message => "104"
   end
 
-  validates_presence_of :email, :message => "101"
+  validates_presence_of   :email, :message => "101"
   validates_uniqueness_of :email, :message => "100"
-  validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
+  validates_format_of     :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
 
-  validates_date :birthdate, 
-    :invalid_date_message => "113", 
-    :on => :update, 
-    :before => lambda { Date.current } 
+  validates_date :birthdate, :invalid_date_message => "113", :on => :update, :before => lambda { Date.current } 
 
   has_many :authentications, :dependent => :destroy
-  has_many :addresses, :dependent => :destroy
-  has_many :places, :dependent => :destroy
+  has_many :addresses,       :dependent => :destroy
+  has_many :places,          :dependent => :destroy
+  # TODO: Do we really want to destroy comments or nullify them?
+  has_many :comments,        :dependent => :destroy
   
   has_attached_file :avatar, 
      :styles => {
