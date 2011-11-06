@@ -77,7 +77,7 @@ class UsersTest < ActionController::IntegrationTest
   end
   
   should "update user profile information (json)" do
-    put "/users.json", {:access_token => @user.authentication_token, :user => { :first_name => "Test Name", :gender => "male" } }
+    put "/users.json", {:access_token => @user.authentication_token, :first_name => "Test Name", :gender => "male" }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -87,7 +87,7 @@ class UsersTest < ActionController::IntegrationTest
   end
   
   should "update user profile information (xml)" do
-    put "/users.xml", {:access_token => @user.authentication_token, :user => { :first_name => "Test Name", :gender => "male" } }
+    put "/users.xml", {:access_token => @user.authentication_token, :first_name => "Test Name", :gender => "male" }
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
@@ -96,7 +96,7 @@ class UsersTest < ActionController::IntegrationTest
   end
   
   should "not update user profile information, invalid birthdate (json)" do
-    put "/users.json", {:access_token => @user.authentication_token, :user => { :birthdate => "1111111" } }
+    put "/users.json", {:access_token => @user.authentication_token, :birthdate => "1111111" }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -105,8 +105,8 @@ class UsersTest < ActionController::IntegrationTest
     assert (json['err']['birthdate'].include? 113)
   end
 
-  should "update user profile information, invalid birthdate (json)" do
-    put "/users.json", {:access_token => @user.authentication_token, :user => { :birthdate => @birthday } }
+  should "update user profile information, valid birthdate (json)" do
+    put "/users.json", {:access_token => @user.authentication_token, :birthdate => @birthday }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -117,7 +117,20 @@ class UsersTest < ActionController::IntegrationTest
   
   should "update avatar" do
     avatar = fixture_file_upload("test_image.jpg","image/jpg")
-    put "/users.json", {:access_token => @user.authentication_token, :user => { :avatar => avatar } }
+    put "/users.json", {:access_token => @user.authentication_token, :avatar => avatar }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_not_nil json['user']['avatar']
+  end
+  
+  should "update avatar using url" do
+    put "/users.json", {
+      :access_token => @user.authentication_token, 
+      :avatar_url => "http://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Lamprotornis_hildebrandti_-Tanzania-8-2c.jpg/470px-Lamprotornis_hildebrandti_-Tanzania-8-2c.jpg"
+    }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)

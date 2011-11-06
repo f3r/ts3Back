@@ -49,7 +49,10 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :message => "100"
   validates_format_of     :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
 
-  validates_date :birthdate, :invalid_date_message => "113", :on => :update, :before => lambda { Date.current } 
+  validates_date :birthdate, 
+    :invalid_date_message => "113", 
+    :on => :update, 
+    :before => lambda { Date.current }
 
   has_many :authentications, :dependent => :destroy
   has_many :addresses,       :dependent => :destroy

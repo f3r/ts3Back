@@ -1,6 +1,21 @@
 class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  
+  def initialize
+    @fields = [
+      :id, 
+      :first_name, 
+      :last_name, 
+      :gender, 
+      :birthdate, 
+      :timezone, 
+      :phone_home, 
+      :phone_mobile, 
+      :phone_work, 
+      :avatar_file_name
+    ]
+  end
 
   # ==Description
   # Returns all the public information of a specific user
@@ -44,20 +59,8 @@ class UsersController < ApplicationController
   def show
     check_token
     id = params[:id].nil? ? current_user.id : params[:id]
-    fields = [
-      :id, 
-      :first_name, 
-      :last_name, 
-      :gender, 
-      :birthdate, 
-      :timezone, 
-      :phone_home, 
-      :phone_mobile, 
-      :phone_work, 
-      :avatar_file_name
-    ]
-    @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.select(fields).find(id) }
-    return_message(200, :ok, {:user => filter_fields(@user,fields)})
+    @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.select(@fields).find(id) }
+    return_message(200, :ok, {:user => filter_fields(@user,@fields)})
   end
 
   # ==Description
@@ -99,12 +102,13 @@ class UsersController < ApplicationController
       :phone_home, 
       :phone_mobile, 
       :phone_work, 
-      :avatar_file_name
+      :avatar,
+      :avatar_url
     ]
     @user = current_user
     new_params = filter_params(params, fields)
     if @user.update_attributes(new_params)
-      return_message(200, :ok, {:user => filter_fields(@user,fields)})
+      return_message(200, :ok, {:user => filter_fields(@user,@fields)})
     else
       return_message(200, :fail, {:err => format_errors(@user.errors.messages)})
     end
