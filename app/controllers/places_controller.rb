@@ -36,39 +36,117 @@ class PlacesController < ApplicationController
 
   end
 
-  # TODO: Work in progress...
-
   # ==Description
   # Returns a list places matching the search parameters
   # ==Resource URL
-  # /places/search.format
+  #   /places/search.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/places/search.json
+  #   GET https://backend-heypal.heroku.com/places/search.json q[country_code_eq]=AU&q[num_bedrooms_lt]=5&q[num_bedrooms_gt]=2&page=1[m]=and
+  # === Matching options
+  # [eq]
+  #   Equal
+  #     Ex: q[num_bedrooms_eq]=2
+  # [not_eq]
+  #   Not equal
+  #     Ex: q[country_code_not_eq]=PH
+  # [gt]
+  #   Greater than
+  #     Ex: q[num_bedrooms_gt]=4
+  # [lt]
+  #   Lower than
+  #     Ex: q[num_bedrooms_lt]=2
+  # [gteq]
+  #   Greater than or equal
+  #     Ex: q[num_bedrooms_gteq]=4
+  # [lteq]
+  #   Lower than or equal
+  #     Ex: q[num_bedrooms_lteq]=4
+  # [cont]
+  #   Contains
+  #     Ex: q[title_cont]=House
+  # [true]
+  #   True, 1 or 0
+  #     Ex: q[amenities_washer_true]=1
+  # [false]
+  #   False, 1 or 0
+  #     Ex: q[amenities_tv_false]=1
+  # [present]
+  #   Not empty, 1 or 0
+  #     Ex: q[description_present]=1
+  # [blank]
+  #   Empty, 1 or 0
+  #     Ex: q[description_present]=1
   # === Parameters
-  # [city_id]
-  # [limit]
+  # The search parameters are received as an array named "q", the paramater itself is composed by the name of the column and the matching option.
+  # Do not use this search paramaters for published status.
+  #   Ex: q[max_guests_eq]
+  # [page]
+  #   Page number
+  #     Ex: page=2
+  # [per_page]
+  #   Results per page. Default is 20
+  #     Ex: per_page=10
+  # [m]
+  #   Used to match all the parameters or any. Options: and, or.
+  #     Ex: m=or
+  # [status]
+  #   Defaults to published, Options: published, not_published, all
+  #     Ex: status=all
+  # === Response
+  # [results] Total number of results. Used for pagination
+  # [current_page] Current page number. Used for pagination
+  # [per_page] Results showed per page. Used for pagination
+  # [total_pages] Total number of pages. Used for pagination
+  # [places] Array containing the places
+  # === Error codes
+  # [115]           no results
   def search
-    # @places = Place.where(:city_id => params[:city_id])
-    # @places = @places.limit(params[:limit]) if params[:limit]
-    @places = Place.search(params[:search])
-    if !@places.blank?
-      # filtered_places = filter_fields(@places, @fields, { :additional_fields => { 
-      #   :user => @user_fields,
-      #   :place_type => @place_type_fields } })
-      return_message(200, :ok, {:places => @places})
+    !params[:per_page].blank? ? per_page = params[:per_page] : per_page = Place.per_page
+
+    if !params[:q].blank?
+      case params[:status]
+      when "all"
+        @search = Place.search(params[:q])
+      when "published"
+        @search = Place.where(:published => true).search(params[:q])
+      when "not_published"
+        @search = Place.where(:published => false).search(params[:q])
+      else
+        @search = Place.where(:published => true).search(params[:q])
+      end
+      places = @search.result(:distinct => true)
+      places_paginated = places.paginate(:page => params[:page], :per_page => per_page)
+
+      if !places_paginated.blank?
+        filtered_places = filter_fields(places_paginated, @fields, { :additional_fields => { 
+          :user => @user_fields,
+          :place_type => @place_type_fields }
+        })
+        response = {
+          :places => filtered_places, 
+          :results => places.count, 
+          :per_page => per_page, 
+          :current_page => params[:page], 
+          :total_pages => (places.count/per_page.to_f).ceil
+        }
+      else
+        response = {:err => {:places => [115]}}
+      end
+      return_message(200, :ok, response)
     else
-      return_message(200, :ok, {:err => {:places => [115]}})
+      return_message(200, :ok, {:err => {:query => [101]}})
     end
+
   end
 
   # ==Description
   # Returns all the information about a place
   # ==Resource URL
-  # /places/:id.format
+  #   /places/:id.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/places/id.json
+  #   GET https://backend-heypal.heroku.com/places/id.json
   # === Parameters
-  # [:id] if of the place
+  # [id] if of the place
   def show
     @place = Place.find(params[:id])
     place = filter_fields(@place, @fields, { :additional_fields => { 
@@ -80,11 +158,11 @@ class PlacesController < ApplicationController
   # == Description
   # Crates a new place with basic information
   # ==Resource URL
-  # /places.format
+  #   /places.format
   # ==Example
-  # POST https://backend-heypal.heroku.com/places.json access_token=access_token&title=Joe's Apartment&type_id=2&num_bedrooms=3&max_guests=5&city_id=62
+  #   POST https://backend-heypal.heroku.com/places.json access_token=access_token&title=Joe's Apartment&type_id=2&num_bedrooms=3&max_guests=5&city_id=62
   # === Parameters
-  # [:access_token] Access token
+  # [access_token] Access token
   # [title]         Title for the place
   # [place_type_id] ID from the PlaceType model, Integer
   # [num_bedrooms]  Integer
@@ -92,7 +170,7 @@ class PlacesController < ApplicationController
   # [city_id]       ID from the City model, Integer
   # === Response
   # [place] Array containing the recently created place
-  # == Error codes
+  # === Error codes
   # [101] can't be blank 
   # [103] is invalid
   # [105] invalid access token
@@ -120,11 +198,11 @@ class PlacesController < ApplicationController
   # == Description
   # Updates a place with additional information
   # ==Resource URL
-  # /places/:id.format
+  #   /places/:id.format
   # ==Example
-  # PUT https://backend-heypal.heroku.com/places/1.json access_token=access_token&num_beds=5&description=Nam luctus feugiat
+  #   PUT https://backend-heypal.heroku.com/places/1.json access_token=access_token&num_beds=5&description=Nam luctus feugiat
   # === Parameters
-  # [:access_token] Access token
+  # [access_token] Access token
   # [title]         String,  title of the place
   # [description]   Text,    long description of the place
   # [place_type_id] Integer, ID from the PlaceType model
@@ -163,7 +241,7 @@ class PlacesController < ApplicationController
   # === Response
   # [place] Array containing the recently created place
   # 
-  # == Error codes
+  # === Error codes
   # [101] can't be blank 
   # [103] is invalid
   # [105] invalid access token
@@ -185,11 +263,11 @@ class PlacesController < ApplicationController
   # == Description
   # Deletes a place
   # ==Resource URL
-  # /places/:id.format
+  #   /places/:id.format
   # ==Example
-  # DELETE https://backend-heypal.heroku.com/places/:id.json access_token=access_token
+  #   DELETE https://backend-heypal.heroku.com/places/:id.json access_token=access_token
   # === Parameters
-  # [:access_token]
+  # [access_token]
   def destroy
     check_token
     place = Place.find(params[:id])
@@ -203,13 +281,13 @@ class PlacesController < ApplicationController
   # == Description
   # Shows a users places
   # ==Resource URL
-  # /users/:id/places.format
+  #   /users/:id/places.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/users/:id/places.json access_token=access_token&published=0
+  #   GET https://backend-heypal.heroku.com/users/:id/places.json access_token=access_token&published=0
   # === Parameters
   # [access_token]  Access token
   # [published]     Shows or hides unpublished places (shows published places by default), Boolean value
-  # Error codes
+  # === Error codes
   # [115]           no results
   def user_places
     check_token
@@ -225,16 +303,16 @@ class PlacesController < ApplicationController
   end
 
   # == Description
-  # Shows a users places
+  # Changes a place status
   # ==Resource URL
-  # /places/:id/:status.format
+  #   /places/:id/:status.format
   # ==Example
-  # GET https://backend-heypal.heroku.com/places/:id/publish.json access_token=access_token
-  # GET https://backend-heypal.heroku.com/places/:id/unpublish.json access_token=access_token
+  #   GET https://backend-heypal.heroku.com/places/:id/publish.json access_token=access_token
+  #   GET https://backend-heypal.heroku.com/places/:id/unpublish.json access_token=access_token
   # === Parameters
   # [access_token]  Access token
   # [status]        Publish status, options: publish, unpublish
-  # Error codes
+  # === Error codes
   # [106] Record not found
   # [123] not enough pictures
   # [124] description is too short

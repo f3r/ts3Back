@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.1.1'
 gem 'rack', '1.3.3'
 gem 'mysql2'
-gem 'devise', "1.4.7"
+gem 'devise', "1.4.9"
 gem 'oauth2', "0.4.1"
 gem "paperclip", "~> 2.4"
 gem "aws-s3"
@@ -13,7 +13,7 @@ gem 'redis'
 gem 'money'
 gem 'google_currency'
 gem 'dalli'               # Memcached
-gem 'meta_search'
+gem "ransack"
 gem 'will_paginate'
 
 group :assets do

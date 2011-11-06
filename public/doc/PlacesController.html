@@ -240,17 +240,14 @@
 
 <h2 id="method-i-create-label-Resource+URL">Resource URL</h2>
 
-<p>/places.format</p>
+<pre>/places.format</pre>
 
 <h2 id="method-i-create-label-Example">Example</h2>
 
-<p>POST <a
-href="https://backend-heypal.heroku.com/places.json">backend-heypal.heroku.com/places.json</a>
-access_token=access_token&amp;title=Joe’s
-Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
+<pre>POST https://backend-heypal.heroku.com/places.json access_token=access_token&amp;title=Joe's Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</pre>
 
 <h3 id="method-i-create-label-Parameters">Parameters</h3>
-<dl class="rdoc-list label-list"><dt>:access_token
+<dl class="rdoc-list label-list"><dt>access_token
 <dd>
 <p>Access token</p>
 </dd><dt>title
@@ -276,7 +273,7 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 <p>Array containing the recently created place</p>
 </dd></dl>
 
-<h2 id="method-i-create-label-Error+codes">Error codes</h2>
+<h3 id="method-i-create-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>101
 <dd>
 <p>can’t be blank</p>
@@ -291,7 +288,7 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 99</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 177</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">place</span> = { 
@@ -339,22 +336,20 @@ Apartment&amp;type_id=2&amp;num_bedrooms=3&amp;max_guests=5&amp;city_id=62</p>
 
 <h2 id="method-i-destroy-label-Resource+URL">Resource URL</h2>
 
-<p>/places/:id.format</p>
+<pre>/places/:id.format</pre>
 
 <h2 id="method-i-destroy-label-Example">Example</h2>
 
-<p>DELETE <a
-href="https://backend-heypal.heroku.com/places/:id.json">backend-heypal.heroku.com/places/:id.json</a>
-access_token=access_token</p>
+<pre>DELETE https://backend-heypal.heroku.com/places/:id.json access_token=access_token</pre>
 
 <h3 id="method-i-destroy-label-Parameters">Parameters</h3>
-<dl class="rdoc-list label-list"><dt>:access_token
+<dl class="rdoc-list label-list"><dt>access_token
 <dd></dd></dl>
           
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 193</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 271</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -387,19 +382,16 @@ access_token=access_token</p>
           
           <h2 id="method-i-publish-label-Description">Description</h2>
 
-<p>Shows a users places</p>
+<p>Changes a place status</p>
 
 <h2 id="method-i-publish-label-Resource+URL">Resource URL</h2>
 
-<p>/places/:id/:status.format</p>
+<pre>/places/:id/:status.format</pre>
 
 <h2 id="method-i-publish-label-Example">Example</h2>
 
-<p>GET <a
-href="https://backend-heypal.heroku.com/places/:id/publish.json">backend-heypal.heroku.com/places/:id/publish.json</a>
-access_token=access_token GET <a
-href="https://backend-heypal.heroku.com/places/:id/unpublish.json">backend-heypal.heroku.com/places/:id/unpublish.json</a>
-access_token=access_token</p>
+<pre>GET https://backend-heypal.heroku.com/places/:id/publish.json access_token=access_token
+GET https://backend-heypal.heroku.com/places/:id/unpublish.json access_token=access_token</pre>
 
 <h3 id="method-i-publish-label-Parameters">Parameters</h3>
 <dl class="rdoc-list label-list"><dt>access_token
@@ -410,7 +402,7 @@ access_token=access_token</p>
 <p>Publish status, options: publish, unpublish</p>
 </dd></dl>
 
-<p>Error codes</p>
+<h3 id="method-i-publish-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>106
 <dd>
 <p>Record not found</p>
@@ -437,7 +429,7 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="publish-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 245</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 323</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">publish</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;publish&quot;</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;unpublish&quot;</span>
     <span class="ruby-identifier">method</span> = <span class="ruby-node">&quot;#{params[:status]}!&quot;</span> 
@@ -487,34 +479,164 @@ access_token=access_token</p>
 
 <h2 id="method-i-search-label-Resource+URL">Resource URL</h2>
 
-<p>/places/search.format</p>
+<pre>/places/search.format</pre>
 
 <h2 id="method-i-search-label-Example">Example</h2>
 
-<p>GET <a
-href="https://backend-heypal.heroku.com/places/search.json">backend-heypal.heroku.com/places/search.json</a></p>
+<pre>GET https://backend-heypal.heroku.com/places/search.json q[country_code_eq]=AU&amp;q[num_bedrooms_lt]=5&amp;q[num_bedrooms_gt]=2&amp;page=1[m]=and</pre>
+
+<h3 id="method-i-search-label-Matching+options">Matching options</h3>
+<dl class="rdoc-list label-list"><dt>eq
+<dd>
+<p>Equal</p>
+
+<pre>Ex: q[num_bedrooms_eq]=2</pre>
+</dd><dt>not_eq
+<dd>
+<p>Not equal</p>
+
+<pre>Ex: q[country_code_not_eq]=PH</pre>
+</dd><dt>gt
+<dd>
+<p>Greater than</p>
+
+<pre>Ex: q[num_bedrooms_gt]=4</pre>
+</dd><dt>lt
+<dd>
+<p>Lower than</p>
+
+<pre>Ex: q[num_bedrooms_lt]=2</pre>
+</dd><dt>gteq
+<dd>
+<p>Greater than or equal</p>
+
+<pre>Ex: q[num_bedrooms_gteq]=4</pre>
+</dd><dt>lteq
+<dd>
+<p>Lower than or equal</p>
+
+<pre>Ex: q[num_bedrooms_lteq]=4</pre>
+</dd><dt>cont
+<dd>
+<p>Contains</p>
+
+<pre>Ex: q[title_cont]=House</pre>
+</dd><dt>true
+<dd>
+<p>True, 1 or 0</p>
+
+<pre>Ex: q[amenities_washer_true]=1</pre>
+</dd><dt>false
+<dd>
+<p>False, 1 or 0</p>
+
+<pre>Ex: q[amenities_tv_false]=1</pre>
+</dd><dt>present
+<dd>
+<p>Not empty, 1 or 0</p>
+
+<pre>Ex: q[description_present]=1</pre>
+</dd><dt>blank
+<dd>
+<p>Empty, 1 or 0</p>
+
+<pre>Ex: q[description_present]=1</pre>
+</dd></dl>
 
 <h3 id="method-i-search-label-Parameters">Parameters</h3>
-<dl class="rdoc-list label-list"><dt>city_id
-<dd></dd><dt>limit
-<dd></dd></dl>
+
+<p>The search parameters are received as an array named “q”, the paramater
+itself is composed by the name of the column and the matching option. Do
+not use this search paramaters for published status.</p>
+
+<pre>Ex: q[max_guests_eq]</pre>
+<dl class="rdoc-list label-list"><dt>page
+<dd>
+<p>Page number</p>
+
+<pre>Ex: page=2</pre>
+</dd><dt>per_page
+<dd>
+<p>Results per page. Default is 20</p>
+
+<pre>Ex: per_page=10</pre>
+</dd><dt>m
+<dd>
+<p>Used to match all the parameters or any. Options: and, or.</p>
+
+<pre>Ex: m=or</pre>
+</dd><dt>status
+<dd>
+<p>Defaults to published, Options: published, not_published, all</p>
+
+<pre>Ex: status=all</pre>
+</dd></dl>
+
+<h3 id="method-i-search-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>results
+<dd>
+<p>Total number of results. Used for pagination</p>
+</dd><dt>current_page
+<dd>
+<p>Current page number. Used for pagination</p>
+</dd><dt>per_page
+<dd>
+<p>Results showed per page. Used for pagination</p>
+</dd><dt>total_pages
+<dd>
+<p>Total number of pages. Used for pagination</p>
+</dd><dt>places
+<dd>
+<p>Array containing the places</p>
+</dd></dl>
+
+<h3 id="method-i-search-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>115
+<dd>
+<p>no results</p>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="search-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 50</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 103</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">search</span>
-  <span class="ruby-comment"># @places = Place.where(:city_id =&gt; params[:city_id])</span>
-  <span class="ruby-comment"># @places = @places.limit(params[:limit]) if params[:limit]</span>
-  <span class="ruby-ivar">@places</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:search</span>])
-  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@places</span>.<span class="ruby-identifier">blank?</span>
-    <span class="ruby-comment"># filtered_places = filter_fields(@places, @fields, { :additional_fields =&gt; { </span>
-    <span class="ruby-comment">#   :user =&gt; @user_fields,</span>
-    <span class="ruby-comment">#   :place_type =&gt; @place_type_fields } })</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:places</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@places</span>})
+  <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:per_page</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:per_page</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">per_page</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">per_page</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>].<span class="ruby-identifier">blank?</span>
+    <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;all&quot;</span>
+      <span class="ruby-ivar">@search</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>])
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;published&quot;</span>
+      <span class="ruby-ivar">@search</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:published</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>).<span class="ruby-identifier">search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>])
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;not_published&quot;</span>
+      <span class="ruby-ivar">@search</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:published</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>).<span class="ruby-identifier">search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>])
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@search</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:published</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>).<span class="ruby-identifier">search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>])
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">places</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">result</span>(<span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+    <span class="ruby-identifier">places_paginated</span> = <span class="ruby-identifier">places</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">per_page</span>)
+
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">places_paginated</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-identifier">filtered_places</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-identifier">places_paginated</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
+        <span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user_fields</span>,
+        <span class="ruby-value">:place_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@place_type_fields</span> }
+      })
+      <span class="ruby-identifier">response</span> = {
+        <span class="ruby-value">:places</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filtered_places</span>, 
+        <span class="ruby-value">:results</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">places</span>.<span class="ruby-identifier">count</span>, 
+        <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">per_page</span>, 
+        <span class="ruby-value">:current_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], 
+        <span class="ruby-value">:total_pages</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">places</span>.<span class="ruby-identifier">count</span><span class="ruby-operator">/</span><span class="ruby-identifier">per_page</span>.<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">ceil</span>
+      }
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">response</span> = {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:places</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}}
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, <span class="ruby-identifier">response</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:places</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}})
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:query</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">101</span>]}})
   <span class="ruby-keyword">end</span>
+
 <span class="ruby-keyword">end</span></pre>
           </div><!-- search-source -->
           
@@ -543,15 +665,14 @@ href="https://backend-heypal.heroku.com/places/search.json">backend-heypal.herok
 
 <h2 id="method-i-show-label-Resource+URL">Resource URL</h2>
 
-<p>/places/:id.format</p>
+<pre>/places/:id.format</pre>
 
 <h2 id="method-i-show-label-Example">Example</h2>
 
-<p>GET <a
-href="https://backend-heypal.heroku.com/places/id.json">backend-heypal.heroku.com/places/id.json</a></p>
+<pre>GET https://backend-heypal.heroku.com/places/id.json</pre>
 
 <h3 id="method-i-show-label-Parameters">Parameters</h3>
-<dl class="rdoc-list label-list"><dt>:id
+<dl class="rdoc-list label-list"><dt>id
 <dd>
 <p>if of the place</p>
 </dd></dl>
@@ -559,7 +680,7 @@ href="https://backend-heypal.heroku.com/places/id.json">backend-heypal.heroku.co
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 72</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 150</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">place</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
@@ -594,16 +715,14 @@ href="https://backend-heypal.heroku.com/places/id.json">backend-heypal.heroku.co
 
 <h2 id="method-i-update-label-Resource+URL">Resource URL</h2>
 
-<p>/places/:id.format</p>
+<pre>/places/:id.format</pre>
 
 <h2 id="method-i-update-label-Example">Example</h2>
 
-<p>PUT <a
-href="https://backend-heypal.heroku.com/places/1.json">backend-heypal.heroku.com/places/1.json</a>
-access_token=access_token&amp;num_beds=5&amp;description=Nam luctus feugiat</p>
+<pre>PUT https://backend-heypal.heroku.com/places/1.json access_token=access_token&amp;num_beds=5&amp;description=Nam luctus feugiat</pre>
 
 <h3 id="method-i-update-label-Parameters">Parameters</h3>
-<dl class="rdoc-list label-list"><dt>:access_token
+<dl class="rdoc-list label-list"><dt>access_token
 <dd>
 <p>Access token</p>
 </dd><dt>title
@@ -705,7 +824,7 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
 <p>Array containing the recently created place</p>
 </dd></dl>
 
-<h2 id="method-i-update-label-Error+codes">Error codes</h2>
+<h3 id="method-i-update-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>101
 <dd>
 <p>can’t be blank</p>
@@ -723,7 +842,7 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 171</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 249</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -764,13 +883,11 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
 
 <h2 id="method-i-user_places-label-Resource+URL">Resource URL</h2>
 
-<p>/users/:id/places.format</p>
+<pre>/users/:id/places.format</pre>
 
 <h2 id="method-i-user_places-label-Example">Example</h2>
 
-<p>GET <a
-href="https://backend-heypal.heroku.com/users/:id/places.json">backend-heypal.heroku.com/users/:id/places.json</a>
-access_token=access_token&amp;published=0</p>
+<pre>GET https://backend-heypal.heroku.com/users/:id/places.json access_token=access_token&amp;published=0</pre>
 
 <h3 id="method-i-user_places-label-Parameters">Parameters</h3>
 <dl class="rdoc-list label-list"><dt>access_token
@@ -782,7 +899,7 @@ access_token=access_token&amp;published=0</p>
 Boolean value</p>
 </dd></dl>
 
-<p>Error codes</p>
+<h3 id="method-i-user_places-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>115
 <dd>
 <p>no results</p>
@@ -791,7 +908,7 @@ Boolean value</p>
 
           
           <div class="method-source-code" id="user_places-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 214</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 292</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">user_places</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-ivar">@places</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">places</span>

@@ -5,7 +5,7 @@ Money.default_bank = Money::Bank::GoogleCurrency.new
 class Place < ActiveRecord::Base
   serialize :photos
 
-  validates_presence_of [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id], :message => "101"
+  validates_presence_of [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id, :user_id], :message => "101"
   validates_inclusion_of :size_unit, :in => ["meters", "feet"], :allow_nil => true, :if => :size?, :message => "129"
 
   validates_numericality_of [
@@ -35,14 +35,15 @@ class Place < ActiveRecord::Base
   has_many   :availabilities
   has_many   :comments
 
-  before_create :update_location_fields
-  before_update :save_amenities, 
+  before_save :save_amenities, 
                 :convert_prices_in_usd_cents, 
                 :convert_json_photos_to_array, 
                 :update_location_fields, 
                 :update_size_fields
   validate      :validate_publishing
   after_commit  :delete_cache
+
+  self.per_page = 20
 
   def publish!
     self.published = true

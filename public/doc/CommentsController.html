@@ -70,6 +70,8 @@
 
   <ul class="link-list">
     
+    <li><a href="#method-c-new">::new</a>
+    
     <li><a href="#method-i-create">#create</a>
     
     <li><a href="#method-i-destroy">#destroy</a>
@@ -145,6 +147,42 @@
 
     <!-- Methods -->
     
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
+  <span class="ruby-ivar">@fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:user_id</span>, <span class="ruby-value">:place_id</span>, <span class="ruby-value">:comment</span>, <span class="ruby-value">:owner</span>, <span class="ruby-value">:created_at</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
 
@@ -190,7 +228,7 @@ access_token=access_token&amp;comment=my+comment+here</p>
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 33</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -201,7 +239,7 @@ access_token=access_token&amp;comment=my+comment+here</p>
     <span class="ruby-value">:owner</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">owner</span>
     )
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:comment</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@comment</span>} )
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:comment</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@comment</span>,<span class="ruby-ivar">@fields</span>)} )
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>)})
   <span class="ruby-keyword">end</span>
@@ -248,10 +286,10 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 78</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">check_token</span>
-  <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-ivar">@comment</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">destroy</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
   <span class="ruby-keyword">else</span>
@@ -299,11 +337,11 @@ href="https://backend-heypal.heroku.com/places/123/comments.json">backend-heypal
 
           
           <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 13</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-ivar">@comments</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]).<span class="ruby-identifier">comments</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comments</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:comments</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@comments</span>})
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:comments</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@comments</span>,<span class="ruby-ivar">@fields</span>)})
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:comments</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}})
   <span class="ruby-keyword">end</span>
@@ -359,12 +397,12 @@ access_token=access_token&amp;comment=new+comment</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 60</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
-  <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-ivar">@comment</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-value">:comment</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>])
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:comment</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@comment</span>})  
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:comment</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@comment</span>,<span class="ruby-ivar">@fields</span>)})  
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>)})
   <span class="ruby-keyword">end</span>

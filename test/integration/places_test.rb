@@ -196,4 +196,35 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @place.title, json['places'][0]['title']
   end
   
+  should "get no search results" do
+    get "/places/search.json", { :q => { :size_sqm_gt => 10000 }, :status => "published" }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert (json['err']['places'].include? 115)
+  end
+
+  should "get no results with empty query" do
+    get "/places/search.json"
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert (json['err']['query'].include? 101)
+  end
+
+  should "get search results" do
+    get "/places/search.json", {:q => {:num_bedrooms_eq => @place.num_bedrooms}, :status => "all"}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_not_nil json['places']
+    assert_operator json['results'], :>, 0
+  end
+  
 end
