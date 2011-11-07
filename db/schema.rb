@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111104202551) do
+ActiveRecord::Schema.define(:version => 20111107224817) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20111104202551) do
     t.string "state"
     t.string "country"
     t.string "country_code"
+    t.string "cached_complete_name"
   end
 
   add_index "cities", ["country"], :name => "index_cities_on_country"

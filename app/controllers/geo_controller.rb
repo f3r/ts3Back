@@ -90,4 +90,25 @@ class GeoController < ApplicationController
     return_message(200, :ok, {:city => @city})
   end
 
+  # == Description
+  # Returns the city id and name containing state and country, used for ajax search
+  # ==Resource URL
+  # /geo/cities/search.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/geo/cities/search.json query=manil
+  # === Parameters
+  # [query]
+  # === Error codes
+  # [115] No results
+  def city_search
+    if !params[:q].blank?
+      @cities = Rails.cache.fetch('city_search_' + params[:query].parameterize) {
+        City.where(['name LIKE ?', "#{params[:query]}%"]).select("id as city_id, cached_complete_name as name").limit(10).all
+      }
+      return_message(200, :ok, {:cities => @cities}) if !@cities.empty?
+    else
+      return_message(200, :ok, {:err => {:cities => [115]}})
+    end
+  end
+
 end
