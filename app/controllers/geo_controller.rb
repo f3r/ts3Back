@@ -101,7 +101,7 @@ class GeoController < ApplicationController
   # === Error codes
   # [115] No results
   def city_search
-    if !params[:q].blank?
+    if !params[:query].blank?
       @cities = Rails.cache.fetch('city_search_' + params[:query].parameterize) {
         City.where(['name LIKE ?', "#{params[:query]}%"]).select("id as city_id, cached_complete_name as name").limit(10).all
       }
