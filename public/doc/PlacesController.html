@@ -199,6 +199,10 @@
     <span class="ruby-value">:amenities_pets_allowed</span>,<span class="ruby-value">:amenities_pool</span>,<span class="ruby-value">:amenities_smoking_allowed</span>,<span class="ruby-value">:amenities_suitable_events</span>,
     <span class="ruby-value">:amenities_tennis</span>,<span class="ruby-value">:amenities_tv</span>,<span class="ruby-value">:amenities_washer</span>  
   ]
+  
+  <span class="ruby-ivar">@search_fields</span> = [
+    <span class="ruby-value">:id</span>, <span class="ruby-value">:title</span>, <span class="ruby-value">:size_sqf</span>, <span class="ruby-value">:size_sqm</span>, <span class="ruby-value">:reviews_overall</span>, <span class="ruby-value">:price_per_night_usd</span>, <span class="ruby-value">:price_per_week_usd</span>, <span class="ruby-value">:price_per_month_usd</span>
+  ]
 
   <span class="ruby-ivar">@fields</span> = <span class="ruby-ivar">@fields</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@amenities</span>
 
@@ -288,7 +292,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 177</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 203</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">place</span> = { 
@@ -349,7 +353,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 271</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 297</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -429,7 +433,7 @@ GET https://backend-heypal.heroku.com/places/:id/unpublish.json access_token=acc
 
           
           <div class="method-source-code" id="publish-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 323</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 349</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">publish</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;publish&quot;</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;unpublish&quot;</span>
     <span class="ruby-identifier">method</span> = <span class="ruby-node">&quot;#{params[:status]}!&quot;</span> 
@@ -570,6 +574,12 @@ not use this search paramaters for published status.</p>
 <p>Defaults to published, Options: published, not_published, all</p>
 
 <pre>Ex: status=all</pre>
+</dd><dt>sort
+<dd>
+<p>Sorting options: name, price_lowest, price_highest, price_size_lowest,
+price_size_highest, reviews</p>
+
+<pre>Ex: sort=price_low</pre>
 </dd></dl>
 
 <h3 id="method-i-search-label-Response">Response</h3>
@@ -599,11 +609,12 @@ not use this search paramaters for published status.</p>
 
           
           <div class="method-source-code" id="search-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 103</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 110</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">search</span>
   <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:per_page</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:per_page</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">per_page</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">per_page</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>].<span class="ruby-identifier">blank?</span>
+
     <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>]
     <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;all&quot;</span>
       <span class="ruby-ivar">@search</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>])
@@ -614,11 +625,29 @@ not use this search paramaters for published status.</p>
     <span class="ruby-keyword">else</span>
       <span class="ruby-ivar">@search</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:published</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>).<span class="ruby-identifier">search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:q</span>])
     <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;name&quot;</span>
+      <span class="ruby-identifier">sorting</span> = [<span class="ruby-string">&quot;title asc&quot;</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;price_lowest&quot;</span>
+      <span class="ruby-identifier">sorting</span> = [<span class="ruby-string">&quot;price_per_night_usd asc&quot;</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;price_highest&quot;</span>
+      <span class="ruby-identifier">sorting</span> = [<span class="ruby-string">&quot;price_per_night_usd desc&quot;</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;price_size_lowest&quot;</span>
+      <span class="ruby-identifier">sorting</span> = [<span class="ruby-string">&quot;price_sqf_usd desc&quot;</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;price_size_highest&quot;</span>
+      <span class="ruby-identifier">sorting</span> = [<span class="ruby-string">&quot;price_sqf_usd asc&quot;</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;reviews_overall&quot;</span>
+      <span class="ruby-identifier">sorting</span> = [<span class="ruby-string">&quot;reviews_overall desc&quot;</span>]
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">sorts</span> = <span class="ruby-identifier">sorting</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">sorting</span>
+
     <span class="ruby-identifier">places</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">result</span>(<span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
     <span class="ruby-identifier">places_paginated</span> = <span class="ruby-identifier">places</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">per_page</span>)
 
     <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">places_paginated</span>.<span class="ruby-identifier">blank?</span>
-      <span class="ruby-identifier">filtered_places</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-identifier">places_paginated</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
+      <span class="ruby-identifier">filtered_places</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-identifier">places_paginated</span>, <span class="ruby-ivar">@search_fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
         <span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user_fields</span>,
         <span class="ruby-value">:place_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@place_type_fields</span> }
       })
@@ -680,7 +709,7 @@ not use this search paramaters for published status.</p>
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 150</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 176</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">place</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
@@ -842,7 +871,7 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 249</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 275</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -908,7 +937,7 @@ Boolean value</p>
 
           
           <div class="method-source-code" id="user_places-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 292</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 318</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">user_places</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-ivar">@places</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">places</span>

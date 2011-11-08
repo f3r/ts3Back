@@ -70,6 +70,8 @@
 
   <ul class="link-list">
     
+    <li><a href="#method-i-city_search">#city_search</a>
+    
     <li><a href="#method-i-get_cities">#get_cities</a>
     
     <li><a href="#method-i-get_city">#get_city</a>
@@ -147,6 +149,66 @@
     
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-city_search" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">city_search</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-city_search-label-Description">Description</h2>
+
+<p>Returns the city id and name containing state and country, used for ajax
+search</p>
+
+<h2 id="method-i-city_search-label-Resource+URL">Resource URL</h2>
+
+<p>/geo/cities/search.format</p>
+
+<h2 id="method-i-city_search-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/geo/cities/search.json">backend-heypal.heroku.com/geo/cities/search.json</a>
+query=manil</p>
+
+<h3 id="method-i-city_search-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>query
+<dd>
+<h3 id="method-i-city_search-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>115
+<dd>
+<p>No results</p>
+</dd></dl>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="city_search-source">
+            <pre><span class="ruby-comment"># File app/controllers/geo_controller.rb, line 103</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">city_search</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>].<span class="ruby-identifier">blank?</span>
+    <span class="ruby-ivar">@cities</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">'city_search_'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>].<span class="ruby-identifier">parameterize</span>) {
+      <span class="ruby-constant">City</span>.<span class="ruby-identifier">where</span>([<span class="ruby-string">'name LIKE ?'</span>, <span class="ruby-node">&quot;#{params[:query]}%&quot;</span>]).<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;id as city_id, cached_complete_name as name&quot;</span>).<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">all</span>
+    }
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:cities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@cities</span>}) <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@cities</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:cities</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- city_search-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- city_search-method -->
 
     
       <div id="method-i-get_cities" class="method-detail ">
