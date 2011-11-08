@@ -73,5 +73,11 @@ HeyPalBackEnd::Application.routes.draw do
     get     "users/:id",              :to => "users#show"
     get     "users",                  :to => "users#show"
     put     "users",                  :to => "users#update"
+    ##############################################################################
+    # NOTIFICATIONS
+    ##############################################################################
+    get     "notifications",           :to => "notifications#index"
+    get     "notifications/unread",    :to => "notifications#unread"
+    get     "notifications/markAsRead",:to => "notifications#mark_as_read"
   end
 end
