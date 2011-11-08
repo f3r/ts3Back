@@ -4,4 +4,11 @@ module Exceptions
       "Unauthorized Access"
     end
   end
+
+  class NotActivated < StandardError
+    def message
+      "Not activated"
+    end
+  end
+
 end
