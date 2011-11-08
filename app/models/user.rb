@@ -87,6 +87,10 @@ class User < ActiveRecord::Base
     now = Time.now.utc.to_date
     now.year - birthdate.year - (birthdate.to_date.change(:year => now.year) > now ? 1 : 0)
   end
+  
+  def activated?
+    !self.confirmed_at.blank?
+  end
 
   def import_facebook_friends  
     begin

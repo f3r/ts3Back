@@ -70,8 +70,6 @@
 
   <ul class="link-list">
     
-    <li><a href="#method-i-authenticated-3F">#authenticated?</a>
-    
     <li><a href="#method-i-check_token">#check_token</a>
     
     <li><a href="#method-i-current_user">#current_user</a>
@@ -149,36 +147,6 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
-      <div id="method-i-authenticated-3F" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">authenticated?</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="authenticated-3F-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 10</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">authenticated?</span>
-  <span class="ruby-identifier">params</span>[<span class="ruby-value">:access_token</span>] <span class="ruby-keyword">and</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_for_token_authentication</span>(<span class="ruby-value">:auth_token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:access_token</span>])
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- authenticated-3F-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- authenticated-3F-method -->
-
-    
       <div id="method-i-check_token" class="method-detail ">
         
         <div class="method-heading">
@@ -195,9 +163,15 @@
 
           
           <div class="method-source-code" id="check_token-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 18</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_token</span>
-  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exceptions</span><span class="ruby-operator">::</span><span class="ruby-constant">UnauthorizedAccess</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">authenticated?</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:access_token</span>]
+    <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_for_token_authentication</span>(<span class="ruby-value">:auth_token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:access_token</span>])
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exceptions</span><span class="ruby-operator">::</span><span class="ruby-constant">NotActivated</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user</span>.<span class="ruby-identifier">activated?</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exceptions</span><span class="ruby-operator">::</span><span class="ruby-constant">UnauthorizedAccess</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exceptions</span><span class="ruby-operator">::</span><span class="ruby-constant">UnauthorizedAccess</span>
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- check_token-source -->
           
@@ -225,7 +199,7 @@
 
           
           <div class="method-source-code" id="current_user-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 14</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">current_user</span>
   <span class="ruby-identifier">warden</span>.<span class="ruby-identifier">user</span> <span class="ruby-operator">||</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_for_token_authentication</span>(<span class="ruby-value">:auth_token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:access_token</span>])
 <span class="ruby-keyword">end</span></pre>
@@ -259,7 +233,7 @@ or :fail) Fields = Array of key/value fields passed in the message</p>
 
           
           <div class="method-source-code" id="return_message-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 26</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">return_message</span>(<span class="ruby-identifier">status</span>,<span class="ruby-identifier">stat</span>,<span class="ruby-identifier">fields</span>={})
   <span class="ruby-identifier">response</span> = {}
   <span class="ruby-identifier">response</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-value">:stat</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat</span>)

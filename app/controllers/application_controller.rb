@@ -1,22 +1,25 @@
 include GeneralHelper
 class ApplicationController < ActionController::Base
   rescue_from Exceptions::UnauthorizedAccess, :with => :unauthorized_access
+  rescue_from Exceptions::NotActivated, :with => :not_activated
   rescue_from ActiveRecord::RecordNotFound, :with => :not_found
   rescue_from ActiveRecord::RecordInvalid, :with => :not_found
   rescue_from ActionController::UnknownAction, :with => :not_found
 
   protect_from_forgery
 
-  def authenticated?
-    params[:access_token] and User.find_for_token_authentication(:auth_token => params[:access_token])
-  end
-
   def current_user
     warden.user || User.find_for_token_authentication(:auth_token => params[:access_token])
   end
   
   def check_token
-    raise Exceptions::UnauthorizedAccess unless authenticated?
+    if params[:access_token]
+      user = User.find_for_token_authentication(:auth_token => params[:access_token])
+      raise Exceptions::NotActivated if user && !user.activated?
+      raise Exceptions::UnauthorizedAccess if !user
+    else
+      raise Exceptions::UnauthorizedAccess
+    end
   end
   
   # Status = HTTP Status code (ie. 200)
@@ -38,25 +41,15 @@ class ApplicationController < ActionController::Base
   private
 
   def unauthorized_access
-    respond_with do |format|
-      format.any(:xml, :json) { 
-        render :status => 401, 
-        request.format.to_sym => format_response({ 
-          :stat => "fail", 
-          :err => {:access_token => [105]}},
-          request.format.to_sym) }
-    end
+    return_message(401,:fail,{:err => {:access_token => [105]}})
+  end
+
+  def not_activated
+    return_message(401,:fail,{:err => {:user => [130]}})
   end
 
   def not_found
-    respond_with do |format|
-      format.any(:xml, :json) { 
-        render :status => 404, 
-        request.format.to_sym => format_response({ 
-          :stat => "fail", 
-          :err => {:record => [106]} },
-          request.format.to_sym) }
-    end
+    return_message(404,:fail,{:err => {:record => [106]}})
   end
 
 end

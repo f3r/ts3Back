@@ -35,3 +35,7 @@ end
 group :production do
   gem 'rack-ssl-enforcer'
 end
+
+group :development do
+  gem 'hirb'
+end

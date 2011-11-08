@@ -31,6 +31,7 @@
 [127] no currency
 [128] no security deposit
 [129] invalid size unit
+[130] not activated
 
 #== Notifications
 # Type - Event - Parameters - Sample Message
