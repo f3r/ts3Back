@@ -27,6 +27,10 @@ class PlacesController < ApplicationController
       :amenities_pets_allowed,:amenities_pool,:amenities_smoking_allowed,:amenities_suitable_events,
       :amenities_tennis,:amenities_tv,:amenities_washer  
     ]
+    
+    @search_fields = [
+      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
+    ]
 
     @fields = @fields + @amenities
 
@@ -92,6 +96,9 @@ class PlacesController < ApplicationController
   # [status]
   #   Defaults to published, Options: published, not_published, all
   #     Ex: status=all
+  # [sort]
+  #   Sorting options: name, price_lowest, price_highest, price_size_lowest, price_size_highest, reviews
+  #     Ex: sort=price_low
   # === Response
   # [results] Total number of results. Used for pagination
   # [current_page] Current page number. Used for pagination
@@ -104,6 +111,7 @@ class PlacesController < ApplicationController
     !params[:per_page].blank? ? per_page = params[:per_page] : per_page = Place.per_page
 
     if !params[:q].blank?
+
       case params[:status]
       when "all"
         @search = Place.search(params[:q])
@@ -114,11 +122,29 @@ class PlacesController < ApplicationController
       else
         @search = Place.where(:published => true).search(params[:q])
       end
+      
+      case params[:sort]
+      when "name"
+        sorting = ["title asc"]
+      when "price_lowest"
+        sorting = ["price_per_night_usd asc"]
+      when "price_highest"
+        sorting = ["price_per_night_usd desc"]
+      when "price_size_lowest"
+        sorting = ["price_sqf_usd desc"]
+      when "price_size_highest"
+        sorting = ["price_sqf_usd asc"]
+      when "reviews_overall"
+        sorting = ["reviews_overall desc"]
+      end
+
+      @search.sorts = sorting if sorting
+
       places = @search.result(:distinct => true)
       places_paginated = places.paginate(:page => params[:page], :per_page => per_page)
 
       if !places_paginated.blank?
-        filtered_places = filter_fields(places_paginated, @fields, { :additional_fields => { 
+        filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
           :user => @user_fields,
           :place_type => @place_type_fields }
         })

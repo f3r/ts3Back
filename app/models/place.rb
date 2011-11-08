@@ -39,7 +39,8 @@ class Place < ActiveRecord::Base
                 :convert_prices_in_usd_cents, 
                 :convert_json_photos_to_array, 
                 :update_location_fields, 
-                :update_size_fields
+                :update_size_fields,
+                :update_price_sqf_field
   validate      :validate_publishing
   after_commit  :delete_cache
 
@@ -107,6 +108,20 @@ class Place < ActiveRecord::Base
       self.size_sqm = nil
       self.size_sqf = nil
       self.size_unit = nil
+    end
+  end
+  
+  def update_price_sqf_field
+    if (self.size_sqf_changed? && !self.size_sqf.blank?) or (price_per_month_usd_changed? or price_per_week_usd_changed? or price_per_night_changed?)
+      if !price_per_night_usd.blank?
+        price = price_per_night_usd
+      elsif price_per_night_usd.blank? && price_per_month_usd.blank? && !price_per_week_usd.blank?
+        price = price_per_week_usd / 7
+      elsif price_per_night_usd.blank? && price_per_week_usd.blank? && !price_per_month_usd.blank?
+        price = price_per_month_usd / 30
+      end
+      price_sqf_usd = price / size_sqf rescue nil
+      self.price_sqf_usd = price_sqf_usd
     end
   end
   

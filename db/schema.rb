@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111107224817) do
+ActiveRecord::Schema.define(:version => 20111108171322) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(:version => 20111107224817) do
     t.string   "country_name"
     t.string   "state_name"
     t.string   "country_code",               :limit => 2
+    t.float    "price_sqf_usd"
   end
 
   add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"
