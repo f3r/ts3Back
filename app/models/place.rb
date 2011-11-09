@@ -25,6 +25,8 @@ class Place < ActiveRecord::Base
     :minimum_stay_days,
     :maximum_stay_days
   ], :allow_nil => true, :message => "118"
+  
+  validates_numericality_of :city_id, :message => "118"
 
   attr_accessor :amenities, :location, :terms_of_offer
   attr_protected :published
