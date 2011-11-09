@@ -3,6 +3,8 @@ require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
 class Place < ActiveRecord::Base
+  geocoded_by :full_address, :latitude  => :lat, :longitude => :lon
+  
   serialize :photos
 
   validates_presence_of [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id, :user_id], :message => "101"
@@ -37,12 +39,13 @@ class Place < ActiveRecord::Base
   has_many   :availabilities
   has_many   :comments
 
-  before_save :save_amenities, 
+  before_save   :save_amenities, 
                 :convert_prices_in_usd_cents, 
                 :convert_json_photos_to_array, 
                 :update_location_fields, 
                 :update_size_fields,
-                :update_price_sqf_field
+                :update_price_sqf_field,
+                :geocode
   validate      :validate_publishing
   after_commit  :delete_cache
 
@@ -56,6 +59,10 @@ class Place < ActiveRecord::Base
   def unpublish!
     self.published = false
     self.save
+  end
+  
+  def full_address
+    [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
   end
 
   private

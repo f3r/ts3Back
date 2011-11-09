@@ -15,6 +15,7 @@ gem 'google_currency'
 gem 'dalli'               # Memcached
 gem "ransack"
 gem 'will_paginate'
+gem 'geocoder'
 
 group :assets do
   gem 'sass-rails', "  ~> 3.1.0"
