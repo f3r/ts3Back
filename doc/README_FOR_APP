@@ -32,6 +32,8 @@
 [128] no security deposit
 [129] invalid size unit
 [130] not activated
+[131] invalid json
+[132] invalid city (not on the cities table)
 
 #== Notifications
 # Type - Event - Parameters - Sample Message

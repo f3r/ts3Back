@@ -41,12 +41,12 @@ class Place < ActiveRecord::Base
 
   before_save   :save_amenities, 
                 :convert_prices_in_usd_cents, 
-                :convert_json_photos_to_array, 
-                :update_location_fields, 
                 :update_size_fields,
                 :update_price_sqf_field,
                 :geocode
-  validate      :validate_publishing
+  validate      :validate_publishing,
+                :update_location_fields, 
+                :convert_json_photos_to_array
   after_commit  :delete_cache
 
   self.per_page = 20
@@ -72,7 +72,11 @@ class Place < ActiveRecord::Base
   end
   
   def convert_json_photos_to_array
-    self.photos = ActiveSupport::JSON.decode(self.photos) if photos_changed?
+    begin
+      self.photos = ActiveSupport::JSON.decode(self.photos) if photos_changed? && !self.photos.blank?
+    rescue Exception
+      errors.add(:place, "131")
+    end
   end
   
   def save_amenities
@@ -94,11 +98,13 @@ class Place < ActiveRecord::Base
   end
   
   def update_location_fields
-    if self.city_id_changed?
+    if self.city_id_changed? && self.city
       self.city_name = self.city.name
       self.state_name = self.city.state
       self.country_name = self.city.country
       self.country_code = self.city.country_code
+    elsif self.city.blank?
+      errors.add(:city_id, "132")
     end
   end
   
@@ -121,13 +127,9 @@ class Place < ActiveRecord::Base
   end
   
   def update_price_sqf_field
-    if (self.size_sqf_changed? && !self.size_sqf.blank?) or (price_per_month_usd_changed? or price_per_week_usd_changed? or price_per_night_changed?)
+    if (self.size_sqf_changed? && !self.size_sqf.blank?) or price_per_night_changed?
       if !price_per_night_usd.blank?
         price = price_per_night_usd
-      elsif price_per_night_usd.blank? && price_per_month_usd.blank? && !price_per_week_usd.blank?
-        price = price_per_week_usd / 7
-      elsif price_per_night_usd.blank? && price_per_week_usd.blank? && !price_per_month_usd.blank?
-        price = price_per_month_usd / 30
       end
       price_sqf_usd = price / size_sqf rescue nil
       self.price_sqf_usd = price_sqf_usd
@@ -140,7 +142,7 @@ class Place < ActiveRecord::Base
       errors.add(:publish, "123") if self.photos.blank? or self.photos.count < 1 # 1 picture
       errors.add(:publish, "124") if self.description.blank? or self.description.split.size < 5 # 5 words
       errors.add(:publish, "125") if self.availabilities.blank? or self.availabilities.count < 1 # at least one date
-      errors.add(:publish, "126") if self.price_per_night.blank? && self.price_per_week.blank? && self.price_per_month.blank?
+      errors.add(:publish, "126") if self.price_per_night.blank?
       errors.add(:publish, "127") if self.currency.blank?
       errors.add(:publish, "128") if self.price_security_deposit.blank?
     end
