@@ -92,28 +92,6 @@ class User < ActiveRecord::Base
     !self.confirmed_at.blank?
   end
 
-  def import_facebook_friends  
-    begin
-      authentication = self.authentications.where(:provider => "facebook").first
-      if authentication
-        client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => FB[:app_url])
-        facebook = OAuth2::AccessToken.new(client, authentication.token)
-        friends  = JSON.parse(facebook.get('/me/friends'))
-        if friends
-          # Update the REDIS information: delete all and create one by one... sigh
-          REDIS.multi do
-            REDIS.del(self.redis_key(:friend))
-            friends['data'].each { |friend|
-              REDIS.sadd(self.redis_key(:friend), friend['id'])
-            }
-          end
-        end
-      end
-    rescue Exception => e
-      return e
-    end
-  end
-
   # Returns true if the current user is friends with the given user
   def friends?(user)
     REDIS.sismember(self.redis_key(:friend), user.facebook.uid)
@@ -132,9 +110,9 @@ class User < ActiveRecord::Base
   def facebook_info(auto_import=false)
     begin
       authentication = self.authentications.where(:provider => "facebook").first
-      client = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => 'https://graph.facebook.com')
+      client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => 'https://graph.facebook.com')
       facebook = OAuth2::AccessToken.new(client, authentication.token)
-      info = JSON.parse(facebook.get("/#{authentication.uid}"))
+      info     = JSON.parse(facebook.get("/#{authentication.uid}"))
       birthday = Date.strptime(info['birthday'], "%m/%d/%Y")
       info = {
         :first_name => info['first_name'],

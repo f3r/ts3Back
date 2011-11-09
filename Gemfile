@@ -2,30 +2,29 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
 gem 'rack', '1.3.3'
-gem 'mysql2'
-gem 'devise', "1.4.9"
-gem 'oauth2', "0.4.1"
-gem "paperclip", "~> 2.4"
-gem "aws-s3"
-gem 'jquery-rails'
-gem 'validates_timeliness', '~> 3.0.2'
-gem 'redis'
-gem 'money'
-gem 'google_currency'
-gem 'dalli'               # Memcached
-gem "ransack"
-gem 'will_paginate'
-gem 'geocoder'
 
-group :assets do
-  gem 'sass-rails', "  ~> 3.1.0"
-  gem 'coffee-rails', "~> 3.1.0"
-  gem 'uglifier'
+gem 'devise', '1.4.9'     # Account Management
+gem 'oauth2', '0.4.1'     # oAuth providers management
+gem 'paperclip', "~> 2.4" # Attachements
+gem 'aws-s3'              # Upload to Amazon S3
+gem 'jquery-rails'        # TODO: Do we really need jquery?
+gem 'validates_timeliness', '~> 3.0.2'
+gem 'money'               # Currency management
+gem 'google_currency'     # Currency Exchange conversion
+gem 'mysql2'              # MySQL DB
+gem 'redis'               # Redis NoSQL DB
+gem 'dalli'               # Memcached
+gem 'delayed_job'         # Background Jobs
+gem 'will_paginate'       # Paginating results
+gem 'ransack'             # Object-based search
+gem 'geocoder'            # Geocoding Google-based
+
+group :development do
+  gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
 end
 
 group :test do
-  # Pretty printed test output
-  gem 'turn', :require => false
+  gem 'turn', :require => false  # Pretty printed test output
   gem 'shoulda'
   gem "shoulda-matchers"
   gem 'factory_girl'
@@ -33,10 +32,14 @@ group :test do
   gem 'minitest'
 end
 
+# TODO: Do we really need this?
+group :assets do
+  gem 'sass-rails', "  ~> 3.1.0"
+  gem 'coffee-rails', "~> 3.1.0"
+  gem 'uglifier'
+end
+
 group :production do
   gem 'rack-ssl-enforcer'
 end
 
-group :development do
-  gem 'hirb'
-end

@@ -18,10 +18,6 @@ class Notification
     notification.merge!({:content           => self.content})
     REDIS.zadd(Notification.key, Notification.score, notification.to_json)
 
-    # We only store notifications for a month, so we delete older notifications
-    # TODO: move this to a 1-per-day cron ;)
-    REDIS.zremrangebyscore(Notification.key, 0, Notification.score_one_month_ago)
-
     # TODO: Add mailer notifications in here!
     return true
   end
