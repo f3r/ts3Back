@@ -131,9 +131,9 @@ class PlacesController < ApplicationController
       when "price_highest"
         sorting = ["price_per_night_usd desc"]
       when "price_size_lowest"
-        sorting = ["price_sqf_usd desc"]
-      when "price_size_highest"
         sorting = ["price_sqf_usd asc"]
+      when "price_size_highest"
+        sorting = ["price_sqf_usd desc"]
       when "reviews_overall"
         sorting = ["reviews_overall desc"]
       end

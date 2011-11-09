@@ -15,8 +15,9 @@ gem 'mysql2'              # MySQL DB
 gem 'redis'               # Redis NoSQL DB
 gem 'dalli'               # Memcached
 gem 'delayed_job'         # Background Jobs
-gem 'ransack'
 gem 'will_paginate'       # Paginating results
+gem 'ransack'             # Object-based search
+gem 'geocoder'            # Geocoding Google-based
 
 group :development do
   gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
