@@ -154,23 +154,25 @@ class Place < ActiveRecord::Base
     if zip_changed? or city_id_changed?
       case country_code
       when "AU"
-        regex = /^\d{4}$/
+        regex = /\d{4}/
       when "CN"
-        regex = /^\d{6}$/
+        regex = /\d{6}/
       when "IN"
-        regex = /^\d{6}$/
+        regex = /\d{6}/
       when "ID"
-        regex = /^\d{5}$/
+        regex = /\d{5}/
       when "MY"
-        regex = /^\d{5}$/
+        regex = /\d{5}/
       when "PH"
-        regex = /^\d{4}$/
+        regex = /\d{4}/
       when "SG"
-        regex = /^\d{6}$/
+        regex = /\d{6}/
       when "TH"
-        regex = /^\d{5}$/
+        regex = /\d{5}/
       when "VN"
-        regex = /^\d{6}$/
+        regex = /\d{6}/
+      when "US"
+        regex = /\d{5}([ \-]\d{4})?/
       end
       errors.add(:zip, "103") if regex && zip && !zip.match(regex)
     end
