@@ -10,10 +10,10 @@ class UsersController < ApplicationController
       :gender, 
       :birthdate, 
       :timezone, 
-      :phone_home, 
       :phone_mobile, 
-      :phone_work, 
-      :avatar_file_name
+      :avatar_file_name,
+      :pref_language,
+      :pref_currency
     ]
   end
 
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
   # [:id] Optional user id
   # === Response
   # [:user]
-  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name}
+  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
   # === Error codes
   # [105] invalid access token
   def show
@@ -72,19 +72,19 @@ class UsersController < ApplicationController
   # ==Example
   # PUT https://backend-heypal.heroku.com/users.json access_token=access_token&avatar_url=http://url/image_file
   # === Parameters
-  # [:access_token]     Access token
-  # [first_name]   First name of the user
-  # [last_name]    Last name of the user
-  # [gender]       Gender: unkown/male/female
-  # [birthdate]    Birthdate of the user, stored in same format as ruby::Date, Ex. 1981-12-31, 1981/09/31
-  # [timezone]     Based on TimeZone::to_s http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048
-  # [phone_home]   Home Phone number, including country code
-  # [phone_mobile] Mobile Phone number, including country code
-  # [phone_work]   Work Phone number, including country code
-  # [avatar_url]   avatar picture from url, i.e. http://url/image_file
+  # [:access_token] Access token
+  # [first_name]    String, First name of the user
+  # [last_name]     String, Last name of the user
+  # [gender]        String, Gender. Values: unkown/male/female
+  # [birthdate]     Date, Birthdate of the user, stored in same format as ruby::Date, Ex. 1981-12-31, 1981/09/31
+  # [timezone]      Based on TimeZone::to_s http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048
+  # [phone_mobile]  String, Mobile Phone number, including country code
+  # [avatar_url]    String, avatar picture from url, i.e. http://url/image_file
+  # [pref_language] String, Preferred Language. ie "en"
+  # [pref_currency] String, Preferred Currency. ie "USD"
   # === Response
   # [:user]
-  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home, :phone_mobile, :phone_work, :avatar_file_name}
+  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
   # === Error codes
   # [105] invalid access token
   # [101] can't be blank
@@ -99,11 +99,11 @@ class UsersController < ApplicationController
       :gender, 
       :birthdate, 
       :timezone, 
-      :phone_home, 
       :phone_mobile, 
-      :phone_work, 
       :avatar,
-      :avatar_url
+      :avatar_url,
+      :pref_language,
+      :pref_currency
     ]
     @user = current_user
     new_params = filter_params(params, fields)

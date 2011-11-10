@@ -27,14 +27,14 @@ class User < ActiveRecord::Base
                   :gender, 
                   :birthdate, 
                   :timezone, 
-                  :phone_home, 
                   :phone_mobile, 
-                  :phone_work, 
                   :avatar, 
                   :avatar_url,
                   :password, 
                   :password_confirmation, 
-                  :remember_me
+                  :remember_me,
+                  :pref_language,
+                  :pref_currency
 
   attr_accessor :avatar_url
 

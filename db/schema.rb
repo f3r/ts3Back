@@ -210,8 +210,8 @@ ActiveRecord::Schema.define(:version => 20111109182944) do
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                                :null => false
-    t.string   "encrypted_password",     :limit => 128,                :null => false
+    t.string   "email",                                 :default => "", :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "remember_token"
@@ -231,13 +231,13 @@ ActiveRecord::Schema.define(:version => 20111109182944) do
     t.string   "gender"
     t.date     "birthdate"
     t.string   "timezone"
-    t.string   "phone_home"
     t.string   "phone_mobile"
-    t.string   "phone_work"
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
+    t.string   "pref_language"
+    t.string   "pref_currency"
     t.string   "first_name"
     t.string   "last_name"
   end
