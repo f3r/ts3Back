@@ -172,7 +172,7 @@ class Place < ActiveRecord::Base
       when "VN"
         regex = /^\d{6}$/
       end
-      errors.add(:zip, "103") unless regex && zip.match(regex)
+      errors.add(:zip, "103") if regex && zip && !zip.match(regex)
     end
   end
 
