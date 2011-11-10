@@ -1,4 +1,4 @@
-Tue, 08 Nov 2011 15:40:52 -0500
+Wed, 09 Nov 2011 23:07:54 -0500
 app/controllers/addresses_controller.rb	Wed, 02 Nov 2011 12:49:45 -0500
 app/controllers/application_controller.rb	Tue, 08 Nov 2011 15:13:11 -0500
 app/controllers/authentications_controller.rb	Wed, 02 Nov 2011 12:49:45 -0500
@@ -6,9 +6,10 @@ app/controllers/availabilities_controller.rb	Thu, 03 Nov 2011 20:19:52 -0500
 app/controllers/comments_controller.rb	Sat, 05 Nov 2011 13:28:10 -0500
 app/controllers/confirmations_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
 app/controllers/geo_controller.rb	Mon, 07 Nov 2011 18:48:46 -0500
+app/controllers/notifications_controller.rb	Tue, 08 Nov 2011 16:50:08 -0500
 app/controllers/passwords_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
 app/controllers/place_types_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
-app/controllers/places_controller.rb	Tue, 08 Nov 2011 15:37:13 -0500
+app/controllers/places_controller.rb	Wed, 09 Nov 2011 12:20:22 -0500
 app/controllers/registrations_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
 app/controllers/sessions_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
 app/controllers/users_controller.rb	Sat, 05 Nov 2011 23:09:42 -0500

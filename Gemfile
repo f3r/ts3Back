@@ -7,7 +7,6 @@ gem 'devise', '1.4.9'     # Account Management
 gem 'oauth2', '0.4.1'     # oAuth providers management
 gem 'paperclip', "~> 2.4" # Attachements
 gem 'aws-s3'              # Upload to Amazon S3
-gem 'jquery-rails'        # TODO: Do we really need jquery?
 gem 'validates_timeliness', '~> 3.0.2'
 gem 'money'               # Currency management
 gem 'google_currency'     # Currency Exchange conversion

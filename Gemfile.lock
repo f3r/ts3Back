@@ -73,9 +73,6 @@ GEM
     hike (1.2.1)
     hirb (0.5.0)
     i18n (0.6.0)
-    jquery-rails (1.0.16)
-      railties (~> 3.0)
-      thor (~> 0.14)
     json (1.6.1)
     mail (2.3.0)
       i18n (>= 0.4.0)
@@ -177,7 +174,6 @@ DEPENDENCIES
   geocoder
   google_currency
   hirb
-  jquery-rails
   minitest
   money
   mysql2

@@ -46,7 +46,8 @@ class Place < ActiveRecord::Base
                 :geocode
   validate      :validate_publishing,
                 :update_location_fields, 
-                :convert_json_photos_to_array
+                :convert_json_photos_to_array,
+                :check_zip
   after_commit  :delete_cache
 
   self.per_page = 20
@@ -145,6 +146,35 @@ class Place < ActiveRecord::Base
       errors.add(:publish, "126") if self.price_per_night.blank?
       errors.add(:publish, "127") if self.currency.blank?
       errors.add(:publish, "128") if self.price_security_deposit.blank?
+    end
+  end
+
+  # Check for valid zip code, HK doesn't have a standard format.
+  def check_zip
+    if zip_changed? or city_id_changed?
+      case country_code
+      when "AU"
+        regex = /\d{4}/
+      when "CN"
+        regex = /\d{6}/
+      when "IN"
+        regex = /\d{6}/
+      when "ID"
+        regex = /\d{5}/
+      when "MY"
+        regex = /\d{5}/
+      when "PH"
+        regex = /\d{4}/
+      when "SG"
+        regex = /\d{6}/
+      when "TH"
+        regex = /\d{5}/
+      when "VN"
+        regex = /\d{6}/
+      when "US"
+        regex = /\d{5}([ \-]\d{4})?/
+      end
+      errors.add(:zip, "103") if regex && zip && !zip.match(regex)
     end
   end
 

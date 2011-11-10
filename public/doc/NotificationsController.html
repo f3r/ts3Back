@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: NotificationsController</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/notifications_controller.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-index">#index</a>
+    
+    <li><a href="#method-i-mark_as_read">#mark_as_read</a>
+    
+    <li><a href="#method-i-unread">#unread</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./AvailabilitiesController.html">AvailabilitiesController</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./GeoController.html">GeoController</a>
+  
+    <li><a href="./NotificationsController.html">NotificationsController</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./PlaceTypesController.html">PlaceTypesController</a>
+  
+    <li><a href="./PlacesController.html">PlacesController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class NotificationsController</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-index" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">index</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-index-label-Description">Description</h2>
+
+<p>Returns all the notifications of the current user</p>
+
+<h2 id="method-i-index-label-Resource+URL">Resource URL</h2>
+
+<p>/notifications.format</p>
+
+<h2 id="method-i-index-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/notifications.json">backend-heypal.heroku.com/notifications.json</a></p>
+
+<h3 id="method-i-index-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<h2 id="method-i-index-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>115
+<dd>
+<p>no result</p>
+</dd></dl>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="index-source">
+            <pre><span class="ruby-comment"># File app/controllers/notifications_controller.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
+  <span class="ruby-identifier">check_token</span>
+  
+  <span class="ruby-ivar">@notifications</span> = []
+  <span class="ruby-constant">Notification</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>
+    <span class="ruby-ivar">@notifications</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ActiveSupport</span><span class="ruby-operator">::</span><span class="ruby-constant">JSON</span><span class="ruby-operator">::</span><span class="ruby-identifier">decode</span>(<span class="ruby-identifier">foo</span>)
+    }
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@notifications</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:notifications</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@notifications</span>})
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:notifications</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- index-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- index-method -->
+
+    
+      <div id="method-i-mark_as_read" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">mark_as_read</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-mark_as_read-label-Description">Description</h2>
+
+<p>Marks</p>
+
+<h2 id="method-i-mark_as_read-label-Resource+URL">Resource URL</h2>
+
+<p>/notifications/mark_as_read.format</p>
+
+<h2 id="method-i-mark_as_read-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/notifications/mark_as_read.json">backend-heypal.heroku.com/notifications/mark_as_read.json</a></p>
+
+<h3 id="method-i-mark_as_read-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd></dd></dl>
+          
+
+          
+          <div class="method-source-code" id="mark_as_read-source">
+            <pre><span class="ruby-comment"># File app/controllers/notifications_controller.rb, line 61</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">mark_as_read</span>
+  <span class="ruby-identifier">check_token</span>    
+  <span class="ruby-constant">Notification</span>.<span class="ruby-identifier">mark_as_read</span>
+  <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- mark_as_read-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- mark_as_read-method -->
+
+    
+      <div id="method-i-unread" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unread</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-unread-label-Description">Description</h2>
+
+<p>Returns all the unread notifications of the current user</p>
+
+<h2 id="method-i-unread-label-Resource+URL">Resource URL</h2>
+
+<p>/notifications/unread.format</p>
+
+<h2 id="method-i-unread-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/notifications/unread.json">backend-heypal.heroku.com/notifications/unread.json</a></p>
+
+<h3 id="method-i-unread-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<h2 id="method-i-unread-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>115
+<dd>
+<p>no results</p>
+</dd></dl>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="unread-source">
+            <pre><span class="ruby-comment"># File app/controllers/notifications_controller.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unread</span>
+  <span class="ruby-identifier">check_token</span>
+  
+  <span class="ruby-ivar">@notifications</span> = []
+  <span class="ruby-constant">Notification</span>.<span class="ruby-identifier">unread</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>
+    <span class="ruby-ivar">@notifications</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ActiveSupport</span><span class="ruby-operator">::</span><span class="ruby-constant">JSON</span><span class="ruby-operator">::</span><span class="ruby-identifier">decode</span>(<span class="ruby-identifier">foo</span>)
+    }
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@notifications</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:notifications</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@notifications</span>})
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:notifications</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unread-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unread-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
