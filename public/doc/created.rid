@@ -1,15 +1,15 @@
-Wed, 09 Nov 2011 23:07:54 -0500
-app/controllers/addresses_controller.rb	Wed, 02 Nov 2011 12:49:45 -0500
-app/controllers/application_controller.rb	Tue, 08 Nov 2011 15:13:11 -0500
-app/controllers/authentications_controller.rb	Wed, 02 Nov 2011 12:49:45 -0500
-app/controllers/availabilities_controller.rb	Thu, 03 Nov 2011 20:19:52 -0500
-app/controllers/comments_controller.rb	Sat, 05 Nov 2011 13:28:10 -0500
-app/controllers/confirmations_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
-app/controllers/geo_controller.rb	Mon, 07 Nov 2011 18:48:46 -0500
-app/controllers/notifications_controller.rb	Tue, 08 Nov 2011 16:50:08 -0500
-app/controllers/passwords_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
-app/controllers/place_types_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
-app/controllers/places_controller.rb	Wed, 09 Nov 2011 12:20:22 -0500
-app/controllers/registrations_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
-app/controllers/sessions_controller.rb	Wed, 02 Nov 2011 12:49:46 -0500
-app/controllers/users_controller.rb	Sat, 05 Nov 2011 23:09:42 -0500
+Thu, 10 Nov 2011 22:24:45 +0800
+app/controllers/addresses_controller.rb	Wed, 02 Nov 2011 23:05:02 +0800
+app/controllers/application_controller.rb	Wed, 09 Nov 2011 05:01:44 +0800
+app/controllers/authentications_controller.rb	Thu, 10 Nov 2011 05:00:04 +0800
+app/controllers/availabilities_controller.rb	Fri, 04 Nov 2011 18:30:26 +0800
+app/controllers/comments_controller.rb	Tue, 08 Nov 2011 00:11:20 +0800
+app/controllers/confirmations_controller.rb	Wed, 02 Nov 2011 21:50:18 +0800
+app/controllers/geo_controller.rb	Wed, 09 Nov 2011 05:01:44 +0800
+app/controllers/notifications_controller.rb	Wed, 09 Nov 2011 04:58:36 +0800
+app/controllers/passwords_controller.rb	Wed, 02 Nov 2011 22:01:09 +0800
+app/controllers/place_types_controller.rb	Wed, 02 Nov 2011 22:21:36 +0800
+app/controllers/places_controller.rb	Thu, 10 Nov 2011 05:01:21 +0800
+app/controllers/registrations_controller.rb	Wed, 02 Nov 2011 22:16:16 +0800
+app/controllers/sessions_controller.rb	Wed, 02 Nov 2011 22:39:24 +0800
+app/controllers/users_controller.rb	Thu, 10 Nov 2011 20:37:17 +0800

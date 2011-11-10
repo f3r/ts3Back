@@ -176,10 +176,10 @@
     <span class="ruby-value">:gender</span>, 
     <span class="ruby-value">:birthdate</span>, 
     <span class="ruby-value">:timezone</span>, 
-    <span class="ruby-value">:phone_home</span>, 
     <span class="ruby-value">:phone_mobile</span>, 
-    <span class="ruby-value">:phone_work</span>, 
-    <span class="ruby-value">:avatar_file_name</span>
+    <span class="ruby-value">:avatar_file_name</span>,
+    <span class="ruby-value">:pref_language</span>,
+    <span class="ruby-value">:pref_currency</span>
   ]
 <span class="ruby-keyword">end</span></pre>
           </div><!-- new-source -->
@@ -302,8 +302,8 @@ access_token=access_token</p>
 <h3 id="method-i-show-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>:user
 <dd>
-<p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home,
-:phone_mobile, :phone_work, :avatar_file_name}</p>
+<p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone,
+:phone_mobile, :avatar_file_name, :pref_language, :pref_currency}</p>
 
 <h3 id="method-i-show-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>105
@@ -367,41 +367,41 @@ href="http://url/image_file">url/image_file</a></p>
 <p>Access token</p>
 </dd><dt>first_name
 <dd>
-<p>First name of the user</p>
+<p>String, First name of the user</p>
 </dd><dt>last_name
 <dd>
-<p>Last name of the user</p>
+<p>String, Last name of the user</p>
 </dd><dt>gender
 <dd>
-<p>Gender: unkown/male/female</p>
+<p>String, Gender. Values: unkown/male/female</p>
 </dd><dt>birthdate
 <dd>
-<p>Birthdate of the user, stored in same format as ruby::Date, Ex. 1981-12-31,
-1981/09/31</p>
+<p>Date, Birthdate of the user, stored in same format as ruby::Date, Ex.
+1981-12-31, 1981/09/31</p>
 </dd><dt>timezone
 <dd>
 <p>Based on TimeZone::to_s <a
 href="http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048">tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048</a></p>
-</dd><dt>phone_home
-<dd>
-<p>Home Phone number, including country code</p>
 </dd><dt>phone_mobile
 <dd>
-<p>Mobile Phone number, including country code</p>
-</dd><dt>phone_work
-<dd>
-<p>Work Phone number, including country code</p>
+<p>String, Mobile Phone number, including country code</p>
 </dd><dt>avatar_url
 <dd>
-<p>avatar picture from url, i.e. <a
+<p>String, avatar picture from url, i.e. <a
 href="http://url/image_file">url/image_file</a></p>
+</dd><dt>pref_language
+<dd>
+<p>String, Preferred Language. ie “en”</p>
+</dd><dt>pref_currency
+<dd>
+<p>String, Preferred Currency. ie “USD”</p>
 </dd></dl>
 
 <h3 id="method-i-update-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>:user
 <dd>
-<p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_home,
-:phone_mobile, :phone_work, :avatar_file_name}</p>
+<p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone,
+:phone_mobile, :avatar_file_name, :pref_language, :pref_currency}</p>
 
 <h3 id="method-i-update-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>105
@@ -432,11 +432,11 @@ href="http://url/image_file">url/image_file</a></p>
     <span class="ruby-value">:gender</span>, 
     <span class="ruby-value">:birthdate</span>, 
     <span class="ruby-value">:timezone</span>, 
-    <span class="ruby-value">:phone_home</span>, 
     <span class="ruby-value">:phone_mobile</span>, 
-    <span class="ruby-value">:phone_work</span>, 
     <span class="ruby-value">:avatar</span>,
-    <span class="ruby-value">:avatar_url</span>
+    <span class="ruby-value">:avatar_url</span>,
+    <span class="ruby-value">:pref_language</span>,
+    <span class="ruby-value">:pref_currency</span>
   ]
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-identifier">new_params</span> = <span class="ruby-identifier">filter_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">fields</span>)
