@@ -242,6 +242,7 @@ class PlacesController < ApplicationController
   # [101] can't be blank 
   # [103] is invalid
   # [105] invalid access token
+  # [132] invalid city (not on the cities table)
   def create
     check_token
     place = { 
