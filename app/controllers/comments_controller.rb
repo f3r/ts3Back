@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
     @comments = Place.find(params[:id]).comments.where(:replying_to => nil).order("created_at ASC")
     if @comments.count > 0
       # We get all the replies and add them to the answer
-      response = {}
+      foo = []
       @comments.each{|comment|
         question = filter_fields(comment,@fields)
         replies  = Comment.where(:replying_to => comment.id)
@@ -28,13 +28,13 @@ class CommentsController < ApplicationController
           replies.each{|reply|
             replies_response.merge!(filter_fields(reply,@fields)) 
           }
-          response.merge!(question)
-          response.merge!({:replies => replies_response})
+          question.merge!({:replies => replies_response})
+          foo = foo << question
         else
-          response.merge!(question) 
+          foo.merge!(question) 
         end
       }
-      return_message(200, :ok, {:comments => response})
+      return_message(200, :ok, {:comments => foo})
     else
       return_message(200, :ok, {:err => {:comments => [115]}})
     end
