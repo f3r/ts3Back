@@ -59,4 +59,14 @@ class PasswordsTest < ActionController::IntegrationTest
     assert_tag 'err', :child => { :tag => "reset_password_token", :content => "103" }
   end
 
+  should "not update password with empty password (xml)" do
+    post '/users/password.xml', {:email => @user.email}
+    user = User.first(:order => 'id DESC')
+    put '/users/password.xml', {:reset_password_token => user.reset_password_token}
+    assert_response(200)
+    assert_equal 'application/xml', @response.content_type
+    assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+    assert_tag 'err', :child => { :tag => "password", :content => "101" }
+  end
+
 end

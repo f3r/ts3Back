@@ -35,21 +35,26 @@ class PasswordsController < Devise::PasswordsController
   # === Response
   # [:authentication_token] Returns the user authentication_token if the account is active
   # === Error codes
+  # [101] can't be blank
+  # [102] too short
   # [103] invalid reset_password_token
   def update
-    self.resource = resource_class.reset_password_by_token({
-      :reset_password_token => params[:reset_password_token],
-      :password => params[:password],
-      :password_confirmation => params[:password]})
-
-    if resource.errors.empty?
-      if resource.active_for_authentication?
-        return_message(200, :ok, {:authentication_token => resource.authentication_token})
+    if params[:reset_password_token] && params[:password]
+      self.resource = resource_class.reset_password_by_token({
+        :reset_password_token => params[:reset_password_token],
+        :password => params[:password],
+        :password_confirmation => params[:password]})
+      if resource.errors.empty?
+        if resource.active_for_authentication?
+          return_message(200, :ok, {:authentication_token => resource.authentication_token})
+        else
+          return_message(200, :ok)
+        end
       else
-        return_message(200, :ok)
+        return_message(200, :fail, {:err => format_errors(resource.errors.messages) })
       end
     else
-      return_message(200, :fail, {:err => { :reset_password_token => "103" }})
+      return_message(200, :fail, {:err => {:password => 101} })
     end
   end
 end

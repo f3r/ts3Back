@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
   validates_date :birthdate, 
     :invalid_date_message => "113", 
     :on => :update, 
+    :unless => lambda { self.password && self.password_confirmation },
     :before => lambda { Date.current }
 
   has_many :authentications, :dependent => :destroy
@@ -76,7 +77,7 @@ class User < ActiveRecord::Base
        :thumb => "-quality 80" }
 
   def password_validations_required?
-    encrypted_password.blank?
+    encrypted_password.blank? or (password && password_confirmation) or encrypted_password_changed?
   end
 
   def full_name
