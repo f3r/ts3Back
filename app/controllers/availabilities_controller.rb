@@ -16,7 +16,8 @@ class AvailabilitiesController < ApplicationController
   def list    
     @place = Place.find(params[:id])
     if !@place.availabilities.blank?
-      return_message(200, :ok, {:availabilities => @place.availabilities.select("id,availability_type,date_start,date_end,comment,price_per_night,comment")})
+      return_message(200, :ok, {:availabilities => 
+        @place.availabilities.select("id,availability_type,date_start,date_end,comment,price_per_night,comment").order("date_start ASC")})
     else
       return_message(200, :ok, {:err=>{:availabilities => [115]}} )
     end

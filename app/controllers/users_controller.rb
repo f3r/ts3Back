@@ -4,7 +4,8 @@ class UsersController < ApplicationController
   
   def initialize
     @fields = [
-      :id, 
+      :id,
+      :email,
       :first_name, 
       :last_name, 
       :gender, 
@@ -53,7 +54,7 @@ class UsersController < ApplicationController
   # [:id] Optional user id
   # === Response
   # [:user]
-  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
+  # {:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
   # === Error codes
   # [105] invalid access token
   def show

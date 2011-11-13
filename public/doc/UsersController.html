@@ -170,7 +170,8 @@
             <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 5</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
   <span class="ruby-ivar">@fields</span> = [
-    <span class="ruby-value">:id</span>, 
+    <span class="ruby-value">:id</span>,
+    <span class="ruby-value">:email</span>,
     <span class="ruby-value">:first_name</span>, 
     <span class="ruby-value">:last_name</span>, 
     <span class="ruby-value">:gender</span>, 
@@ -243,7 +244,7 @@ href="https://backend-heypal.heroku.com/users/:id/info.json">backend-heypal.hero
 
           
           <div class="method-source-code" id="info-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 33</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">info</span>
   <span class="ruby-identifier">fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:avatar_file_name</span>]
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;user_info_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">to_s</span>) { <span class="ruby-constant">User</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">fields</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]) }
@@ -302,7 +303,7 @@ access_token=access_token</p>
 <h3 id="method-i-show-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>:user
 <dd>
-<p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone,
+<p>{:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone,
 :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}</p>
 
 <h3 id="method-i-show-label-Error+codes">Error codes</h3>
@@ -315,7 +316,7 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 59</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 60</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
@@ -422,7 +423,7 @@ href="http://url/image_file">url/image_file</a></p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 93</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 94</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">fields</span> = [

@@ -228,7 +228,7 @@ Price)</p>
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 47</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-comment">#TODO: Check that the availability is for a place the user owns...</span>
@@ -291,7 +291,7 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 74</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-ivar">@availability</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>]).<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -357,7 +357,8 @@ href="https://backend-heypal.heroku.com/places/123/availabilities.json">backend-
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">list</span>    
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@place</span>.<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:availabilities</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;id,availability_type,date_start,date_end,comment,price_per_night,comment&quot;</span>)})
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:availabilities</span> =<span class="ruby-operator">&gt;</span> 
+      <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;id,availability_type,date_start,date_end,comment,price_per_night,comment&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;date_start ASC&quot;</span>)})
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err=</span><span class="ruby-operator">&gt;</span>{<span class="ruby-value">:availabilities</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}} )
   <span class="ruby-keyword">end</span>
@@ -446,7 +447,7 @@ Price)</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 105</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 106</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">check_token</span>
 

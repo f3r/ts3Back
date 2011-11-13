@@ -1,3 +1,6 @@
+require 'money/bank/google_currency'
+Money.default_bank = Money::Bank::GoogleCurrency.new
+
 class PlacesController < ApplicationController
   filter_resource_access
   filter_access_to [:show, :create, :update, :search, :user_places, :publish], :attribute_check => false
@@ -42,12 +45,15 @@ class PlacesController < ApplicationController
 
   end
 
+  # FIXME: We need to show them what parameters can they search upon
+  # FIXME: Why is params[:q] required?
+  
   # ==Description
   # Returns a list places matching the search parameters
   # ==Resource URL
   #   /places/search.format
   # ==Example
-  #   GET https://backend-heypal.heroku.com/places/search.json q[country_code_eq]=AU&q[num_bedrooms_lt]=5&q[num_bedrooms_gt]=2&page=1[m]=and
+  #   GET https://backend-heypal.heroku.com/places/search.json q[country_code_eq]=AU&q[num_bedrooms_lt]=5&q[num_bedrooms_gt]=2&page=1&m=and
   # === Matching options
   # [eq]
   #   Equal
@@ -98,22 +104,57 @@ class PlacesController < ApplicationController
   # [status]
   #   Defaults to published, Options: published, not_published, all
   #     Ex: status=all
+  # [guests]
+  #   Defaults to 1, determines the number of guests against places.max_guests
+  #     Ex: guests=3
+  # [currency]
+  #   Defaults to USD, ISO Code of the currency the user is searching
+  #     Ex: currency=USD
+  # [min_price]
+  #   Defaults to 0, Minimum price per night for the apartment search in the currency selected (no cents)
+  #     Ex: min_price=200
+  # [max_price]
+  #   Defaults to no maximum, Maximum price per night for the apartment search in the currency selected (no cents)
+  #     Ex: min_price=600
   # [sort]
   #   Sorting options: name, price_lowest, price_highest, price_size_lowest, price_size_highest, reviews
   #     Ex: sort=price_low
   # === Response
-  # [results] Total number of results. Used for pagination
+  # [results]      Total number of results. Used for pagination
   # [current_page] Current page number. Used for pagination
-  # [per_page] Results showed per page. Used for pagination
-  # [total_pages] Total number of pages. Used for pagination
-  # [places] Array containing the places
+  # [per_page]     Results showed per page. Used for pagination
+  # [total_pages]  Total number of pages. Used for pagination
+  # [places]       Array containing the places
   # === Error codes
-  # [115]           no results
+  # [115] no results
   def search
     !params[:per_page].blank? ? per_page = params[:per_page] : per_page = Place.per_page
 
     if !params[:q].blank?
 
+      # Currency conversion
+      if !params[:currency].blank? or params[:currency] != "USD"
+        if params[:min_price]
+          min_price = params[:min_price].to_money(params[:currency]).exchange_to(:USD).cents 
+          params[:q].merge!({"price_per_night_usd_gteq" => "#{min_price}"})
+        end
+        if params[:max_price]
+          max_price = params[:max_price].to_money(params[:currency]).exchange_to(:USD).cents if params[:max_price]
+          params[:q].merge!({"price_per_night_usd_lteq" => "#{max_price}"})
+        end
+      # defaults to USD and checks against usd precalculated rates
+      else
+        params[:q].merge!({"price_per_night_usd_gteq" => "#{params[:min_price]}"}) if params[:min_price]
+        params[:q].merge!({"price_per_night_usd_lteq" => "#{params[:max_price]}"}) if params[:max_price]
+      end
+      
+
+      # Filter by number of guests
+      if !params[:guests].blank?
+        params[:q].merge!({"max_guests_gteq" => "#{params[:guests]}"})
+      end
+      
+      # Filter by status
       case params[:status]
       when "all"
         @search = Place.search(params[:q])
@@ -124,7 +165,8 @@ class PlacesController < ApplicationController
       else
         @search = Place.where(:published => true).search(params[:q])
       end
-      
+
+      # Sorting column
       case params[:sort]
       when "name"
         sorting = ["title asc"]
@@ -202,6 +244,7 @@ class PlacesController < ApplicationController
   # [101] can't be blank 
   # [103] is invalid
   # [105] invalid access token
+  # [132] invalid city (not on the cities table)
   def create
     check_token
     place = { 
