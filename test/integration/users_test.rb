@@ -2,8 +2,9 @@ require 'test_helper'
 class UsersTest < ActionController::IntegrationTest
 
   setup do
-    @user = Factory(:user)
+    @user = Factory(:user, :role => "admin")
     @user.confirm!
+    Authorization.current_user = @user
     @birthday = "1981/01/01"
   end
 

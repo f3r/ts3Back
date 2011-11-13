@@ -1,5 +1,6 @@
 class FacebookImport < Struct.new(:user_id)
   def perform
+    logger.info { "[DELAYED][FACEBOOK] Retrieved friends for user #{user_id}" }
     user = User.find(user_id)
     authentication = user.authentications.where(:provider => "facebook").first
     if authentication

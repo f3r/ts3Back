@@ -1,6 +1,7 @@
 HeyPalBackEnd::Application.routes.draw do
 
   devise_for :users, :skip => [ :registrations, :sessions, :passwords, :confirmations ] do
+    match "/" => "home#not_found"
     ##############################################################################
     # ACCOUNTS & REGISTRATION
     ##############################################################################
@@ -80,5 +81,9 @@ HeyPalBackEnd::Application.routes.draw do
     get     "notifications",           :to => "notifications#index"
     get     "notifications/unread",    :to => "notifications#unread"
     get     "notifications/markAsRead",:to => "notifications#mark_as_read"
+    ##############################################################################
+    # ROUTING ERRORS HACK
+    ##############################################################################
+    match   '*a',                     :to => 'home#not_found'
   end
 end

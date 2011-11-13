@@ -76,6 +76,15 @@ class User < ActiveRecord::Base
        :medium => "-quality 80", 
        :thumb => "-quality 80" }
 
+
+  def role_symbols
+    [role.to_sym]
+  end
+
+  def has_role?(the_role)
+    role == the_role.to_s
+  end
+
   def password_validations_required?
     encrypted_password.blank? or (password && password_confirmation) or encrypted_password_changed?
   end

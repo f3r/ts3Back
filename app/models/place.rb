@@ -3,6 +3,8 @@ require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
 class Place < ActiveRecord::Base
+  using_access_control
+
   geocoded_by :full_address, :latitude  => :lat, :longitude => :lon
   
   serialize :photos

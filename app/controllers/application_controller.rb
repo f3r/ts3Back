@@ -1,5 +1,9 @@
 include GeneralHelper
 class ApplicationController < ActionController::Base
+
+  # TODO: Doesn't seem to work
+  rescue_from Authorization::NotAuthorized, :with => :unauthorized_access
+
   rescue_from Exceptions::UnauthorizedAccess, :with => :unauthorized_access
   rescue_from Exceptions::NotActivated, :with => :not_activated
   rescue_from ActiveRecord::RecordNotFound, :with => :not_found
@@ -7,6 +11,9 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::UnknownAction, :with => :not_found
 
   protect_from_forgery
+
+
+  before_filter :set_current_user
 
   def current_user
     warden.user || User.find_for_token_authentication(:auth_token => params[:access_token])
@@ -35,7 +42,16 @@ class ApplicationController < ActionController::Base
         render :status => status, 
         request.format.to_sym => format_response(response, request.format.to_sym)
       }
+      format.html {
+        # TODO: Add custom page for html requests
+        render :status => 403, :inline => "fail"
+      }
     end
+  end
+  
+  protected
+  def set_current_user
+    Authorization.current_user = current_user
   end
   
   private

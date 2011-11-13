@@ -7,10 +7,11 @@ class PlacesTest < ActionController::IntegrationTest
 
   setup do
     @city = Factory(:city)
-    @user = Factory(:user)
-    @user.confirm!
+    @admin_user = Factory(:user, :role => "admin")
+    @admin_user.confirm!
+    Authorization.current_user = @admin_user
     @place_type = Factory(:place_type)
-    @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
+    @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
     @availability = Factory(:availability, :place => @place )
     @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
     @place_new_info = { 
@@ -26,8 +27,8 @@ class PlacesTest < ActionController::IntegrationTest
     @new_place = { :title => "test title", :place_type_id => @place_type.id, :num_bedrooms => 3, :max_guests => 5, :city_id => @city.id }
   end
 
-  should "get place information (json)" do
-    get "/places/#{@place.id}.json"
+  should "get place information as admin (json)" do
+    get "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -36,8 +37,8 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @place.id, json['place']['id']
   end
 
-  should "get place information (xml)" do
-    get "/places/#{@place.id}.xml"
+  should "get place information as admin (xml)" do
+    get "/places/#{@place.id}.xml", {:access_token => @admin_user.authentication_token}
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
@@ -46,7 +47,7 @@ class PlacesTest < ActionController::IntegrationTest
   
   should "delete place (json)" do
     assert_difference 'Place.count', -1 do
-      delete "/places/#{@place.id}.json", {:access_token => @user.authentication_token}
+      delete "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token}
     end
     assert_response(200)
     assert_equal 'application/json', @response.content_type
@@ -57,7 +58,7 @@ class PlacesTest < ActionController::IntegrationTest
     
   should "delete place (xml)" do
     assert_difference 'Place.count', -1 do
-      delete "/places/#{@place.id}.xml", {:access_token => @user.authentication_token}
+      delete "/places/#{@place.id}.xml", {:access_token => @admin_user.authentication_token}
     end
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
@@ -65,7 +66,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
   
   should "update place" do
-    put "/places/#{@place.id}.json", @place_new_info.merge({:access_token => @user.authentication_token})
+    put "/places/#{@place.id}.json", @place_new_info.merge({:access_token => @admin_user.authentication_token})
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -81,20 +82,20 @@ class PlacesTest < ActionController::IntegrationTest
   end  
 
   should "update place, publish it and unpublish it" do
-    put "/places/#{@place.id}.json", @place_new_info.merge({:access_token => @user.authentication_token})
+    put "/places/#{@place.id}.json", @place_new_info.merge({:access_token => @admin_user.authentication_token})
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']    
-    get "/places/#{@place.id}/publish.json", {:access_token => @user.authentication_token }
+    get "/places/#{@place.id}/publish.json", {:access_token => @admin_user.authentication_token }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']    
     assert_equal true, json['place']['published']
-    get "/places/#{@place.id}/unpublish.json", {:access_token => @user.authentication_token }
+    get "/places/#{@place.id}/unpublish.json", {:access_token => @admin_user.authentication_token }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -104,7 +105,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
   
   should "not publish place with incomplete information" do
-    get "/places/#{@place.id}/publish.json", {:access_token => @user.authentication_token }
+    get "/places/#{@place.id}/publish.json", {:access_token => @admin_user.authentication_token }
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -115,10 +116,10 @@ class PlacesTest < ActionController::IntegrationTest
 
   should "create a place and update it's information (json)" do
     assert_difference 'Place.count', +1 do
-      post '/places.json', @new_place.merge({:access_token => @user.authentication_token})
+      post '/places.json', @new_place.merge({:access_token => @admin_user.authentication_token})
     end
     place = Place.first(:order => 'id DESC')
-    put "/places/#{place.id}.json", @place_new_info.merge({:access_token => @user.authentication_token})
+    put "/places/#{place.id}.json", @place_new_info.merge({:access_token => @admin_user.authentication_token})
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -135,10 +136,10 @@ class PlacesTest < ActionController::IntegrationTest
 
   should "create a place and update it's information (xml)" do
     assert_difference 'Place.count', +1 do
-      post '/places.xml', { :title => "test title2", :place_type_id => @place_type.id, :num_bedrooms => 5, :max_guests => 10, :city_id => @city.id, :access_token => @user.authentication_token }
+      post '/places.xml', { :title => "test title2", :place_type_id => @place_type.id, :num_bedrooms => 5, :max_guests => 10, :city_id => @city.id, :access_token => @admin_user.authentication_token }
     end
     place = Place.first(:order => 'id DESC')
-    put "/places/#{place.id}.xml", @place_new_info.merge({:access_token => @user.authentication_token})
+    put "/places/#{place.id}.xml", @place_new_info.merge({:access_token => @admin_user.authentication_token})
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
@@ -152,7 +153,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
 
   should "update place dimessions in meters (json)" do
-    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :size => 100, :size_unit => "meters"}
+    put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :size => 100, :size_unit => "meters"}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -164,7 +165,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
 
   should "update place dimessions in feet (json)" do
-    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :size => 1000, :size_unit => "feet"}
+    put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :size => 1000, :size_unit => "feet"}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -176,7 +177,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
 
   should "not update place dimessions with invalid size_unit (json)" do
-    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :size => 1000, :size_unit => "zapatos"}
+    put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :size => 1000, :size_unit => "zapatos"}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -186,7 +187,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
 
   should "update place with valid US zip code (json)" do
-    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :zip => "33122-1111"}
+    put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :zip => "33122-1111"}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -195,7 +196,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
 
   should "not update place with invalid zip code (json)" do
-    put "/places/#{@place.id}.json", {:access_token => @user.authentication_token, :zip => "3333333333"}
+    put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :zip => "3333333333"}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -204,7 +205,7 @@ class PlacesTest < ActionController::IntegrationTest
   end
 
   should "get a users unpublished places" do
-    get "/users/#{@user.id}/places.json", {:access_token => @user.authentication_token, :published => 0}
+    get "/users/#{@admin_user.id}/places.json", {:access_token => @admin_user.authentication_token, :published => 0}
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)

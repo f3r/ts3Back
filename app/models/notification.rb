@@ -41,14 +41,12 @@ class Notification
 private
   # helper method to generate redis notifications keys
   def self.key
-    #"notifications:#{current_user.id}"
-    "notifications:1"
+    "notifications:#{Authorization.current_user.id}"
   end
 
   # helper method to generate redis last_read_on keys
   def self.key_read
-    #"notifications-read-on:#{current_user.id}" 
-    "notifications-read-on:1" 
+    "notifications-read-on:#{Authorization.current_user.id}" 
   end
   
   # Helper method to generate the timestamp based on unix time

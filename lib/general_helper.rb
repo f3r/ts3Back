@@ -12,7 +12,10 @@ module GeneralHelper
   def format_errors(errors)
     error_list = {}
     for error in errors
-      codes = error[1].map {|x| x.to_i if (Float(x) or Integer(x)) rescue nil }.compact
+      codes = error[1].map {|x|
+        x = 103 if x == "is invalid" # horrible hack, used to catch the reset password validation error.
+        x.to_i if (Float(x) or Integer(x)) rescue nil
+      }.compact
       error_list = error_list.merge({error[0] => codes})
     end
     return error_list

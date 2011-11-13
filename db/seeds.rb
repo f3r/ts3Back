@@ -13981,3 +13981,4 @@ City.create(name: "Tuyen Quang", lat: 21.8233, lon: 105.218, state: "Tinh Tuyen 
 City.create(name: "Vinh Long", lat: 10.25, lon: 105.967, state: "Tinh Vinh Long", country: "Vietnam", country_code: "VN" )
 City.create(name: "Vinh Yen", lat: 21.31, lon: 105.597, state: "Tinh Vinh Phuc", country: "Vietnam", country_code: "VN" )
 City.create(name: "Yen Bai", lat: 21.7, lon: 104.867, state: "Tinh Yen Bai", country: "Vietnam", country_code: "VN" )
+City.create(name: "Hong Kong", lat: 22.2855, lon: 114.158, country: "Hong Kong", country_code: "HK" )

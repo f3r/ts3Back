@@ -1,4 +1,6 @@
 class PlacesController < ApplicationController
+  filter_resource_access
+  filter_access_to [:show, :create, :update, :search, :user_places, :publish], :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
@@ -209,7 +211,6 @@ class PlacesController < ApplicationController
       :max_guests    => params[:max_guests],
       :city_id       => params[:city_id] }
     @place = current_user.places.new(place)
-
     if @place.save
       place_return = filter_fields(@place, [:id, :title,:num_bedrooms,:max_guests,:country_name, :country_code, :state_name, :city_name, :city_id], :additional_fields => {
           :user => @user_fields,

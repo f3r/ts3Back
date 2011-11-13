@@ -3,8 +3,9 @@ class AvailabilitiesTest < ActionController::IntegrationTest
 
   setup do
     @city = Factory(:city)
-    @user = Factory(:user)
+    @user = Factory(:user, :role => "admin")
     @user.confirm!
+    Authorization.current_user = @user
     @place_type = Factory(:place_type)
     @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
     

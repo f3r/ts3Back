@@ -6,8 +6,11 @@ require 'shoulda'
 require 'factory_girl'
 FactoryGirl.find_definitions
 
+require 'declarative_authorization/maintenance'
+
 class ActionController::TestCase
   include Devise::TestHelpers
+  include Authorization::TestHelper
 end
 
 class ActiveSupport::TestCase

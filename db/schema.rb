@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111109182944) do
+ActiveRecord::Schema.define(:version => 20111110175153) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -210,8 +210,8 @@ ActiveRecord::Schema.define(:version => 20111109182944) do
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                 :default => "", :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
+    t.string   "email",                                                     :null => false
+    t.string   "encrypted_password",     :limit => 128,                     :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "remember_token"
@@ -240,11 +240,13 @@ ActiveRecord::Schema.define(:version => 20111109182944) do
     t.string   "pref_currency"
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "role",                                  :default => "user"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["role"], :name => "index_users_on_role"
 
 end

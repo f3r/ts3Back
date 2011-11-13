@@ -2,8 +2,9 @@ require 'test_helper'
 class AuthenticationsTest < ActionController::IntegrationTest
 
   setup do
-    @user = Factory(:user)
+    @user = Factory(:user, :role => "admin")
     @user.confirm!
+    Authorization.current_user = @user
     @oauth_token = {
       :provider=>"twitter", 
       :uid=>"1111111111", 
