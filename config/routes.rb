@@ -70,6 +70,7 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # USER INFO
     ##############################################################################
+    put     "users/:id/change_role",  :to => "users#change_role"
     get     "users/:id/info",         :to => "users#info"
     get     "users/:id/places",       :to => "places#user_places"
     get     "users/:id",              :to => "users#show"

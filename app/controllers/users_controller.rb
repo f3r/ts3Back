@@ -115,4 +115,27 @@ class UsersController < ApplicationController
     end
   end
 
+  # ==Description
+  # Changes a users role
+  # ==Resource URL
+  # /users/:id/change_role.format
+  # ==Example
+  # PUT https://backend-heypal.heroku.com/users/1/change_role.json access_token=access_token&role=admin
+  # === Parameters
+  # [:access_token] Access token
+  # [:role] New role, Options: superadmin, admin, agent, user
+  # === Error codes
+  # [105] invalid access token
+  # [101] can't be blank
+  # [103] is invalid
+  def change_role
+    check_token
+    @user = User.find(params[:id])
+    if @user.update_attributes({:role => params[:role]})
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => format_errors(@user.errors.messages)})
+    end
+  end
+
 end

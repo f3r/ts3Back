@@ -140,4 +140,23 @@ class UsersTest < ActionController::IntegrationTest
     assert_not_nil json['user']['avatar']
   end
 
+  should "change users role (json)" do
+    put "/users/#{@user.id}/change_role.json", {:access_token => @user.authentication_token, :role => "admin" }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+  end
+  
+  should "not change users role, invalid role (json)" do
+    put "/users/#{@user.id}/change_role.json", {:access_token => @user.authentication_token, :role => "troll" }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+    assert (json['err']['role'].include? 103)
+  end
+  
 end

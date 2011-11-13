@@ -34,7 +34,8 @@ class User < ActiveRecord::Base
                   :password_confirmation, 
                   :remember_me,
                   :pref_language,
-                  :pref_currency
+                  :pref_currency,
+                  :role
 
   attr_accessor :avatar_url
 
@@ -48,11 +49,12 @@ class User < ActiveRecord::Base
   validates_presence_of   :email, :message => "101"
   validates_uniqueness_of :email, :message => "100"
   validates_format_of     :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
+  validates_inclusion_of  :role, :in => ["superadmin", "admin", "agent", "user"], :message => "103"
 
   validates_date :birthdate, 
     :invalid_date_message => "113", 
     :on => :update, 
-    :unless => lambda { self.password && self.password_confirmation },
+    :unless => lambda { (self.password && self.password_confirmation) or role_changed? },
     :before => lambda { Date.current }
 
   has_many :authentications, :dependent => :destroy
