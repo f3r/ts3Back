@@ -22,7 +22,7 @@ class SessionsController < Devise::SessionsController
     params[resource_name] = { :email => params[:email], :password => params[:password] }
     resource = warden.authenticate!(:scope => resource_name)
     if resource
-      return_message(200, :ok, {:authentication_token => resource.authentication_token})
+      return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
     end
   end
   # Error message override is at /lib/custom_failure.rb

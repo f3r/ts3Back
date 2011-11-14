@@ -46,7 +46,7 @@ class PasswordsController < Devise::PasswordsController
         :password_confirmation => params[:password]})
       if resource.errors.empty?
         if resource.active_for_authentication?
-          return_message(200, :ok, {:authentication_token => resource.authentication_token})
+          return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
         else
           return_message(200, :ok)
         end

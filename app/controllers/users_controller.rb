@@ -130,11 +130,15 @@ class UsersController < ApplicationController
   # [103] is invalid
   def change_role
     check_token
-    @user = User.find(params[:id])
-    if @user.update_attributes({:role => params[:role]})
-      return_message(200, :ok)
+    if !params[:role].blank?
+      @user = User.find(params[:id])
+      if @user.update_attributes({:role => params[:role]})
+        return_message(200, :ok)
+      else
+        return_message(200, :fail, {:err => format_errors(@user.errors.messages)})
+      end
     else
-      return_message(200, :fail, {:err => format_errors(@user.errors.messages)})
+      return_message(200, :fail, {:err => {:role => [101]}})
     end
   end
 

@@ -40,7 +40,7 @@ class ConfirmationsController < Devise::ConfirmationsController
     if resource.errors.empty?
       # New user! Now we send them a nice welcome email
       UserMailer.welcome_note(resource).deliver
-      return_message(200, :ok, {:authentication_token => resource.authentication_token})
+      return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
     else
       return_message(401, :fail, {:err => {:confirmation_token => "103"}})
     end
