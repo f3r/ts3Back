@@ -154,16 +154,18 @@ class PlacesController < ApplicationController
         params[:q].merge!({"max_guests_gteq" => "#{params[:guests]}"})
       end
       
+      places = Place.with_permissions_to(:read)
+      
       # Filter by status
       case params[:status]
       when "all"
-        @search = Place.search(params[:q])
+        @search = places.search(params[:q])
       when "published"
-        @search = Place.where(:published => true).search(params[:q])
+        @search = places.where(:published => true).search(params[:q])
       when "not_published"
-        @search = Place.where(:published => false).search(params[:q])
+        @search = places.where(:published => false).search(params[:q])
       else
-        @search = Place.where(:published => true).search(params[:q])
+        @search = places.where(:published => true).search(params[:q])
       end
 
       # Sorting column
@@ -184,8 +186,8 @@ class PlacesController < ApplicationController
 
       @search.sorts = sorting if sorting
 
-      places = @search.result(:distinct => true)
-      places_paginated = places.paginate(:page => params[:page], :per_page => per_page)
+      places_search = @search.result(:distinct => true)
+      places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
 
       if !places_paginated.blank?
         filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
@@ -194,10 +196,10 @@ class PlacesController < ApplicationController
         })
         response = {
           :places => filtered_places, 
-          :results => places.count, 
+          :results => places_search.count, 
           :per_page => per_page, 
           :current_page => params[:page], 
-          :total_pages => (places.count/per_page.to_f).ceil
+          :total_pages => (places_search.count/per_page.to_f).ceil
         }
       else
         response = {:err => {:places => [115]}}
@@ -218,7 +220,7 @@ class PlacesController < ApplicationController
   # === Parameters
   # [id] if of the place
   def show
-    @place = Place.find(params[:id])
+    @place = Place.with_permissions_to(:read).find(params[:id])
     place = filter_fields(@place, @fields, { :additional_fields => { 
       :user => @user_fields,
       :place_type => @place_type_fields } })
@@ -246,7 +248,6 @@ class PlacesController < ApplicationController
   # [105] invalid access token
   # [132] invalid city (not on the cities table)
   def create
-    check_token
     place = { 
       :title         => params[:title],
       :place_type_id => params[:place_type_id],
@@ -317,8 +318,7 @@ class PlacesController < ApplicationController
   # [105] invalid access token
   # [118] must be a number
   def update
-    check_token
-    @place = Place.find(params[:id])
+    @place = Place.with_permissions_to(:read).find(params[:id])
     place = filter_params(params, @fields)
     if @place.update_attributes(place)
       place_return = filter_fields(@place,@fields, { :additional_fields => {
@@ -339,8 +339,7 @@ class PlacesController < ApplicationController
   # === Parameters
   # [access_token]
   def destroy
-    check_token
-    place = Place.find(params[:id])
+    place = Place.with_permissions_to(:read).find(params[:id])
     if place.destroy
       return_message(200, :ok)
     else
@@ -360,8 +359,7 @@ class PlacesController < ApplicationController
   # === Error codes
   # [115]           no results
   def user_places
-    check_token
-    @places = current_user.places
+    @places = current_user.places.with_permissions_to(:read)
     @places = @places.where(:published => true) unless params[:published] == "0"
     if !@places.blank?
       places_return = filter_fields(@places,@fields, { :additional_fields => {
@@ -396,7 +394,7 @@ class PlacesController < ApplicationController
     else
       raise ActionController::UnknownAction
     end
-    @place = Place.find(params[:id])
+    @place = Place.with_permissions_to(:read).find(params[:id])
       if method        
         if @place.send(method)
           place = filter_fields(@place,@fields, { 

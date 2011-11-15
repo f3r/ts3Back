@@ -10,10 +10,10 @@ require 'declarative_authorization/maintenance'
 
 class ActionController::TestCase
   include Devise::TestHelpers
-  include Authorization::TestHelper
 end
 
 class ActiveSupport::TestCase
+  include Authorization::TestHelper
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
   # Note: You'll currently still have to declare fixtures explicitly in integration tests

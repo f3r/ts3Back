@@ -1,14 +1,12 @@
 include GeneralHelper
 class ApplicationController < ActionController::Base
 
-  # TODO: Doesn't seem to work
-  rescue_from Authorization::NotAuthorized, :with => :unauthorized_access
-
   rescue_from Exceptions::UnauthorizedAccess, :with => :unauthorized_access
   rescue_from Exceptions::NotActivated, :with => :not_activated
   rescue_from ActiveRecord::RecordNotFound, :with => :not_found
   rescue_from ActiveRecord::RecordInvalid, :with => :not_found
   rescue_from ActionController::UnknownAction, :with => :not_found
+  rescue_from Authorization::AttributeAuthorizationError, :with => :attribute_authorization_error
 
   protect_from_forgery
 
@@ -48,6 +46,10 @@ class ApplicationController < ActionController::Base
       }
     end
   end
+
+  def permission_denied  
+    return_message(403,:fail,{:err => {:authorization => [133]}})
+  end
   
   protected
   def set_current_user
@@ -56,6 +58,10 @@ class ApplicationController < ActionController::Base
   
   private
 
+  def attribute_authorization_error
+    return_message(403,:fail,{:err => {:permissions => [134]}})
+  end
+  
   def unauthorized_access
     return_message(401,:fail,{:err => {:access_token => [105]}})
   end
