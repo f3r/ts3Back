@@ -7,13 +7,14 @@ authorization do
   role :admin do
     includes [:default]
     has_permission_on [:users, :places], :to => [:manage]
+    has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish]
   end
 
   role :agent do
     includes [:default]
     has_permission_on :places, :to => [:create]
-    has_permission_on :places, :to => [:manage, :publish] do
+    has_permission_on :places, :to => [:manage, :publish, :user_places] do
       if_attribute :user => is { user }
     end
   end
@@ -24,12 +25,13 @@ authorization do
 
   role :default do
     includes [:guest]
-    has_permission_on [:users], :to => [:read, :update] do
+    has_permission_on [:users], :to => [:read, :update, :info] do
       if_attribute :id => is { user.id }
     end
   end
   
   role :guest do
+    has_permission_on :users, :to => [:info]
     has_permission_on :places, :to => [:search]
     has_permission_on :places, :to => [:read] do
       if_attribute :published => is { true }
