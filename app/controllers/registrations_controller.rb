@@ -1,3 +1,5 @@
+require 'declarative_authorization/maintenance'
+include Authorization::TestHelper
 class RegistrationsController < Devise::RegistrationsController
   prepend_before_filter :require_no_authentication, :only => [ :new, :create, :cancel, :destroy ]
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update]
@@ -29,24 +31,26 @@ class RegistrationsController < Devise::RegistrationsController
   # [103] is invalid
   # [104] doesn't match
   def create
-    parameters = {  :first_name => params[:first_name], 
-                    :last_name => params[:last_name], 
-                    :email => params[:email], 
-                    :password => params[:password], 
-                    :password_confirmation => params[:password],
-                    :role => "agent" } # FIXME: set all user to agent (should be user)
-    resource = resource_class.new(parameters)
-    if resource.save
-      if params[:oauth_token] && params[:oauth_token]['credentials']
-        authentication = resource.authentications.create(
-          :provider => params[:oauth_token]['provider'], 
-          :uid => params[:oauth_token]['uid'], 
-          :token => params[:oauth_token]['credentials']['token'], 
-          :secret => params[:oauth_token]['credentials']['secret'])
+    without_access_control do
+      parameters = {  :first_name => params[:first_name], 
+                      :last_name => params[:last_name], 
+                      :email => params[:email], 
+                      :password => params[:password], 
+                      :password_confirmation => params[:password],
+                      :role => "agent" } # FIXME: set all user to agent (should be user)
+      resource = resource_class.new(parameters)
+      if resource.save
+        if params[:oauth_token] && params[:oauth_token]['credentials']
+          authentication = resource.authentications.create(
+            :provider => params[:oauth_token]['provider'], 
+            :uid => params[:oauth_token]['uid'], 
+            :token => params[:oauth_token]['credentials']['token'], 
+            :secret => params[:oauth_token]['credentials']['secret'])
+        end
+        return_message(200, :ok, {:user_id => resource.id})
+      else
+        return_message(200, :fail, {:err => format_errors(resource.errors.messages)})
       end
-      return_message(200, :ok, {:user_id => resource.id})
-    else
-      return_message(200, :fail, {:err => format_errors(resource.errors.messages)})
     end
   end
   

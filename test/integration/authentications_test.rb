@@ -2,14 +2,16 @@ require 'test_helper'
 class AuthenticationsTest < ActionController::IntegrationTest
 
   setup do
-    @user = Factory(:user, :role => "admin")
-    @user.confirm!
-    Authorization.current_user = @user
-    @oauth_token = {
-      :provider=>"twitter", 
-      :uid=>"1111111111", 
-      :credentials=>{"token"=>"aaaaa", "secret"=>"bbbbb"}, 
-      :user_info=>{"first_name"=>Faker::Name.first_name,"last_name"=>Faker::Name.last_name, "email" => Faker::Internet.email}}
+    without_access_control do
+      @user = Factory(:user, :role => "admin")
+      @user.confirm!
+      Authorization.current_user = @user
+      @oauth_token = {
+        :provider=>"twitter", 
+        :uid=>"1111111111", 
+        :credentials=>{"token"=>"aaaaa", "secret"=>"bbbbb"}, 
+        :user_info=>{"first_name"=>Faker::Name.first_name,"last_name"=>Faker::Name.last_name, "email" => Faker::Internet.email}}
+    end
   end
 
   should "list user authentications (json)" do

@@ -8,7 +8,7 @@ authorization do
     includes [:default]
     has_permission_on [:users, :places], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
-    has_permission_on :places, :to => [:user_places, :publish]
+    has_permission_on :places, :to => [:user_places, :publish, :user_places]
   end
 
   role :agent do
@@ -25,17 +25,19 @@ authorization do
 
   role :default do
     includes [:guest]
-    has_permission_on [:users], :to => [:read, :update, :info] do
+    has_permission_on [:users], :to => [:read, :update, :info, :delete] do
       if_attribute :id => is { user.id }
     end
   end
   
   role :guest do
-    has_permission_on :users, :to => [:info]
+    has_permission_on :users, :to => [:info, :user_places]
     has_permission_on :places, :to => [:search]
     has_permission_on :places, :to => [:read] do
       if_attribute :published => is { true }
     end
+    has_permission_on [:passwords], :to => [:update, :create]
+    has_permission_on [:sessions], :to => [:create, :oauth_create]
   end
 
 end

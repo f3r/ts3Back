@@ -2,17 +2,19 @@ require 'test_helper'
 class AddressesTest < ActionController::IntegrationTest
 
   setup do
-    @user = Factory(:user, :role => "admin")
-    @user.confirm!
-    Authorization.current_user = @user
-    @address = Factory(:address, :user => @user)
-    @fake_address = { 
-      :street => Faker::Address.street_address,
-      :city => Faker::Address.city,
-      :country => Faker::Address.country,
-      :zip => Faker::Address.zip,
-      :user_id => @user.id
-    }
+    without_access_control do
+      @user = Factory(:user, :role => "admin")
+      @user.confirm!
+      Authorization.current_user = @user
+      @address = Factory(:address, :user => @user)
+      @fake_address = { 
+        :street => Faker::Address.street_address,
+        :city => Faker::Address.city,
+        :country => Faker::Address.country,
+        :zip => Faker::Address.zip,
+        :user_id => @user.id
+      }
+    end
   end
 
   should "create user addresses (json)" do

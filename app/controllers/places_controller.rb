@@ -2,8 +2,7 @@ require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
 class PlacesController < ApplicationController
-  filter_resource_access
-  filter_access_to [:show, :create, :update, :search, :user_places, :publish], :attribute_check => false
+  filter_access_to :all, :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   

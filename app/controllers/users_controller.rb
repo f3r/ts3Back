@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+
+  before_filter :get_user, :only => [:update,:show,:change_role]
+  filter_access_to :all, :attribute_check => false
   
   def initialize
     @fields = [
@@ -34,7 +37,7 @@ class UsersController < ApplicationController
   def info
     fields = [:id, :first_name, :last_name, :avatar_file_name]
     @user = Rails.cache.fetch("user_info_" + params[:id].to_s) { User.select(fields).find(params[:id]) }
-    if @user
+    if permitted_to? :info, @user
       return_message(200, :ok, {:user => filter_fields(@user, fields, {:style => :thumb})})
     else
       return_message(200, :fail, {:err => {:user => [112]}})
@@ -58,10 +61,11 @@ class UsersController < ApplicationController
   # === Error codes
   # [105] invalid access token
   def show
-    check_token
-    id = params[:id].nil? ? current_user.id : params[:id]
-    @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.select(@fields).find(id) }
-    return_message(200, :ok, {:user => filter_fields(@user,@fields)})
+    if @user && (permitted_to? :read, @user)
+      return_message(200, :ok, {:user => filter_fields(@user,@fields)})
+    else
+      attribute_authorization_error
+    end
   end
 
   # ==Description
@@ -70,8 +74,10 @@ class UsersController < ApplicationController
   # *Note:* User fields must be enclosed with square brackets, not with periods
   # ==Resource URL
   # /users.format
+  # /users/:id.format
   # ==Example
   # PUT https://backend-heypal.heroku.com/users.json access_token=access_token&avatar_url=http://url/image_file
+  # PUT https://backend-heypal.heroku.com/users/1.json access_token=access_token&avatar_url=http://url/image_file
   # === Parameters
   # [:access_token] Access token
   # [first_name]    String, First name of the user
@@ -92,7 +98,6 @@ class UsersController < ApplicationController
   # [103] is invalid
   # [113] invalid date
   def update
-    check_token
     fields = [
       :id,
       :first_name, 
@@ -106,7 +111,6 @@ class UsersController < ApplicationController
       :pref_language,
       :pref_currency
     ]
-    @user = current_user
     new_params = filter_params(params, fields)
     if @user.update_attributes(new_params)
       return_message(200, :ok, {:user => filter_fields(@user,@fields)})
@@ -129,17 +133,27 @@ class UsersController < ApplicationController
   # [101] can't be blank
   # [103] is invalid
   def change_role
-    check_token
-    if !params[:role].blank?
-      @user = User.find(params[:id])
+    if !params[:role].blank? && params[:role] != @user.role
       if @user.update_attributes({:role => params[:role]})
         return_message(200, :ok)
       else
         return_message(200, :fail, {:err => format_errors(@user.errors.messages)})
       end
+    elsif !params[:role].blank? && params[:role] == @user.role # no change
+      return_message(200, :ok)
     else
       return_message(200, :fail, {:err => {:role => [101]}})
     end
   end
 
+  protected
+  def get_user
+    if params[:id]
+      id = params[:id]
+    elsif current_user
+      id = current_user.id
+    end
+    # @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.find(id) } if id
+    @user = User.find(id) if id
+  end
 end

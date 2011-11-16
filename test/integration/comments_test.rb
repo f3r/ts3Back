@@ -2,13 +2,15 @@ require 'test_helper'
 class CommentsTest < ActionController::IntegrationTest
 
   setup do
-    @city    = Factory(:city)
-    @user = Factory(:user, :role => "admin")
-    @user.confirm!
-    Authorization.current_user = @user
-    @place_type = Factory(:place_type)
-    @place      = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
-    @comment    = Factory(:comment, :place => @place, :user => @user)
+    without_access_control do
+      @city    = Factory(:city)
+      @user = Factory(:user, :role => "admin")
+      @user.confirm!
+      Authorization.current_user = @user
+      @place_type = Factory(:place_type)
+      @place      = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
+      @comment    = Factory(:comment, :place => @place, :user => @user)
+    end
   end
 
   should "create a comment (xml)" do
