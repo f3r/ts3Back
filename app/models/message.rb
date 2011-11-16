@@ -1,4 +1,4 @@
-puts# == Description
+# == Description
 # Messages are between two users. We have three different keys in REDIS:
 #
 # [Messages]
@@ -29,9 +29,6 @@ puts# == Description
 #
 #   Fields: Two Sorted Sets (read/unread) of user_ids for the other user in the conversation
 #
-
-#Authorization.current_user = User.last
-
 class Message
   
   # == Description
