@@ -1,6 +1,9 @@
+require 'declarative_authorization/maintenance'
+include Authorization::TestHelper
 class PasswordsController < Devise::PasswordsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  filter_access_to :all, :attribute_check => false
 
   # ==Description
   # If a user forgets the password, you call this url with the email
@@ -14,11 +17,13 @@ class PasswordsController < Devise::PasswordsController
   # === Error codes
   # [106] email not found
   def create
-    self.resource = resource_class.send_reset_password_instructions({:email => params[:email]})
-    if successful_and_sane?(resource)
-      return_message(200, :ok)
-    else
-      return_message(200, :fail, {:err => { :email => "106" }})
+    without_access_control do
+      self.resource = resource_class.send_reset_password_instructions({:email => params[:email]})
+      if successful_and_sane?(resource)
+        return_message(200, :ok)
+      else
+        return_message(200, :fail, {:err => { :email => "106" }})
+      end
     end
   end
 
@@ -39,22 +44,24 @@ class PasswordsController < Devise::PasswordsController
   # [102] too short
   # [103] invalid reset_password_token
   def update
-    if params[:reset_password_token] && params[:password]
-      self.resource = resource_class.reset_password_by_token({
-        :reset_password_token => params[:reset_password_token],
-        :password => params[:password],
-        :password_confirmation => params[:password]})
-      if resource.errors.empty?
-        if resource.active_for_authentication?
-          return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
+    without_access_control do
+      if params[:reset_password_token] && params[:password]
+        self.resource = resource_class.reset_password_by_token({
+          :reset_password_token => params[:reset_password_token],
+          :password => params[:password],
+          :password_confirmation => params[:password]})
+        if resource.errors.empty?
+          if resource.active_for_authentication?
+            return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
+          else
+            return_message(200, :ok)
+          end
         else
-          return_message(200, :ok)
+          return_message(200, :fail, {:err => format_errors(resource.errors.messages) })
         end
       else
-        return_message(200, :fail, {:err => format_errors(resource.errors.messages) })
+        return_message(200, :fail, {:err => {:password => 101} })
       end
-    else
-      return_message(200, :fail, {:err => {:password => 101} })
     end
   end
 end

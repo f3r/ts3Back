@@ -1,6 +1,9 @@
+require 'declarative_authorization/maintenance'
+include Authorization::TestHelper
 class ConfirmationsController < Devise::ConfirmationsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  filter_access_to :all, :attribute_check => false
 
   # ==Resource URL
   # /users/confirmation.format
@@ -11,11 +14,13 @@ class ConfirmationsController < Devise::ConfirmationsController
   # === Error codes
   # [106] email not found
   def create
-    self.resource = resource_class.send_confirmation_instructions({:email => params[:email]})
-    if successful_and_sane?(resource)
-      return_message(200, :ok)
-    else
-      return_message(200, :fail, {:err => { :email => "106" }})
+    without_access_control do
+      self.resource = resource_class.send_confirmation_instructions({:email => params[:email]})
+      if successful_and_sane?(resource)
+        return_message(200, :ok)
+      else
+        return_message(200, :fail, {:err => { :email => "106" }})
+      end
     end
   end
 
@@ -36,13 +41,15 @@ class ConfirmationsController < Devise::ConfirmationsController
   # === Error codes
   # [103] invalid confirmation_token
   def show
-    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
-    if resource.errors.empty?
-      # New user! Now we send them a nice welcome email
-      UserMailer.welcome_note(resource).deliver
-      return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
-    else
-      return_message(401, :fail, {:err => {:confirmation_token => "103"}})
+    without_access_control do
+      self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+      if resource.errors.empty?
+        # New user! Now we send them a nice welcome email
+        UserMailer.welcome_note(resource).deliver
+        return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
+      else
+        return_message(401, :fail, {:err => {:confirmation_token => "103"}})
+      end
     end
   end
 

@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
          # :invitable,              # Send invites: https://github.com/scambra/devise_invitable
          :token_authenticatable     # Generate auth token and validates it
 
+  using_access_control
+
   before_save :ensure_authentication_token, :check_avatar_url
   after_save  :delete_cache
 

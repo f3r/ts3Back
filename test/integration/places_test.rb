@@ -6,43 +6,45 @@ Money.default_bank = Money::Bank::GoogleCurrency.new
 class PlacesTest < ActionController::IntegrationTest
 
   setup do
-    @city = Factory(:city)
-    @admin_user = Factory(:user, :role => "admin")
-    @admin_user.confirm!
-    Authorization.current_user = @admin_user
-    @agent_user = Factory(:user, :role => "agent")
-    @agent_user.confirm!
-    @user = Factory(:user, :role => "user")
-    @user.confirm!
-    @place_type = Factory(:place_type)
-    @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
-    @availability = Factory(:availability, :place => @place )
-    @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
-    @place_new_info = { 
-      :title => "Test title", 
-      :amenities_kitchen => true, 
-      :amenities_tennis => true, 
-      :photos => @photos,
-      :currency => "JPY",
-      :price_per_night => "8000",
-      :price_per_week => "128000",
-      :price_per_month => "400000"
-    }
-    @new_place = { :title => "test title", :place_type_id => @place_type.id, :num_bedrooms => 3, :max_guests => 5, :city_id => @city.id }
-    @published_place = Factory( :place, 
-                                :user => @admin_user, 
-                                :place_type => @place_type, 
-                                :city => @city,
-                                :amenities_kitchen => true, 
-                                :amenities_tennis => true, 
-                                :photos => @photos,
-                                :currency => "JPY",
-                                :price_per_night => "8000",
-                                :price_per_week => "128000",
-                                :price_per_month => "400000"
-                              )
-    @published_place_availability = Factory(:availability, :place => @published_place )
-    @published_place.publish!
+    without_access_control do
+      @city = Factory(:city)
+      @admin_user = Factory(:user, :role => "admin")
+      @admin_user.confirm!
+      Authorization.current_user = @admin_user
+      @agent_user = Factory(:user, :role => "agent")
+      @agent_user.confirm!
+      @user = Factory(:user, :role => "user")
+      @user.confirm!
+      @place_type = Factory(:place_type)
+      @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
+      @availability = Factory(:availability, :place => @place )
+      @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
+      @place_new_info = { 
+        :title => "Test title", 
+        :amenities_kitchen => true, 
+        :amenities_tennis => true, 
+        :photos => @photos,
+        :currency => "JPY",
+        :price_per_night => "8000",
+        :price_per_week => "128000",
+        :price_per_month => "400000"
+      }
+      @new_place = { :title => "test title", :place_type_id => @place_type.id, :num_bedrooms => 3, :max_guests => 5, :city_id => @city.id }
+      @published_place = Factory( :place, 
+                                  :user => @admin_user, 
+                                  :place_type => @place_type, 
+                                  :city => @city,
+                                  :amenities_kitchen => true, 
+                                  :amenities_tennis => true, 
+                                  :photos => @photos,
+                                  :currency => "JPY",
+                                  :price_per_night => "8000",
+                                  :price_per_week => "128000",
+                                  :price_per_month => "400000"
+                                )
+      @published_place_availability = Factory(:availability, :place => @published_place )
+      @published_place.publish!
+    end
   end
 
   should "get place information as admin (json)" do
@@ -94,17 +96,17 @@ class PlacesTest < ActionController::IntegrationTest
   
   should "not delete admin's place as agent (xml)" do
     assert_difference 'Place.count', 0 do
-      delete "/places/#{@place.id}.xml", {:access_token => @agent_user.authentication_token}
+      delete "/places/#{@published_place.id}.xml", {:access_token => @agent_user.authentication_token}
     end
     assert_response(403)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
-    assert_tag 'err', :child => { :tag => "authorization", :content => "133" }
+    assert_tag 'err', :child => { :tag => "permissions", :content => "134" }
   end
   
   should "not delete admin's place as user (xml)" do
     assert_difference 'Place.count', 0 do
-      delete "/places/#{@place.id}.xml", {:access_token => @user.authentication_token}
+      delete "/places/#{@published_place.id}.xml", {:access_token => @user.authentication_token}
     end
     assert_response(403)
     assert_equal 'application/xml', @response.content_type
@@ -128,15 +130,25 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_month_usd']
   end  
 
-  should "not update admin's place as agent (xml)" do
+  should "not update admin's unpublished place as agent (xml)" do
     assert_equal 'admin', @place.user.role
     assert_equal 'agent', @agent_user.role
     put "/places/#{@place.id}.xml", @place_new_info.merge({:access_token => @agent_user.authentication_token})
+    assert_response(404)
+    assert_equal 'application/xml', @response.content_type
+    assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
+  end
+
+  should "not update admin's published place as agent (xml)" do
+    assert_equal 'admin', @published_place.user.role
+    assert_equal 'agent', @agent_user.role
+    put "/places/#{@published_place.id}.xml", @place_new_info.merge({:access_token => @agent_user.authentication_token})
     assert_response(403)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
     assert_tag 'err', :child => { :tag => "permissions", :content => "134" }
   end
+
   
   should "not update admin's place as user (xml)" do
     put "/places/#{@place.id}.xml", @place_new_info.merge({:access_token => @user.authentication_token})

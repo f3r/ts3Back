@@ -2,10 +2,12 @@ require 'test_helper'
 class PlaceTypesTest < ActionController::IntegrationTest
 
   setup do
-    @place_type = Factory(:place_type)
-    @user = Factory(:user, :role => "admin")
-    @user.confirm!
-    Authorization.current_user = @user
+    without_access_control do
+      @place_type = Factory(:place_type)
+      @user = Factory(:user, :role => "admin")
+      @user.confirm!
+      Authorization.current_user = @user
+    end
   end
 
   should "create a place_type (xml)" do

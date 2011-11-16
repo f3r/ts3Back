@@ -2,12 +2,15 @@ require 'test_helper'
 class RegistrationsTest < ActionController::IntegrationTest
 
   setup do
-    @user = Factory(:user)
-    Authorization.current_user = @user
-    @parameters = { :first_name => Faker::Name.first_name, 
-                    :last_name => Faker::Name.last_name, 
-                    :email => Faker::Internet.email, 
-                    :password => "FSls26ESKaaJzADP" }
+    without_access_control do
+      @user = Factory(:user, :role => "user")
+      @user.confirm!
+      Authorization.current_user = @user
+      @parameters = { :first_name => Faker::Name.first_name, 
+                      :last_name => Faker::Name.last_name, 
+                      :email => Faker::Internet.email, 
+                      :password => "FSls26ESKaaJzADP" }
+    end
   end
 
   should "create a user (xml)" do
@@ -37,13 +40,8 @@ class RegistrationsTest < ActionController::IntegrationTest
   end
 
   should "cancel registration (xml)" do
-    assert_difference 'User.count', +1 do
-      post '/users/sign_up.xml', @parameters
-    end
-    user = User.first(:order => 'id DESC')
-    user.confirm!
     assert_difference 'User.count', -1 do
-      delete '/users.xml', {:access_token => user.authentication_token}
+      delete '/users.xml', {:access_token => @user.authentication_token}
     end
     assert_response(200)
     assert_equal 'application/xml', @response.content_type
@@ -51,15 +49,10 @@ class RegistrationsTest < ActionController::IntegrationTest
   end
 
   should "cancel registration invalid token (xml)" do
-    assert_difference 'User.count', +1 do
-      post '/users/sign_up.xml', @parameters
-    end
-    user = User.first(:order => 'id DESC')
-    user.confirm!
     assert_no_difference 'User.count' do
       delete '/users.xml', {:access_token => "invalid-token"}
     end
-    assert_response(401)
+    assert_response(403)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
   end

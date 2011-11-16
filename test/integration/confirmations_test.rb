@@ -2,7 +2,9 @@ require 'test_helper'
 class ConfirmationsTest < ActionController::IntegrationTest
 
   setup do
-    @user = Factory(:user)
+    without_access_control do
+      @user = Factory(:user)
+    end
   end
 
   should "create new confirmation token (xml)" do

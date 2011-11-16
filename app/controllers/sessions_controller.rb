@@ -1,6 +1,9 @@
+require 'declarative_authorization/maintenance'
+include Authorization::TestHelper
 class SessionsController < Devise::SessionsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  filter_access_to :all, :attribute_check => false
 
   # ==Description
   # Given an email and password, this method returns the authentication token of the user so you can
@@ -19,10 +22,12 @@ class SessionsController < Devise::SessionsController
   # [108] unauthenticated user
   # [109] Invalid email or password
   def create
-    params[resource_name] = { :email => params[:email], :password => params[:password] }
-    resource = warden.authenticate!(:scope => resource_name)
-    if resource
-      return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
+    without_access_control do
+      params[resource_name] = { :email => params[:email], :password => params[:password] }
+      resource = warden.authenticate!(:scope => resource_name)
+      if resource
+        return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
+      end
     end
   end
   # Error message override is at /lib/custom_failure.rb

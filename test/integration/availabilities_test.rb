@@ -2,61 +2,63 @@ require 'test_helper'
 class AvailabilitiesTest < ActionController::IntegrationTest
 
   setup do
-    @city = Factory(:city)
-    @user = Factory(:user, :role => "admin")
-    @user.confirm!
-    Authorization.current_user = @user
-    @place_type = Factory(:place_type)
-    @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
+    without_access_control do
+      @city = Factory(:city)
+      @user = Factory(:user, :role => "admin")
+      @user.confirm!
+      Authorization.current_user = @user
+      @place_type = Factory(:place_type)
+      @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
     
-    @availability_occupied_new_info = { 
-      :availability_type => 1, 
-      :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
-      :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
-      :comment           => "new comment"
-    }
+      @availability_occupied_new_info = { 
+        :availability_type => 1, 
+        :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
+        :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
+        :comment           => "new comment"
+      }
 
-    @availability_occupied_new_info_updated = { 
-      :availability_type => 1, 
-      :date_start        => "#{(Date.current + 2.year + 10.day).to_s}",
-      :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
-      :comment           => "different comment"
-    }
+      @availability_occupied_new_info_updated = { 
+        :availability_type => 1, 
+        :date_start        => "#{(Date.current + 2.year + 10.day).to_s}",
+        :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
+        :comment           => "different comment"
+      }
     
-    @availability_occupied_new_info_updated_invalid = {
-      :availability_type => 1, 
-      :date_start        => "#{(Date.current - 1.day).to_s}",
-      :date_end          => "#{(Date.current - 2.day).to_s}"
-    }
+      @availability_occupied_new_info_updated_invalid = {
+        :availability_type => 1, 
+        :date_start        => "#{(Date.current - 1.day).to_s}",
+        :date_end          => "#{(Date.current - 2.day).to_s}"
+      }
     
-    @availability_occupied_new_info_overlap = { 
-      :availability_type => 1, 
-      :date_start        => "#{(Date.current + 2.year + 10.day).to_s}",
-      :date_end          => "#{(Date.current + 2.year + 25.day).to_s}",
-      :comment           => "new other comment"
-    }    
+      @availability_occupied_new_info_overlap = { 
+        :availability_type => 1, 
+        :date_start        => "#{(Date.current + 2.year + 10.day).to_s}",
+        :date_end          => "#{(Date.current + 2.year + 25.day).to_s}",
+        :comment           => "new other comment"
+      }    
     
-    @availability_new_price_new_info = { 
-      :availability_type => 2,
-      :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
-      :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
-      :price_per_night   => 150,
-      :comment           => "new comment"
-    }
+      @availability_new_price_new_info = { 
+        :availability_type => 2,
+        :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
+        :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
+        :price_per_night   => 150,
+        :comment           => "new comment"
+      }
 
-    @availability_new_price_new_info_updated = { 
-      :availability_type => 2,
-      :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
-      :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
-      :price_per_night   => 150,
-      :comment           => "new comment"
-    }
+      @availability_new_price_new_info_updated = { 
+        :availability_type => 2,
+        :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
+        :date_end          => "#{(Date.current + 2.year + 15.day).to_s}",
+        :price_per_night   => 150,
+        :comment           => "new comment"
+      }
         
-    @availability_new_price_new_info_overlap = { 
-      :availability_type => 2,
-      :date_start        => "#{(Date.current + 2.year + 10.day).to_s}",
-      :date_end          => "#{(Date.current + 2.year + 25.day).to_s}"
-    }
+      @availability_new_price_new_info_overlap = { 
+        :availability_type => 2,
+        :date_start        => "#{(Date.current + 2.year + 10.day).to_s}",
+        :date_end          => "#{(Date.current + 2.year + 25.day).to_s}"
+      }
+    end
   end
 
   should "create place availability occupied and update it (json)" do
