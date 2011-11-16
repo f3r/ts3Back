@@ -205,12 +205,14 @@ email=user@example.com&amp;password=password</p>
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 21</span>
+            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 24</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
-  <span class="ruby-identifier">params</span>[<span class="ruby-identifier">resource_name</span>] = { <span class="ruby-value">:email</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>], <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>] }
-  <span class="ruby-identifier">resource</span> = <span class="ruby-identifier">warden</span>.<span class="ruby-identifier">authenticate!</span>(<span class="ruby-value">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource_name</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">resource</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:authentication_token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">authentication_token</span>})
+  <span class="ruby-identifier">without_access_control</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">params</span>[<span class="ruby-identifier">resource_name</span>] = { <span class="ruby-value">:email</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>], <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>] }
+    <span class="ruby-identifier">resource</span> = <span class="ruby-identifier">warden</span>.<span class="ruby-identifier">authenticate!</span>(<span class="ruby-value">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource_name</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">resource</span>
+      <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:authentication_token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">authentication_token</span>, <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">role</span>})
+    <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- create-source -->
@@ -267,7 +269,7 @@ oauth_token[credentials][token]=token</pre>
 
           
           <div class="method-source-code" id="oauth_create-source">
-            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 43</span>
+            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">oauth_create</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>]
     <span class="ruby-identifier">authentication</span> = <span class="ruby-constant">Authentication</span>.<span class="ruby-identifier">find_by_provider_and_token</span>(

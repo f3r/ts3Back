@@ -191,7 +191,7 @@ email=fer@heypal.com</p>
 
           
           <div class="method-source-code" id="check_email-source">
-            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 86</span>
+            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 92</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_email</span>
   <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>
@@ -286,25 +286,28 @@ first_name=John&amp;last_name=Smith&amp;email=user@example.com&amp;password=pass
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 31</span>
+            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
-  <span class="ruby-identifier">parameters</span> = {  <span class="ruby-value">:first_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:first_name</span>], 
-                  <span class="ruby-value">:last_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:last_name</span>], 
-                  <span class="ruby-value">:email</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>], 
-                  <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>], 
-                  <span class="ruby-value">:password_confirmation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>] }
-  <span class="ruby-identifier">resource</span> = <span class="ruby-identifier">resource_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parameters</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>]
-      <span class="ruby-identifier">authentication</span> = <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">create</span>(
-        <span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'provider'</span>], 
-        <span class="ruby-value">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'uid'</span>], 
-        <span class="ruby-value">:token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>][<span class="ruby-string">'token'</span>], 
-        <span class="ruby-value">:secret</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>][<span class="ruby-string">'secret'</span>])
+  <span class="ruby-identifier">without_access_control</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">parameters</span> = {  <span class="ruby-value">:first_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:first_name</span>], 
+                    <span class="ruby-value">:last_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:last_name</span>], 
+                    <span class="ruby-value">:email</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>], 
+                    <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>], 
+                    <span class="ruby-value">:password_confirmation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>],
+                    <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;agent&quot;</span> } <span class="ruby-comment"># FIXME: set all user to agent (should be user)</span>
+    <span class="ruby-identifier">resource</span> = <span class="ruby-identifier">resource_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parameters</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>]
+        <span class="ruby-identifier">authentication</span> = <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">create</span>(
+          <span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'provider'</span>], 
+          <span class="ruby-value">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'uid'</span>], 
+          <span class="ruby-value">:token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>][<span class="ruby-string">'token'</span>], 
+          <span class="ruby-value">:secret</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>][<span class="ruby-string">'secret'</span>])
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">id</span>})
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-identifier">resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>)})
     <span class="ruby-keyword">end</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">id</span>})
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format_errors</span>(<span class="ruby-identifier">resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">messages</span>)})
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- create-source -->
@@ -362,7 +365,7 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 65</span>
+            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 71</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">check_token</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
