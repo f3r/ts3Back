@@ -52,7 +52,7 @@ class RegistrationsTest < ActionController::IntegrationTest
     assert_no_difference 'User.count' do
       delete '/users.xml', {:access_token => "invalid-token"}
     end
-    assert_response(401)
+    assert_response(403)
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
   end

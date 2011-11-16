@@ -5,6 +5,7 @@ class RegistrationsController < Devise::RegistrationsController
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update]
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  filter_access_to :all, :attribute_check => false
 
   # ==Description
   # This is the first step for a registration of new user. Just give us the name, email and password,

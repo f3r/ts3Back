@@ -3,6 +3,7 @@ include Authorization::TestHelper
 class ConfirmationsController < Devise::ConfirmationsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  filter_access_to :all, :attribute_check => false
 
   # ==Resource URL
   # /users/confirmation.format

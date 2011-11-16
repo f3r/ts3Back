@@ -3,6 +3,7 @@ include Authorization::TestHelper
 class PasswordsController < Devise::PasswordsController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  filter_access_to :all, :attribute_check => false
 
   # ==Description
   # If a user forgets the password, you call this url with the email
