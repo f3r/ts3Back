@@ -11,17 +11,19 @@ task :cron => :environment do
   # if Time.now.hour == 0 # run at midnight
   #   User.send_reminders
   # end
+  require 'facebook_import_job'
+  require 'logger'
   
   # Update Facebook Friends for each user with facebook account linked
   Authentication.where(:provider => "facebook").select("user_id").all.each{|foo|
     Delayed::Job.enqueue(FacebookImport.new(foo.user_id), -10)
-    logger.info { "[Cron] Added FB import task for user  #{foo.user_id}" }
+    Rails.logger.info { "[Cron] Added FB import task for user  #{foo.user_id}" }
   }
   
   # We only store notifications for a month, so we delete older notifications for all users
   User.all.each {|user|
     REDIS.zremrangebyscore("notifications:#{user.id}", 0, Notification.score_one_month_ago)
-    logger.info { "[Cron] Deleted old notifications for user  #{foo.user_id}" }
+    Rails.logger.info { "[Cron] Deleted old notifications for user #{user.id}" }
   }
   
 end

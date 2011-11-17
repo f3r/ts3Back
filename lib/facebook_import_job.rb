@@ -1,6 +1,6 @@
 class FacebookImport < Struct.new(:user_id)
   def perform
-    logger.info { "[DELAYED][FACEBOOK] Retrieved friends for user #{user_id}" }
+    Rails.logger.info { "[DELAYED][FACEBOOK] Retrieved friends for user #{user_id}" }
     user = User.find(user_id)
     authentication = user.authentications.where(:provider => "facebook").first
     if authentication
@@ -15,6 +15,7 @@ class FacebookImport < Struct.new(:user_id)
             REDIS.sadd(user.redis_key(:friend), friend['id'])
           }
         end
+        Rails.logger.info { "[DELAYED][FACEBOOK] Updated friends for user #{user_id}" }
       end
     end
   end
