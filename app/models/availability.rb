@@ -6,8 +6,8 @@ class Availability < ActiveRecord::Base
   validates_numericality_of :availability_type, :message => "118"
   validates_numericality_of :price_per_night, :allow_nil => true, :message => "118"
   
-  validates_date :date_start, :after => :today,      :after_message => "119"
-  validates_date :date_end,   :after => :date_start, :after_message => "120"
+  validates_date :date_start, :after => :today,            :after_message => "119"
+  validates_date :date_end,   :on_or_after => :date_start, :on_or_after_message => "120"
 
   validate :validates_overlapping
 
