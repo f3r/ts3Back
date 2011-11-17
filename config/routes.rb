@@ -25,10 +25,10 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # ADDRESSES
     ##############################################################################
-    get    "users/addresses",         :to => "addresses#index"
-    post   "users/addresses",         :to => "addresses#create"
-    put    "users/addresses/:id",     :to => "addresses#update"
-    delete "users/addresses/:id",     :to => "addresses#destroy"
+    get    "users/:user_id/addresses",         :to => "addresses#index"
+    post   "users/:user_id/addresses",         :to => "addresses#create"
+    put    "users/:user_id/addresses/:id",     :to => "addresses#update"
+    delete "users/:user_id/addresses/:id",     :to => "addresses#destroy"
     ##############################################################################
     # PLACE AVAILABILITIES
     ##############################################################################

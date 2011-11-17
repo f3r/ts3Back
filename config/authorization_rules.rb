@@ -6,7 +6,7 @@ authorization do
 
   role :admin do
     includes [:default]
-    has_permission_on [:users, :places], :to => [:manage]
+    has_permission_on [:users, :places, :addresses], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish, :user_places]
   end
@@ -29,6 +29,9 @@ authorization do
       if_attribute :id => is { user.id }
     end
     has_permission_on :registrations, :to => :destroy
+    has_permission_on :addresses, :to => [:index, :manage] do
+      if_attribute :user => is { user }
+    end
   end
   
   role :guest do

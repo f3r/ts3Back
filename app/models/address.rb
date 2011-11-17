@@ -1,4 +1,5 @@
 class Address < ActiveRecord::Base
+  using_access_control
   belongs_to :user
   validates_presence_of :country, :message => "101"
   validates_presence_of :city, :message => "101"
