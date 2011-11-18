@@ -11,7 +11,24 @@ class AvailabilitiesTest < ActionController::IntegrationTest
       @agent_user.confirm!
       @place_type = Factory(:place_type)
       @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
+      @availability = Factory(:availability, :place => @place )
       @agent_place = Factory(:place, :user => @agent_user, :place_type => @place_type, :city => @city)
+
+      @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
+      @published_place = Factory( :place, 
+                                  :user => @agent_user, 
+                                  :place_type => @place_type, 
+                                  :city => @city,
+                                  :amenities_kitchen => true, 
+                                  :amenities_tennis => true, 
+                                  :photos => @photos,
+                                  :currency => "JPY",
+                                  :price_per_night => "8000",
+                                  :price_per_week => "128000",
+                                  :price_per_month => "400000"
+                                )
+      @published_place_availability = Factory(:availability, :place => @published_place )
+      @published_place.publish!
       
       @users = [@admin_user, @agent_user]
 
@@ -65,7 +82,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
       }
     end
   end
-
+  
   should "create place availability occupied and update it as admin (json)" do
     assert_difference 'Availability.count', +1 do
       post "/places/#{@place.id}/availabilities.json", 
@@ -94,7 +111,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal @availability_occupied_new_info_updated[:date_end],           json['availability']['date_end']
     assert_equal @availability_occupied_new_info_updated[:comment],            json['availability']['comment']    
   end
-
+  
   should "create place availability occupied and update it as agent (json)" do
     assert_difference 'Availability.count', +1 do
       post "/places/#{@agent_place.id}/availabilities.json", 
@@ -152,7 +169,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal @availability_new_price_new_info_updated[:date_end],           json['availability']['date_end']
     assert_equal @availability_new_price_new_info_updated[:comment],            json['availability']['comment']    
   end
-
+  
   should "not create place availability if begin/end overlaps a previous one (json)" do
     post "/places/#{@place.id}/availabilities.json", 
       {:access_token => @admin_user.authentication_token}.merge(@availability_new_price_new_info)
@@ -169,7 +186,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal "fail", json['stat']
     assert_equal [121],  json['err']['message']
   end
-
+  
   should "create place availability if begin/end overlaps a previous one for occupied type (json)" do
     post "/places/#{@place.id}/availabilities.json", 
       {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)
@@ -188,7 +205,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
   end
-
+  
   should "create place availability occupied and not update wrong dates (json)" do
     post "/places/#{@place.id}/availabilities.json", 
         {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)
@@ -227,7 +244,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
   end
-
+  
   should "delete place availability as agent (json)" do
     assert_difference 'Availability.count', +1 do
       post "/places/#{@agent_place.id}/availabilities.json", 
@@ -247,16 +264,23 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
   end
-
+  
   should "not delete admin place availability as agent (json)" do
-    post "/places/#{@place.id}/availabilities.json", 
-          {:access_token => @agent_user.authentication_token}.merge(@availability_occupied_new_info)
+    delete "/places/#{@place.id}/availabilities.json", {:access_token => @agent_user.authentication_token}
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "fail", json['stat']
   end
-
+  
+  should "not delete place availability as guest (json)" do
+    delete "/places/#{@place.id}/availabilities.json"
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+  end
+  
   should "not create place availability if place doesn't exist (json)" do
     post "/places/8287278/availabilities.json", 
         {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)    
@@ -266,6 +290,35 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "fail", json['stat']
     assert_equal [106],  json['err']['record']
+  end
+
+  should "list published place availabilities as guest" do
+    get "/places/#{@published_place.id}/availabilities.json"
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+  end
+
+  should "not list unpublished place availabilities as guest" do
+    get "/places/#{@place.id}/availabilities.json"
+    assert_response(404)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+  end
+  
+  should "list unpublished place availabilities as admin" do
+    get "/places/#{@place.id}/availabilities.json", :access_token => @admin_user.authentication_token
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_not_nil json['availabilities']  
+    assert_equal @availability.id, json['availabilities'][0]["id"]
   end
 
 end

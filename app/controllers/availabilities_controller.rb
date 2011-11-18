@@ -14,11 +14,11 @@ class AvailabilitiesController < ApplicationController
   # == Error codes
   # [106] not found
   # [115] no results
-  def list    
-    @place = Place.find(params[:id])
+  def list
+    @place = Place.with_permissions_to(:read).find(params[:id])
+    @availabilities = @place.availabilities.select("id,availability_type,date_start,date_end,comment,price_per_night,comment").order("date_start ASC")
     if !@place.availabilities.blank?
-      return_message(200, :ok, {:availabilities => 
-        @place.availabilities.select("id,availability_type,date_start,date_end,comment,price_per_night,comment").order("date_start ASC")})
+      return_message(200, :ok, {:availabilities => @availabilities})
     else
       return_message(200, :ok, {:err=>{:availabilities => [115]}} )
     end
@@ -56,7 +56,7 @@ class AvailabilitiesController < ApplicationController
     availability.merge!({ :price_per_night   => params[:price_per_night]}) if params[:price_per_night]
     availability.merge!({ :comment           => params[:comment]})         if params[:comment]
     
-    @availability = Place.find(params[:id]).availabilities.new(availability)
+    @availability = Place.with_permissions_to(:read).find(params[:id]).availabilities.new(availability)
     if @availability.save
       return_message(200, :ok, {:availability => @availability})
     else
@@ -73,7 +73,7 @@ class AvailabilitiesController < ApplicationController
   # === Parameters
   # [:access_token]      Access token
   def destroy
-    @availability = Place.find(params[:place_id]).availabilities.find(params[:id])
+    @availability = Place.with_permissions_to(:read).find(params[:place_id]).availabilities.find(params[:id])
     if @availability.destroy
       return_message(200, :ok)
     else
@@ -104,7 +104,7 @@ class AvailabilitiesController < ApplicationController
   # [122] unmatching parent resource and child resource
   def update
     #TODO: Check that the availability is for a place the user owns...
-    @place        = Place.find(params[:place_id])
+    @place        = Place.with_permissions_to(:read).find(params[:place_id])
     @availability = @place.availabilities.find(params[:id])
           
     availability = {}

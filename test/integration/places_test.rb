@@ -65,6 +65,16 @@ class PlacesTest < ActionController::IntegrationTest
     assert_tag "place", :child => { :tag => "id", :content => @place.id.to_s }
   end
 
+  should "get published place information as guest" do
+    get "/places/#{@published_place.id}.json"
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @published_place.id, json['place']['id']
+  end
+  
   should "not get unpublished place information as user (xml)" do
     @place.unpublish!
     get "/places/#{@place.id}.xml", {:access_token => @user.authentication_token}

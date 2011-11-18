@@ -46,6 +46,9 @@ authorization do
     has_permission_on :places, :to => :read do
       if_attribute :published => is { true }
     end
+    has_permission_on :availabilities, :to => :read do
+      if_permitted_to :read, :place
+    end
     has_permission_on :passwords, :to => [:update, :create]
     has_permission_on :sessions, :to => [:create, :oauth_create]
     has_permission_on :confirmations, :to => [:show, :create]
