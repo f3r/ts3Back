@@ -1,4 +1,5 @@
 class NotificationsController < ApplicationController
+  filter_access_to :all, :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
@@ -13,8 +14,6 @@ class NotificationsController < ApplicationController
   # == Errors
   # [115] no result
   def index
-    check_token
-    
     @notifications = []
     Notification.all.each{|foo|
       @notifications << ActiveSupport::JSON::decode(foo)
@@ -37,8 +36,6 @@ class NotificationsController < ApplicationController
   # == Errors
   # [115] no results
   def unread
-    check_token
-    
     @notifications = []
     Notification.unread.each{|foo|
       @notifications << ActiveSupport::JSON::decode(foo)
@@ -59,7 +56,6 @@ class NotificationsController < ApplicationController
   # === Parameters
   # [:access_token]
   def mark_as_read
-    check_token    
     Notification.mark_as_read
     return_message(200, :ok)
   end  

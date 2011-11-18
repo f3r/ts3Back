@@ -38,6 +38,7 @@ authorization do
     has_permission_on :comments, :to => :create do
       if_attribute :replying_to => is { nil }
     end
+    has_permission_on :notifications, :to => [:index, :unread, :mark_as_read]
   end
   
   role :guest do
