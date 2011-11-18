@@ -239,6 +239,7 @@ class PlacesController < ApplicationController
   # [num_bedrooms]  Integer
   # [max_guests]    Integer
   # [city_id]       ID from the City model, Integer
+  # [currency]      Currency
   # === Response
   # [place] Array containing the recently created place
   # === Error codes
@@ -252,7 +253,8 @@ class PlacesController < ApplicationController
       :place_type_id => params[:place_type_id],
       :num_bedrooms  => params[:num_bedrooms],
       :max_guests    => params[:max_guests],
-      :city_id       => params[:city_id] }
+      :city_id       => params[:city_id],
+      :currency      => params[:currency]}
     @place = current_user.places.new(place)
     if @place.save
       place_return = filter_fields(@place, [:id, :title,:num_bedrooms,:max_guests,:country_name, :country_code, :state_name, :city_name, :city_id], :additional_fields => {
@@ -383,19 +385,18 @@ class PlacesController < ApplicationController
   # [106] Record not found
   # [123] not enough pictures
   # [124] description is too short
-  # [125] no availability
   # [126] no price
   # [127] no currency
   # [128] no security deposit
   def publish
     if params[:status] == "publish" or params[:status] == "unpublish"
-      method = "#{params[:status]}!" 
+      value = (params[:status] == "publish")
     else
       raise ActionController::UnknownAction
     end
     @place = Place.with_permissions_to(:read).find(params[:id])
       if method        
-        if @place.send(method)
+        if @place.send("published=", value)
           place = filter_fields(@place,@fields, { 
             :additional_fields => {
               :place_type => @place_type_fields 
