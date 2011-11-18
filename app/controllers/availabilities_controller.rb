@@ -1,4 +1,5 @@
 class AvailabilitiesController < ApplicationController
+  filter_access_to :all, :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
@@ -46,7 +47,6 @@ class AvailabilitiesController < ApplicationController
   # [120] end date must be after initial date
   # [121] interval overlaps with existing interval for the place
   def create
-    check_token
     #TODO: Check that the availability is for a place the user owns...
     
     availability = {}     
@@ -73,7 +73,6 @@ class AvailabilitiesController < ApplicationController
   # === Parameters
   # [:access_token]      Access token
   def destroy
-    check_token
     @availability = Place.find(params[:place_id]).availabilities.find(params[:id])
     if @availability.destroy
       return_message(200, :ok)
@@ -104,8 +103,6 @@ class AvailabilitiesController < ApplicationController
   # [106] not found
   # [122] unmatching parent resource and child resource
   def update
-    check_token
-
     #TODO: Check that the availability is for a place the user owns...
     @place        = Place.find(params[:place_id])
     @availability = @place.availabilities.find(params[:id])

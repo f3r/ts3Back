@@ -1,4 +1,5 @@
 class Comment < ActiveRecord::Base
+  using_access_control
   belongs_to :place
   belongs_to :user
   

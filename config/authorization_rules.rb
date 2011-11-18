@@ -6,7 +6,7 @@ authorization do
 
   role :admin do
     includes [:default]
-    has_permission_on [:users, :places, :addresses], :to => [:manage]
+    has_permission_on [:users, :places, :addresses, :availabilities, :comments], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish, :user_places]
   end
@@ -16,6 +16,9 @@ authorization do
     has_permission_on :places, :to => [:create]
     has_permission_on :places, :to => [:manage, :publish, :user_places] do
       if_attribute :user => is { user }
+    end
+    has_permission_on [:availabilities, :comments], :to => [:manage] do
+      if_permitted_to :manage, :place
     end
   end
 
@@ -29,8 +32,11 @@ authorization do
       if_attribute :id => is { user.id }
     end
     has_permission_on :registrations, :to => :destroy
-    has_permission_on :addresses, :to => [:index, :manage] do
+    has_permission_on :addresses, :to => [:read, :manage] do
       if_attribute :user => is { user }
+    end
+    has_permission_on :comments, :to => :create do
+      if_attribute :replying_to => is { nil }
     end
   end
   
@@ -50,7 +56,7 @@ end
 
 privileges do
   privilege :manage, :includes => [:create, :read, :update, :delete]
-  privilege :read, :includes => [:index, :show]
+  privilege :read, :includes => [:index, :show, :list]
   privilege :create
   privilege :update
   privilege :delete, :includes => :destroy

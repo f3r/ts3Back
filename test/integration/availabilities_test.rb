@@ -4,12 +4,17 @@ class AvailabilitiesTest < ActionController::IntegrationTest
   setup do
     without_access_control do
       @city = Factory(:city)
-      @user = Factory(:user, :role => "admin")
-      @user.confirm!
-      Authorization.current_user = @user
+      @admin_user = Factory(:user, :role => "admin")
+      @admin_user.confirm!
+      Authorization.current_user = @admin_user
+      @agent_user = Factory(:user, :role => "agent")
+      @agent_user.confirm!
       @place_type = Factory(:place_type)
-      @place = Factory(:place, :user => @user, :place_type => @place_type, :city => @city)
-    
+      @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
+      @agent_place = Factory(:place, :user => @agent_user, :place_type => @place_type, :city => @city)
+      
+      @users = [@admin_user, @agent_user]
+
       @availability_occupied_new_info = { 
         :availability_type => 1, 
         :date_start        => "#{(Date.current + 2.year + 1.day).to_s}",
@@ -61,10 +66,10 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     end
   end
 
-  should "create place availability occupied and update it (json)" do
+  should "create place availability occupied and update it as admin (json)" do
     assert_difference 'Availability.count', +1 do
       post "/places/#{@place.id}/availabilities.json", 
-        {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)
+        {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)
     end
     assert_response(200)
     assert_equal 'application/json', @response.content_type
@@ -78,7 +83,36 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     
     availability = Availability.first(:order => 'id DESC')
     put "/places/#{@place.id}/availabilities/#{availability.id}.json", 
-      {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info_updated)
+      {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info_updated)
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @availability_occupied_new_info_updated[:availability_type],  json['availability']['availability_type']
+    assert_equal @availability_occupied_new_info_updated[:date_start],         json['availability']['date_start']
+    assert_equal @availability_occupied_new_info_updated[:date_end],           json['availability']['date_end']
+    assert_equal @availability_occupied_new_info_updated[:comment],            json['availability']['comment']    
+  end
+
+  should "create place availability occupied and update it as agent (json)" do
+    assert_difference 'Availability.count', +1 do
+      post "/places/#{@agent_place.id}/availabilities.json", 
+        {:access_token => @agent_user.authentication_token}.merge(@availability_occupied_new_info)
+    end
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @availability_occupied_new_info[:availability_type],  json['availability']['availability_type']
+    assert_equal @availability_occupied_new_info[:date_start],         json['availability']['date_start']
+    assert_equal @availability_occupied_new_info[:date_end],           json['availability']['date_end']
+    assert_equal @availability_occupied_new_info[:comment],            json['availability']['comment']
+    
+    availability = Availability.first(:order => 'id DESC')
+    put "/places/#{@agent_place.id}/availabilities/#{availability.id}.json", 
+      {:access_token => @agent_user.authentication_token}.merge(@availability_occupied_new_info_updated)
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -93,7 +127,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
   should "create place availability updating new price and update it (json)" do
     assert_difference 'Availability.count', +1 do
       post "/places/#{@place.id}/availabilities.json", 
-        {:access_token => @user.authentication_token}.merge(@availability_new_price_new_info)
+        {:access_token => @admin_user.authentication_token}.merge(@availability_new_price_new_info)
     end
     assert_response(200)
     assert_equal 'application/json', @response.content_type
@@ -107,7 +141,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     
     availability = Availability.first(:order => 'id DESC')
     put "/places/#{@place.id}/availabilities/#{availability.id}.json", 
-      {:access_token => @user.authentication_token}.merge(@availability_new_price_new_info_updated)
+      {:access_token => @admin_user.authentication_token}.merge(@availability_new_price_new_info_updated)
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -121,13 +155,13 @@ class AvailabilitiesTest < ActionController::IntegrationTest
 
   should "not create place availability if begin/end overlaps a previous one (json)" do
     post "/places/#{@place.id}/availabilities.json", 
-      {:access_token => @user.authentication_token}.merge(@availability_new_price_new_info)
+      {:access_token => @admin_user.authentication_token}.merge(@availability_new_price_new_info)
     json = ActiveSupport::JSON.decode(response.body)
     assert_equal @availability_new_price_new_info[:date_start], json['availability']['date_start']
     assert_equal @availability_new_price_new_info[:date_end],   json['availability']['date_end']
   
     post "/places/#{@place.id}/availabilities.json", 
-      {:access_token => @user.authentication_token}.merge(@availability_new_price_new_info_overlap)
+      {:access_token => @admin_user.authentication_token}.merge(@availability_new_price_new_info_overlap)
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -138,7 +172,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
 
   should "create place availability if begin/end overlaps a previous one for occupied type (json)" do
     post "/places/#{@place.id}/availabilities.json", 
-      {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)
+      {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -147,7 +181,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal @availability_occupied_new_info[:date_start], json['availability']['date_start']
     assert_equal @availability_occupied_new_info[:date_end],   json['availability']['date_end']
     post "/places/#{@place.id}/availabilities.json", 
-      {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info_overlap)
+      {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info_overlap)
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -157,14 +191,14 @@ class AvailabilitiesTest < ActionController::IntegrationTest
 
   should "create place availability occupied and not update wrong dates (json)" do
     post "/places/#{@place.id}/availabilities.json", 
-        {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)
+        {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)
     json = ActiveSupport::JSON.decode(response.body)
     assert_equal @availability_occupied_new_info[:date_start],         json['availability']['date_start']
     assert_equal @availability_occupied_new_info[:date_end],           json['availability']['date_end']
     
     availability = Availability.first(:order => 'id DESC')
     put "/places/#{@place.id}/availabilities/#{availability.id}.json", 
-      {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info_updated_invalid)
+      {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info_updated_invalid)
     assert_response(200)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -174,18 +208,18 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal [120],  json['err']['date_end']
   end
   
-  should "delete place availability (json)" do
+  should "delete place availability as admin (json)" do
     assert_difference 'Availability.count', +1 do
-      post "/places/#{@place.id}/availabilities.json", 
-          {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)
+      post "/places/#{@agent_place.id}/availabilities.json", 
+          {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)
     end
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
     assert_difference 'Availability.count', -1 do
-      delete "/places/#{@place.id}/availabilities/#{json['availability']['id']}.json", 
-        {:access_token => @user.authentication_token}
+      delete "/places/#{@agent_place.id}/availabilities/#{json['availability']['id']}.json", 
+        {:access_token => @admin_user.authentication_token}
     end
     assert_response(200)
     assert_equal 'application/json', @response.content_type
@@ -193,10 +227,39 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
   end
-  
+
+  should "delete place availability as agent (json)" do
+    assert_difference 'Availability.count', +1 do
+      post "/places/#{@agent_place.id}/availabilities.json", 
+          {:access_token => @agent_user.authentication_token}.merge(@availability_occupied_new_info)
+    end
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_difference 'Availability.count', -1 do
+      delete "/places/#{@agent_place.id}/availabilities/#{json['availability']['id']}.json", 
+        {:access_token => @agent_user.authentication_token}
+    end
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+  end
+
+  should "not delete admin place availability as agent (json)" do
+    post "/places/#{@place.id}/availabilities.json", 
+          {:access_token => @agent_user.authentication_token}.merge(@availability_occupied_new_info)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+  end
+
   should "not create place availability if place doesn't exist (json)" do
     post "/places/8287278/availabilities.json", 
-        {:access_token => @user.authentication_token}.merge(@availability_occupied_new_info)    
+        {:access_token => @admin_user.authentication_token}.merge(@availability_occupied_new_info)    
     assert_response(404)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -204,4 +267,5 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal "fail", json['stat']
     assert_equal [106],  json['err']['record']
   end
+
 end

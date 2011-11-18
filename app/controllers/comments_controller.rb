@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  filter_access_to :all, :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   
@@ -54,7 +55,6 @@ class CommentsController < ApplicationController
   # [:101] can't be blank 
   # [:106] not found (place or replying_to comment, if passed)
   def create
-    check_token
     place = Place.find(params[:id])
 
     comment      = {:user_id     => current_user.id}
@@ -82,8 +82,7 @@ class CommentsController < ApplicationController
   # == Errors
   # [:101] can't be blank 
   def update
-    check_token
-    @comment = current_user.comments.find(params[:id])
+    @comment = Comment.find(params[:id])
     if @comment.update_attributes(:comment  => params[:comment])
       return_message(200, :ok, {:comment => filter_fields(@comment,@fields)})  
     else
@@ -100,8 +99,7 @@ class CommentsController < ApplicationController
   # === Parameters
   # [:access_token]
   def destroy
-    check_token
-    @comment = current_user.comments.find(params[:id])
+    @comment = Comment.find(params[:id])
     # We find all the replies
     @replies = Comment.where("replying_to = #{params[:id]}").all
     if @comment.destroy
