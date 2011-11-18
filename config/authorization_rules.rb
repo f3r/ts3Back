@@ -38,6 +38,9 @@ authorization do
     has_permission_on :comments, :to => :create do
       if_attribute :replying_to => is { nil }
     end
+    has_permission_on :comments, :to => :read do
+      if_attribute :user => is { user }
+    end
     has_permission_on :notifications, :to => [:index, :unread, :mark_as_read]
   end
   
@@ -54,6 +57,9 @@ authorization do
     has_permission_on :sessions, :to => [:create, :oauth_create]
     has_permission_on :confirmations, :to => [:show, :create]
     has_permission_on :registrations, :to => [:create, :check_email]
+    has_permission_on :comments, :to => :read do
+      if_attribute :comments_count => gt { 0 }
+    end
   end
 
 end

@@ -14,6 +14,40 @@ class CommentsTest < ActionController::IntegrationTest
       @place_type = Factory(:place_type)
       @place      = Factory(:place, :user => @agent_user, :place_type => @place_type, :city => @city)
       @comment    = Factory(:comment, :place => @place, :user => @agent_user)
+
+      @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
+      @published_place = Factory( 
+        :place, 
+        :user => @agent_user, 
+        :place_type => @place_type, 
+        :city => @city,
+        :amenities_kitchen => true, 
+        :amenities_tennis => true, 
+        :photos => @photos,
+        :currency => "JPY",
+        :price_per_night => "8000",
+        :price_per_week => "128000",
+        :price_per_month => "400000"
+      )
+      @published_place_2 = Factory( 
+        :place,
+        :user => @agent_user, 
+        :place_type => @place_type, 
+        :city => @city,
+        :amenities_kitchen => true, 
+        :amenities_tennis => true, 
+        :photos => @photos,
+        :currency => "JPY",
+        :price_per_night => "8000",
+        :price_per_week => "128000",
+        :price_per_month => "400000"
+      )
+      @published_place.publish!
+      @published_place_2.publish!
+      @published_comment = Factory(:comment, :place => @published_place, :user => @user)
+      @published_reply = Factory(:comment, :place => @published_place, :user => @user, :replying_to => @published_comment.id)
+      @published_2_comment = Factory(:comment, :place => @published_place_2, :user => @user)
+
     end
   end
 
@@ -41,7 +75,7 @@ class CommentsTest < ActionController::IntegrationTest
 
   should "create a comment as user (json)" do
     assert_difference('Comment.count') do
-      post "/places/#{@place.id}/comments.json", { :comment => "testing", :access_token => @user.authentication_token }
+      post "/places/#{@published_place.id}/comments.json", { :comment => "testing", :access_token => @user.authentication_token }
     end
     assert_response(200)
     assert_equal 'application/json', @response.content_type
@@ -52,7 +86,7 @@ class CommentsTest < ActionController::IntegrationTest
   end
   
   should "not reply a comment as user (json)" do
-    post "/places/#{@place.id}/comments.json", { :comment => "testing", :replying_to => @comment.id, :access_token => @user.authentication_token }
+    post "/places/#{@published_place.id}/comments.json", { :comment => "testing", :replying_to => @published_comment.id, :access_token => @user.authentication_token }
     assert_response(403)
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
@@ -166,4 +200,33 @@ class CommentsTest < ActionController::IntegrationTest
     assert (json['err']['authorization'].include? 133)
   end
 
+  should "list answered comments as guest on a published place with comments" do
+    get "/places/#{@published_place.id}/comments.json"
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_operator json['comments'].count, :>, 0
+  end
+
+  should "not list comments as guest on a published place with unanswered comments" do
+    get "/places/#{@published_place_2.id}/comments.json"
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert (json['err']['comments'].include? 115)
+  end
+
+  should "list comments as owner on a published place with unanswered comments" do
+    get "/places/#{@published_place_2.id}/comments.json", { :access_token => @agent_user.authentication_token }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_operator json['comments'].count, :>, 0
+  end
 end
