@@ -144,7 +144,7 @@ class Place < ActiveRecord::Base
     if published_changed? && published == true
       errors.add(:publish, "123") if self.photos.blank? or self.photos.count < 1 # 1 picture
       errors.add(:publish, "124") if self.description.blank? or self.description.split.size < 5 # 5 words
-      errors.add(:publish, "125") if self.availabilities.blank? or self.availabilities.count < 1 # at least one date
+      #errors.add(:publish, "125") if self.availabilities.blank? or self.availabilities.count < 1 # at least one date
       errors.add(:publish, "126") if self.price_per_night.blank?
       errors.add(:publish, "127") if self.currency.blank?
       errors.add(:publish, "128") if self.price_security_deposit.blank?
