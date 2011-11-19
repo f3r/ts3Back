@@ -390,13 +390,13 @@ class PlacesController < ApplicationController
   # [128] no security deposit
   def publish
     if params[:status] == "publish" or params[:status] == "unpublish"
-      value = (params[:status] == "publish")
+      method = "#{params[:status]}!"
     else
       raise ActionController::UnknownAction
     end
     @place = Place.with_permissions_to(:read).find(params[:id])
       if method        
-        if @place.send("published=", value)
+        if @place.send(method)
           place = filter_fields(@place,@fields, { 
             :additional_fields => {
               :place_type => @place_type_fields 
