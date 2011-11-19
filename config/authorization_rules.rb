@@ -6,7 +6,7 @@ authorization do
 
   role :admin do
     includes [:default]
-    has_permission_on [:users, :places, :addresses, :availabilities, :comments], :to => [:manage]
+    has_permission_on [:users, :places, :place_types, :addresses, :availabilities, :comments], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish, :user_places]
   end
