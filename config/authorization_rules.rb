@@ -42,6 +42,7 @@ authorization do
       if_attribute :user => is { user }
     end
     has_permission_on :notifications, :to => [:index, :unread, :mark_as_read]
+    has_permission_on :authentications, :to => [:create, :list, :delete, :get_facebook_oauth_info]
   end
   
   role :guest do
