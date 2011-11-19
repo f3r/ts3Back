@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111111173124) do
+ActiveRecord::Schema.define(:version => 20111118224324) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20111111173124) do
     t.text     "comment"
     t.boolean  "owner"
     t.integer  "replying_to"
+    t.integer  "comments_count"
   end
 
   add_index "comments", ["place_id"], :name => "index_comments_on_place_id"

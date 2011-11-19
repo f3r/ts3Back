@@ -42,4 +42,5 @@ HeyPalBackEnd::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
+  ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379'
 end

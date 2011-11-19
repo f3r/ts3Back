@@ -1,4 +1,5 @@
 class PlaceTypesController < ApplicationController
+  filter_access_to :all, :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
   

@@ -390,7 +390,7 @@ class PlacesController < ApplicationController
   # [128] no security deposit
   def publish
     if params[:status] == "publish" or params[:status] == "unpublish"
-       method = "#{params[:status]}!"
+      method = "#{params[:status]}!"
     else
       raise ActionController::UnknownAction
     end

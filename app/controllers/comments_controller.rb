@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
   respond_to :xml, :json
   
   def initialize
-    @fields = [:id, :user_id, :place_id, :comment, :owner, :created_at, :replying_to]
+    @fields = [:id, :user_id, :place_id, :comment, :owner, :created_at]
   end
   
   # == Description
@@ -17,19 +17,19 @@ class CommentsController < ApplicationController
   # none
   def index
     # We get all the comments for the place that are questions
-    @comments = Place.find(params[:id]).comments.where(:replying_to => nil).order("created_at ASC")
+    @comments = Comment.with_permissions_to(:read).where(:replying_to => nil, :place_id => params[:id])
     if @comments.count > 0
       # We get all the replies and add them to the answer
       foo = []
       @comments.each{|comment|
-        question = filter_fields(comment,@fields)
-        replies  = Comment.where(:replying_to => comment.id)
-        if replies
-          replies_response = {}
-          replies.each{|reply|
-            replies_response.merge!(filter_fields(reply,@fields)) 
+        question = filter_fields(comment,@fields + [:comments_count])
+        answers = comment.answers
+        if answers
+          answers_response = []
+          answers.each{|reply|
+            answers_response << (filter_fields(reply,@fields))
           }
-          question.merge!({:replies => replies_response})
+          question.merge!({:replies => answers_response})
           foo = foo << question
         else
           foo.merge!(question) 
@@ -48,21 +48,19 @@ class CommentsController < ApplicationController
   # ==Example
   # POST https://backend-heypal.heroku.com/places/123/comments.json access_token=access_token&comment=my+comment+here
   # === Parameters
-  # [:access_token]
-  # [:comment]      String, comment that user posts
-  # [:replying_to]  Optional, Integer, comment_id that the owner replies to
+  # [access_token]
+  # [comment]      String, comment that user posts
+  # [replying_to]  Optional, Integer, comment_id that the owner replies to
   # == Errors
-  # [:101] can't be blank 
-  # [:106] not found (place or replying_to comment, if passed)
+  # [101] can't be blank 
+  # [106] not found (place or replying_to comment, if passed)
   def create
-    place = Place.find(params[:id])
-
+    place = Place.with_permissions_to(:read).find(params[:id])
     comment      = {:user_id     => current_user.id}
     comment.merge!({:comment     => params[:comment]})
     comment.merge!({:owner       => (place.user_id == current_user.id)})
     comment.merge!({:replying_to => params[:replying_to]}) if params[:replying_to]
-    @comment = Place.find(params[:id]).comments.new(comment)
-
+    @comment = place.comments.new(comment)
     if @comment.save
       return_message(200, :ok, {:comment => filter_fields(@comment,@fields)} )
     else
@@ -77,10 +75,10 @@ class CommentsController < ApplicationController
   # ==Example
   # PUT https://backend-heypal.heroku.com/places/123/comments/1.json access_token=access_token&comment=new+comment
   # === Parameters
-  # [:access_token]
-  # [:comment]  New comment
+  # [access_token]
+  # [comment]  New comment
   # == Errors
-  # [:101] can't be blank 
+  # [101] can't be blank 
   def update
     @comment = Comment.find(params[:id])
     if @comment.update_attributes(:comment  => params[:comment])
@@ -97,7 +95,7 @@ class CommentsController < ApplicationController
   # ==Example
   # DELETE https://backend-heypal.heroku.com/places/123/comments/:id.json access_token=access_token
   # === Parameters
-  # [:access_token]
+  # [access_token]
   def destroy
     @comment = Comment.find(params[:id])
     # We find all the replies
