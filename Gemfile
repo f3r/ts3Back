@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.1'
-gem 'rack', '1.3.3'
+gem 'rails', '3.1.2'
+gem 'rack', '1.3.5'
 
 gem 'devise', '1.4.9'     			# Account Management
 gem 'oauth2', '0.4.1'     			# oAuth providers management
