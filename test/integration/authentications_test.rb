@@ -1,4 +1,4 @@
-2require 'test_helper'
+require 'test_helper'
 class AuthenticationsTest < ActionController::IntegrationTest
 
   setup do
