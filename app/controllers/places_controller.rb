@@ -116,8 +116,8 @@ class PlacesController < ApplicationController
   #   Defaults to no maximum, Maximum price per night for the apartment search in the currency selected (no cents)
   #     Ex: min_price=600
   # [sort]
-  #   Sorting options: name, price_lowest, price_highest, price_size_lowest, price_size_highest, reviews
-  #     Ex: sort=price_low
+  #   Sorting options: name, price_lowest, price_highest, price_size_lowest, price_size_highest, reviews, most_recent
+  #     Ex: sort=price_lowest
   # === Response
   # [results]      Total number of results. Used for pagination
   # [current_page] Current page number. Used for pagination
@@ -181,6 +181,8 @@ class PlacesController < ApplicationController
         sorting = ["price_sqf_usd desc"]
       when "reviews_overall"
         sorting = ["reviews_overall desc"]
+      when "most_recent"
+        sorting = ["updated_at desc"]
       end
 
       @search.sorts = sorting if sorting
@@ -188,6 +190,7 @@ class PlacesController < ApplicationController
       places_search = @search.result(:distinct => true)
       places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
 
+      # FIXME: Add all images to search result
       if !places_paginated.blank?
         filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
           :user => @user_fields,
@@ -248,6 +251,7 @@ class PlacesController < ApplicationController
   # [105] invalid access token
   # [132] invalid city (not on the cities table)
   def create
+    params[:currency] ||= "USD"
     place = { 
       :title         => params[:title],
       :place_type_id => params[:place_type_id],
@@ -257,7 +261,7 @@ class PlacesController < ApplicationController
       :currency      => params[:currency]}
     @place = current_user.places.new(place)
     if @place.save
-      place_return = filter_fields(@place, [:id, :title,:num_bedrooms,:max_guests,:country_name, :country_code, :state_name, :city_name, :city_id], :additional_fields => {
+      place_return = filter_fields(@place, [:id, :title,:num_bedrooms,:max_guests,:country_name, :country_code, :state_name, :city_name, :city_id, :currency], :additional_fields => {
           :user => @user_fields,
           :place_type => @place_type_fields
         })
