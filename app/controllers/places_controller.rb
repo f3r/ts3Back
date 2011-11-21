@@ -33,7 +33,7 @@ class PlacesController < ApplicationController
     ]
     
     @search_fields = [
-      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
+      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd, :photos
     ]
 
     @fields = @fields + @amenities
@@ -44,9 +44,6 @@ class PlacesController < ApplicationController
 
   end
 
-  # FIXME: We need to show them what parameters can they search upon
-  # FIXME: Why is params[:q] required?
-  
   # ==Description
   # Returns a list places matching the search parameters
   # ==Resource URL
