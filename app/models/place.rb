@@ -32,7 +32,7 @@ class Place < ActiveRecord::Base
   
   validates_numericality_of :city_id, :message => "118"
 
-  attr_accessor :amenities, :location, :terms_of_offer
+  attr_accessor :amenities, :location, :terms_of_offer, :currency
   attr_protected :published
 
   belongs_to :user
@@ -88,7 +88,7 @@ class Place < ActiveRecord::Base
   
   # Convert all price fields into USD cents
   def convert_prices_in_usd_cents
-    if currency.length != 3
+    if currency.nil? || currency.length != 3
       currency = "USD"
     end  
     self.price_per_night_usd        = money_to_usd_cents(self.price_per_night,currency)         if price_per_night_changed? or currency_changed?
