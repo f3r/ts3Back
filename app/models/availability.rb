@@ -3,7 +3,6 @@ class Availability < ActiveRecord::Base
   belongs_to :place
   
   validates_presence_of [:availability_type, :date_start, :date_end], :message => "101"
-  validates_presence_of [:date_start, :date_end], :message => "101"
   validates_numericality_of :availability_type, :message => "118"
   validates_numericality_of :price_per_night, :allow_nil => true, :message => "118"
   
