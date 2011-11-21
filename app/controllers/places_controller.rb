@@ -251,7 +251,7 @@ class PlacesController < ApplicationController
   # [105] invalid access token
   # [132] invalid city (not on the cities table)
   def create
-    params[:currency] ||= "USD"
+    params[:currency] = "USD"   unless params.has_key?(:currency])
     place = { 
       :title         => params[:title],
       :place_type_id => params[:place_type_id],
