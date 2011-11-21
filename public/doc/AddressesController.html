@@ -76,6 +76,8 @@
     
     <li><a href="#method-i-destroy">#destroy</a>
     
+    <li><a href="#method-i-get_user">#get_user</a>
+    
     <li><a href="#method-i-index">#index</a>
     
     <li><a href="#method-i-update">#update</a>
@@ -107,6 +109,8 @@
     <li><a href="./GeoController.html">GeoController</a>
   
     <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./MessagesController.html">MessagesController</a>
   
     <li><a href="./NotificationsController.html">NotificationsController</a>
   
@@ -171,7 +175,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 5</span>
+            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
   <span class="ruby-ivar">@fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:street</span>, <span class="ruby-value">:city</span>, <span class="ruby-value">:country</span>, <span class="ruby-value">:zip</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -209,12 +213,15 @@ country and zip code</p>
 
 <h2 id="method-i-create-label-Resource+URL">Resource URL</h2>
 
-<p>/users/addresses.format</p>
+<p>/users/:user_id/addresses.format</p>
 
 <h2 id="method-i-create-label-Example">Example</h2>
 
 <p>POST <a
-href="https://backend-heypal.heroku.com/users/addresses.json">backend-heypal.heroku.com/users/addresses.json</a>
+href="https://backend-heypal.heroku.com/users/341/addresses.json">backend-heypal.heroku.com/users/341/addresses.json</a>
+access_token=access_token&amp;street=street&amp;city=city&amp;country=country&amp;zip=zip
+POST <a
+href="https://backend-heypal.heroku.com/users/me/addresses.json">backend-heypal.heroku.com/users/me/addresses.json</a>
 access_token=access_token&amp;street=street&amp;city=city&amp;country=country&amp;zip=zip</p>
 
 <h3 id="method-i-create-label-Parameters">Parameters</h3>
@@ -245,10 +252,9 @@ access_token=access_token&amp;street=street&amp;city=city&amp;country=country&am
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 42</span>
+            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
-  <span class="ruby-identifier">check_token</span>
-  <span class="ruby-ivar">@address</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">new</span>(
+  <span class="ruby-ivar">@address</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">new</span>(
     <span class="ruby-value">:street</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:street</span>],
     <span class="ruby-value">:city</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:city</span>],
     <span class="ruby-value">:country</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:country</span>],
@@ -287,12 +293,14 @@ access_token=access_token&amp;street=street&amp;city=city&amp;country=country&am
 
 <h2 id="method-i-destroy-label-Resource+URL">Resource URL</h2>
 
-<p>/users/addresses/:id.format</p>
+<p>/users/:user_id/addresses/:id.format</p>
 
 <h2 id="method-i-destroy-label-Example">Example</h2>
 
 <p>DELETE <a
-href="https://backend-heypal.heroku.com/users/addresses/:id.json">backend-heypal.heroku.com/users/addresses/:id.json</a>
+href="https://backend-heypal.heroku.com/users/341/addresses/:id.json">backend-heypal.heroku.com/users/341/addresses/:id.json</a>
+access_token=access_token DELETE <a
+href="https://backend-heypal.heroku.com/users/me/addresses/:id.json">backend-heypal.heroku.com/users/me/addresses/:id.json</a>
 access_token=access_token</p>
 
 <h3 id="method-i-destroy-label-Parameters">Parameters</h3>
@@ -302,10 +310,9 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 94</span>
+            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 97</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
-  <span class="ruby-identifier">check_token</span>
-  <span class="ruby-ivar">@address</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-ivar">@address</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@address</span>.<span class="ruby-identifier">destroy</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
   <span class="ruby-keyword">else</span>
@@ -339,12 +346,14 @@ access_token=access_token</p>
 
 <h2 id="method-i-index-label-Resource+URL">Resource URL</h2>
 
-<p>/users/addresses.format</p>
+<p>/users/:user_id/addresses.format</p>
 
 <h2 id="method-i-index-label-Example">Example</h2>
 
 <p>GET <a
-href="https://backend-heypal.heroku.com/users/addresses.json">backend-heypal.heroku.com/users/addresses.json</a></p>
+href="https://backend-heypal.heroku.com/users/341/addresses.json">backend-heypal.heroku.com/users/341/addresses.json</a>
+GET <a
+href="https://backend-heypal.heroku.com/users/me/addresses.json">backend-heypal.heroku.com/users/me/addresses.json</a></p>
 
 <h3 id="method-i-index-label-Parameters">Parameters</h3>
 <dl class="rdoc-list label-list"><dt>:access_token
@@ -353,10 +362,9 @@ href="https://backend-heypal.heroku.com/users/addresses.json">backend-heypal.her
 
           
           <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 17</span>
+            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-identifier">check_token</span>
-  <span class="ruby-ivar">@addresses</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">select</span>(<span class="ruby-ivar">@fields</span>)
+  <span class="ruby-ivar">@addresses</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">select</span>(<span class="ruby-ivar">@fields</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@addresses</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:addresses</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@addresses</span>})
   <span class="ruby-keyword">else</span>
@@ -390,12 +398,15 @@ href="https://backend-heypal.heroku.com/users/addresses.json">backend-heypal.her
 
 <h2 id="method-i-update-label-Resource+URL">Resource URL</h2>
 
-<p>/users/addresses/:id.format</p>
+<p>/users/:user_id/addresses/:id.format</p>
 
 <h2 id="method-i-update-label-Example">Example</h2>
 
 <p>PUT <a
-href="https://backend-heypal.heroku.com/users/addresses/:id.json">backend-heypal.heroku.com/users/addresses/:id.json</a>
+href="https://backend-heypal.heroku.com/users/341/addresses/1.json">backend-heypal.heroku.com/users/341/addresses/1.json</a>
+access_token=access_token&amp;street=street&amp;city=city&amp;country=country&amp;zip=zip
+PUT <a
+href="https://backend-heypal.heroku.com/users/me/addresses/1.json">backend-heypal.heroku.com/users/me/addresses/1.json</a>
 access_token=access_token&amp;street=street&amp;city=city&amp;country=country&amp;zip=zip</p>
 
 <h3 id="method-i-update-label-Parameters">Parameters</h3>
@@ -426,10 +437,9 @@ access_token=access_token&amp;street=street&amp;city=city&amp;country=country&am
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 72</span>
+            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
-  <span class="ruby-identifier">check_token</span>
-  <span class="ruby-ivar">@address</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-ivar">@address</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@address</span>.<span class="ruby-identifier">update_attributes</span>(
       <span class="ruby-value">:street</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:street</span>],
       <span class="ruby-value">:city</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:city</span>],
@@ -451,6 +461,47 @@ access_token=access_token&amp;street=street&amp;city=city&amp;country=country&am
 
     
     </section><!-- public-instance-method-details -->
+  
+     <section id="protected-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Protected Instance Methods</h3>
+
+    
+      <div id="method-i-get_user" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_user</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_user-source">
+            <pre><span class="ruby-comment"># File app/controllers/addresses_controller.rb, line 107</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_user</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/\A[+-]?\d+?(\.\d+)?\Z/</span>) <span class="ruby-operator">!=</span> <span class="ruby-keyword">nil</span> <span class="ruby-comment"># is numeric</span>
+    <span class="ruby-identifier">id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;me&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>
+    <span class="ruby-identifier">id</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_user-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_user-method -->
+
+    
+    </section><!-- protected-instance-method-details -->
   
   </section><!-- 5Buntitled-5D -->
 

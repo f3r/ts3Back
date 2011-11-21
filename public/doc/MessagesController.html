@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: MessagesController</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/messages_controller.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-create">#create</a>
+    
+    <li><a href="#method-i-destroy">#destroy</a>
+    
+    <li><a href="#method-i-index">#index</a>
+    
+    <li><a href="#method-i-mark_as_read">#mark_as_read</a>
+    
+    <li><a href="#method-i-messages">#messages</a>
+    
+    <li><a href="#method-i-unread_count">#unread_count</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./AvailabilitiesController.html">AvailabilitiesController</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./GeoController.html">GeoController</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./MessagesController.html">MessagesController</a>
+  
+    <li><a href="./NotificationsController.html">NotificationsController</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./PlaceTypesController.html">PlaceTypesController</a>
+  
+    <li><a href="./PlacesController.html">PlacesController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class MessagesController</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-create-label-Description">Description</h2>
+
+<p>Sends a messages to another user</p>
+
+<h2 id="method-i-create-label-Resource+URL">Resource URL</h2>
+
+<p>/messages/user.format</p>
+
+<h2 id="method-i-create-label-Example">Example</h2>
+
+<p>POST <a
+href="https://backend-heypal.heroku.com/messages/2.json">backend-heypal.heroku.com/messages/2.json</a>
+message=“Message content”</p>
+
+<h3 id="method-i-create-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd></dd><dt>:user
+<dd>
+<p>The other user in the conversation</p>
+</dd><dt>:message
+<dd>
+<p>The content of the message</p>
+</dd></dl>
+
+<h2 id="method-i-create-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>User not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="create-source">
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 73</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-identifier">check_token</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">to</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>], <span class="ruby-identifier">params</span>[<span class="ruby-string">'message'</span>])
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:messages</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">106</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create-method -->
+
+    
+      <div id="method-i-destroy" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">destroy</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-destroy-label-Description">Description</h2>
+
+<p>Deletes a conversation with another user</p>
+
+<h2 id="method-i-destroy-label-Resource+URL">Resource URL</h2>
+
+<p>/messages/user.format</p>
+
+<h2 id="method-i-destroy-label-Example">Example</h2>
+
+<p>DELETE <a
+href="https://backend-heypal.heroku.com/messages/2.json">backend-heypal.heroku.com/messages/2.json</a></p>
+
+<h3 id="method-i-destroy-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd></dd><dt>:user
+<dd>
+<p>The other user in the conversation</p>
+</dd></dl>
+
+<h2 id="method-i-destroy-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>User not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="destroy-source">
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 94</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">delete_conversation_with</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>])
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:messages</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">106</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- destroy-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- destroy-method -->
+
+    
+      <div id="method-i-index" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">index</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-index-label-Description">Description</h2>
+
+<p>Returns all the conversations of the current user</p>
+
+<h2 id="method-i-index-label-Resource+URL">Resource URL</h2>
+
+<p>/conversations.format</p>
+
+<h2 id="method-i-index-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/conversations.json">backend-heypal.heroku.com/conversations.json</a></p>
+
+<h3 id="method-i-index-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd>
+<h2 id="method-i-index-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>115
+<dd>
+<p>no result</p>
+</dd></dl>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="index-source">
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
+  <span class="ruby-identifier">check_token</span>
+  
+  <span class="ruby-ivar">@conversations</span> = []
+  <span class="ruby-constant">Message</span>.<span class="ruby-identifier">conversations</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">with_user</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">last_message</span> = <span class="ruby-constant">ActiveSupport</span><span class="ruby-operator">::</span><span class="ruby-constant">JSON</span><span class="ruby-operator">::</span><span class="ruby-identifier">decode</span>(<span class="ruby-constant">Message</span>.<span class="ruby-identifier">last_message_with</span>(<span class="ruby-identifier">with_user</span>)[<span class="ruby-value">0</span>])
+    <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">is_read?</span>(<span class="ruby-identifier">last_message</span>[<span class="ruby-string">'to'</span>].<span class="ruby-identifier">to_i</span>)
+      <span class="ruby-ivar">@conversations</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">last_message</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-value">:isread</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>})
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@conversations</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">last_message</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-value">:isread</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>})
+    <span class="ruby-keyword">end</span>
+  }
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@conversations</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:conversations</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@conversations</span>})
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:conversations</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- index-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- index-method -->
+
+    
+      <div id="method-i-mark_as_read" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">mark_as_read</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-mark_as_read-label-Description">Description</h2>
+
+<p>Marks a conversation with another user as read</p>
+
+<h2 id="method-i-mark_as_read-label-Resource+URL">Resource URL</h2>
+
+<p>/conversations/user/mark_as_read.format</p>
+
+<h2 id="method-i-mark_as_read-label-Example">Example</h2>
+
+<p>PUT <a
+href="https://backend-heypal.heroku.com/conversations/2/mark_as_read.json">backend-heypal.heroku.com/conversations/2/mark_as_read.json</a></p>
+
+<h3 id="method-i-mark_as_read-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd></dd><dt>:user
+<dd>
+<p>The other user in the conversation</p>
+</dd></dl>
+
+<h2 id="method-i-mark_as_read-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>User not found or already read</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="mark_as_read-source">
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 114</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">mark_as_read</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">mark_as_read</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>])
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:messages</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">106</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- mark_as_read-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- mark_as_read-method -->
+
+    
+      <div id="method-i-messages" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">messages</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-messages-label-Description">Description</h2>
+
+<p>Returns all the messages with another user and marks conversation as read</p>
+
+<h2 id="method-i-messages-label-Resource+URL">Resource URL</h2>
+
+<p>/messages/user.format</p>
+
+<h2 id="method-i-messages-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/messages/2.json">backend-heypal.heroku.com/messages/2.json</a></p>
+
+<h3 id="method-i-messages-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd></dd><dt>:user
+<dd>
+<p>The other user in the conversation</p>
+</dd></dl>
+
+<h2 id="method-i-messages-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>User not found</p>
+</dd><dt>115
+<dd>
+<p>no results</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="messages-source">
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">messages</span>
+  <span class="ruby-identifier">check_token</span>
+  
+  <span class="ruby-identifier">foo</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>])
+  <span class="ruby-ivar">@messages</span> = []
+  <span class="ruby-constant">Message</span>.<span class="ruby-identifier">messages_with</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>]).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">message</span><span class="ruby-operator">|</span>
+    <span class="ruby-ivar">@messages</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ActiveSupport</span><span class="ruby-operator">::</span><span class="ruby-constant">JSON</span><span class="ruby-operator">::</span><span class="ruby-identifier">decode</span>(<span class="ruby-identifier">message</span>)
+  }
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@messages</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:messages</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@messages</span>})
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:messages</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- messages-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- messages-method -->
+
+    
+      <div id="method-i-unread_count" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unread_count</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-unread_count-label-Description">Description</h2>
+
+<p>Returns the number of unread conversations for the current user</p>
+
+<h2 id="method-i-unread_count-label-Resource+URL">Resource URL</h2>
+
+<p>/conversations/unread_count.format</p>
+
+<h2 id="method-i-unread_count-label-Example">Example</h2>
+
+<p>GET <a
+href="https://backend-heypal.heroku.com/conversations/unread_count.json">backend-heypal.heroku.com/conversations/unread_count.json</a></p>
+
+<h3 id="method-i-unread_count-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd></dd></dl>
+          
+
+          
+          <div class="method-source-code" id="unread_count-source">
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 151</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unread_count</span>
+  <span class="ruby-identifier">check_token</span>
+  <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, <span class="ruby-value">:count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">unread_count</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unread_count-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unread_count-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
