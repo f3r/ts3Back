@@ -32,6 +32,7 @@ FactoryGirl.define do
     max_guests   { 4 }
     place_type   { @place_type }
     user         { @user }
+    currency     { "JPY"}
   end
   
   factory :comment do

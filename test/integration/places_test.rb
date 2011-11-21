@@ -56,7 +56,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "ok", json['stat']
     assert_equal @place.id, json['place']['id']
   end
-
+  
   should "get place information as admin (xml)" do
     get "/places/#{@place.id}.xml", {:access_token => @admin_user.authentication_token}
     assert_response(200)
@@ -64,7 +64,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
     assert_tag "place", :child => { :tag => "id", :content => @place.id.to_s }
   end
-
+  
   should "get published place information as guest" do
     get "/places/#{@published_place.id}.json"
     assert_response(200)
@@ -139,7 +139,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_week_usd']
     assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_month_usd']
   end  
-
+  
   should "not update admin's unpublished place as agent (xml)" do
     assert_equal 'admin', @place.user.role
     assert_equal 'agent', @agent_user.role
@@ -148,7 +148,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal 'application/xml', @response.content_type
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
   end
-
+  
   should "not update admin's published place as agent (xml)" do
     assert_equal 'admin', @published_place.user.role
     assert_equal 'agent', @agent_user.role
@@ -158,7 +158,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_tag 'rsp', :child => { :tag => "stat", :content => "fail" }
     assert_tag 'err', :child => { :tag => "permissions", :content => "134" }
   end
-
+  
   
   should "not update admin's place as user (xml)" do
     put "/places/#{@place.id}.xml", @place_new_info.merge({:access_token => @user.authentication_token})
@@ -180,7 +180,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal 'application/json', @response.content_type
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
-    assert_equal "ok", json['stat']    
+    assert_equal "ok", json['stat']
     assert_equal true, json['place']['published']
     get "/places/#{@place.id}/unpublish.json", {:access_token => @admin_user.authentication_token }
     assert_response(200)
@@ -200,7 +200,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "ok", json['stat']    
     assert_not_nil false, json['err']['publish']
   end
-
+  
   should "create a place and update it's information as admin (json)" do
     assert_difference 'Place.count', +1 do
       post '/places.json', @new_place.merge({:access_token => @admin_user.authentication_token})
@@ -217,10 +217,10 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal true, json['place']['amenities_tennis']
     assert_not_nil json['place']['photos']
     assert_equal @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_night_usd']
-    assert_equal @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_week_usd']
+    assert_equal @place_new_info[:price_per_week ].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_week_usd']
     assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_month_usd']
   end
-
+  
   should "create a place and update it's information as agent (json)" do
     assert_difference 'Place.count', +1 do
       post '/places.json', @new_place.merge({:access_token => @agent_user.authentication_token})
@@ -237,10 +237,10 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal true, json['place']['amenities_tennis']
     assert_not_nil json['place']['photos']
     assert_equal @place_new_info[:price_per_night].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_night_usd']
-    assert_equal @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_week_usd']
+    assert_equal @place_new_info[:price_per_week ].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_week_usd']
     assert_equal @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents, json['place']['price_per_month_usd']
   end
-
+  
   should "create a place and update it's information as admin (xml)" do
     assert_difference 'Place.count', +1 do
       post '/places.xml', { :title => "test title2", :place_type_id => @place_type.id, :num_bedrooms => 5, :max_guests => 10, :city_id => @city.id, :access_token => @admin_user.authentication_token }
@@ -258,7 +258,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_tag "place", :child => { :tag => "price_per_week_usd", :content => @place_new_info[:price_per_week].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s }
     assert_tag "place", :child => { :tag => "price_per_month_usd", :content => @place_new_info[:price_per_month].to_money(@place_new_info[:currency]).exchange_to(:USD).cents.to_s }
   end
-
+  
   should "not create a place as user (json)" do
     post '/places.json', @new_place.merge({:access_token => @user.authentication_token})
     assert_response(403)
@@ -268,7 +268,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "fail", json['stat']
     assert (json['err']['authorization'].include? 133)
   end
-
+  
   should "update place dimessions in meters (json)" do
     put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :size => 100, :size_unit => "meters"}
     assert_response(200)
@@ -280,7 +280,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal 100, json['place']['size_sqm']
     assert_equal 100 * 10.7639104, json['place']['size_sqf']
   end
-
+  
   should "update place dimessions in feet (json)" do
     put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :size => 1000, :size_unit => "feet"}
     assert_response(200)
@@ -292,7 +292,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal 1000, json['place']['size_sqf']
     assert_equal 1000 * 0.09290304, json['place']['size_sqm']
   end
-
+  
   should "not update place dimessions with invalid size_unit (json)" do
     put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :size => 1000, :size_unit => "zapatos"}
     assert_response(200)
@@ -302,7 +302,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "fail", json['stat']
     assert (json['err']['size_unit'].include? 129)
   end
-
+  
   should "update place with valid US zip code (json)" do
     put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :zip => "33122-1111"}
     assert_response(200)
@@ -311,7 +311,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
   end
-
+  
   should "not update place with invalid zip code (json)" do
     put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :zip => "3333333333"}
     assert_response(200)
@@ -320,7 +320,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
   end
-
+  
   should "get a users unpublished places" do
     get "/users/#{@admin_user.id}/places.json", {:access_token => @admin_user.authentication_token, :published => 0}
     assert_response(200)
@@ -341,7 +341,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "ok", json['stat']
     assert (json['err']['places'].include? 115)
   end
-
+  
   should "get no results with empty query" do
     get "/places/search.json"
     assert_response(200)
@@ -351,7 +351,7 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "ok", json['stat']
     assert (json['err']['query'].include? 101)
   end
-
+  
   should "get search results" do
     get "/places/search.json", {:q => {:num_bedrooms_eq => @place.num_bedrooms}}
     assert_response(200)

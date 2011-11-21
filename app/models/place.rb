@@ -32,7 +32,8 @@ class Place < ActiveRecord::Base
   
   validates_numericality_of :city_id, :message => "118"
 
-  attr_accessor :amenities, :location, :terms_of_offer, :currency
+  attr_accessor :amenities, :location, :terms_of_offer
+  attr_accessible :currency
   attr_protected :published
 
   belongs_to :user
@@ -49,7 +50,8 @@ class Place < ActiveRecord::Base
   validate      :validate_publishing,
                 :update_location_fields, 
                 :convert_json_photos_to_array,
-                :check_zip
+                :check_zip,
+                :validate_currency
   after_commit  :delete_cache
 
   self.per_page = 20
@@ -88,14 +90,13 @@ class Place < ActiveRecord::Base
   
   # Convert all price fields into USD cents
   def convert_prices_in_usd_cents
-    if currency.nil? || currency.length != 3
-      currency = "USD"
-    end  
-    self.price_per_night_usd        = money_to_usd_cents(self.price_per_night,currency)         if price_per_night_changed? or currency_changed?
-    self.price_per_week_usd         = money_to_usd_cents(self.price_per_week,currency)          if price_per_week_changed? or currency_changed?
-    self.price_per_month_usd        = money_to_usd_cents(self.price_per_month,currency)         if price_per_month_changed? or currency_changed?
-    self.price_final_cleanup_usd    = money_to_usd_cents(self.price_final_cleanup,currency)     if price_final_cleanup_changed? or currency_changed?
-    self.price_security_deposit_usd = money_to_usd_cents(self.price_security_deposit,currency)  if price_security_deposit_changed? or currency_changed?
+    if !currency.nil?
+      self.price_per_night_usd        = money_to_usd_cents(self.price_per_night,currency)         if price_per_night_changed? or currency_changed?
+      self.price_per_week_usd         = money_to_usd_cents(self.price_per_week,currency)          if price_per_week_changed? or currency_changed?
+      self.price_per_month_usd        = money_to_usd_cents(self.price_per_month,currency)         if price_per_month_changed? or currency_changed?
+      self.price_final_cleanup_usd    = money_to_usd_cents(self.price_final_cleanup,currency)     if price_final_cleanup_changed? or currency_changed?
+      self.price_security_deposit_usd = money_to_usd_cents(self.price_security_deposit,currency)  if price_security_deposit_changed? or currency_changed?
+    end
   end
   
   # Convert currency/money into USD cents
@@ -151,6 +152,15 @@ class Place < ActiveRecord::Base
       errors.add(:publish, "126") if self.price_per_night.blank?
       errors.add(:publish, "127") if self.currency.blank?
       errors.add(:publish, "128") if self.price_security_deposit.blank?
+    end
+  end
+  
+  # Adds validation errors if the currency is not supported
+  def validate_currency
+    begin
+      100.to_money(currency).exchange_to(:USD).cents    
+    rescue Exception => e
+      errors.add(:currency, "135")
     end
   end
 
