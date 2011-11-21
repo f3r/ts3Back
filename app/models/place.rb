@@ -88,6 +88,9 @@ class Place < ActiveRecord::Base
   
   # Convert all price fields into USD cents
   def convert_prices_in_usd_cents
+    if currency.length != 3
+      currency = "USD"
+    end  
     self.price_per_night_usd        = money_to_usd_cents(self.price_per_night,currency)         if price_per_night_changed? or currency_changed?
     self.price_per_week_usd         = money_to_usd_cents(self.price_per_week,currency)          if price_per_week_changed? or currency_changed?
     self.price_per_month_usd        = money_to_usd_cents(self.price_per_month,currency)         if price_per_month_changed? or currency_changed?
