@@ -54,7 +54,8 @@ class SessionsController < Devise::SessionsController
     end
 
     if authentication
-      return_message(200, :ok, {:authentication_token => authentication.user.authentication_token})
+      
+      return_message(200, :ok, {:authentication_token => authentication.user.authentication_token, :role => authentication.user.role})
     else
       return_message(401, :fail, {:err => {:user => [110]}})
     end
