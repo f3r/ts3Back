@@ -38,8 +38,8 @@ class PlacesController < ApplicationController
 
     @fields = @fields + @amenities
 
-    # Assosiations
-    @user_fields = [:id, :first_name, :last_name, :avatar_file_name]
+    # Associations
+    @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
     @place_type_fields = [:id,:name]
 
   end
@@ -217,9 +217,11 @@ class PlacesController < ApplicationController
   # ==Example
   #   GET https://backend-heypal.heroku.com/places/id.json
   # === Parameters
-  # [id] if of the place
+  # [:id]         if of the place
+  # [:currency]   ISO Code of the currency to return prices in
   def show
     @place = Place.with_permissions_to(:read).find(params[:id])
+    
     place = filter_fields(@place, @fields, { :additional_fields => { 
       :user => @user_fields,
       :place_type => @place_type_fields } })
