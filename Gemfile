@@ -19,9 +19,11 @@ gem 'ransack'             			# Object-based search
 gem 'geocoder'            			# Geocoding Google-based
 gem 'declarative_authorization' 	# Access Control List
 
-group :development do
-  gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
-end
+gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
+
+#group :development do
+# gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
+#end
 
 group :test do
   gem 'turn', :require => false  # Pretty printed test output
