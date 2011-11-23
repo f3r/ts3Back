@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
-  before_filter :get_user, :only => [:update,:show,:change_role]
+  before_filter :get_user, :only => [:update, :show, :change_role]
   filter_access_to :all, :attribute_check => false
   
   def initialize
@@ -31,11 +31,11 @@ class UsersController < ApplicationController
   # [:id] User id
   # === Response
   # [:user]
-  # {id, first_name, last_name, avatar_file_name}
+  # {id, first_name, last_name, avatar_file_name, role}
   # === Error codes
   # [106] no user exists
   def info
-    fields = [:id, :first_name, :last_name, :avatar_file_name]
+    fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
     @user = Rails.cache.fetch("user_info_" + params[:id].to_s) { User.select(fields).find(params[:id]) }
     if permitted_to? :info, @user
       return_message(200, :ok, {:user => filter_fields(@user, fields, {:style => :thumb})})
