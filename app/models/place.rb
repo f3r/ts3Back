@@ -157,11 +157,7 @@ class Place < ActiveRecord::Base
   
   # Adds validation errors if the currency is not supported
   def validate_currency
-    begin
-      100.to_money(currency).exchange_to(:USD).cents    
-    rescue Exception => e
-      errors.add(:currency, "135")
-    end
+    errors.add(:currency, "135") unless valid_currency?(currency)
   end
 
   # Check for valid zip code, HK doesn't have a standard format.

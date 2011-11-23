@@ -321,6 +321,16 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "ok", json['stat']
   end
   
+  should "not update place with invalid currency (json)" do
+    put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :currency => "eee"}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+    assert (json['err']['currency'].include? 135)
+  end  
+
   should "get a users unpublished places" do
     get "/users/#{@admin_user.id}/places.json", {:access_token => @admin_user.authentication_token, :published => 0}
     assert_response(200)

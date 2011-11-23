@@ -73,4 +73,13 @@ module GeneralHelper
     {field.to_sym => filter_fields(object.send(field),fields) }
   end
 
+  def valid_currency?(currency)
+    begin
+      Money.new(1000, currency).currency
+      true
+    rescue Exception => e
+      false
+    end
+  end
+
 end
