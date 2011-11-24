@@ -75,6 +75,20 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal @published_place.id, json['place']['id']
   end
   
+  should "get published place information with different currency as guest" do
+    get "/places/#{@published_place.id}.json", {:currency => "USD"}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @published_place.id, json['place']['id']
+    assert_equal "USD", json['place']['currency']
+    # something between 90 and 120 (exchange rate changes!)
+    assert_operator json['place']['price_per_night'], :>=, 90
+    assert_operator json['place']['price_per_night'], :<=, 120
+  end
+  
   should "not get unpublished place information as user (xml)" do
     @place.unpublish!
     get "/places/#{@place.id}.xml", {:access_token => @user.authentication_token}

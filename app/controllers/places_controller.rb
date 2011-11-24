@@ -33,7 +33,8 @@ class PlacesController < ApplicationController
     ]
     
     @search_fields = [
-      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd, :photos
+      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd, :photos,
+      :price_per_night, :price_per_week, :price_per_month, :currency
     ]
 
     @fields = @fields + @amenities
@@ -191,7 +192,8 @@ class PlacesController < ApplicationController
       if !places_paginated.blank?
         filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
           :user => @user_fields,
-          :place_type => @place_type_fields }
+          :place_type => @place_type_fields },
+        :currency => params[:currency]
         })
         response = {
           :places => filtered_places, 
@@ -221,10 +223,10 @@ class PlacesController < ApplicationController
   # [:currency]   ISO Code of the currency to return prices in
   def show
     @place = Place.with_permissions_to(:read).find(params[:id])
-    
     place = filter_fields(@place, @fields, { :additional_fields => { 
       :user => @user_fields,
-      :place_type => @place_type_fields } })
+      :place_type => @place_type_fields },
+    :currency => params[:currency]})
     return_message(200, :ok, {:place => place})
   end
   

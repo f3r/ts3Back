@@ -45,6 +45,17 @@ module GeneralHelper
     filtered_object = {}
     remove_fields = []
     
+    # change currency if options[:currency] is valid
+    if options[:currency] && options[:currency] != object.currency && object.class == Place && valid_currency?(options[:currency])
+      new_currency = options[:currency]
+      object.price_per_night = exchange_currency(object.price_per_night, object.currency, new_currency).to_f unless object.price_per_night.blank?
+      object.price_per_week = exchange_currency(object.price_per_week, object.currency, new_currency).to_f  unless object.price_per_week.blank?
+      object.price_per_month = exchange_currency(object.price_per_month, object.currency, new_currency).to_f unless object.price_per_month.blank?
+      object.price_final_cleanup = exchange_currency(object.price_final_cleanup, object.currency, new_currency).to_f unless object.price_final_cleanup.blank?
+      object.price_security_deposit = exchange_currency(object.price_security_deposit, object.currency, new_currency).to_f unless object.price_security_deposit.blank?
+      object.currency = new_currency
+    end
+    
     for field in fields
       if field == :avatar_file_name
         style = options[:style] if options[:style] rescue :large
@@ -81,5 +92,9 @@ module GeneralHelper
       false
     end
   end
-
+  
+  def exchange_currency(price, old_currency, new_currency)
+    price.to_money(old_currency).exchange_to(new_currency)
+  end  
+  
 end
