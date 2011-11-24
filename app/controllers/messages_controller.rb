@@ -13,8 +13,6 @@ class MessagesController < ApplicationController
   # == Errors
   # [115] no result
   def index
-    check_token
-    
     @conversations = []
     Message.conversations.each{|with_user|
       last_message = ActiveSupport::JSON::decode(Message.last_message_with(with_user)[0])
@@ -44,8 +42,6 @@ class MessagesController < ApplicationController
   # [106] User not found
   # [115] no results
   def messages
-    check_token
-    
     foo = User.find(params['id'])
     @messages = []
     Message.messages_with(params['id']).each{|message|
@@ -71,8 +67,6 @@ class MessagesController < ApplicationController
   # == Errors
   # [106] User not found
   def create
-    check_token
-    
     if Message.to(params['id'], params['message'])
       return_message(200, :ok)
     else
@@ -92,7 +86,6 @@ class MessagesController < ApplicationController
   # == Errors
   # [106] User not found
   def destroy
-    check_token
     if Message.delete_conversation_with(params['id'])
       return_message(200, :ok)
     else
@@ -112,7 +105,6 @@ class MessagesController < ApplicationController
   # == Errors
   # [106] User not found or already read
   def mark_as_read
-    check_token
     if Message.mark_as_read(params['id'])
       return_message(200, :ok)
     else
@@ -131,8 +123,7 @@ class MessagesController < ApplicationController
   # [:user]    The other user in the conversation
   # == Errors
   # [106] User not found or already read
-  def mark_as_read
-    check_token
+  def mark_as_unread
     if Message.mark_as_unread(params['id'])
       return_message(200, :ok)
     else
@@ -149,7 +140,6 @@ class MessagesController < ApplicationController
   # === Parameters
   # [:access_token]
   def unread_count
-    check_token
     return_message(200, :ok, :count => Message.unread_count)
   end
 end
