@@ -62,6 +62,7 @@ authorization do
     has_permission_on :comments, :to => :read do
       if_attribute :comments_count => gt { 0 }
     end
+    has_permission_on :geo, :to => [:get_countries, :get_states, :get_cities, :get_city, :city_search, :price_range]
   end
 
 end

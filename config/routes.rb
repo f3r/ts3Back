@@ -62,11 +62,12 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # GEO
     ##############################################################################
-    get     "geo/countries",          :to => "geo#get_countries"
-    get     "geo/states",             :to => "geo#get_states"
-    get     "geo/cities",             :to => "geo#get_cities"
-    get     "geo/cities/search",      :to => "geo#city_search"
-    get     "geo/cities/:id",         :to => "geo#get_city"
+    get     "geo/countries",                  :to => "geo#get_countries"
+    get     "geo/states",                     :to => "geo#get_states"
+    get     "geo/cities",                     :to => "geo#get_cities"
+    get     "geo/cities/search",              :to => "geo#city_search"
+    get     "geo/cities/:id",                 :to => "geo#get_city"
+    get     "geo/cities/:id/price_range",     :to => "geo#price_range"
     ##############################################################################
     # USER INFO
     ##############################################################################

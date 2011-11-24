@@ -1,4 +1,5 @@
 class GeoController < ApplicationController
+  filter_access_to :all, :attribute_check => false
   respond_to :xml, :json
   
   # TODO: Check caching, it seems to be buggy
@@ -108,6 +109,48 @@ class GeoController < ApplicationController
       return_message(200, :ok, {:cities => @cities}) if !@cities.empty?
     else
       return_message(200, :ok, {:err => {:cities => [115]}})
+    end
+  end
+
+  # == Description
+  # Shows a cities's max and min price
+  # ==Resource URL
+  #   /geo/cities/:id/price_range.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/geo/cities/1/price_range.json
+  # === Parameters
+  # [:currency]   ISO Code of the currency to return prices in. Optional
+  # === Response
+  # [min_price] Minimum price of published places. Default USD
+  # [max_price] Maximum price of published places. Default USD
+  # === Error codes
+  # [115] no results
+  def price_range
+    city_id = params[:id]
+    new_currency = params[:currency]
+
+    places_prices = Place.find_by_sql(["
+      SELECT price_per_night_usd 
+      FROM places 
+      WHERE price_per_night_usd = (SELECT MAX(price_per_night_usd) FROM places WHERE published = 0 AND city_id = ?) 
+      OR price_per_night_usd = (SELECT MIN(price_per_night_usd) FROM places WHERE published = 0 AND city_id = ?)
+    ", city_id, city_id])
+
+    prices = places_prices.map{|x|
+      if new_currency && valid_currency?(new_currency)
+        exchange_currency(x.price_per_night_usd/100, :USD, new_currency).to_f
+      else
+        x.price_per_night_usd/100
+      end
+    }.sort!
+
+    if !prices.blank?
+      return_message(200, :ok, {
+        :min_price => prices.first,
+        :max_price => prices.last
+      })
+    else
+      return_message(200, :ok, {:err => {:places => [115]}})
     end
   end
 
