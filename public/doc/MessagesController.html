@@ -78,6 +78,8 @@
     
     <li><a href="#method-i-mark_as_read">#mark_as_read</a>
     
+    <li><a href="#method-i-mark_as_unread">#mark_as_unread</a>
+    
     <li><a href="#method-i-messages">#messages</a>
     
     <li><a href="#method-i-unread_count">#unread_count</a>
@@ -203,10 +205,8 @@ message=“Message content”</p>
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 73</span>
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 69</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
-  <span class="ruby-identifier">check_token</span>
-  
   <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">to</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>], <span class="ruby-identifier">params</span>[<span class="ruby-string">'message'</span>])
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
   <span class="ruby-keyword">else</span>
@@ -263,9 +263,8 @@ href="https://backend-heypal.heroku.com/messages/2.json">backend-heypal.heroku.c
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 94</span>
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 88</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
-  <span class="ruby-identifier">check_token</span>
   <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">delete_conversation_with</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>])
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
   <span class="ruby-keyword">else</span>
@@ -321,8 +320,6 @@ href="https://backend-heypal.heroku.com/conversations.json">backend-heypal.herok
           <div class="method-source-code" id="index-source">
             <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-identifier">check_token</span>
-  
   <span class="ruby-ivar">@conversations</span> = []
   <span class="ruby-constant">Message</span>.<span class="ruby-identifier">conversations</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">with_user</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">last_message</span> = <span class="ruby-constant">ActiveSupport</span><span class="ruby-operator">::</span><span class="ruby-constant">JSON</span><span class="ruby-operator">::</span><span class="ruby-identifier">decode</span>(<span class="ruby-constant">Message</span>.<span class="ruby-identifier">last_message_with</span>(<span class="ruby-identifier">with_user</span>)[<span class="ruby-value">0</span>])
@@ -388,9 +385,8 @@ href="https://backend-heypal.heroku.com/conversations/2/mark_as_read.json">backe
 
           
           <div class="method-source-code" id="mark_as_read-source">
-            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 114</span>
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 107</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">mark_as_read</span>
-  <span class="ruby-identifier">check_token</span>
   <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">mark_as_read</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>])
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
   <span class="ruby-keyword">else</span>
@@ -405,6 +401,64 @@ href="https://backend-heypal.heroku.com/conversations/2/mark_as_read.json">backe
 
         
       </div><!-- mark_as_read-method -->
+
+    
+      <div id="method-i-mark_as_unread" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">mark_as_unread</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-mark_as_unread-label-Description">Description</h2>
+
+<p>Marks a conversation with another user as unread</p>
+
+<h2 id="method-i-mark_as_unread-label-Resource+URL">Resource URL</h2>
+
+<p>/conversations/user/mark_as_unread.format</p>
+
+<h2 id="method-i-mark_as_unread-label-Example">Example</h2>
+
+<p>PUT <a
+href="https://backend-heypal.heroku.com/conversations/2/mark_as_unread.json">backend-heypal.heroku.com/conversations/2/mark_as_unread.json</a></p>
+
+<h3 id="method-i-mark_as_unread-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>:access_token
+<dd></dd><dt>:user
+<dd>
+<p>The other user in the conversation</p>
+</dd></dl>
+
+<h2 id="method-i-mark_as_unread-label-Errors">Errors</h2>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>User not found or already read</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="mark_as_unread-source">
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 126</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">mark_as_unread</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">mark_as_unread</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>])
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:messages</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">106</span>]}})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- mark_as_unread-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- mark_as_unread-method -->
 
     
       <div id="method-i-messages" class="method-detail ">
@@ -450,10 +504,8 @@ href="https://backend-heypal.heroku.com/messages/2.json">backend-heypal.heroku.c
 
           
           <div class="method-source-code" id="messages-source">
-            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 46</span>
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">messages</span>
-  <span class="ruby-identifier">check_token</span>
-  
   <span class="ruby-identifier">foo</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>])
   <span class="ruby-ivar">@messages</span> = []
   <span class="ruby-constant">Message</span>.<span class="ruby-identifier">messages_with</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">'id'</span>]).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">message</span><span class="ruby-operator">|</span>
@@ -506,9 +558,8 @@ href="https://backend-heypal.heroku.com/conversations/unread_count.json">backend
 
           
           <div class="method-source-code" id="unread_count-source">
-            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 151</span>
+            <pre><span class="ruby-comment"># File app/controllers/messages_controller.rb, line 142</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">unread_count</span>
-  <span class="ruby-identifier">check_token</span>
   <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, <span class="ruby-value">:count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Message</span>.<span class="ruby-identifier">unread_count</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- unread_count-source -->
