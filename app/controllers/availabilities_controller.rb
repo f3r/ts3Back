@@ -9,16 +9,20 @@ class AvailabilitiesController < ApplicationController
   # /places/:id/availabilities.format
   # ==Example
   # GET https://backend-heypal.heroku.com/places/123/availabilities.json
+  # === Parameters
+  # [:currency]   ISO Code of the currency to return prices in. Optional
   # === Response
   # [availability] Array containing all availabilities of a place
   # == Error codes
   # [106] not found
   # [115] no results
   def list
+    @fields = [:id,:availability_type,:date_start,:date_end,:comment,:price_per_night,:comment]
     @place = Place.with_permissions_to(:read).find(params[:id])
-    @availabilities = @place.availabilities.select("id,availability_type,date_start,date_end,comment,price_per_night,comment").order("date_start ASC")
-    if !@place.availabilities.blank?
-      return_message(200, :ok, {:availabilities => @availabilities})
+    @availabilities = @place.availabilities.order("date_start ASC")
+    availabilities = filter_fields(@availabilities, @fields, { :currency => params[:currency] })
+    if !availabilities.blank?
+      return_message(200, :ok, {:availabilities => availabilities})
     else
       return_message(200, :ok, {:err=>{:availabilities => [115]}} )
     end

@@ -27,7 +27,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
                                   :price_per_week => "128000",
                                   :price_per_month => "400000"
                                 )
-      @published_place_availability = Factory(:availability, :place => @published_place )
+      @published_place_availability = Factory(:availability, :place => @published_place, :price_per_night => 9000 )
       @published_place.publish!
       
       @users = [@admin_user, @agent_user]
@@ -299,6 +299,18 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
+  end
+
+  should "list published place availabilities with a different currency as guest" do
+    get "/places/#{@published_place.id}/availabilities.json", {:currency => "USD"}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    # something between 100 and 140 (exchange rate changes!)
+    assert_operator json['availabilities'][0]['price_per_night'], :>=, 100
+    assert_operator json['availabilities'][0]['price_per_night'], :<=, 140
   end
 
   should "not list unpublished place availabilities as guest" do

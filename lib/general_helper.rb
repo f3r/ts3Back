@@ -45,8 +45,8 @@ module GeneralHelper
     filtered_object = {}
     remove_fields = []
     
-    # change currency if options[:currency] is valid
-    if options[:currency] && options[:currency] != object.currency && object.class == Place && valid_currency?(options[:currency])
+    # change place currency if options[:currency] is valid
+    if object.class == Place && options[:currency] && options[:currency] != object.currency && valid_currency?(options[:currency])
       new_currency = options[:currency]
       object.price_per_night = exchange_currency(object.price_per_night, object.currency, new_currency).to_f unless object.price_per_night.blank?
       object.price_per_week = exchange_currency(object.price_per_week, object.currency, new_currency).to_f  unless object.price_per_week.blank?
@@ -54,6 +54,12 @@ module GeneralHelper
       object.price_final_cleanup = exchange_currency(object.price_final_cleanup, object.currency, new_currency).to_f unless object.price_final_cleanup.blank?
       object.price_security_deposit = exchange_currency(object.price_security_deposit, object.currency, new_currency).to_f unless object.price_security_deposit.blank?
       object.currency = new_currency
+    end
+
+    # change availability currency if options[:currency] is valid
+    if object.class == Availability && options[:currency] && options[:currency] != object.place.currency && valid_currency?(options[:currency])
+      new_currency = options[:currency]
+      object.price_per_night = exchange_currency(object.price_per_night, object.place.currency, new_currency).to_f unless object.price_per_night.blank?
     end
     
     for field in fields
