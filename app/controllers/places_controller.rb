@@ -188,18 +188,39 @@ class PlacesController < ApplicationController
       places_search = @search.result(:distinct => true)
       places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
 
-      # FIXME: Add all images to search result
       if !places_paginated.blank?
         filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
           :user => @user_fields,
           :place_type => @place_type_fields },
         :currency => params[:currency]
         })
+        
+        place_types = PlaceType.select([:id,:name]).all
+        place_type_count = {}
+        for place_type in place_types
+          count = 0
+          for place in places_paginated
+            count+=1 if place.place_type_id == place_type.id
+          end
+          place_type_count.merge!({place_type.name.parameterize(sep = '_').to_sym => count}) 
+        end
+
+        amenities_count = {}
+        for amenity in @amenities
+          count = 0
+          for place in places_paginated
+            count+=1 if place.send(amenity) == true
+          end
+          amenities_count.merge!({amenity.to_s.gsub("amenities_", "") => count}) 
+        end
+
         response = {
           :places => filtered_places, 
           :results => places_search.count, 
           :per_page => per_page, 
           :current_page => params[:page], 
+          :place_type_count => place_type_count,
+          :amenities_count => amenities_count,
           :total_pages => (places_search.count/per_page.to_f).ceil
         }
       else
