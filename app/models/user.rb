@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   using_access_control
 
   before_save :ensure_authentication_token, :check_avatar_url
-  after_save  :delete_cache
+  after_commit  :delete_cache
 
   attr_accessible :first_name,
                   :last_name,
@@ -157,7 +157,7 @@ class User < ActiveRecord::Base
 
   # Expires the cache when the user info is updated
   def delete_cache
-    delete_caches(["user_info_" + self.id.to_s, "user_full_info_" + self.id.to_s])
+    delete_caches(["user_info_" + self.id.to_s, "user_" + self.id.to_s])
   end
   
   # checks if avatar_url is set and updates the avatar if avatar_url is an image

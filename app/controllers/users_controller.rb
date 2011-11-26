@@ -153,7 +153,7 @@ class UsersController < ApplicationController
     elsif current_user
       id = current_user.id
     end
-    # @user = Rails.cache.fetch("user_full_info_" + id.to_s) { User.find(id) } if id
+    # @user = Rails.cache.fetch("user_" + id.to_s) { User.find(id) } if id
     @user = User.find(id) if id
   end
 end

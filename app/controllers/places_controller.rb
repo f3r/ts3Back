@@ -184,8 +184,8 @@ class PlacesController < ApplicationController
       end
 
       @search.sorts = sorting if sorting
-
       places_search = @search.result(:distinct => true)
+      total_results = places_search.count
       places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
 
       if !places_paginated.blank?
@@ -194,8 +194,9 @@ class PlacesController < ApplicationController
           :place_type => @place_type_fields },
         :currency => params[:currency]
         })
-        
-        place_types = PlaceType.select([:id,:name]).all
+
+        place_types = PlaceType.all_cached
+
         place_type_count = {}
         for place_type in place_types
           count = 0
@@ -216,12 +217,12 @@ class PlacesController < ApplicationController
 
         response = {
           :places => filtered_places, 
-          :results => places_search.count, 
+          :results => total_results, 
           :per_page => per_page, 
           :current_page => params[:page], 
           :place_type_count => place_type_count,
           :amenities_count => amenities_count,
-          :total_pages => (places_search.count/per_page.to_f).ceil
+          :total_pages => (total_results/per_page.to_f).ceil
         }
       else
         response = {:err => {:places => [115]}}

@@ -87,7 +87,11 @@ module GeneralHelper
   end
   
   def get_additional_fields(field, object, fields)
-    {field.to_sym => filter_fields(object.send(field),fields) }
+    additional_object = Rails.cache.fetch("#{field.to_s}_#{object.send("#{field.to_s}_id")}") {
+      Rails.logger.info "Cache: #{field.to_s}_#{object.send("#{field.to_s}_id")} miss"
+      object.send("#{field.to_s}").class.find(object.send("#{field.to_s}_id"))
+    }
+    return {field.to_sym => filter_fields(additional_object,fields) }
   end
 
   def valid_currency?(currency)
