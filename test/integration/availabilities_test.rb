@@ -29,8 +29,6 @@ class AvailabilitiesTest < ActionController::IntegrationTest
                                 )
       @published_place_availability = Factory(:availability, :place => @published_place, :price_per_night => 9000 )
       @published_place.publish!
-      
-      @users = [@admin_user, @agent_user]
 
       @availability_occupied_new_info = { 
         :availability_type => 1, 
@@ -291,7 +289,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_equal "fail", json['stat']
     assert_equal [106],  json['err']['record']
   end
-
+  
   should "list published place availabilities as guest" do
     get "/places/#{@published_place.id}/availabilities.json"
     assert_response(200)
@@ -300,7 +298,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
   end
-
+  
   should "list published place availabilities with a different currency as guest" do
     get "/places/#{@published_place.id}/availabilities.json", {:currency => "USD"}
     assert_response(200)
@@ -312,7 +310,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
     assert_operator json['availabilities'][0]['price_per_night'], :>=, 100
     assert_operator json['availabilities'][0]['price_per_night'], :<=, 140
   end
-
+  
   should "not list unpublished place availabilities as guest" do
     get "/places/#{@place.id}/availabilities.json"
     assert_response(404)

@@ -1,5 +1,5 @@
 require 'test_helper'
-class AvailabilitiesTest < ActionController::IntegrationTest
+class CitiesTest < ActionController::IntegrationTest
 
   setup do
     without_access_control do

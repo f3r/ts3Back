@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   using_access_control
 
   before_save :ensure_authentication_token, :check_avatar_url
-  after_commit  :delete_cache
+  after_save  :delete_cache
 
   attr_accessible :first_name,
                   :last_name,

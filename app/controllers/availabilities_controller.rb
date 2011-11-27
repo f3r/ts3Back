@@ -60,7 +60,7 @@ class AvailabilitiesController < ApplicationController
     availability.merge!({ :price_per_night   => params[:price_per_night]}) if params[:price_per_night]
     availability.merge!({ :comment           => params[:comment]})         if params[:comment]
     
-    @availability = Place.with_permissions_to(:read).find(params[:id]).availabilities.new(availability)
+    @availability = Place.with_permissions_to(:update).find(params[:id]).availabilities.new(availability)
     if @availability.save
       return_message(200, :ok, {:availability => @availability})
     else
@@ -77,7 +77,7 @@ class AvailabilitiesController < ApplicationController
   # === Parameters
   # [:access_token]      Access token
   def destroy
-    @availability = Place.with_permissions_to(:read).find(params[:place_id]).availabilities.find(params[:id])
+    @availability = Place.with_permissions_to(:update).find(params[:place_id]).availabilities.find(params[:id])
     if @availability.destroy
       return_message(200, :ok)
     else
@@ -107,8 +107,7 @@ class AvailabilitiesController < ApplicationController
   # [106] not found
   # [122] unmatching parent resource and child resource
   def update
-    #TODO: Check that the availability is for a place the user owns...
-    @place        = Place.with_permissions_to(:read).find(params[:place_id])
+    @place        = Place.with_permissions_to(:update).find(params[:place_id])
     @availability = @place.availabilities.find(params[:id])
           
     availability = {}
