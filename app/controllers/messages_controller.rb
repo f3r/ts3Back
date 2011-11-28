@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  filter_access_to :all, :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
@@ -77,16 +78,16 @@ class MessagesController < ApplicationController
   # == Description
   # Deletes a conversation with another user
   # ==Resource URL
-  # /messages/user.format
+  # /conversations/:user_id.format
   # ==Example
-  # DELETE https://backend-heypal.heroku.com/messages/2.json
+  # DELETE https://backend-heypal.heroku.com/conversations/2.json
   # === Parameters
   # [:access_token]
-  # [:user]    The other user in the conversation
+  # [:user_id]    The other user in the conversation
   # == Errors
   # [106] User not found
   def destroy
-    if Message.delete_conversation_with(params['id'])
+    if Message.delete_conversation_with(params[:user_id])
       return_message(200, :ok)
     else
       return_message(200, :ok, {:err => {:messages => [106]}})
@@ -96,16 +97,16 @@ class MessagesController < ApplicationController
   # == Description
   # Marks a conversation with another user as read
   # ==Resource URL
-  # /conversations/user/mark_as_read.format
+  # /conversations/:user_id/mark_as_read.format
   # ==Example
   # PUT https://backend-heypal.heroku.com/conversations/2/mark_as_read.json
   # === Parameters
   # [:access_token]
-  # [:user]    The other user in the conversation
+  # [:user_id]    The other user in the conversation
   # == Errors
   # [106] User not found or already read
   def mark_as_read
-    if Message.mark_as_read(params['id'])
+    if Message.mark_as_read(params[:user_id])
       return_message(200, :ok)
     else
       return_message(200, :ok, {:err => {:messages => [106]}})
@@ -115,16 +116,17 @@ class MessagesController < ApplicationController
   # == Description
   # Marks a conversation with another user as unread
   # ==Resource URL
-  # /conversations/user/mark_as_unread.format
+  # /conversations/:user_id/mark_as_unread.format
   # ==Example
   # PUT https://backend-heypal.heroku.com/conversations/2/mark_as_unread.json
   # === Parameters
   # [:access_token]
-  # [:user]    The other user in the conversation
+  # [:user_id]    The other user in the conversation
   # == Errors
-  # [106] User not found or already read
+  # [106] User not found or already unread
   def mark_as_unread
-    if Message.mark_as_unread(params['id'])
+    # FIXME: this doesn't work
+    if Message.mark_as_unread(params[:user_id])
       return_message(200, :ok)
     else
       return_message(200, :ok, {:err => {:messages => [106]}})
