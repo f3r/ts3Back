@@ -79,41 +79,41 @@ class MessagesTest < ActionController::IntegrationTest
         assert_equal 0, json['count']
       end
       
-      # should "create and mark as read and mark as unread a conversation (json)" do
-      #   post "/messages/#{@user.id}.json", {:access_token => @access_token_2, :message => "hello"}
-      #   assert_response(200)
-      #   assert_equal 'application/json', @response.content_type
-      #   json = ActiveSupport::JSON.decode(response.body)
-      #   assert_kind_of Hash, json
-      #   assert_equal "ok", json['stat']
-      # 
-      #   get "/conversations/unread_count.json", {:access_token => @access_token}
-      #   json = ActiveSupport::JSON.decode(response.body)
-      #   assert_operator json['count'], :>=, 1
-      # 
-      #   put "/conversations/#{@user_2.id}/mark_as_read.json", {:access_token => @access_token}
-      #   assert_response(200)
-      #   assert_equal 'application/json', @response.content_type
-      #   json = ActiveSupport::JSON.decode(response.body)
-      #   assert_kind_of Hash, json
-      #   assert_equal "ok", json['stat']
-      # 
-      #   get "/conversations/unread_count.json", {:access_token => @access_token}
-      #   json = ActiveSupport::JSON.decode(response.body)
-      #   assert_equal 0, json['count']
-      # 
-      #   put "/conversations/#{@user_2.id}/mark_as_unread.json", {:access_token => @access_token}
-      #   assert_response(200)
-      #   assert_equal 'application/json', @response.content_type
-      #   json = ActiveSupport::JSON.decode(response.body)
-      #   assert_kind_of Hash, json
-      #   assert_equal "ok", json['stat']
-      # 
-      #   get "/conversations/unread_count.json", {:access_token => @access_token}
-      #   json = ActiveSupport::JSON.decode(response.body)
-      #   assert_operator json['count'], :>=, 1
-      # 
-      # end
+      should "create and mark as read and mark as unread a conversation (json)" do
+        post "/messages/#{@user.id}.json", {:access_token => @access_token_2, :message => "hello"}
+        assert_response(200)
+        assert_equal 'application/json', @response.content_type
+        json = ActiveSupport::JSON.decode(response.body)
+        assert_kind_of Hash, json
+        assert_equal "ok", json['stat']
+      
+        get "/conversations/unread_count.json", {:access_token => @access_token}
+        json = ActiveSupport::JSON.decode(response.body)
+        assert_operator json['count'], :>=, 1
+      
+        put "/conversations/#{@user_2.id}/mark_as_read.json", {:access_token => @access_token}
+        assert_response(200)
+        assert_equal 'application/json', @response.content_type
+        json = ActiveSupport::JSON.decode(response.body)
+        assert_kind_of Hash, json
+        assert_equal "ok", json['stat']
+      
+        get "/conversations/unread_count.json", {:access_token => @access_token}
+        json = ActiveSupport::JSON.decode(response.body)
+        assert_equal 0, json['count']
+      
+        put "/conversations/#{@user_2.id}/mark_as_unread.json", {:access_token => @access_token}
+        assert_response(200)
+        assert_equal 'application/json', @response.content_type
+        json = ActiveSupport::JSON.decode(response.body)
+        assert_kind_of Hash, json
+        assert_equal "ok", json['stat']
+      
+        get "/conversations/unread_count.json", {:access_token => @access_token}
+        json = ActiveSupport::JSON.decode(response.body)
+        assert_operator json['count'], :>=, 1
+      
+      end
       
       should "get message and check unread count (json)" do
         post "/messages/#{@user.id}.json", {:access_token => @access_token_2, :message => "hello"}

@@ -139,7 +139,7 @@ class Message
   # Marks a conversation as unread
   def self.mark_as_unread(user)
     # We check that the conversation exists and is read
-    if (REDIS.sismember Message.ConversationReadKey user)
+    if (REDIS.sismember Message.ConversationReadKey, user)
       REDIS.smove Message.ConversationReadKey, Message.ConversationUnreadKey, user
       return true
     else
