@@ -56,7 +56,10 @@ class NotificationsController < ApplicationController
   # === Parameters
   # [:access_token]
   def mark_as_read
-    Notification.mark_as_read
-    return_message(200, :ok)
+    if Notification.mark_as_read
+      return_message(200, :ok)
+    else
+      return_message(200, :fail)
+    end
   end  
 end
