@@ -72,9 +72,13 @@
     
     <li><a href="#method-c-new">::new</a>
     
+    <li><a href="#method-i-check_availability">#check_availability</a>
+    
     <li><a href="#method-i-create">#create</a>
     
     <li><a href="#method-i-destroy">#destroy</a>
+    
+    <li><a href="#method-i-place_request">#place_request</a>
     
     <li><a href="#method-i-publish">#publish</a>
     
@@ -234,6 +238,98 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
+      <div id="method-i-check_availability" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_availability</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-check_availability-label-Description">Description</h2>
+
+<p>Checks place availability</p>
+
+<h2 id="method-i-check_availability-label-Resource+URL">Resource URL</h2>
+
+<pre>/places/:id/check_availability.format</pre>
+
+<h2 id="method-i-check_availability-label-Example">Example</h2>
+
+<pre>GET https://backend-heypal.heroku.com/places/:id/check_availability.json access_token=access_token&amp;check_in=2011/12/01&amp;check_out=2012/01/03</pre>
+
+<h3 id="method-i-check_availability-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>access_token
+<dd>
+<p>Access token</p>
+</dd><dt>check_in
+<dd>
+<p>Check in date</p>
+</dd><dt>check_out
+<dd>
+<p>Check out date</p>
+</dd></dl>
+
+<h3 id="method-i-check_availability-label-Response">Response</h3>
+<dl class="rdoc-list label-list"><dt>dates
+<dd>
+<p>Array containing the selected dates, with their respective price_per_night
+and comment if present</p>
+</dd><dt>total_days
+<dd>
+<p>total nights selected</p>
+</dd><dt>currency
+<dd>
+<p>original currency</p>
+</dd><dt>avg_price_per_night
+<dd>
+<p>Average price_per_night, depending on availabilities special prices</p>
+</dd><dt>sub_total
+<dd>
+<p>sum of price_per_night</p>
+</dd></dl>
+
+<h3 id="method-i-check_availability-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>Record not found</p>
+</dd><dt>113
+<dd>
+<p>Invalid date</p>
+</dd><dt>119
+<dd>
+<p>date must be future, after today</p>
+</dd><dt>120
+<dd>
+<p>end date must be after initial date</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="check_availability-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 461</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_availability</span>
+  <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-identifier">place_availability</span> = <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">place_availability</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:check_in</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:check_out</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">place_availability</span>[<span class="ruby-value">:err</span>].<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, <span class="ruby-identifier">place_availability</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, <span class="ruby-identifier">place_availability</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_availability-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_availability-method -->
+
+    
       <div id="method-i-create" class="method-detail ">
         
         <div class="method-heading">
@@ -305,7 +401,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 254</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 276</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">place</span> = { 
     <span class="ruby-value">:title</span>         =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:title</span>],
@@ -365,7 +461,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 346</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 368</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">place</span>.<span class="ruby-identifier">destroy</span>
@@ -382,6 +478,63 @@
 
         
       </div><!-- destroy-method -->
+
+    
+      <div id="method-i-place_request" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">place_request</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-place_request-label-Description">Description</h2>
+
+<p>Requests a place</p>
+
+<h2 id="method-i-place_request-label-Resource+URL">Resource URL</h2>
+
+<pre>/places/:id/place_request.format</pre>
+
+<h2 id="method-i-place_request-label-Example">Example</h2>
+
+<pre>GET https://backend-heypal.heroku.com/places/:id/place_request.json access_token=access_token</pre>
+
+<h3 id="method-i-place_request-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>access_token
+<dd>
+<p>Access token</p>
+</dd></dl>
+
+<h3 id="method-i-place_request-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>Record not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="place_request-source">
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 481</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">place_request</span>
+  <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">do_request</span>({})
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span> )
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, { <span class="ruby-value">:place</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;meh&quot;</span> } )
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- place_request-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- place_request-method -->
 
     
       <div id="method-i-publish" class="method-detail ">
@@ -441,7 +594,7 @@ GET https://backend-heypal.heroku.com/places/:id/unpublish.json access_token=acc
 
           
           <div class="method-source-code" id="publish-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 395</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 417</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">publish</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;publish&quot;</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;unpublish&quot;</span>
     <span class="ruby-identifier">method</span> = <span class="ruby-node">&quot;#{params[:status]}!&quot;</span>
@@ -700,23 +853,45 @@ price_size_highest, reviews, most_recent</p>
     <span class="ruby-keyword">end</span>
 
     <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">sorts</span> = <span class="ruby-identifier">sorting</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">sorting</span>
-
     <span class="ruby-identifier">places_search</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">result</span>(<span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+    <span class="ruby-identifier">total_results</span> = <span class="ruby-identifier">places_search</span>.<span class="ruby-identifier">count</span>
     <span class="ruby-identifier">places_paginated</span> = <span class="ruby-identifier">places_search</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">per_page</span>)
 
-    <span class="ruby-comment"># FIXME: Add all images to search result</span>
     <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">places_paginated</span>.<span class="ruby-identifier">blank?</span>
       <span class="ruby-identifier">filtered_places</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-identifier">places_paginated</span>, <span class="ruby-ivar">@search_fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
         <span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user_fields</span>,
         <span class="ruby-value">:place_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@place_type_fields</span> },
       <span class="ruby-value">:currency</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:currency</span>]
       })
+
+      <span class="ruby-identifier">place_types</span> = <span class="ruby-constant">PlaceType</span>.<span class="ruby-identifier">all_cached</span>
+
+      <span class="ruby-identifier">place_type_count</span> = {}
+      <span class="ruby-keyword">for</span> <span class="ruby-identifier">place_type</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">place_types</span>
+        <span class="ruby-identifier">count</span> = <span class="ruby-value">0</span>
+        <span class="ruby-keyword">for</span> <span class="ruby-identifier">place</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">places_paginated</span>
+          <span class="ruby-identifier">count</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">place</span>.<span class="ruby-identifier">place_type_id</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">place_type</span>.<span class="ruby-identifier">id</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">place_type_count</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">place_type</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">parameterize</span>(<span class="ruby-identifier">sep</span> = <span class="ruby-string">'_'</span>).<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">count</span>}) 
+      <span class="ruby-keyword">end</span>
+
+      <span class="ruby-identifier">amenities_count</span> = {}
+      <span class="ruby-keyword">for</span> <span class="ruby-identifier">amenity</span> <span class="ruby-keyword">in</span> <span class="ruby-ivar">@amenities</span>
+        <span class="ruby-identifier">count</span> = <span class="ruby-value">0</span>
+        <span class="ruby-keyword">for</span> <span class="ruby-identifier">place</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">places_paginated</span>
+          <span class="ruby-identifier">count</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">place</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">amenity</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">amenities_count</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-identifier">amenity</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;amenities_&quot;</span>, <span class="ruby-string">&quot;&quot;</span>) =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">count</span>}) 
+      <span class="ruby-keyword">end</span>
+
       <span class="ruby-identifier">response</span> = {
         <span class="ruby-value">:places</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filtered_places</span>, 
-        <span class="ruby-value">:results</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">places_search</span>.<span class="ruby-identifier">count</span>, 
+        <span class="ruby-value">:results</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">total_results</span>, 
         <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">per_page</span>, 
         <span class="ruby-value">:current_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], 
-        <span class="ruby-value">:total_pages</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">places_search</span>.<span class="ruby-identifier">count</span><span class="ruby-operator">/</span><span class="ruby-identifier">per_page</span>.<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">ceil</span>
+        <span class="ruby-value">:place_type_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">place_type_count</span>,
+        <span class="ruby-value">:amenities_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">amenities_count</span>,
+        <span class="ruby-value">:total_pages</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">total_results</span><span class="ruby-operator">/</span><span class="ruby-identifier">per_page</span>.<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">ceil</span>
       }
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">response</span> = {<span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:places</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">115</span>]}}
@@ -772,7 +947,7 @@ price_size_highest, reviews, most_recent</p>
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 224</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 246</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">place</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@place</span>, <span class="ruby-ivar">@fields</span>, { <span class="ruby-value">:additional_fields</span> =<span class="ruby-operator">&gt;</span> { 
@@ -935,7 +1110,7 @@ smoking_allowed,suitable_events,tennis,tv,washer</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 325</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 347</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">place</span> = <span class="ruby-identifier">filter_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-ivar">@fields</span>)
@@ -1000,7 +1175,7 @@ Boolean value</p>
 
           
           <div class="method-source-code" id="user_places-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 366</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 388</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">user_places</span>
   <span class="ruby-ivar">@places</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">places</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>)
   <span class="ruby-ivar">@places</span> = <span class="ruby-ivar">@places</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:published</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:published</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;0&quot;</span>

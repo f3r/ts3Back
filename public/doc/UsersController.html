@@ -569,7 +569,7 @@ href="http://url/image_file">url/image_file</a></p>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">current_user</span>
     <span class="ruby-identifier">id</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-comment"># @user = Rails.cache.fetch(&quot;user_full_info_&quot; + id.to_s) { User.find(id) } if id</span>
+  <span class="ruby-comment"># @user = Rails.cache.fetch(&quot;user_&quot; + id.to_s) { User.find(id) } if id</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- get_user-source -->

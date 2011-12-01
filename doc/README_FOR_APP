@@ -37,6 +37,7 @@
 [133] not allowed to do that
 [134] doesn't have access to resource
 [135] Invalid currency
+[136] occupied
 
 #== Notifications
 # Type - Event - Parameters - Sample Message
