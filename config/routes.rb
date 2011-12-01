@@ -46,12 +46,13 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # PLACES
     ##############################################################################
-    get     "places/search",          :to => "places#search"
-    post    "places",                 :to => "places#create"
-    put     "places/:id",             :to => "places#update"
-    get     "places/:id",             :to => "places#show"
-    delete  "places/:id",             :to => "places#destroy"
-    get     "places/:id/:status",     :to => "places#publish"
+    get     "places/:id/check_availability",      :to => "places#check_availability"
+    get     "places/search",                      :to => "places#search"
+    post    "places",                             :to => "places#create" 
+    put     "places/:id",                         :to => "places#update" 
+    get     "places/:id",                         :to => "places#show"   
+    delete  "places/:id",                         :to => "places#destroy"
+    get     "places/:id/:status",                 :to => "places#publish"
     ##############################################################################
     # PLACE TYPES
     ##############################################################################

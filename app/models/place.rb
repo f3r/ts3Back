@@ -69,6 +69,89 @@ class Place < ActiveRecord::Base
   def full_address
     [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
   end
+  
+  def place_availability(check_in, check_out)
+
+    errors = {}
+    validate_check_in = validate_attribute(Transaction, :check_in, check_in)
+    errors.merge!(validate_check_in) if validate_check_in
+    validate_check_out = validate_attribute(Transaction, :check_out, check_out)
+    errors.merge!(validate_check_out) if validate_check_out
+      
+    if errors.blank?
+      check_in = check_in.to_date
+      check_out = check_out.to_date
+
+      total_days = (check_out - check_in).to_i
+      requested_dates = (check_in..check_out).to_a
+
+      price_per_night = self.price_per_night
+      price_per_night = self.price_per_week / 7 if self.price_per_week && total_days > 7 && total_days < 28
+      price_per_night = self.price_per_month / 31 if self.price_per_month && total_days > 28
+
+      availabilities = # Rails.cache.fetch("place_#{self.id}_availabilities_new_price") {
+       #      puts "place_#{self.id}_availabilities_new_price miss"
+        self.availabilities.where(:availability_type => 2)
+      # }
+
+      unavailabilities = # Rails.cache.fetch("place_#{self.id}_availabilities_occupied") {
+       #      puts "place_#{self.id}_availabilities_occupied miss"
+        self.availabilities.where(:availability_type => 1)
+      # }
+    
+      unavailable_dates = []
+
+      if !unavailabilities.blank?
+        for unavailability in unavailabilities
+          unavailability_dates = (unavailability.date_start..unavailability.date_end).to_a
+          intersections = requested_dates & unavailability_dates
+          if !intersections.blank?
+            for date in intersections
+              unavailable_dates << {:date => date, :comment => unavailability.comment}
+            end
+          end
+        end
+      end
+    
+      if unavailable_dates.blank?
+
+        dates = []
+        for date in requested_dates
+          dates << { :date => date, :price_per_night => price_per_night }
+        end
+
+        for availability in availabilities
+          availability_dates = (availability.date_start..availability.date_end).to_a
+          intersections = requested_dates & availability_dates
+          if !intersections.blank?
+            for date in intersections
+              dates.delete_if {|hash| hash[:date] == date}
+              dates << {:date => date, :price_per_night => availability.price_per_night, :comment => availability.comment}
+            end
+          end
+        end
+        dates = dates.sort_by { |hash| hash[:date] }
+        sub_total = 0
+        dates.map{|hash| sub_total += hash[:price_per_night]}
+        avg_price_per_night = sub_total.to_f/total_days
+    
+        return {
+          :total_days => total_days, 
+          :avg_price_per_night => avg_price_per_night.ceil, # FIXME: integer or decimals?
+          :currency => self.currency,
+          :sub_total => sub_total,
+          :dates => dates
+        }
+
+      elsif unavailable_dates
+        return { :err => {:place => [136]}, :dates => unavailable_dates }
+      end
+
+    else
+      return { :err => errors }
+    end
+
+  end
 
   private
   

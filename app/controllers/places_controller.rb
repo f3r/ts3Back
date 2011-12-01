@@ -436,4 +436,36 @@ class PlacesController < ApplicationController
         return_message(200, :ok, { :err => {:status => [103]} } )
       end
   end
+
+  # == Description
+  # Checks place availability
+  # ==Resource URL
+  #   /places/:id/check_availability.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/places/:id/check_availability.json access_token=access_token&check_in=2011/12/01&check_out=2012/01/03
+  # === Parameters
+  # [access_token]  Access token
+  # [check_in]  Check in date
+  # [check_out]  Check out date
+  # === Response
+  # [dates] Array containing the selected dates, with their respective price_per_night and comment if present
+  # [total_days] total nights selected
+  # [currency] original currency
+  # [avg_price_per_night] Average price_per_night, depending on availabilities special prices
+  # [sub_total] sum of price_per_night
+  # === Error codes
+  # [106] Record not found
+  # [113] Invalid date
+  # [119] date must be future, after today
+  # [120] end date must be after initial date
+  def check_availability
+    @place = Place.with_permissions_to(:read).find(params[:id])
+    place_availability = @place.place_availability(params[:check_in], params[:check_out])
+    if place_availability[:err].blank?
+      return_message(200, :ok, place_availability)
+    else
+      return_message(200, :fail, place_availability)
+    end
+  end
+
 end

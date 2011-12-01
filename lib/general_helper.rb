@@ -105,6 +105,16 @@ module GeneralHelper
   
   def exchange_currency(price, old_currency, new_currency)
     price.to_money(old_currency).exchange_to(new_currency)
-  end  
+  end
+
+  # Validates an attribute using the validation rules from a model
+  def validate_attribute(model, attribute, value)
+    temp = model.new(attribute => value)
+    if !temp.valid?
+      return {attribute => temp.errors.get(attribute)} unless temp.errors.get(attribute).blank?
+    else
+      return nil
+    end
+  end
   
 end
