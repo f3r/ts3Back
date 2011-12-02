@@ -5,6 +5,7 @@ class CommentsController < ApplicationController
   
   def initialize
     @fields = [:id, :user_id, :place_id, :comment, :owner, :created_at]
+    @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
   end
   
   # == Description
@@ -25,26 +26,12 @@ class CommentsController < ApplicationController
       # We get all the replies and add them to the answer
       foo = []
       @comments.each{|comment|
-        question = filter_fields(comment, @fields + [:comments_count])
-        user = User.find(comment.user_id)
-        question.merge!({:user => 
-          { :name =>  user.full_name,
-            :role =>  user.role,
-            :photo => user.avatar.url(:thumb)
-          }
-        })
+        question = filter_fields(comment, @fields + [:comments_count], { :additional_fields => { :user => @user_fields } })
         answers = comment.answers
         if answers
           answers_response = []
           answers.each{|reply|
-            user = User.find(reply.user_id)
-            bar = ({:user => 
-              { :name =>  user.full_name,
-                :role =>  user.role,
-                :photo => user.avatar.url(:thumb)
-              }
-            })
-            answers_response << (filter_fields(reply,@fields)).merge!(bar)
+            answers_response << (filter_fields(reply,@fields, { :additional_fields => { :user => @user_fields } }))
           }
           question.merge!({:replies => answers_response})
           foo = foo << question
@@ -79,14 +66,7 @@ class CommentsController < ApplicationController
     comment.merge!({:replying_to => params[:replying_to]}) if params[:replying_to]
     @comment = place.comments.new(comment)
     if @comment.save
-      user = User.find(current_user.id)
-      foo = ({:user => 
-        { :name =>  user.full_name,
-          :role =>  user.role,
-          :photo => user.avatar.url(:thumb)
-        }
-      })
-      return_message(200, :ok, {:comment => filter_fields(@comment,@fields).merge!(foo)} )
+      return_message(200, :ok, {:comment => filter_fields(@comment,@fields, { :additional_fields => { :user => @user_fields } })} )
     else
       return_message(200, :fail, {:err => format_errors(@comment.errors.messages)})
     end
