@@ -64,7 +64,7 @@ module GeneralHelper
     
     for field in fields
       if field == :avatar_file_name
-        style = options[:style] if options[:style] rescue :large
+        style = options[:style].blank? ? :thumb : options[:style]
         avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
         filtered_object.merge!({:avatar => avatar })
       else
@@ -72,7 +72,6 @@ module GeneralHelper
       end
       if !additional_fields.blank? && additional_fields[field].class == Array
         filtered_object.merge!(get_additional_fields(field, object, additional_fields[field]))
-        # remove_fields << field
       end
     end
     remove_fields.map{|x| filtered_object.delete(x) }
