@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
         question.merge!({:user => 
           { :name =>  user.full_name,
             :role =>  user.role,
-            :photo => user.avatar_file_name
+            :photo => user.avatar.url(:thumb)
           }
         })
         answers = comment.answers
@@ -41,7 +41,7 @@ class CommentsController < ApplicationController
             bar = ({:user => 
               { :name =>  user.full_name,
                 :role =>  user.role,
-                :photo => user.avatar_file_name
+                :photo => user.avatar.url(:thumb)
               }
             })
             answers_response << (filter_fields(reply,@fields)).merge!(bar)
