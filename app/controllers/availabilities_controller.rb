@@ -10,7 +10,7 @@ class AvailabilitiesController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/places/123/availabilities.json
   # === Parameters
-  # [:currency]   ISO Code of the currency to return prices in. Optional
+  # [currency]   ISO Code of the currency to return prices in. Optional
   # === Response
   # [availability] Array containing all availabilities of a place
   # == Error codes
@@ -35,12 +35,12 @@ class AvailabilitiesController < ApplicationController
   # ==Example
   # POST https://backend-heypal.heroku.com/places/123/availabilities.json access_token=access_token&date_start=23/01/2011&date_end=12/02/2011
   # === Parameters
-  # [:access_token]      Access token
-  # [:availability_type] Integer, Type of availability, possible values are (1: Occupied, 2: New Price)
-  # [:date_start]        Date (dd/mm/yyyy), Starting date
-  # [:date_end]          Date (dd/mm/yyyy), Ending Date
-  # [:price_per_night]   Integer, Price for the period in original currency cents, optional
-  # [:comment]           String, Comment to describe the period, optional
+  # [access_token]      Access token
+  # [availability_type] Integer, Type of availability, possible values are (1: Occupied, 2: New Price)
+  # [date_start]        Date (dd/mm/yyyy), Starting date
+  # [date_end]          Date (dd/mm/yyyy), Ending Date
+  # [price_per_night]   Integer, Price for the period in original currency cents, optional
+  # [comment]           String, Comment to describe the period, optional
   # === Response
   # [availability] Array containing the recently created availability
   # == Error codes
@@ -75,7 +75,7 @@ class AvailabilitiesController < ApplicationController
   # ==Example
   # POST https://backend-heypal.heroku.com/places/123/availabilities/1.json access_token=access_token
   # === Parameters
-  # [:access_token]      Access token
+  # [access_token]      Access token
   def destroy
     @availability = Place.with_permissions_to(:update).find(params[:place_id]).availabilities.find(params[:id])
     if @availability.destroy
@@ -92,12 +92,12 @@ class AvailabilitiesController < ApplicationController
   # ==Example
   # PUT https://backend-heypal.heroku.com/places/123/availabilities/2.json access_token=access_token&date_start=23/01/2011&date_end=12/02/2011
   # === Parameters
-  # [:access_token]     Access token
-  # [:availability_type] Integer, Type of availability, possible values are (1: Occupied, 2: New Price)
-  # [:date_start]       Date (dd/mm/yyyy), Starting date
-  # [:date_end]         Date (dd/mm/yyyy), Ending Date
-  # [:price_per_night]  Integer, Price for the period in original currency cents
-  # [:comment]          String, Comment to describe the period
+  # [access_token]     Access token
+  # [availability_type] Integer, Type of availability, possible values are (1: Occupied, 2: New Price)
+  # [date_start]       Date (dd/mm/yyyy), Starting date
+  # [date_end]         Date (dd/mm/yyyy), Ending Date
+  # [price_per_night]  Integer, Price for the period in original currency cents
+  # [comment]          String, Comment to describe the period
   # === Response
   # [availability] Array containing the recently updated availability
   # == Error codes

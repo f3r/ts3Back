@@ -6,9 +6,9 @@ class Notification
   # == Description
   # Adds a notification to the current user
   # == Parameters
-  # [:Type]    String with the superclass of event that generated it (ie "Requests", "Places")
-  # [:Event]   String with the code of the event that generated it (ie "Rental Request")
-  # [:Content] Hash with all the relevant parameters for the event (ie "requestor_id", "place_id", etc)
+  # [Type]    String with the superclass of event that generated it (ie "Requests", "Places")
+  # [Event]   String with the code of the event that generated it (ie "Rental Request")
+  # [Content] Hash with all the relevant parameters for the event (ie "requestor_id", "place_id", etc)
   #
   # All notifications are added automatically a Date field, with the time it was generated
   def save

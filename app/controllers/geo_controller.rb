@@ -119,7 +119,7 @@ class GeoController < ApplicationController
   # ==Example
   #   GET https://backend-heypal.heroku.com/geo/cities/1/price_range.json
   # === Parameters
-  # [:currency]   ISO Code of the currency to return prices in. Optional
+  # [currency]   ISO Code of the currency to return prices in. Optional
   # === Response
   # [min_price] Minimum price of published places. Default USD
   # [max_price] Maximum price of published places. Default USD

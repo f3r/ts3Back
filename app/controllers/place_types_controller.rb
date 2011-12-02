@@ -27,8 +27,8 @@ class PlaceTypesController < ApplicationController
   # ==Example
   # POST https://backend-heypal.heroku.com/place_types.json access_token=access_token&name=name
   # === Parameters
-  # [:access_token]
-  # [:name]
+  # [access_token]
+  # [name]
   def create
     check_token
     @place_type = PlaceType.new(:name => params[:name])
@@ -45,8 +45,8 @@ class PlaceTypesController < ApplicationController
   # ==Example
   # PUT https://backend-heypal.heroku.com/place_types/:id.json access_token=access_token&name=name
   # === Parameters
-  # [:access_token]
-  # [:name]
+  # [access_token]
+  # [name]
   def update
     check_token
     @place_type = PlaceType.find(params[:id])
@@ -62,7 +62,7 @@ class PlaceTypesController < ApplicationController
   # ==Example
   # DELETE https://backend-heypal.heroku.com/place_types/:id.json access_token=access_token
   # === Parameters
-  # [:access_token]
+  # [access_token]
   def destroy
     check_token
     @place_type = PlaceType.find(params[:id])

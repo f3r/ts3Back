@@ -476,7 +476,7 @@ country_code=PA</p>
 <pre>GET https://backend-heypal.heroku.com/geo/cities/1/price_range.json</pre>
 
 <h3 id="method-i-price_range-label-Parameters">Parameters</h3>
-<dl class="rdoc-list label-list"><dt>:currency
+<dl class="rdoc-list label-list"><dt>currency
 <dd>
 <p>ISO Code of the currency to return prices in. Optional</p>
 </dd></dl>
@@ -513,7 +513,7 @@ country_code=PA</p>
 
   <span class="ruby-identifier">prices</span> = <span class="ruby-identifier">places_prices</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">new_currency</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">valid_currency?</span>(<span class="ruby-identifier">new_currency</span>)
-      <span class="ruby-identifier">exchange_currency</span>(<span class="ruby-identifier">x</span>.<span class="ruby-identifier">price_per_night_usd</span><span class="ruby-operator">/</span><span class="ruby-value">100</span>, <span class="ruby-value">:USD</span>, <span class="ruby-identifier">new_currency</span>).<span class="ruby-identifier">to_f</span>
+      <span class="ruby-identifier">exchange_currency</span>(<span class="ruby-identifier">x</span>.<span class="ruby-identifier">price_per_night_usd</span><span class="ruby-operator">/</span><span class="ruby-value">100</span>, <span class="ruby-value">:USD</span>, <span class="ruby-identifier">new_currency</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">x</span>.<span class="ruby-identifier">price_per_night_usd</span><span class="ruby-operator">/</span><span class="ruby-value">100</span>
     <span class="ruby-keyword">end</span>

@@ -13,10 +13,10 @@ class SessionsController < Devise::SessionsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/sign_in.json email=user@example.com&password=password
   # === Parameters
-  # [:email]    User email
-  # [:password] User password
+  # [email]    User email
+  # [password] User password
   # === Response
-  # [:authentication_token] Returns the user authentication_token
+  # [authentication_token] Returns the user authentication_token
   # === Error codes
   # [107] unconfirmed user
   # [108] unauthenticated user
@@ -40,7 +40,7 @@ class SessionsController < Devise::SessionsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/oauth/sign_in.json oauth_token=oauth_token
   # === Parameters
-  # [:oauth_token]  oAuth token
+  # [oauth_token]  oAuth token
   #   oauth_token[provider]=facebook&
   #   oauth_token[credentials][token]=token
   # === Error codes

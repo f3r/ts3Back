@@ -18,13 +18,13 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/sign_up.json first_name=John&last_name=Smith&email=user@example.com&password=password
   # === Parameters
-  # [:first_name] User first name (Example values: John)
-  # [:last_name] User last name (Example values: Smith)
-  # [:email] User email address (Example values: user@example.com)
-  # [:password] User password
-  # [:oauth_token] Optional oauth token
+  # [first_name] User first name (Example values: John)
+  # [last_name] User last name (Example values: Smith)
+  # [email] User email address (Example values: user@example.com)
+  # [password] User password
+  # [oauth_token] Optional oauth token
   # === Response
-  # [:user]  An array containing the user ID
+  # [user]  An array containing the user ID
   # === Error codes
   # [100] has already been taken
   # [101] can't be blank
@@ -64,7 +64,7 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Example
   # DELETE https://backend-heypal.heroku.com/users.json access_token=access_token
   # === Parameters
-  # [:access_token]  User access token
+  # [access_token]  User access token
   # === Error codes
   # [105] invalid access token
   # TODO: Create a "reactivation" method!
@@ -86,7 +86,7 @@ class RegistrationsController < Devise::RegistrationsController
   # ==Example
   # GET https://backend-heypal.heroku.com/users/check_email.json email=fer@heypal.com
   # === Parameters
-  # [:email] User email
+  # [email] User email
   # === Error codes
   # [100] has already been taken
   def check_email

@@ -10,7 +10,7 @@ class NotificationsController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/notifications.json
   # === Parameters
-  # [:access_token]
+  # [access_token]
   # == Errors
   # [115] no result
   def index
@@ -32,7 +32,7 @@ class NotificationsController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/notifications/unread.json
   # === Parameters
-  # [:access_token]
+  # [access_token]
   # == Errors
   # [115] no results
   def unread
@@ -54,7 +54,7 @@ class NotificationsController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/notifications/mark_as_read.json
   # === Parameters
-  # [:access_token]
+  # [access_token]
   def mark_as_read
     if Notification.mark_as_read
       return_message(200, :ok)

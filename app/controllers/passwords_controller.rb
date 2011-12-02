@@ -13,7 +13,7 @@ class PasswordsController < Devise::PasswordsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/password.json email=user@example.com
   # === Parameters
-  # [:email]
+  # [email]
   # === Error codes
   # [106] email not found
   def create
@@ -35,10 +35,10 @@ class PasswordsController < Devise::PasswordsController
   # ==Example
   # PUT https://backend-heypal.heroku.com/users/password.json reset_password_token=reset_password_token&password=password
   # === Parameters
-  # [:reset_password_token] Reset password token sent by email
-  # [:password]  The new password
+  # [reset_password_token] Reset password token sent by email
+  # [password]  The new password
   # === Response
-  # [:authentication_token] Returns the user authentication_token if the account is active
+  # [authentication_token] Returns the user authentication_token if the account is active
   # === Error codes
   # [101] can't be blank
   # [102] too short

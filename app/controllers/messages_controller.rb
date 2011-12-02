@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/conversations.json
   # === Parameters
-  # [:access_token]
+  # [access_token]
   # == Errors
   # [115] no result
   def index
@@ -37,8 +37,8 @@ class MessagesController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/messages/2.json
   # === Parameters
-  # [:access_token]
-  # [:user] The other user in the conversation
+  # [access_token]
+  # [user] The other user in the conversation
   # == Errors
   # [106] User not found
   # [115] no results
@@ -62,9 +62,9 @@ class MessagesController < ApplicationController
   # ==Example
   # POST https://backend-heypal.heroku.com/messages/2.json message="Message content"
   # === Parameters
-  # [:access_token]
-  # [:user]    The other user in the conversation
-  # [:message] The content of the message
+  # [access_token]
+  # [user]    The other user in the conversation
+  # [message] The content of the message
   # == Errors
   # [106] User not found
   def create
@@ -82,8 +82,8 @@ class MessagesController < ApplicationController
   # ==Example
   # DELETE https://backend-heypal.heroku.com/conversations/2.json
   # === Parameters
-  # [:access_token]
-  # [:user_id]    The other user in the conversation
+  # [access_token]
+  # [user_id]    The other user in the conversation
   # == Errors
   # [106] User not found
   def destroy
@@ -101,8 +101,8 @@ class MessagesController < ApplicationController
   # ==Example
   # PUT https://backend-heypal.heroku.com/conversations/2/mark_as_read.json
   # === Parameters
-  # [:access_token]
-  # [:user_id]    The other user in the conversation
+  # [access_token]
+  # [user_id]    The other user in the conversation
   # == Errors
   # [106] User not found or already read
   def mark_as_read
@@ -120,8 +120,8 @@ class MessagesController < ApplicationController
   # ==Example
   # PUT https://backend-heypal.heroku.com/conversations/2/mark_as_unread.json
   # === Parameters
-  # [:access_token]
-  # [:user_id]    The other user in the conversation
+  # [access_token]
+  # [user_id]    The other user in the conversation
   # == Errors
   # [106] User not found or already unread
   def mark_as_unread
@@ -140,7 +140,7 @@ class MessagesController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/conversations/unread_count.json
   # === Parameters
-  # [:access_token]
+  # [access_token]
   def unread_count
     return_message(200, :ok, :count => Message.unread_count)
   end

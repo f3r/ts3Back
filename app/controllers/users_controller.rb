@@ -28,9 +28,9 @@ class UsersController < ApplicationController
   # ==Example
   # GET https://backend-heypal.heroku.com/users/:id/info.json
   # === Parameters
-  # [:id] User id
+  # [id] User id
   # === Response
-  # [:user]
+  # [user]
   # {id, first_name, last_name, avatar_file_name, role}
   # === Error codes
   # [106] no user exists
@@ -53,10 +53,10 @@ class UsersController < ApplicationController
   # GET https://backend-heypal.heroku.com/users.json access_token=access_token
   # GET https://backend-heypal.heroku.com/users/1.json access_token=access_token
   # === Parameters
-  # [:access_token] Access token
-  # [:id] Optional user id
+  # [access_token] Access token
+  # [id] Optional user id
   # === Response
-  # [:user]
+  # [user]
   # {:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
   # === Error codes
   # [105] invalid access token
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
   # PUT https://backend-heypal.heroku.com/users.json access_token=access_token&avatar_url=http://url/image_file
   # PUT https://backend-heypal.heroku.com/users/1.json access_token=access_token&avatar_url=http://url/image_file
   # === Parameters
-  # [:access_token] Access token
+  # [access_token] Access token
   # [first_name]    String, First name of the user
   # [last_name]     String, Last name of the user
   # [gender]        String, Gender. Values: unkown/male/female
@@ -90,7 +90,7 @@ class UsersController < ApplicationController
   # [pref_language] String, Preferred Language. ie "en"
   # [pref_currency] String, Preferred Currency. ie "USD"
   # === Response
-  # [:user]
+  # [user]
   # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
   # === Error codes
   # [105] invalid access token
@@ -126,8 +126,8 @@ class UsersController < ApplicationController
   # ==Example
   # PUT https://backend-heypal.heroku.com/users/1/change_role.json access_token=access_token&role=admin
   # === Parameters
-  # [:access_token] Access token
-  # [:role] New role, Options: superadmin, admin, agent, user
+  # [access_token] Access token
+  # [role] New role, Options: superadmin, admin, agent, user
   # === Error codes
   # [105] invalid access token
   # [101] can't be blank

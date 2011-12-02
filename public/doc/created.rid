@@ -1,17 +1,17 @@
-Thu, 01 Dec 2011 14:45:31 -0500
-app/controllers/addresses_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
+Fri, 02 Dec 2011 10:09:40 -0500
+app/controllers/addresses_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
 app/controllers/application_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
 app/controllers/authentications_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/availabilities_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/comments_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/confirmations_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/geo_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
+app/controllers/availabilities_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/comments_controller.rb	Fri, 02 Dec 2011 10:08:16 -0500
+app/controllers/confirmations_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/geo_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
 app/controllers/home_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/messages_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/notifications_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/passwords_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/place_types_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/places_controller.rb	Thu, 01 Dec 2011 14:37:44 -0500
-app/controllers/registrations_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/sessions_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
-app/controllers/users_controller.rb	Tue, 29 Nov 2011 21:18:31 -0500
+app/controllers/messages_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/notifications_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/passwords_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/place_types_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/places_controller.rb	Fri, 02 Dec 2011 09:36:27 -0500
+app/controllers/registrations_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/sessions_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500
+app/controllers/users_controller.rb	Fri, 02 Dec 2011 10:09:15 -0500

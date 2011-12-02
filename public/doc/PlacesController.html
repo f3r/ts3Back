@@ -271,6 +271,9 @@
 </dd><dt>check_out
 <dd>
 <p>Check out date</p>
+</dd><dt>currency
+<dd>
+<p>ISO Code of the currency to return prices in</p>
 </dd></dl>
 
 <h3 id="method-i-check_availability-label-Response">Response</h3>
@@ -282,12 +285,12 @@ and comment if present</p>
 <dd>
 <p>total nights selected</p>
 </dd><dt>currency
-<dd>
-<p>original currency</p>
-</dd><dt>avg_price_per_night
+<dd></dd><dt>avg_price_per_night
 <dd>
 <p>Average price_per_night, depending on availabilities special prices</p>
-</dd><dt>sub_total
+</dd><dt>price_security_deposit
+<dd></dd><dt>price_final_cleanup
+<dd></dd><dt>sub_total
 <dd>
 <p>sum of price_per_night</p>
 </dd></dl>
@@ -310,10 +313,10 @@ and comment if present</p>
 
           
           <div class="method-source-code" id="check_availability-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 461</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 464</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_availability</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
-  <span class="ruby-identifier">place_availability</span> = <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">place_availability</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:check_in</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:check_out</span>])
+  <span class="ruby-identifier">place_availability</span> = <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">place_availability</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:check_in</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:check_out</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:currency</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">place_availability</span>[<span class="ruby-value">:err</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, <span class="ruby-identifier">place_availability</span>)
   <span class="ruby-keyword">else</span>
@@ -518,7 +521,7 @@ and comment if present</p>
 
           
           <div class="method-source-code" id="place_request-source">
-            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 481</span>
+            <pre><span class="ruby-comment"># File app/controllers/places_controller.rb, line 484</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">place_request</span>
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">do_request</span>({})
@@ -936,10 +939,10 @@ price_size_highest, reviews, most_recent</p>
 <pre>GET https://backend-heypal.heroku.com/places/id.json</pre>
 
 <h3 id="method-i-show-label-Parameters">Parameters</h3>
-<dl class="rdoc-list label-list"><dt>:id
+<dl class="rdoc-list label-list"><dt>id
 <dd>
 <p>if of the place</p>
-</dd><dt>:currency
+</dd><dt>currency
 <dd>
 <p>ISO Code of the currency to return prices in</p>
 </dd></dl>

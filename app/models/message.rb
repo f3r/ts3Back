@@ -37,8 +37,8 @@ class Message
   # - Adds it to A and B's message list. B as unread
   # - Increases B unread counter
   # == Parameters
-  # [:to]      User_id recipient of the message
-  # [:message] String with the message
+  # [to]      User_id recipient of the message
+  # [message] String with the message
   #
   # Note. All messages are added automatically a Date field, with the time it was generated
   # == Usage
@@ -74,7 +74,7 @@ class Message
   # Returns an array with all the messages between the current user and another user
   # - Marks the conversation as read
   # == Parameters
-  # [:user]  User_id recipient of the message
+  # [user]  User_id recipient of the message
   # == Usage
   # Message.messages_with(2)
   def self.messages_with(user)
@@ -85,7 +85,7 @@ class Message
   # == Description
   # Returns the last message between the current user and another user
   # == Parameters
-  # [:user]  User_id recipient of the message
+  # [user]  User_id recipient of the message
   # == Usage
   # Message.last_message_with(2)
   def self.last_message_with(user)

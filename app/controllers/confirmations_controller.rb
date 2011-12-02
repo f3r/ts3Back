@@ -10,7 +10,7 @@ class ConfirmationsController < Devise::ConfirmationsController
   # ==Example
   # POST https://backend-heypal.heroku.com/users/confirmation.json email=user@example.com
   # === Parameters
-  # [:email] Email used on registration
+  # [email] Email used on registration
   # === Error codes
   # [106] email not found
   def create
@@ -34,10 +34,10 @@ class ConfirmationsController < Devise::ConfirmationsController
   # ==Example
   # GET https://backend-heypal.heroku.com/users/confirmation.json confirmation_token=confirmation_token
   # === Parameters
-  # [:confirmation_token]
+  # [confirmation_token]
   #   Confirmation token sent by email
   # === Response
-  # [:authentication_token] The user authentication_token
+  # [authentication_token] The user authentication_token
   # === Error codes
   # [103] invalid confirmation_token
   def show
