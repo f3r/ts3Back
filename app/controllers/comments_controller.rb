@@ -79,7 +79,14 @@ class CommentsController < ApplicationController
     comment.merge!({:replying_to => params[:replying_to]}) if params[:replying_to]
     @comment = place.comments.new(comment)
     if @comment.save
-      return_message(200, :ok, {:comment => filter_fields(@comment,@fields)} )
+      user = User.find(current_user.id)
+      foo = ({:user => 
+        { :name =>  user.full_name,
+          :role =>  user.role,
+          :photo => user.avatar.url(:thumb)
+        }
+      })
+      return_message(200, :ok, {:comment => filter_fields(@comment,@fields).merge!(foo)} )
     else
       return_message(200, :fail, {:err => format_errors(@comment.errors.messages)})
     end
