@@ -18,6 +18,7 @@ gem 'will_paginate'       			# Paginating results
 gem 'ransack'             			# Object-based search
 gem 'geocoder'            			# Geocoding Google-based
 gem 'declarative_authorization' 	# Access Control List
+gem 'workflow'						# State control
 
 gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
 
@@ -32,13 +33,6 @@ group :test do
   gem 'factory_girl'
   gem 'faker'
   gem 'minitest'
-end
-
-# TODO: Do we really need this?
-group :assets do
-  gem 'sass-rails', "  ~> 3.1.0"
-  gem 'coffee-rails', "~> 3.1.0"
-  gem 'uglifier'
 end
 
 group :production do
