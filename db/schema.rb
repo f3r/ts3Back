@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111118224324) do
+ActiveRecord::Schema.define(:version => 20111129025953) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -210,6 +210,39 @@ ActiveRecord::Schema.define(:version => 20111118224324) do
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
   add_index "places", ["state_name"], :name => "index_places_on_state_name"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
+
+  create_table "transaction_logs", :force => true do |t|
+    t.integer  "transaction_id"
+    t.string   "state"
+    t.string   "previous_state"
+    t.text     "additional_data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transaction_logs", ["transaction_id"], :name => "index_transaction_logs_on_transaction_id"
+
+  create_table "transactions", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "place_id"
+    t.string   "state",                  :default => "bigbang"
+    t.date     "check_in"
+    t.date     "check_out"
+    t.string   "currency"
+    t.float    "price_per_night"
+    t.float    "price_final_cleanup"
+    t.float    "price_security_deposit"
+    t.float    "service_fee"
+    t.float    "service_percentage"
+    t.float    "sub_total"
+    t.text     "additional_data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transactions", ["place_id"], :name => "index_transactions_on_place_id"
+  add_index "transactions", ["state"], :name => "index_transactions_on_state"
+  add_index "transactions", ["user_id"], :name => "index_transactions_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                                     :null => false

@@ -107,14 +107,16 @@ module GeneralHelper
     price.to_money(old_currency).exchange_to(new_currency)
   end
 
-  # Validates an attribute using the validation rules from a model
-  def validate_attribute(model, attribute, value)
-    temp = model.new(attribute => value)
+  # Validates multiple attributes using the validation rules from a model
+  def validate_attributes(model, attributes)
+    errors = {}
+    temp = model.new(attributes)
     if !temp.valid?
-      return {attribute => temp.errors.get(attribute)} unless temp.errors.get(attribute).blank?
-    else
-      return nil
+      temp.errors.each {|attribute,value|
+        errors.merge!({attribute => temp.errors.get(attribute)}) unless temp.errors.get(attribute).blank?
+      }
     end
+    return errors
   end
   
 end

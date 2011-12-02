@@ -46,6 +46,7 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # PLACES
     ##############################################################################
+    get     "places/:id/request",                 :to => "places#place_request"
     get     "places/:id/check_availability",      :to => "places#check_availability"
     get     "places/search",                      :to => "places#search"
     post    "places",                             :to => "places#create" 

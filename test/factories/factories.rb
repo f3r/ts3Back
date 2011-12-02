@@ -43,7 +43,7 @@ FactoryGirl.define do
   
   factory :availability do
     place               { @place }
-    availability_type   { 1 }
+    availability_type   { 2 } # new price
     date_start          "#{(Date.current + 2.year + 1.day).to_s}"
     date_end            "#{(Date.current + 2.year + 15.day).to_s}"
     comment             "new comment"

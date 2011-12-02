@@ -468,4 +468,22 @@ class PlacesController < ApplicationController
     end
   end
 
+  # == Description
+  # Requests a place
+  # ==Resource URL
+  #   /places/:id/place_request.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/places/:id/place_request.json access_token=access_token
+  # === Parameters
+  # [access_token]  Access token
+  # === Error codes
+  # [106] Record not found  
+  def place_request
+    @place = Place.with_permissions_to(:read).find(params[:id])
+    if @place.do_request({})
+      return_message(200, :ok )
+    else
+      return_message(200, :fail, { :place => "meh" } )
+    end
+  end
 end

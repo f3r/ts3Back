@@ -41,6 +41,7 @@ class Place < ActiveRecord::Base
   belongs_to :city
   has_many   :availabilities
   has_many   :comments
+  has_many   :transactions
 
   before_save   :save_amenities, 
                 :convert_prices_in_usd_cents, 
@@ -72,11 +73,7 @@ class Place < ActiveRecord::Base
   
   def place_availability(check_in, check_out)
 
-    errors = {}
-    validate_check_in = validate_attribute(Transaction, :check_in, check_in)
-    errors.merge!(validate_check_in) if validate_check_in
-    validate_check_out = validate_attribute(Transaction, :check_out, check_out)
-    errors.merge!(validate_check_out) if validate_check_out
+    errors = validate_attributes(Transaction, {:check_in => check_in, :check_out => check_out})
       
     if errors.blank?
       check_in = check_in.to_date
@@ -148,9 +145,32 @@ class Place < ActiveRecord::Base
       end
 
     else
-      return { :err => errors }
+      return { :err => format_errors(errors) }
     end
 
+  end
+  
+  def do_request(options)
+  
+    # calculations
+    price_per_night = self.price_per_night
+    sub_total = 100
+    service_percentage = 16
+    service_fee = sub_total * (service_percentage * 0.01)
+  
+    transaction_data = {
+      :user => Authorization.current_user,
+      :check_in => options[:check_in],
+      :check_out => options[:check_out],
+      :currency => self.currency,
+      :price_per_night => price_per_night,
+      :price_final_cleanup => options[:price_final_cleanup],
+      :price_security_deposit => options[:price_security_deposit],
+      :service_fee => service_fee,
+      :service_percentage => service_percentage,
+      :sub_total => sub_total
+    }
+    transaction = self.transactions.create(transaction_data)
   end
 
   private

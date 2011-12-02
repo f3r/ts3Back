@@ -11,7 +11,13 @@ class AvailabilitiesTest < ActionController::IntegrationTest
       @agent_user.confirm!
       @place_type = Factory(:place_type)
       @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
-      @availability = Factory(:availability, :place => @place )
+      @availability = Factory(:availability, 
+        :place => @place,
+        :availability_type => 2,
+        :price_per_night   => 8000,
+        :date_start        => (Date.current + 3.year).to_s,
+        :date_end          => (Date.current + 3.year + 2.days).to_s
+      )
       @agent_place = Factory(:place, :user => @agent_user, :place_type => @place_type, :city => @city)
 
       @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
@@ -27,7 +33,13 @@ class AvailabilitiesTest < ActionController::IntegrationTest
                                   :price_per_week => "128000",
                                   :price_per_month => "400000"
                                 )
-      @published_place_availability = Factory(:availability, :place => @published_place, :price_per_night => 9000 )
+      @published_place_availability = Factory(:availability, 
+        :place => @published_place,
+        :availability_type => 2,
+        :price_per_night   => 9000,
+        :date_start        => (Date.current + 3.year).to_s,
+        :date_end          => (Date.current + 3.year + 2.days).to_s
+      )
       @published_place.publish!
 
       @availability_occupied_new_info = { 
