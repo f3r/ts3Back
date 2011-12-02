@@ -109,10 +109,11 @@ module GeneralHelper
   # Validates multiple attributes using the validation rules from a model
   def validate_attributes(model, attributes)
     errors = {}
+    attribute_list = attributes.map{|k,v| k}
     temp = model.new(attributes)
     if !temp.valid?
       temp.errors.each {|attribute,value|
-        errors.merge!({attribute => temp.errors.get(attribute)}) unless temp.errors.get(attribute).blank?
+        errors.merge!({attribute => temp.errors.get(attribute)}) if !temp.errors.get(attribute).blank? && attribute_list.include?(attribute)
       }
     end
     return errors
