@@ -48,8 +48,8 @@ class CitiesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_operator json['min_price'], :>=, 100
-    assert_operator json['max_price'], :<=, 2000
+    assert_operator json['min_price'], :>=, 75
+    assert_operator json['max_price'], :<=, 2500
   end
 
   should "show city price range with JPY currency (json)" do
@@ -59,8 +59,8 @@ class CitiesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_operator json['min_price'], :>=, 7000
-    assert_operator json['max_price'], :<=, 77100
+    assert_operator json['min_price'], :>=, 6000
+    assert_operator json['max_price'], :<=, 80000
   end
 
 end
