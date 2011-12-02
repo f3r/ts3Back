@@ -15,6 +15,9 @@ class CommentsController < ApplicationController
   # GET https://backend-heypal.heroku.com/places/123/comments.json
   # === Parameters
   # none
+  # ==Errors
+  # [106] not found
+  # [115] no results
   def index
     # We get all the comments for the place that are questions
     @comments = Comment.with_permissions_to(:read).where(:replying_to => nil, :place_id => params[:id])
@@ -22,12 +25,26 @@ class CommentsController < ApplicationController
       # We get all the replies and add them to the answer
       foo = []
       @comments.each{|comment|
-        question = filter_fields(comment,@fields + [:comments_count])
+        question = filter_fields(comment, @fields + [:comments_count])
+        user = User.find(comment.user_id)
+        question.merge!({:user => 
+          { :name =>  user.full_name,
+            :role =>  user.role,
+            :photo => user.avatar_file_name
+          }
+        })
         answers = comment.answers
         if answers
           answers_response = []
           answers.each{|reply|
-            answers_response << (filter_fields(reply,@fields))
+            user = User.find(reply.user_id)
+            bar = ({:user => 
+              { :name =>  user.full_name,
+                :role =>  user.role,
+                :photo => user.avatar_file_name
+              }
+            })
+            answers_response << (filter_fields(reply,@fields)).merge!(bar)
           }
           question.merge!({:replies => answers_response})
           foo = foo << question
