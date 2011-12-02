@@ -138,7 +138,7 @@ class GeoController < ApplicationController
 
     prices = places_prices.map{|x|
       if new_currency && valid_currency?(new_currency)
-        exchange_currency(x.price_per_night_usd/100, :USD, new_currency).to_f
+        exchange_currency(x.price_per_night_usd/100, :USD, new_currency)
       else
         x.price_per_night_usd/100
       end

@@ -241,8 +241,8 @@ class PlacesController < ApplicationController
   # ==Example
   #   GET https://backend-heypal.heroku.com/places/id.json
   # === Parameters
-  # [:id]         if of the place
-  # [:currency]   ISO Code of the currency to return prices in
+  # [id]         if of the place
+  # [currency]   ISO Code of the currency to return prices in
   def show
     @place = Place.with_permissions_to(:read).find(params[:id])
     place = filter_fields(@place, @fields, { :additional_fields => { 
@@ -447,11 +447,14 @@ class PlacesController < ApplicationController
   # [access_token]  Access token
   # [check_in]  Check in date
   # [check_out]  Check out date
+  # [currency]   ISO Code of the currency to return prices in
   # === Response
   # [dates] Array containing the selected dates, with their respective price_per_night and comment if present
   # [total_days] total nights selected
-  # [currency] original currency
+  # [currency]
   # [avg_price_per_night] Average price_per_night, depending on availabilities special prices
+  # [price_security_deposit]
+  # [price_final_cleanup]
   # [sub_total] sum of price_per_night
   # === Error codes
   # [106] Record not found
@@ -460,7 +463,7 @@ class PlacesController < ApplicationController
   # [120] end date must be after initial date
   def check_availability
     @place = Place.with_permissions_to(:read).find(params[:id])
-    place_availability = @place.place_availability(params[:check_in], params[:check_out])
+    place_availability = @place.place_availability(params[:check_in], params[:check_out], params[:currency])
     if place_availability[:err].blank?
       return_message(200, :ok, place_availability)
     else

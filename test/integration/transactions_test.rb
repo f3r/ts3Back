@@ -15,8 +15,8 @@ class TransactionsTest < ActionController::IntegrationTest
                                   :photos => [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json,
                                   :currency => "JPY",
                                   :price_per_night => "8000",
-                                  :price_per_week => "128000",
-                                  :price_per_month => "400000"
+                                  :price_per_week => "51000",
+                                  :price_per_month => "245000"
                                 )
       @published_place_availability = Factory(:availability, :place => @published_place, :price_per_night => 9000, :comment => "test" )
       @published_place_availability2 = Factory(:availability, 
@@ -53,6 +53,26 @@ class TransactionsTest < ActionController::IntegrationTest
         assert_kind_of Hash, json
         assert_equal "ok", json['stat']
         assert_equal 10, json['total_days']
+        assert_not_nil json['dates']
+      end
+
+      should "check place availability with custom currency, available (json)" do
+        get "/places/#{@published_place.id}/check_availability.json", {
+          :access_token => @access_token,
+          :check_in => (Date.today + 350.days).to_s,
+          :check_out => (Date.today + 360.days).to_s,
+          :currency => "USD"
+        }
+        assert_response(200)
+        assert_equal 'application/json', @response.content_type
+        json = ActiveSupport::JSON.decode(response.body)
+        assert_kind_of Hash, json
+        assert_equal "ok", json['stat']
+        assert_equal 10, json['total_days']
+        assert_equal "USD", json['currency']
+        # something between 100 and 140 (exchange rate changes!)
+        assert_operator json['avg_price_per_night'], :>=, 100
+        assert_operator json['avg_price_per_night'], :<=, 140
         assert_not_nil json['dates']
       end
 

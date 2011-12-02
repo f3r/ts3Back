@@ -71,7 +71,7 @@ class Place < ActiveRecord::Base
     [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
   end
   
-  def place_availability(check_in, check_out)
+  def place_availability(check_in, check_out, new_currency)
 
     errors = validate_attributes(Transaction, {:check_in => check_in, :check_out => check_out})
       
@@ -82,10 +82,16 @@ class Place < ActiveRecord::Base
       total_days = (check_out - check_in).to_i
       requested_dates = (check_in..check_out).to_a
 
+      # set default prices in the original currency
       price_per_night = self.price_per_night
       price_per_night = self.price_per_week / 7 if self.price_per_week && total_days > 7 && total_days < 28
       price_per_night = self.price_per_month / 31 if self.price_per_month && total_days > 28
-
+      price_final_cleanup = self.price_final_cleanup
+      price_security_deposit = self.price_security_deposit
+      currency = self.currency
+      
+      # get availabilities
+      # FIXME: merge into one query
       availabilities = # Rails.cache.fetch("place_#{self.id}_availabilities_new_price") {
        #      puts "place_#{self.id}_availabilities_new_price miss"
         self.availabilities.where(:availability_type => 2)
@@ -95,9 +101,9 @@ class Place < ActiveRecord::Base
        #      puts "place_#{self.id}_availabilities_occupied miss"
         self.availabilities.where(:availability_type => 1)
       # }
-    
-      unavailable_dates = []
 
+      # check for ocuppied dates
+      unavailable_dates = []
       if !unavailabilities.blank?
         for unavailability in unavailabilities
           unavailability_dates = (unavailability.date_start..unavailability.date_end).to_a
@@ -112,12 +118,26 @@ class Place < ActiveRecord::Base
     
       if unavailable_dates.blank?
 
+        # exchange currency if new_currency param is present
+        if new_currency && valid_currency?(new_currency)
+          price_per_night = exchange_currency(price_per_night, self.currency, new_currency)
+          price_final_cleanup = exchange_currency(price_final_cleanup, self.currency, new_currency)
+          price_security_deposit = exchange_currency(price_security_deposit, self.currency, new_currency)
+          currency = new_currency
+        end
+
         dates = []
         for date in requested_dates
           dates << { :date => date, :price_per_night => price_per_night }
         end
 
+        # replaces regular price with the availability price on the affected dates
         for availability in availabilities
+
+          if new_currency && valid_currency?(new_currency)
+            availability.price_per_night = exchange_currency(availability.price_per_night, self.currency, new_currency)
+          end
+
           availability_dates = (availability.date_start..availability.date_end).to_a
           intersections = requested_dates & availability_dates
           if !intersections.blank?
@@ -128,14 +148,18 @@ class Place < ActiveRecord::Base
           end
         end
         dates = dates.sort_by { |hash| hash[:date] }
+
+        # get the sum of price_per_night
         sub_total = 0
         dates.map{|hash| sub_total += hash[:price_per_night]}
         avg_price_per_night = sub_total.to_f/total_days
-    
+
         return {
           :total_days => total_days, 
           :avg_price_per_night => avg_price_per_night.ceil, # FIXME: integer or decimals?
-          :currency => self.currency,
+          :price_final_cleanup => price_final_cleanup,
+          :price_security_deposit => price_security_deposit,
+          :currency => currency,
           :sub_total => sub_total,
           :dates => dates
         }
