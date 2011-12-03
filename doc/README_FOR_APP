@@ -38,6 +38,7 @@
 [134] doesn't have access to resource
 [135] Invalid currency
 [136] occupied
+[137] invalid place request, check availability
 
 #== Notifications
 # Type - Event - Parameters - Sample Message

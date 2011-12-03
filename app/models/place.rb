@@ -39,9 +39,9 @@ class Place < ActiveRecord::Base
   belongs_to :user
   belongs_to :place_type
   belongs_to :city
-  has_many   :availabilities
-  has_many   :comments
-  has_many   :transactions
+  has_many   :availabilities, :dependent => :destroy
+  has_many   :comments, :dependent => :destroy
+  has_many   :transactions, :dependent => :destroy
 
   before_save   :save_amenities, 
                 :convert_prices_in_usd_cents, 
@@ -71,7 +71,7 @@ class Place < ActiveRecord::Base
     [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
   end
   
-  def place_availability(check_in, check_out, new_currency)
+  def place_availability(check_in, check_out, new_currency=nil)
 
     errors = validate_attributes(Transaction, {:check_in => check_in, :check_out => check_out})
       
@@ -92,6 +92,7 @@ class Place < ActiveRecord::Base
       
       # get availabilities
       # FIXME: merge into one query
+      # TODO: create error message for reserved places waiting for payment
       availabilities = # Rails.cache.fetch("place_#{self.id}_availabilities_new_price") {
        #      puts "place_#{self.id}_availabilities_new_price miss"
         self.availabilities.where(:availability_type => 2)
@@ -99,7 +100,7 @@ class Place < ActiveRecord::Base
 
       unavailabilities = # Rails.cache.fetch("place_#{self.id}_availabilities_occupied") {
        #      puts "place_#{self.id}_availabilities_occupied miss"
-        self.availabilities.where(:availability_type => 1)
+        self.availabilities.where(["availability_type = ? OR availability_type = ?", 1, 3])
       # }
 
       # check for ocuppied dates
@@ -172,29 +173,6 @@ class Place < ActiveRecord::Base
       return { :err => format_errors(errors) }
     end
 
-  end
-  
-  def do_request(options)
-  
-    # calculations
-    price_per_night = self.price_per_night
-    sub_total = 100
-    service_percentage = 16
-    service_fee = sub_total * (service_percentage * 0.01)
-  
-    transaction_data = {
-      :user => Authorization.current_user,
-      :check_in => options[:check_in],
-      :check_out => options[:check_out],
-      :currency => self.currency,
-      :price_per_night => price_per_night,
-      :price_final_cleanup => options[:price_final_cleanup],
-      :price_security_deposit => options[:price_security_deposit],
-      :service_fee => service_fee,
-      :service_percentage => service_percentage,
-      :sub_total => sub_total
-    }
-    transaction = self.transactions.create(transaction_data)
   end
 
   private

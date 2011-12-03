@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111129025953) do
+ActiveRecord::Schema.define(:version => 20111203025843) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(:version => 20111129025953) do
     t.text     "additional_data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "transaction_code"
   end
 
   add_index "transactions", ["place_id"], :name => "index_transactions_on_place_id"

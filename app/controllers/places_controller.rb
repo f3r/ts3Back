@@ -43,6 +43,8 @@ class PlacesController < ApplicationController
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
     @place_type_fields = [:id,:name]
 
+    @transaction_fields = [:id, :state, :check_in, :check_out, :currency, :price_per_night, :transaction_code]
+
   end
 
   # ==Description
@@ -474,19 +476,51 @@ class PlacesController < ApplicationController
   # == Description
   # Requests a place
   # ==Resource URL
-  #   /places/:id/place_request.format
+  #   /places/:id/request.format
   # ==Example
-  #   GET https://backend-heypal.heroku.com/places/:id/place_request.json access_token=access_token
+  #   GET https://backend-heypal.heroku.com/places/:id/request.json access_token=access_token
   # === Parameters
   # [access_token]  Access token
+  # [check_in]  Check in date
+  # [check_out]  Check out date
   # === Error codes
-  # [106] Record not found  
+  # [106] Record not found
+  # [137] invalid place request, check availability
   def place_request
     @place = Place.with_permissions_to(:read).find(params[:id])
-    if @place.do_request({})
-      return_message(200, :ok )
+    request = @place.place_availability(params[:check_in], params[:check_out])
+    if request[:err].blank?  
+      # TODO: store this elsewhere, create site settings
+      service_percentage = 16
+      service_fee = request[:sub_total] * (service_percentage * 0.01)
+      transaction_data = {
+        :user => current_user,
+        :check_in => params[:check_in],
+        :check_out => params[:check_out],
+        :currency => request[:currency],
+        :price_per_night => request[:avg_price_per_night],
+        :price_final_cleanup => request[:price_final_cleanup],
+        :price_security_deposit => request[:price_security_deposit],
+        :service_fee => service_fee,
+        :service_percentage => service_percentage,
+        :sub_total => request[:sub_total]
+      }
+      transaction = @place.transactions.new(transaction_data)
+      if transaction.save
+        request_return = { 
+          :transaction => filter_fields(
+            transaction,
+            @transaction_fields,
+            { :additional_fields => {:user => @user_fields} }
+          ) 
+        }
+        transaction.request!
+        return_message(200, :ok, request_return)
+      else
+        return_message(200, :fail, {:err => format_errors(transaction.errors.messages)})
+      end
     else
-      return_message(200, :fail, { :place => "meh" } )
+      return_message(200, :fail, :err=>{:place => [137]})
     end
   end
 end
