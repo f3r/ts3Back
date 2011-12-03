@@ -9,6 +9,7 @@ authorization do
     has_permission_on [:users, :places, :place_types, :addresses, :availabilities, :comments], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish, :user_places]
+    has_permission_on :transactions, :to => [:cancel, :pay]
   end
 
   role :agent do
@@ -18,6 +19,9 @@ authorization do
       if_attribute :user => is { user }
     end
     has_permission_on [:availabilities, :comments], :to => [:manage] do
+      if_permitted_to :manage, :place
+    end
+    has_permission_on :transactions, :to => :cancel do
       if_permitted_to :manage, :place
     end
   end
@@ -46,6 +50,9 @@ authorization do
     has_permission_on :messages, :to => [:index, :messages, :create, :destroy, :mark_as_read, :mark_as_unread, :unread_count]
     has_permission_on :places, :to => [:place_request, :check_availability] do
       if_permitted_to :read, :place
+    end
+    has_permission_on :transactions, :to => :cancel do
+      if_attribute :user => is { user }
     end
   end
   

@@ -55,6 +55,11 @@ HeyPalBackEnd::Application.routes.draw do
     delete  "places/:id",                         :to => "places#destroy"
     get     "places/:id/:status",                 :to => "places#publish"
     ##############################################################################
+    # TRANSACTIONS
+    ##############################################################################
+    get     "/places/:place_id/transactions/:id/cancel",  :to => "transactions#cancel"
+    get     "/places/:place_id/transactions/:id/pay",     :to => "transactions#pay"
+    ##############################################################################
     # PLACE TYPES
     ##############################################################################
     get    "place_types",              :to => "place_types#index"

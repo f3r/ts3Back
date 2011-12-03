@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111203025843) do
+ActiveRecord::Schema.define(:version => 20111203190719) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -45,9 +45,11 @@ ActiveRecord::Schema.define(:version => 20111203025843) do
     t.integer  "price_per_night"
     t.string   "comment"
     t.integer  "availability_type"
+    t.integer  "transaction_id"
   end
 
   add_index "availabilities", ["place_id"], :name => "index_availabilities_on_place_id"
+  add_index "availabilities", ["transaction_id"], :name => "index_availabilities_on_transaction_id"
 
   create_table "cities", :force => true do |t|
     t.string "name"

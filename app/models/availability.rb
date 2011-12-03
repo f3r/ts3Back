@@ -1,6 +1,7 @@
 class Availability < ActiveRecord::Base
   using_access_control
   belongs_to :place
+  belongs_to :transaction
   
   validates_presence_of [:availability_type, :date_start, :date_end], :message => "101"
   validates_numericality_of :availability_type, :message => "118"
