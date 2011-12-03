@@ -122,6 +122,8 @@
   
     <li><a href="./SessionsController.html">SessionsController</a>
   
+    <li><a href="./TransactionsController.html">TransactionsController</a>
+  
     <li><a href="./UsersController.html">UsersController</a>
   
   </ul>
@@ -232,7 +234,7 @@ Price)</p>
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 53</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 56</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-comment">#TODO: Check that the availability is for a place the user owns...</span>
   
@@ -294,7 +296,7 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 79</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@availability</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:update</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>]).<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@availability</span>.<span class="ruby-identifier">destroy</span>
@@ -346,7 +348,9 @@ href="https://backend-heypal.heroku.com/places/123/availabilities.json">backend-
 <h3 id="method-i-list-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>availability
 <dd>
-<p>Array containing all availabilities of a place</p>
+<p>Array containing all availabilities of a place Availability types: 1:
+Ocuppied, 2: New price, Internal use, 3: temporal request, 4: Payed, 5:
+Confirmed rental</p>
 </dd></dl>
 
 <h2 id="method-i-list-label-Error+codes">Error codes</h2>
@@ -361,7 +365,7 @@ href="https://backend-heypal.heroku.com/places/123/availabilities.json">backend-
 
           
           <div class="method-source-code" id="list-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 19</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">list</span>
   <span class="ruby-ivar">@fields</span> = [<span class="ruby-value">:id</span>,<span class="ruby-value">:availability_type</span>,<span class="ruby-value">:date_start</span>,<span class="ruby-value">:date_end</span>,<span class="ruby-value">:comment</span>,<span class="ruby-value">:price_per_night</span>,<span class="ruby-value">:comment</span>]
   <span class="ruby-ivar">@place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -457,7 +461,7 @@ Price)</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 109</span>
+            <pre><span class="ruby-comment"># File app/controllers/availabilities_controller.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-ivar">@place</span>        = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:update</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
   <span class="ruby-ivar">@availability</span> = <span class="ruby-ivar">@place</span>.<span class="ruby-identifier">availabilities</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])

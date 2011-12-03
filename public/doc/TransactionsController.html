@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: TransactionsController</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/transactions_controller.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-cancel">#cancel</a>
+    
+    <li><a href="#method-i-pay">#pay</a>
+    
+    <li><a href="#method-i-payment_processor_callback">#payment_processor_callback</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AddressesController.html">AddressesController</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./AuthenticationsController.html">AuthenticationsController</a>
+  
+    <li><a href="./AvailabilitiesController.html">AvailabilitiesController</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./ConfirmationsController.html">ConfirmationsController</a>
+  
+    <li><a href="./GeoController.html">GeoController</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./MessagesController.html">MessagesController</a>
+  
+    <li><a href="./NotificationsController.html">NotificationsController</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./PlaceTypesController.html">PlaceTypesController</a>
+  
+    <li><a href="./PlacesController.html">PlacesController</a>
+  
+    <li><a href="./RegistrationsController.html">RegistrationsController</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./TransactionsController.html">TransactionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class TransactionsController</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-cancel" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cancel</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-cancel-label-Description">Description</h2>
+
+<p>Cancels a transaction</p>
+
+<h2 id="method-i-cancel-label-Resource+URL">Resource URL</h2>
+
+<pre>/places/:place_id/transactions/:id/cancel.format</pre>
+
+<h2 id="method-i-cancel-label-Example">Example</h2>
+
+<pre>GET https://backend-heypal.heroku.com/places/:place_id/transactions/:id/cancel.json access_token=access_token</pre>
+
+<h3 id="method-i-cancel-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>access_token
+<dd>
+<p>Access token</p>
+</dd></dl>
+
+<h3 id="method-i-cancel-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>Record not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="cancel-source">
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel</span>
+  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
+  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">transaction</span>.<span class="ruby-identifier">cancel!</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [transactions_controller.rb/cancel] #{e.message}&quot;</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- cancel-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- cancel-method -->
+
+    
+      <div id="method-i-pay" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">pay</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-pay-label-Description">Description</h2>
+
+<p>Starts payment of a transaction</p>
+
+<h2 id="method-i-pay-label-Resource+URL">Resource URL</h2>
+
+<pre>/places/:place_id/transactions/:id/pay.format</pre>
+
+<h2 id="method-i-pay-label-Example">Example</h2>
+
+<pre>GET https://backend-heypal.heroku.com/places/:place_id/transactions/:id/pay.json access_token=access_token</pre>
+
+<h3 id="method-i-pay-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>access_token
+<dd>
+<p>Access token</p>
+</dd></dl>
+
+<h3 id="method-i-pay-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>Record not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="pay-source">
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">pay</span>
+  <span class="ruby-comment"># get total to pay from transaction, send it to payment processor</span>
+  <span class="ruby-comment"># TODO: generate payment_token, ActiveMerchant?</span>
+  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
+  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-comment"># do the payment thingy..</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">transaction</span>.<span class="ruby-identifier">process_payment!</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-comment"># get error messages</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [transactions_controller.rb/pay] #{e.message}&quot;</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- pay-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- pay-method -->
+
+    
+      <div id="method-i-payment_processor_callback" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">payment_processor_callback</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-payment_processor_callback-label-Description">Description</h2>
+
+<p>Process callback from payment processor</p>
+
+<h2 id="method-i-payment_processor_callback-label-Resource+URL">Resource URL</h2>
+
+<pre>/payment_processor_callback.format</pre>
+
+<h2 id="method-i-payment_processor_callback-label-Example">Example</h2>
+
+<pre>GET https://backend-heypal.heroku.com/payment_processor_callback.json access_token=access_token</pre>
+
+<h3 id="method-i-payment_processor_callback-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>access_token
+<dd>
+<p>Access token</p>
+</dd></dl>
+
+<h3 id="method-i-payment_processor_callback-label-Error+codes">Error codes</h3>
+          
+
+          
+          <div class="method-source-code" id="payment_processor_callback-source">
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">payment_processor_callback</span>
+  <span class="ruby-comment"># TODO: search transaction with payment_token</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">transaction</span>.<span class="ruby-identifier">confirm_payment!</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-comment"># get error messages</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [transactions_controller.rb/payment_processor_callback] #{e.message}&quot;</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- payment_processor_callback-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- payment_processor_callback-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
