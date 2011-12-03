@@ -48,31 +48,27 @@ class Transaction < ActiveRecord::Base
     end
   
     before_transition do |from, to, triggering_event, *event_args|
+      # check user permissions
       halt! unless check_transaction_permissions(triggering_event)
     end
   
     after_transition do |from, to, triggering_event, *event_args|
+      # destroy availabilities
+      availability_destroy_list = [:cancel, :auto_cancel, :declined, :auto_declined]
+      if availability_destroy_list.include?(triggering_event)
+        self.availability.destroy
+      end
+      # log every transaction
       log_transaction(:from => from, :to => to, :triggering_event => triggering_event, :additional_data => event_args[0])
     end
-
-  end
-
-  # FIXME: found a way to merge this identical methods
-  def cancel
-    self.availability.destroy
-  end
-
-  def auto_cancel
-    self.availability.destroy
+    
   end
 
   def declined
-    self.availability.destroy
     # notify user, do refund
   end
 
   def auto_declined
-    self.availability.destroy
     # notify user, do refund
   end
   
