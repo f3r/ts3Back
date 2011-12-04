@@ -72,6 +72,10 @@
     
     <li><a href="#method-i-cancel">#cancel</a>
     
+    <li><a href="#method-i-confirm_rental">#confirm_rental</a>
+    
+    <li><a href="#method-i-decline">#decline</a>
+    
     <li><a href="#method-i-pay">#pay</a>
     
     <li><a href="#method-i-payment_processor_callback">#payment_processor_callback</a>
@@ -188,20 +192,23 @@
 <dl class="rdoc-list label-list"><dt>106
 <dd>
 <p>Record not found</p>
+</dd><dt>138
+<dd>
+<p>already cancelled</p>
 </dd></dl>
           
 
           
           <div class="method-source-code" id="cancel-source">
-            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 15</span>
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 16</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel</span>
-  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
-  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
+  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:cancel</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">begin</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">transaction</span>.<span class="ruby-identifier">cancel!</span>
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
-    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [transactions_controller.rb/cancel] #{e.message}&quot;</span> }
+    <span class="ruby-comment"># logger.error { &quot;Error [transactions_controller.rb/cancel] #{e.message}&quot; }</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>, <span class="ruby-value">:err</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:transaction</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">138</span>] })
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- cancel-source -->
@@ -212,6 +219,126 @@
 
         
       </div><!-- cancel-method -->
+
+    
+      <div id="method-i-confirm_rental" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">confirm_rental</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-confirm_rental-label-Description">Description</h2>
+
+<p>Confirm rental</p>
+
+<h2 id="method-i-confirm_rental-label-Resource+URL">Resource URL</h2>
+
+<pre>/places/:place_id/transactions/:id/confirm.format</pre>
+
+<h2 id="method-i-confirm_rental-label-Example">Example</h2>
+
+<pre>GET https://backend-heypal.heroku.com/places/:place_id/transactions/:id/confirm.json access_token=access_token</pre>
+
+<h3 id="method-i-confirm_rental-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>access_token
+<dd>
+<p>Access token</p>
+</dd></dl>
+
+<h3 id="method-i-confirm_rental-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>Record not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="confirm_rental-source">
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 82</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">confirm_rental</span>
+  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:manage</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
+  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:confirm_rental</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">transaction</span>.<span class="ruby-identifier">confirm_rental!</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-comment"># get error messages</span>
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [transactions_controller.rb/confirm_rental] #{e.message}&quot;</span> }
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- confirm_rental-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- confirm_rental-method -->
+
+    
+      <div id="method-i-decline" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">decline</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <h2 id="method-i-decline-label-Description">Description</h2>
+
+<p>Decline rental</p>
+
+<h2 id="method-i-decline-label-Resource+URL">Resource URL</h2>
+
+<pre>/places/:place_id/transactions/:id/decline.format</pre>
+
+<h2 id="method-i-decline-label-Example">Example</h2>
+
+<pre>GET https://backend-heypal.heroku.com/places/:place_id/transactions/:id/decline.json access_token=access_token</pre>
+
+<h3 id="method-i-decline-label-Parameters">Parameters</h3>
+<dl class="rdoc-list label-list"><dt>access_token
+<dd>
+<p>Access token</p>
+</dd></dl>
+
+<h3 id="method-i-decline-label-Error+codes">Error codes</h3>
+<dl class="rdoc-list label-list"><dt>106
+<dd>
+<p>Record not found</p>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="decline-source">
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 104</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">decline</span>
+  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:manage</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
+  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:decline</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">transaction</span>.<span class="ruby-identifier">decline!</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-comment"># get error messages</span>
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [transactions_controller.rb/decline] #{e.message}&quot;</span> }
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- decline-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- decline-method -->
 
     
       <div id="method-i-pay" class="method-detail ">
@@ -252,19 +379,19 @@
 
           
           <div class="method-source-code" id="pay-source">
-            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 36</span>
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">pay</span>
   <span class="ruby-comment"># get total to pay from transaction, send it to payment processor</span>
-  <span class="ruby-comment"># TODO: generate payment_token, ActiveMerchant?</span>
-  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
-  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-comment"># TODO: authorize payment, ActiveMerchant?</span>
+  <span class="ruby-identifier">place</span> = <span class="ruby-constant">Place</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:read</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:place_id</span>])
+  <span class="ruby-identifier">transaction</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">transactions</span>.<span class="ruby-identifier">with_permissions_to</span>(<span class="ruby-value">:pay</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">begin</span>
     <span class="ruby-comment"># do the payment thingy..</span>
     <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">transaction</span>.<span class="ruby-identifier">process_payment!</span>
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
     <span class="ruby-comment"># get error messages</span>
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
     <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> { <span class="ruby-node">&quot;Error [transactions_controller.rb/pay] #{e.message}&quot;</span> }
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:fail</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- pay-source -->
@@ -311,7 +438,7 @@
 
           
           <div class="method-source-code" id="payment_processor_callback-source">
-            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 60</span>
+            <pre><span class="ruby-comment"># File app/controllers/transactions_controller.rb, line 61</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">payment_processor_callback</span>
   <span class="ruby-comment"># TODO: search transaction with payment_token</span>
   <span class="ruby-keyword">begin</span>
