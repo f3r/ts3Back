@@ -58,18 +58,24 @@ class Transaction < ActiveRecord::Base
       halt! unless check_transaction_permissions(triggering_event)
     end
   
-    after_transition do |from, to, triggering_event, *event_args|
+    after_transition do |from, to, triggering_event, *event_args|  
       # log every transaction
       log_transaction(:from => from, :to => to, :triggering_event => triggering_event, :additional_data => event_args[0])
+      # Fake payment approval
+      if to == :processing_payment
+        self.confirm_payment!
+      end      
     end
     
   end
 
-  def declined
+  def decline
+    # delete availability if transaction was confirmed
+    self.availability.destroy if self.confirmed_rental?
     # notify user, do refund
   end
 
-  def auto_declined
+  def auto_decline
     # notify user, do refund
   end
   
@@ -78,9 +84,12 @@ class Transaction < ActiveRecord::Base
   end
 
   def confirm_payment
-    # self.availability.update_attributes(:availability_type  => 4, :comment => "System message: Payed")
     # TODO: notify agent
-    # fire auto decline delayed job
+
+    # Unconfirmed transactions expire in 24 hours
+    # TODO: store this elsewhere, create site settings
+    unconfirmed_transaction_timeout = Time.now + 1.day
+    Delayed::Job.enqueue PurgeUnconfirmedTransactionJob.new(self.id), 0, unconfirmed_transaction_timeout
   end
   
   def confirm_rental
@@ -92,13 +101,23 @@ class Transaction < ActiveRecord::Base
       :transaction => self
     )
     # TODO: notify user
+    # decline other transactions
   end
 
-  def self.purge_temporary_reservation(transaction_id)
+  def self.purge_unpaid_transaction(transaction_id)
     without_access_control do
       transaction = Transaction.find(transaction_id)
       if transaction && transaction.requested?
         transaction.auto_cancel!
+      end
+    end
+  end
+
+  def self.purge_unconfirmed_transaction(transaction_id)
+    without_access_control do
+      transaction = Transaction.find(transaction_id)
+      if transaction && transaction.confirmed_payment?
+        transaction.auto_decline!
       end
     end
   end
@@ -127,8 +146,8 @@ class Transaction < ActiveRecord::Base
   def set_temporary_transaction_timeout
     # Unpaid transactions expire in 5 minutes
     # TODO: store this elsewhere, create site settings
-    transaction_timeout = Time.now + 5.minutes
-    Delayed::Job.enqueue PurgeTemporaryReservationJob.new(self.id), 0, transaction_timeout
+    unpaid_transaction_timeout = Time.now + 5.minutes
+    Delayed::Job.enqueue PurgeUnpaidTransactionJob.new(self.id), 0, unpaid_transaction_timeout
   end
 
   def log_transaction(options={})

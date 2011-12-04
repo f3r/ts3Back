@@ -39,6 +39,7 @@
 [135] Invalid currency
 [136] occupied
 [137] invalid place request, check availability
+[138] already cancelled
 
 #== Notifications
 # Type - Event - Parameters - Sample Message
