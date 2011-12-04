@@ -180,6 +180,12 @@ class Place < ActiveRecord::Base
 
   end
 
+  # auto decline transactions on a date range
+  def auto_decline_transactions(check_in, check_out)
+    transactions = self.transactions.where("state != ?", "confirmed_rental").where("check_in <= ?", check_out).where("check_out >= ?", check_in).active
+    transactions.each{|x| x.auto_decline! }
+  end
+
   private
   
   def delete_cache

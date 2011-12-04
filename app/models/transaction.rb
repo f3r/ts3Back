@@ -61,10 +61,11 @@ class Transaction < ActiveRecord::Base
     after_transition do |from, to, triggering_event, *event_args|  
       # log every transaction
       log_transaction(:from => from, :to => to, :triggering_event => triggering_event, :additional_data => event_args[0])
+
       # Fake payment approval
-      if to == :processing_payment
+      if triggering_event == :process_payment
         self.confirm_payment!
-      end      
+      end
     end
     
   end
@@ -100,8 +101,9 @@ class Transaction < ActiveRecord::Base
       :comment => "Rented",
       :transaction => self
     )
+    # auto decline other transactions
+    self.place.auto_decline_transactions(check_in, check_out)
     # TODO: notify user
-    # decline other transactions
   end
 
   def self.purge_unpaid_transaction(transaction_id)
@@ -121,7 +123,7 @@ class Transaction < ActiveRecord::Base
       end
     end
   end
-
+  
   private
   
   def check_transaction_permissions(to)
