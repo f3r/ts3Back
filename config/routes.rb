@@ -48,6 +48,7 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     get     "places/:id/request",                 :to => "places#place_request"
     get     "places/:id/check_availability",      :to => "places#check_availability"
+    get     "/places/:id/transactions",           :to => "places#transactions"
     get     "places/search",                      :to => "places#search"
     post    "places",                             :to => "places#create" 
     put     "places/:id",                         :to => "places#update" 
@@ -78,6 +79,7 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # USER INFO
     ##############################################################################
+    get     "users/:id/transactions", :to => "users#transactions"
     put     "users/:id/change_role",  :to => "users#change_role"
     get     "users/:id/info",         :to => "users#info"
     get     "users/:id/places",       :to => "places#user_places"

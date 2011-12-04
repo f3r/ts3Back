@@ -8,14 +8,14 @@ authorization do
     includes [:default]
     has_permission_on [:users, :places, :place_types, :addresses, :availabilities, :comments], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
-    has_permission_on :places, :to => [:user_places, :publish, :user_places]
+    has_permission_on :places, :to => [:user_places, :publish, :user_places, :transactions]
     has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
   end
 
   role :agent do
     includes [:default]
     has_permission_on :places, :to => [:create]
-    has_permission_on :places, :to => [:manage, :publish, :user_places] do
+    has_permission_on :places, :to => [:manage, :publish, :user_places, :transactions] do
       if_attribute :user => is { user }
     end
     has_permission_on [:availabilities, :comments], :to => [:manage] do
@@ -32,7 +32,7 @@ authorization do
 
   role :default do
     includes [:guest]
-    has_permission_on [:users], :to => [:read, :update, :info, :delete] do
+    has_permission_on [:users], :to => [:read, :update, :info, :delete, :transactions] do
       if_attribute :id => is { user.id }
     end
     has_permission_on :registrations, :to => :destroy

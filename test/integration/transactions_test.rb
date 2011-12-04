@@ -141,5 +141,7 @@ class TransactionsTest < ActionController::IntegrationTest
   end
   logged_in_as "agent" do
   end
+  
+  # TODO: users transactions, places transactions
 
 end

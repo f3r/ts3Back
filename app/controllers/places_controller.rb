@@ -43,7 +43,14 @@ class PlacesController < ApplicationController
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
     @place_type_fields = [:id,:name]
 
-    @transaction_fields = [:id, :state, :check_in, :check_out, :currency, :price_per_night, :transaction_code]
+    @transaction_fields = [
+      :id, :state, :check_in, :check_out, :transaction_code,
+      :currency, :price_per_night, :price_final_cleanup, :price_security_deposit, :service_fee, :service_percentage, :sub_total
+    ]
+    
+    @place_details = [
+      :title
+    ]
 
   end
 
@@ -523,4 +530,44 @@ class PlacesController < ApplicationController
       return_message(200, :fail, :err=>{:place => [137]})
     end
   end
+
+  # == Description
+  # Requests a place
+  # ==Resource URL
+  #   /places/:id/transactions.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/places/:id/transactions.json access_token=access_token&status=active
+  # === Parameters
+  # [access_token]  Access token
+  # [status] Options: active, inactive, any, Defaults to active
+  # === Error codes
+  # [106] Record not found
+  # [115] no results
+  def transactions
+    place = Place.with_permissions_to(:manage).find(params[:id])
+
+    case params[:status]
+    when "active"
+      transactions = place.transactions.active
+    when "inactive"
+      transactions = place.transactions.inactive
+    when "any"
+      transactions = place.transactions
+    else
+      transactions = place.transactions.active
+    end
+    
+    if !transactions.blank?
+      transactions_return = { 
+        :transactions => filter_fields(
+          transactions,
+          @transaction_fields, { :additional_fields => {:user => @user_fields} }
+        ) 
+      }
+      return_message(200, :ok, transactions_return)
+    else
+      return_message(200, :ok, {:err=>{:transactions => [115]}} )
+    end
+  end
+
 end

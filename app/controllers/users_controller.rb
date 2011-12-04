@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
-  before_filter :get_user, :only => [:update, :show, :change_role]
+  before_filter :get_user, :only => [:update, :show, :change_role, :transactions]
   filter_access_to :all, :attribute_check => false
   
   def initialize
@@ -19,6 +19,16 @@ class UsersController < ApplicationController
       :pref_language,
       :pref_currency
     ]
+
+    @transaction_fields = [
+      :id, :state, :check_in, :check_out, :transaction_code,
+      :currency, :price_per_night, :price_final_cleanup, :price_security_deposit, :sub_total
+    ]
+    
+    @place_details = [
+      :title, :city_name, :state_name, :country_name
+    ]
+
   end
 
   # ==Description
@@ -146,6 +156,47 @@ class UsersController < ApplicationController
     end
   end
 
+  # == Description
+  # Requests a place
+  # ==Resource URL
+  #   /users/:id/transactions.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/users/:id/transactions.json access_token=access_token&status=active
+  # === Parameters
+  # [access_token]  Access token
+  # [status] Options: active, inactive, any, Defaults to active
+  # === Error codes
+  # [106] Record not found
+  # [115] no results
+  def transactions
+    case params[:status]
+    when "active"
+      transactions = @user.transactions.active
+    when "inactive"
+      transactions = @user.transactions.inactive
+    when "any"
+      transactions = @user.transactions
+    else
+      transactions = @user.transactions.active
+    end
+    
+    if !transactions.blank?
+      transactions_return = { 
+        :transactions => filter_fields(
+          transactions,
+          @transaction_fields,
+          {
+            :additional_fields => { :place => @place_details }
+          }
+        )
+      }
+      return_message(200, :ok, transactions_return)
+    else
+      return_message(200, :ok, {:err=>{:transactions => [115]}} )
+    end
+
+  end
+
   protected
   def get_user
     if params[:id]
@@ -153,7 +204,6 @@ class UsersController < ApplicationController
     elsif current_user
       id = current_user.id
     end
-    # @user = Rails.cache.fetch("user_" + id.to_s) { User.find(id) } if id
     @user = User.find(id) if id
   end
 end
