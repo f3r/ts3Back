@@ -71,7 +71,7 @@ class Place < ActiveRecord::Base
     [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
   end
   
-  def place_availability(check_in, check_out, new_currency=nil)
+  def place_availability(check_in, check_out, new_currency=nil, user=nil)
 
     errors = validate_attributes(Transaction, {:check_in => check_in, :check_out => check_out})
       
@@ -88,20 +88,11 @@ class Place < ActiveRecord::Base
       price_per_night = self.price_per_month / 31 if self.price_per_month && total_days > 28
       price_final_cleanup = self.price_final_cleanup
       price_security_deposit = self.price_security_deposit
-      currency = self.currency
-      
-      # get availabilities
-      # FIXME: merge into one query
-      # TODO: create error message for reserved places waiting for payment
-      availabilities = # Rails.cache.fetch("place_#{self.id}_availabilities_new_price") {
-       #      puts "place_#{self.id}_availabilities_new_price miss"
-        self.availabilities.where(:availability_type => 2)
-      # }
+      currency = self.currency      
 
-      unavailabilities = # Rails.cache.fetch("place_#{self.id}_availabilities_occupied") {
-       #      puts "place_#{self.id}_availabilities_occupied miss"
-        self.availabilities.where(["availability_type = ? OR availability_type = ?", 1, 3])
-      # }
+      availabilities_all = self.availabilities.all.map{|x| x}
+      unavailabilities = availabilities_all.map{|x| x if x.availability_type == 1 }.compact!
+      availabilities = availabilities_all.map{|x| x if x.availability_type == 2 or x.availability_type == 3}.compact!
 
       # check for ocuppied dates
       unavailable_dates = []
@@ -112,6 +103,20 @@ class Place < ActiveRecord::Base
           if !intersections.blank?
             for date in intersections
               unavailable_dates << {:date => date, :comment => unavailability.comment}
+            end
+          end
+        end
+      end
+      
+      # add active transaction dates to unavailable_dates array
+      if user
+        user_transactions = user.transactions.active.where(:place_id => self.id)
+        for transaction in user_transactions
+          unavailability_dates = (transaction.check_in..transaction.check_out).to_a
+          intersections = requested_dates & unavailability_dates
+          if !intersections.blank?
+            for date in intersections
+              unavailable_dates << {:date => date, :comment => "Already requested"}
             end
           end
         end
@@ -253,7 +258,6 @@ class Place < ActiveRecord::Base
     if published_changed? && published == true
       errors.add(:publish, "123") if self.photos.blank? or self.photos.count < 1 # 1 picture
       errors.add(:publish, "124") if self.description.blank? or self.description.split.size < 5 # 5 words
-      #errors.add(:publish, "125") if self.availabilities.blank? or self.availabilities.count < 1 # at least one date
       errors.add(:publish, "126") if self.price_per_night.blank?
       errors.add(:publish, "127") if self.currency.blank?
       errors.add(:publish, "128") if self.price_security_deposit.blank?

@@ -14,8 +14,7 @@ class AvailabilitiesController < ApplicationController
   # === Response
   # [availability]
   #   Array containing all availabilities of a place
-  #   Availability types: 1: Ocuppied, 2: New price,
-  #   Internal use, 3: temporal request, 4: Payed, 5: Confirmed rental
+  #   Availability types: 1: Ocuppied, 2: New price, 3: Rented
   # == Error codes
   # [106] not found
   # [115] no results

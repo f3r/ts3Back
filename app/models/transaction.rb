@@ -1,6 +1,12 @@
 require 'declarative_authorization/maintenance'
 include Authorization::TestHelper
 class Transaction < ActiveRecord::Base
+  
+  INACTIVE_STATES = [:cancelled, :auto_cancelled, :declined, :auto_declined]
+
+  scope :active, where("state NOT IN (?)", INACTIVE_STATES)
+  scope :inactive, where("state IN (?)", INACTIVE_STATES)
+  
   belongs_to :user
   belongs_to :place
   has_many :transaction_logs, :dependent => :destroy
@@ -8,7 +14,7 @@ class Transaction < ActiveRecord::Base
   serialize :additional_data
   
   before_create :set_transaction_code
-  after_create :set_temporary_reservation
+  after_create :set_temporary_transaction_timeout
 
   validates_presence_of :check_in, :check_out, :user_id, :place_id, :state, 
     :currency, :price_per_night, :service_fee, :service_percentage, :sub_total, :message => "101"
@@ -53,11 +59,6 @@ class Transaction < ActiveRecord::Base
     end
   
     after_transition do |from, to, triggering_event, *event_args|
-      # destroy availabilities
-      availability_destroy_list = [:cancel, :auto_cancel, :declined, :auto_declined]
-      if availability_destroy_list.include?(triggering_event)
-        self.availability.destroy
-      end
       # log every transaction
       log_transaction(:from => from, :to => to, :triggering_event => triggering_event, :additional_data => event_args[0])
     end
@@ -77,13 +78,19 @@ class Transaction < ActiveRecord::Base
   end
 
   def confirm_payment
-    self.availability.update_attributes(:availability_type  => 4, :comment => "Payed")
+    # self.availability.update_attributes(:availability_type  => 4, :comment => "System message: Payed")
     # TODO: notify agent
     # fire auto decline delayed job
   end
   
   def confirm_rental
-    self.availability.update_attributes(:availability_type  => 5, :comment => nil)
+    availability = self.place.availabilities.create(
+      :availability_type => 3,
+      :date_start => self.check_in,
+      :date_end => self.check_out,
+      :comment => "Rented",
+      :transaction => self
+    )
     # TODO: notify user
   end
 
@@ -117,16 +124,8 @@ class Transaction < ActiveRecord::Base
     self.transaction_code = generate_transaction_code
   end
   
-  def set_temporary_reservation
-    # add an temporary availability to give the user time to pay, etc. Expires in 5 minutes
-    availability = self.place.availabilities.create(
-      :availability_type => 3,
-      :date_start => self.check_in,
-      :date_end => self.check_out,
-      :comment => "Expires at #{Time.now + 5.minutes}",
-      :transaction => self
-    )
-    # create delayed job immediately
+  def set_temporary_transaction_timeout
+    # Unpaid transactions expire in 5 minutes
     # TODO: store this elsewhere, create site settings
     transaction_timeout = Time.now + 5.minutes
     Delayed::Job.enqueue PurgeTemporaryReservationJob.new(self.id), 0, transaction_timeout

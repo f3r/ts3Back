@@ -465,7 +465,7 @@ class PlacesController < ApplicationController
   # [120] end date must be after initial date
   def check_availability
     @place = Place.with_permissions_to(:read).find(params[:id])
-    place_availability = @place.place_availability(params[:check_in], params[:check_out], params[:currency])
+    place_availability = @place.place_availability(params[:check_in], params[:check_out], params[:currency], current_user)
     if place_availability[:err].blank?
       return_message(200, :ok, place_availability)
     else
@@ -488,7 +488,7 @@ class PlacesController < ApplicationController
   # [137] invalid place request, check availability
   def place_request
     @place = Place.with_permissions_to(:read).find(params[:id])
-    request = @place.place_availability(params[:check_in], params[:check_out])
+    request = @place.place_availability(params[:check_in], params[:check_out], '', current_user)
     if request[:err].blank?  
       # TODO: store this elsewhere, create site settings
       service_percentage = 16
