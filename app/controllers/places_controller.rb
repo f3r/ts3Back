@@ -5,6 +5,7 @@ class PlacesController < ApplicationController
   filter_access_to :all, :attribute_check => false
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
+  before_filter :get_user, :only => [:user_places]
   
   def initialize
     @fields = [
@@ -387,19 +388,28 @@ class PlacesController < ApplicationController
   # Shows a users places
   # ==Resource URL
   #   /users/:id/places.format
+  #   /users/me/places.format
   # ==Example
-  #   GET https://backend-heypal.heroku.com/users/:id/places.json access_token=access_token&published=0
+  #   GET https://backend-heypal.heroku.com/users/:id/places.json access_token=access_token&status=any
+  #   GET https://backend-heypal.heroku.com/users/me/places.json access_token=access_token&status=any
   # === Parameters
   # [access_token]  Access token
-  # [published]     Shows or hides unpublished places (shows published places by default), Boolean value
+  # [status] Options: published, draft, any, Defaults to any
+  # [currency]   ISO Code of the currency to return prices in
   # === Error codes
   # [115]           no results
   def user_places
-    @places = current_user.places.with_permissions_to(:read)
-    @places = @places.where(:published => true) unless params[:published] == "0"
+    @places = @user.places.with_permissions_to(:read)
+    case params[:status]
+    when "published"
+      @places = @places.where(:published => true)
+    when "draft"
+      @places = @places.where(:published => false)
+    end
     if !@places.blank?
       places_return = filter_fields(@places,@fields, { :additional_fields => {
-        :place_type => @place_type_fields}})
+        :place_type => @place_type_fields},
+        :currency => params[:currency]})
       return_message(200, :ok, {:places => places_return})
     else
       return_message(200, :ok, { :err => {:places => [115]}})
@@ -532,7 +542,7 @@ class PlacesController < ApplicationController
   end
 
   # == Description
-  # Requests a place
+  # Shows place transactions
   # ==Resource URL
   #   /places/:id/transactions.format
   # ==Example
@@ -568,6 +578,16 @@ class PlacesController < ApplicationController
     else
       return_message(200, :ok, {:err=>{:transactions => [115]}} )
     end
+  end
+
+  protected
+  def get_user
+    if params[:user_id] && params[:user_id].to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) != nil # is numeric
+      id = params[:user_id]
+    elsif params[:user_id] == "me" && current_user
+      id = current_user.id
+    end
+    @user = User.find(id) if id
   end
 
 end
