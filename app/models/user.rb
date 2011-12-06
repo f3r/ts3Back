@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
                   :remember_me,
                   :pref_language,
                   :pref_currency,
+                  :pref_size_unit,
                   :role
 
   attr_accessor :avatar_url
@@ -52,6 +53,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :message => "100"
   validates_format_of     :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
   validates_inclusion_of  :role, :in => ["superadmin", "admin", "agent", "user"], :message => "103"
+  validates_inclusion_of  :pref_size_unit, :in => ["sqm", "sqf"], :allow_blank => true, :message => "103"
 
   validates_date :birthdate, 
     :invalid_date_message => "113", 

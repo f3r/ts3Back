@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111203190719) do
+ActiveRecord::Schema.define(:version => 20111206213523) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -279,6 +279,7 @@ ActiveRecord::Schema.define(:version => 20111203190719) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "role",                                  :default => "user"
+    t.string   "pref_size_unit"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true

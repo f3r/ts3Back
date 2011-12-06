@@ -17,7 +17,8 @@ class UsersController < ApplicationController
       :phone_mobile, 
       :avatar_file_name,
       :pref_language,
-      :pref_currency
+      :pref_currency,
+      :pref_size_unit
     ]
 
     @transaction_fields = [
@@ -99,9 +100,10 @@ class UsersController < ApplicationController
   # [avatar_url]    String, avatar picture from url, i.e. http://url/image_file
   # [pref_language] String, Preferred Language. ie "en"
   # [pref_currency] String, Preferred Currency. ie "USD"
+  # [pref_size_unit] String, Preferred Size unit. ie "sqm"
   # === Response
   # [user]
-  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
+  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency, :pref_size_unit}
   # === Error codes
   # [105] invalid access token
   # [101] can't be blank
@@ -119,7 +121,8 @@ class UsersController < ApplicationController
       :avatar,
       :avatar_url,
       :pref_language,
-      :pref_currency
+      :pref_currency,
+      :pref_size_unit
     ]
     new_params = filter_params(params, fields)
     if @user.update_attributes(new_params)
