@@ -75,7 +75,11 @@ class UsersController < ApplicationController
   def show
     if @user && (permitted_to? :read, @user)
       # TODO: add to additional_fields method, caching
-      address = filter_fields(@user.addresses.first,[:street, :city, :country, :zip])
+      if !@user.addresses.blank?
+        address = filter_fields(@user.addresses.first,[:street, :city, :country, :zip])
+      else
+        address = nil
+      end
       return_message(200, :ok, {:user => filter_fields(@user,@fields).merge!({:address => address})})
     else
       attribute_authorization_error
