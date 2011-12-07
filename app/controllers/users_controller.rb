@@ -18,7 +18,8 @@ class UsersController < ApplicationController
       :avatar_file_name,
       :pref_language,
       :pref_currency,
-      :pref_size_unit
+      :pref_size_unit,
+      :role
     ]
 
     @transaction_fields = [
@@ -73,7 +74,9 @@ class UsersController < ApplicationController
   # [105] invalid access token
   def show
     if @user && (permitted_to? :read, @user)
-      return_message(200, :ok, {:user => filter_fields(@user,@fields)})
+      # TODO: add to additional_fields method, filter address field
+      address = @user.addresses.first
+      return_message(200, :ok, {:user => filter_fields(@user,@fields).merge!({:address => address})})
     else
       attribute_authorization_error
     end
