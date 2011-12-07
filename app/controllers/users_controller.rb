@@ -74,8 +74,8 @@ class UsersController < ApplicationController
   # [105] invalid access token
   def show
     if @user && (permitted_to? :read, @user)
-      # TODO: add to additional_fields method, filter address field
-      address = @user.addresses.first
+      # TODO: add to additional_fields method, caching
+      address = filter_fields(@user.addresses.first,[:street, :city, :country, :zip])
       return_message(200, :ok, {:user => filter_fields(@user,@fields).merge!({:address => address})})
     else
       attribute_authorization_error
