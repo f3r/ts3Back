@@ -480,6 +480,7 @@ class PlacesController < ApplicationController
   # [113] Invalid date
   # [119] date must be future, after today
   # [120] end date must be after initial date
+  # [136] occupied
   def check_availability
     @place = Place.with_permissions_to(:read).find(params[:id])
     place_availability = @place.place_availability(params[:check_in], params[:check_out], params[:currency], current_user)

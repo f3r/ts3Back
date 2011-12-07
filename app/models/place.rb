@@ -136,23 +136,26 @@ class Place < ActiveRecord::Base
         for date in requested_dates
           dates << { :date => date, :price_per_night => price_per_night }
         end
+        
+        if availabilities
+          # replaces regular price with the availability price on the affected dates
+          for availability in availabilities
 
-        # replaces regular price with the availability price on the affected dates
-        for availability in availabilities
+            if new_currency && valid_currency?(new_currency)
+              availability.price_per_night = exchange_currency(availability.price_per_night, self.currency, new_currency)
+            end
 
-          if new_currency && valid_currency?(new_currency)
-            availability.price_per_night = exchange_currency(availability.price_per_night, self.currency, new_currency)
-          end
-
-          availability_dates = (availability.date_start..availability.date_end).to_a
-          intersections = requested_dates & availability_dates
-          if !intersections.blank?
-            for date in intersections
-              dates.delete_if {|hash| hash[:date] == date}
-              dates << {:date => date, :price_per_night => availability.price_per_night, :comment => availability.comment}
+            availability_dates = (availability.date_start..availability.date_end).to_a
+            intersections = requested_dates & availability_dates
+            if !intersections.blank?
+              for date in intersections
+                dates.delete_if {|hash| hash[:date] == date}
+                dates << {:date => date, :price_per_night => availability.price_per_night, :comment => availability.comment}
+              end
             end
           end
         end
+
         dates = dates.sort_by { |hash| hash[:date] }
 
         # get the sum of price_per_night
