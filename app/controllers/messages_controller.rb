@@ -3,6 +3,10 @@ class MessagesController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
+  def initialize
+    @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
+  end
+
   # == Description
   # Returns all the conversations of the current user
   # ==Resource URL
@@ -26,9 +30,9 @@ class MessagesController < ApplicationController
     if @conversations
       @foo = []
       @conversations.each{|c|
-        user = (c['from'] == current_user.id) ? User.find(c['to']) : User.find(c['from'])
-        name = "#{user.first_name[0]}. #{user.last_name}"
-        @foo << c.merge!({:name => name}).merge!({:img => user.avatar_file_name})
+        from =  filter_fields(User.find(c['from']), @user_fields)
+        to   =  filter_fields(User.find(c['to']),   @user_fields)
+        @foo << c.merge!({:from => from, :to => to})
       }
       return_message(200, :ok, {:conversations => @foo})
     else
@@ -52,7 +56,10 @@ class MessagesController < ApplicationController
     foo = User.find(params['id'])
     @messages = []
     Message.messages_with(params['id']).each{|message|
-      @messages << ActiveSupport::JSON::decode(message)
+      bar  =  ActiveSupport::JSON::decode(message)
+      from =  filter_fields(User.find(bar['from']), @user_fields)
+      to   =  filter_fields(User.find(bar['to']),   @user_fields)
+      @messages << bar.merge!({:from => from, :to => to})
     }
     if @messages
       return_message(200, :ok, {:messages => @messages})
