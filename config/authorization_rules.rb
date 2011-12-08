@@ -57,9 +57,9 @@ authorization do
   end
   
   role :guest do
-    has_permission_on :users,       :to => [:info, :user_places]
+    has_permission_on :users,       :to => [:info]
     has_permission_on :place_types, :to => :read
-    has_permission_on :places,      :to => :search
+    has_permission_on :places,      :to => [:search, :user_places]
     has_permission_on :places,      :to => :read do
       if_attribute :published => is { true }
     end
