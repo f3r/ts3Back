@@ -24,7 +24,13 @@ class MessagesController < ApplicationController
       end
     }
     if @conversations
-      return_message(200, :ok, {:conversations => @conversations})
+      @foo = []
+      @conversations.each{|c|
+        user = (c['from'] == current_user.id) ? User.find(c['to']) : User.find(c['from'])
+        name = "#{user.first_name[0]}. #{user.last_name}"
+        @foo << c.merge!({:name => name}).merge!({:img => user.avatar_file_name})
+      }
+      return_message(200, :ok, {:conversations => @foo})
     else
       return_message(200, :ok, {:err => {:conversations => [115]}})
     end
