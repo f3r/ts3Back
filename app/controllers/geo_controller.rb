@@ -126,29 +126,19 @@ class GeoController < ApplicationController
   # === Error codes
   # [115] no results
   def price_range
-    city_id = params[:id]
-    new_currency = params[:currency]
+    max_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").maximum('price_per_night_usd')
+    min_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").minimum('price_per_night_usd')
 
-    places_prices = Place.find_by_sql(["
-      SELECT price_per_night_usd 
-      FROM places 
-      WHERE price_per_night_usd = (SELECT MAX(price_per_night_usd) FROM places WHERE published = 0 AND city_id = ?) 
-      OR price_per_night_usd = (SELECT MIN(price_per_night_usd) FROM places WHERE published = 0 AND city_id = ?)
-    ", city_id, city_id])
+    if params[:currency] && valid_currency?(params[:currency])
+      max_price = exchange_currency(max_price_usd/100, :USD, params[:currency]).ceil
+      min_price = exchange_currency(min_price_usd/100, :USD, params[:currency]).floor
+    else
+      max_price = (max_price_usd/100).ceil
+      min_price = (min_price_usd/100).floor
+    end
 
-    prices = places_prices.map{|x|
-      if new_currency && valid_currency?(new_currency)
-        exchange_currency(x.price_per_night_usd/100, :USD, new_currency)
-      else
-        x.price_per_night_usd/100
-      end
-    }.sort!
-
-    if !prices.blank?
-      return_message(200, :ok, {
-        :min_price => prices.first,
-        :max_price => prices.last
-      })
+    if !max_price.blank?
+      return_message(200, :ok, {:min_price => min_price, :max_price => max_price})
     else
       return_message(200, :ok, {:err => {:places => [115]}})
     end
