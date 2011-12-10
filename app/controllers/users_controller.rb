@@ -15,6 +15,7 @@ class UsersController < ApplicationController
       :birthdate, 
       :timezone, 
       :phone_mobile, 
+      :passport_number, 
       :avatar_file_name,
       :pref_language,
       :pref_currency,
@@ -69,7 +70,7 @@ class UsersController < ApplicationController
   # [id] Optional user id
   # === Response
   # [user]
-  # {:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency}
+  # {:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :passport_number, :avatar_file_name, :pref_language, :pref_currency}
   # === Error codes
   # [105] invalid access token
   def show
@@ -104,13 +105,14 @@ class UsersController < ApplicationController
   # [birthdate]     Date, Birthdate of the user, stored in same format as ruby::Date, Ex. 1981-12-31, 1981/09/31
   # [timezone]      Based on TimeZone::to_s http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048
   # [phone_mobile]  String, Mobile Phone number, including country code
+  # [passport_number]  String, Passport number
   # [avatar_url]    String, avatar picture from url, i.e. http://url/image_file
   # [pref_language] String, Preferred Language. ie "en"
   # [pref_currency] String, Preferred Currency. ie "USD"
   # [pref_size_unit] String, Preferred Size unit. ie "sqm"
   # === Response
   # [user]
-  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :avatar_file_name, :pref_language, :pref_currency, :pref_size_unit}
+  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, passport_number, :avatar_file_name, :pref_language, :pref_currency, :pref_size_unit}
   # === Error codes
   # [105] invalid access token
   # [101] can't be blank
@@ -125,6 +127,7 @@ class UsersController < ApplicationController
       :birthdate, 
       :timezone, 
       :phone_mobile, 
+      :passport_number, 
       :avatar,
       :avatar_url,
       :pref_language,

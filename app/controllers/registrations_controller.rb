@@ -38,7 +38,7 @@ class RegistrationsController < Devise::RegistrationsController
                       :email => params[:email], 
                       :password => params[:password], 
                       :password_confirmation => params[:password],
-                      :role => "agent" } # FIXME: set all user to agent (should be user)
+                      :role => "user" }
       resource = resource_class.new(parameters)
       if resource.save
         if params[:oauth_token] && params[:oauth_token]['credentials']
