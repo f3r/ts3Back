@@ -38,7 +38,8 @@ class User < ActiveRecord::Base
                   :pref_language,
                   :pref_currency,
                   :pref_size_unit,
-                  :role
+                  :role,
+                  :passport_number
 
   attr_accessor :avatar_url
 
