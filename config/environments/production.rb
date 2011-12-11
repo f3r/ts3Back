@@ -64,7 +64,7 @@ HeyPalBackEnd::Application.configure do
   #Facebook authentications
   #TODO: Change to production facebook app!
   FB = {
-    :app_id => '221413484589066', 
-    :app_secret => '719daf903365b4bab445a2ef5c54c2ea', 
+    :app_id => '201854953233705', 
+    :app_secret => '5a773c1f43daaaefb0a169fc388ba1e0', 
     :app_url => 'https://graph.facebook.com'}
 end

@@ -129,12 +129,14 @@ class GeoController < ApplicationController
     max_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").maximum('price_per_night_usd')
     min_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").minimum('price_per_night_usd')
 
-    if params[:currency] && valid_currency?(params[:currency])
+    if !max_price_usd.nil? && !min_price_usd.nil?
+      if params[:currency] && valid_currency?(params[:currency])
       max_price = exchange_currency(max_price_usd/100, :USD, params[:currency]).ceil
       min_price = exchange_currency(min_price_usd/100, :USD, params[:currency]).floor
-    else
-      max_price = (max_price_usd/100).ceil
-      min_price = (min_price_usd/100).floor
+      else
+        max_price = (max_price_usd/100).ceil
+        min_price = (min_price_usd/100).floor
+      end
     end
 
     if !max_price.blank?
