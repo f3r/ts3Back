@@ -55,6 +55,8 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id",                         :to => "places#show"   
     delete  "places/:id",                         :to => "places#destroy"
     get     "places/:id/:status",                 :to => "places#publish"
+    # temporal mailer
+    post    "/places/:place_id/confirm_rental",   :to => "places#confirm_rental"
     ##############################################################################
     # TRANSACTIONS
     ##############################################################################
