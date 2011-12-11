@@ -91,8 +91,8 @@ class Place < ActiveRecord::Base
       currency = self.currency      
 
       availabilities_all = self.availabilities.all.map{|x| x}
-      unavailabilities = availabilities_all.map{|x| x if x.availability_type == 1 }.compact!
-      availabilities = availabilities_all.map{|x| x if x.availability_type == 2 or x.availability_type == 3}.compact!
+      unavailabilities = availabilities_all.map{|x| x if x.availability_type == 1 }.compact
+      availabilities = availabilities_all.map{|x| x if x.availability_type == 2 or x.availability_type == 3}.compact
 
       # check for ocuppied dates
       unavailable_dates = []
