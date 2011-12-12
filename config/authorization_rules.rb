@@ -48,7 +48,7 @@ authorization do
     has_permission_on :notifications, :to => [:index, :unread, :mark_as_read]
     has_permission_on :authentications, :to => [:create, :list, :delete, :get_facebook_oauth_info]
     has_permission_on :messages, :to => [:index, :messages, :create, :destroy, :mark_as_read, :mark_as_unread, :unread_count]
-    has_permission_on :places, :to => [:place_request, :check_availability] do
+    has_permission_on :places, :to => [:place_request, :check_availability, :confirm_rental] do
       if_permitted_to :read, :place
     end
     has_permission_on :transactions, :to => [:cancel, :pay] do

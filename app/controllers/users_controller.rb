@@ -132,7 +132,9 @@ class UsersController < ApplicationController
       :avatar_url,
       :pref_language,
       :pref_currency,
-      :pref_size_unit
+      :pref_size_unit,
+      :password,
+      :password_confirmation
     ]
     new_params = filter_params(params, fields)
     if @user.update_attributes(new_params)

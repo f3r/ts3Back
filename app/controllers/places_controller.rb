@@ -580,6 +580,12 @@ class PlacesController < ApplicationController
       return_message(200, :ok, {:err=>{:transactions => [115]}} )
     end
   end
+  
+  def confirm_rental
+   @place = Place.with_permissions_to(:read).find(params[:place_id])
+   RentalMailer.rental_confirmed(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
+   return_message(200, :ok)
+  end
 
   protected
   def get_user
