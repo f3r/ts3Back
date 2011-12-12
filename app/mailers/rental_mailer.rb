@@ -1,7 +1,4 @@
 class RentalMailer < ActionMailer::Base  
-  default :from     => 'SquareStays.com <noreply@squarestays.com>',
-          # Settings version => "#{@site_name} <#{Setting.contact_email}>"
-          :reply_to =>  'SquareStays.com <noreply@squarestays.com>'
 
 # ==Description
 # Temporary email sent when the user rents a place..
@@ -15,7 +12,10 @@ def rental_confirmed(owner, renter, place, check_in, check_out)
     recipients = "#{user.full_name} <#{user.email}>, #{renter.full_name} <#{renter.email}>, SquareStays.com <noreply@squarestays.com>"
     subject    = 'Confirmed rental!'
     sent_on    =  Time.now
-    mail(:bcc => "SquareStays.com <noreply@squarestays.com>", :subject => subject, :date => sent_on) do |format|
+    mail(:from     => 'SquareStays.com <noreply@squarestays.com>',
+         :bcc => "SquareStays.com <noreply@squarestays.com>", 
+         :subject => subject,
+         :date => sent_on) do |format|
       format.text
       # format.html
     end
