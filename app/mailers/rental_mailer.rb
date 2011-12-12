@@ -9,11 +9,11 @@ def rental_confirmed(owner, renter, place, check_in, check_out)
     @place        = place
     @check_in     = check_in
     @check_out    = check_out
-    recipients = "#{user.full_name} <#{user.email}>, #{renter.full_name} <#{renter.email}>, SquareStays.com <noreply@squarestays.com>"
+    recipients = ["#{user.full_name} <#{user.email}>" , "#{renter.full_name} <#{renter.email}>", "SquareStays.com <jeremy@squarestays.com>"]
     subject    = 'Confirmed rental!'
     sent_on    =  Time.now
-    mail(:from    => 'noreply@squarestays.com',
-         :bcc     => "SquareStays.com <noreply@squarestays.com>", 
+    mail(:from    => "SquareStays.com <noreply@squarestays.com>",
+         :bcc     => recipients, 
          :subject => subject,
          :date    => sent_on) do |format|
       format.text
