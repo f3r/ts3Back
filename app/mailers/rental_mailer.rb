@@ -4,15 +4,15 @@ class RentalMailer < ActionMailer::Base
 # Temporary email sent when the user rents a place..
 def rental_confirmed(owner, renter, place, check_in, check_out)
   begin
-    @owner        = owner
-    @renter       = renter
-    @place        = place
-    @check_in     = check_in
-    @check_out    = check_out
+    @owner     = owner
+    @renter    = renter
+    @place     = place
+    @check_in  = check_in
+    @check_out = check_out
     recipients = ["#{user.full_name} <#{user.email}>" , "#{renter.full_name} <#{renter.email}>", "SquareStays.com <jeremy@squarestays.com>"]
     subject    = 'Confirmed rental!'
     sent_on    =  Time.now
-    mail(:from    => "SquareStays.com <noreply@squarestays.com>",
+    mail(:from    => 'noreply@squarestays.com',
          :bcc     => recipients, 
          :subject => subject,
          :date    => sent_on) do |format|
