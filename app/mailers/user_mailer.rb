@@ -1,7 +1,7 @@
 class UserMailer < ActionMailer::Base  
-  default :from     => 'Heypal.com <support@heypal.com>',
+  default :from     => 'SquareStays.com <noreply@squarestays.com>',
           # Settings version => "#{@site_name} <#{Setting.contact_email}>"
-          :reply_to =>  'Heypal.com <support@heypal.com>'
+          :reply_to =>  'SquareStays.com <noreply@squarestays.com>'
 
 # ==Description
 # Email sent when the user confirms the account
@@ -10,7 +10,7 @@ def welcome_note(user)
   begin
     @user      = user
     recipients = "#{user.full_name} <#{user.email}>"
-    subject    = 'Welcome to Heypal!'
+    subject    = 'Welcome to SquareStays'
     sent_on    =  Time.now
     mail(:to => recipients, :subject => subject, :date => sent_on) do |format|
       format.text

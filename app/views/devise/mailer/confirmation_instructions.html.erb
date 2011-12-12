@@ -1,5 +1,4 @@
 <p>Welcome <%= @resource.email %>!</p>
 
-<p>You can confirm your account through the link below:</p>
-
-<p><%= link_to 'Confirm my account', "https://frontend-heypal.heroku.com/users/confirmation/#{@resource.confirmation_token}" %></p>
+<p>Thank you for signing up on  Squarestays - your site for trusted stays worldwide. Before you can start finding the best places for your upcoming stays, please <%= link_to 'confirm your email address', "https://squarestays.com/users/confirmation/#{@resource.confirmation_token}" %>.</p>
+<p>--The SquareStays Team
