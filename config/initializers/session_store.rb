@@ -1,6 +1,6 @@
 # Be sure to restart your server when you modify this file.
 
-HeyPalBackEnd::Application.config.session_store :cookie_store, key: '_HeyPalBackEnd_session'
+HeyPalBackEnd::Application.config.session_store :cookie_store, key: COOKIE_STORE_KEY
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information

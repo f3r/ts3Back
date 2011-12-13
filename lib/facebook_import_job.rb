@@ -4,7 +4,7 @@ class FacebookImport < Struct.new(:user_id)
     user = User.find(user_id)
     authentication = user.authentications.where(:provider => "facebook").first
     if authentication
-      client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => FB[:app_url])
+      client   = OAuth2::Client.new(FB_APP_ID, FB_APP_SECRET, :site => "https://graph.facebook.com")
       facebook = OAuth2::AccessToken.new(client, authentication.token)
       friends  = JSON.parse(facebook.get('/me/friends'))
       if friends

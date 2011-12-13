@@ -76,7 +76,11 @@ class User < ActiveRecord::Base
        :large  => "600x600>" },
      :storage => :s3,
      :s3_protocol => 'https',
-     :s3_credentials => "#{Rails.root}/config/s3.yml",
+     :s3_credentials => {
+       :access_key_id => S3_ACCESS_KEY_ID,
+       :secret_access_key => S3_SECRET_ACCESS_KEY
+     },
+     :bucket => S3_BUCKET,
      :path => "avatars/:id_partition/:style.:extension",
      :default_url => "none",
      :convert_options => { 
@@ -126,23 +130,27 @@ class User < ActiveRecord::Base
   end
 
   def facebook_info(auto_import=false)
-    begin
-      authentication = self.authentications.where(:provider => "facebook").first
-      client   = OAuth2::Client.new(FB[:app_id], FB[:app_secret], :site => 'https://graph.facebook.com')
-      facebook = OAuth2::AccessToken.new(client, authentication.token)
-      info     = JSON.parse(facebook.get("/#{authentication.uid}"))
-      birthday = Date.strptime(info['birthday'], "%m/%d/%Y")
-      info = {
-        :first_name => info['first_name'],
-        :last_name => info['last_name'],
-        :gender => info['gender'],
-        :birthdate => birthday,
-        :avatar_url => "http://graph.facebook.com/" + info['id'] + "/picture?type=large"
-      }
-      self.update_attributes(info) if auto_import
-      return info
-    rescue Exception => e
-      logger.error { "Error [user.rb/facebook_info] #{e.message}" }
+    authentication = self.authentications.where(:provider => "facebook").first
+    if authentication && authentication.token
+      begin
+        client   = OAuth2::Client.new(FB_APP_ID, FB_APP_SECRET, :site => "https://graph.facebook.com")
+        facebook = OAuth2::AccessToken.new(client, authentication.token)
+        info     = JSON.parse(facebook.get("/#{authentication.uid}"))
+        birthday = Date.strptime(info['birthday'], "%m/%d/%Y")
+        info = {
+          :first_name => info['first_name'],
+          :last_name => info['last_name'],
+          :gender => info['gender'],
+          :birthdate => birthday,
+          :avatar_url => "http://graph.facebook.com/" + info['id'] + "/picture?type=large"
+        }
+        self.update_attributes(info) if auto_import
+        return info
+      rescue Exception => e
+        logger.error { "Error [user.rb/facebook_info] #{e.message}" }
+        return nil
+      end
+    else
       return nil
     end
   end

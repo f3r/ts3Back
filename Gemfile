@@ -24,6 +24,7 @@ gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hi
 
 #group :development do
 # gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
+  gem 'heroku_san'
 #end
 
 group :test do

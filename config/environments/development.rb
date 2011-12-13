@@ -32,15 +32,8 @@ HeyPalBackEnd::Application.configure do
   config.action_mailer.delivery_method = :sendmail
 
   # Local Redis Configuration
-  ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379'
-  
-  #Facebook authentications
-  FB = {
-    :app_id => '221413484589066', 
-    :app_secret => '719daf903365b4bab445a2ef5c54c2ea', 
-    :app_url => 'https://graph.facebook.com'
-  }
+  # ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379'
 
-  config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "heypal", :expires_in => 1.minute, :compress => false }
+  config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "squarestays", :expires_in => 1.minute, :compress => false }
 
 end

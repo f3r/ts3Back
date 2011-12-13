@@ -38,7 +38,7 @@ HeyPalBackEnd::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store
+  config.cache_store = :dalli_store, 'mc7.ec2.northscale.net', { :namespace => "squarestays", :expires_in => 15.minute }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
