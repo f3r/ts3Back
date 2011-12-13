@@ -9,7 +9,7 @@ def rental_confirmed(owner, renter, place, check_in, check_out)
     @place     = place
     @check_in  = check_in
     @check_out = check_out
-    recipients = ["#{owner.full_name} <#{owner.email}>" , "#{renter.full_name} <#{renter.email}>", "SquareStays.com <jeremy@squarestays.com>"]
+    recipients = ["#{owner.full_name} <#{owner.email}>" , "#{renter.full_name} <#{renter.email}>", "jeremy@squarestays.com", "fer@squarestays.com"]
     subject    = 'Confirmed rental!'
     sent_on    =  Time.now
     mail(:from    => MAILER_SENDER,

@@ -28,12 +28,11 @@ HeyPalBackEnd::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  # Mailer configuration
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :sendmail
 
-  # Local Redis Configuration
-  # ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379'
-
+  # Local memcached
   config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "squarestays", :expires_in => 1.minute, :compress => false }
 
 end

@@ -1,4 +1,4 @@
 <p>Welcome <%= @resource.email %>!</p>
 
-<p>Thank you for signing up on  Squarestays - your site for trusted stays worldwide. Before you can start finding the best places for your upcoming stays, please <%= link_to 'confirm your email address', "<%= ENV['FRONTEND_PATH'] %>/users/confirmation/#{@resource.confirmation_token}" %>.</p>
+<p>Thank you for signing up on  Squarestays - your site for trusted stays worldwide. Before you can start finding the best places for your upcoming stays, please <%= link_to 'confirm your email address', "#{FRONTEND_PATH}/users/confirmation/#{@resource.confirmation_token}" %>.</p>
 <p>--The SquareStays Team

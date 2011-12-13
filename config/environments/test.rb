@@ -41,6 +41,4 @@ HeyPalBackEnd::Application.configure do
   config.assets.allow_debugging = true
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-
-  # ENV["REDISTOGO_URL"] = 'redis://mopx:aaf3ce5564ab359b8695223b53a50002@stingfish.redistogo.com:9181'
 end
