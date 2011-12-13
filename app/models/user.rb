@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
        :large  => "600x600>" },
      :storage => :s3,
      :s3_protocol => 'https',
-     :s3_credentials => "#{Rails.root}/config/s3.yml",
+     :s3_credentials => S3_CREDENTIALS,
      :path => "avatars/:id_partition/:style.:extension",
      :default_url => "none",
      :convert_options => { 
