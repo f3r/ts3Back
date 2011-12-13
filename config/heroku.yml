@@ -17,26 +17,24 @@ production:
     S3_BUCKET: squarestays-img-production
     FB_APP_ID: 201854953233705
     FB_APP_SECRET: 5a773c1f43daaaefb0a169fc388ba1e0
-    FRONTEND_PATH: 'http://frontend-heypal.heroku.com'
+    FRONTEND_PATH: http://frontend-heypal.heroku.com
     SECRET_TOKEN: 4fafcf33a55a5b7d6cd2be869e9f450b65ea004e421c05b459ebb2643e7a6b3201d5f1e2da0ce7310102c7d48368b0d100087f73545fd14aff0de8050f818a61
     COOKIE_STORE_KEY: _SquareStaysProductionBackEnd_session
-    REDISTOGO_URL: redis://redistogo:150d8783d490b5b39f39634420b5895c@barracuda.redistogo.com:9076/
-    MAILER_SENDER: SquareStays.com <noreply@squarestays.com>
+    # MAILER_SENDER: "SquareStays.com <noreply@squarestays.com>"
     PEPPER_TOKEN: Z8TxukxAnyxxjRgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUuYgTcaWywccE3CA8Gdgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUWywccE3CA8Gdgs6jSB3YAnyxxjRgs6jS
 
 staging:
   app: backend-heypal
   stack: bamboo-mri-1.9.2
-  config: &default
+  config:
     BUNDLE_WITHOUT: "development:test"
     S3_ACCESS_KEY_ID: AKIAJOJEIAZ6LOVHDFDA
     S3_SECRET_ACCESS_KEY: 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
     S3_BUCKET: squarestays-img-staging
     FB_APP_ID: 294052747281058
     FB_APP_SECRET: c8fbc31a070e9aa9bcbba3d702d5ec1a
-    FRONTEND_PATH: 'http://squarestays.com'
+    FRONTEND_PATH: http://squarestays.com
     SECRET_TOKEN: 4fafcf33a55a5b7d6cd2be869e9f450b65ea004e421c05b459ebb2643e7a6b3201d5f1e2da0ce7310102c7d48368b0d100087f73545fd14aff0de8050f818a61
     COOKIE_STORE_KEY: _SquareStaysStagingBackEnd_session
-    REDISTOGO_URL: redis://redistogo:7e54317d323d792d47324b654633b87e@herring.redistogo.com:9385/
-    MAILER_SENDER: SquareStays.com <noreply@squarestays.com>
+    # MAILER_SENDER: 'SquareStays.com <noreply@squarestays.com>' ERROR
     PEPPER_TOKEN: Z8TxukxAnyxxjRgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUuYgTcaWywccE3CA8Gdgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUWywccE3CA8Gdgs6jSB3YAnyxxjRgs6jS
