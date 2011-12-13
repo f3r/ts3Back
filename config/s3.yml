@@ -7,6 +7,6 @@ test:
   access_key_id: AKIAJOJEIAZ6LOVHDFDA
   secret_access_key: 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
 production:
-  bucket: heypal-prod1
-  access_key_id: AKIAJOJEIAZ6LOVHDFDA
-  secret_access_key: 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
+  bucket:            ENV['S3_BUCKET']
+  access_key_id:     ENV['S3_ACCESS_KEY_ID']
+  secret_access_key: ENV['S3_SECRET_ACCESS_KEY']

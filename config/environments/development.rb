@@ -28,19 +28,21 @@ HeyPalBackEnd::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  # Mailer configuration
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :sendmail
 
   # Local Redis Configuration
   ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379'
   
-  #Facebook authentications
+  # Facebook authentications
   FB = {
-    :app_id => '221413484589066', 
+    :app_id     => '221413484589066', 
     :app_secret => '719daf903365b4bab445a2ef5c54c2ea', 
-    :app_url => 'https://graph.facebook.com'
+    :app_url    => 'https://graph.facebook.com'
   }
 
+  # Memcache configuration
   config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "heypal", :expires_in => 1.minute, :compress => false }
 
 end

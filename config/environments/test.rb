@@ -42,5 +42,18 @@ HeyPalBackEnd::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
+  # Local Redis Configuration
   ENV["REDISTOGO_URL"] = 'redis://mopx:aaf3ce5564ab359b8695223b53a50002@stingfish.redistogo.com:9181'
+  #ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379'
+  
+  # Facebook authentications
+  FB = {
+    :app_id     => '221413484589066', 
+    :app_secret => '719daf903365b4bab445a2ef5c54c2ea', 
+    :app_url    => 'https://graph.facebook.com'
+  }
+
+  # Memcache configuration
+  config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "heypal", :expires_in => 1.minute, :compress => false }
+  
 end

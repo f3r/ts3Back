@@ -61,10 +61,9 @@ HeyPalBackEnd::Application.configure do
   
   # config.middleware.use Rack::SslEnforcer
 
-  #Facebook authentications
-  #TODO: Change to production facebook app!
+  # Facebook authentications
   FB = {
-    :app_id => '201854953233705', 
-    :app_secret => '5a773c1f43daaaefb0a169fc388ba1e0', 
-    :app_url => 'https://graph.facebook.com'}
+    :app_id     => ENV['FB_APP_ID'], 
+    :app_secret => ENV['FB_APP_SECRET'], 
+    :app_url    => 'https://graph.facebook.com'}
 end

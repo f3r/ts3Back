@@ -9,10 +9,10 @@ def welcome_note(user)
     recipients = "#{user.full_name} <#{user.email}>"
     subject    = 'Welcome to SquareStays'
     sent_on    =  Time.now
-    mail(:from => 'noreply@squarestays.com', 
-      :to => recipients, 
-      :subject => subject, 
-      :date => sent_on) do |format|
+    mail(:from => ENV['MAILER_SENDER'], 
+         :to => recipients, 
+         :subject => subject, 
+         :date => sent_on) do |format|
       format.text
       format.html
     end
