@@ -1,0 +1,21 @@
+defaults: &defaults
+  S3_ACCESS_KEY_ID: 
+  S3_SECRET_ACCESS_KEY: 
+  FB_APP_ID: 
+  FB_APP_SECRET: 
+  FRONTEND_PATH: 'http://localhost:5000'
+  SECRET_TOKEN: 4fafcf33a55a5b7d6cd2be869e9f450b65ea004e421c05b459ebb2643e7a6b3201d5f1e2da0ce7310102c7d48368b0d100087f73545fd14aff0de8050f818a61
+  MAILER_SENDER: SquareStays.com <noreply@squarestays.com>
+  PEPPER_TOKEN: Z8TxukxAnyxxjRgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUuYgTcaWywccE3CA8Gdgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUWywccE3CA8Gdgs6jSB3YAnyxxjRgs6jS
+
+development:
+  <<: *defaults
+  S3_BUCKET: squarestays-img-dev
+  COOKIE_STORE_KEY: _SquareStaysDevelopmentBackEnd_session
+  REDISTOGO_URL: redis://127.0.0.1:6379
+
+test:
+  <<: *defaults
+  S3_BUCKET: squarestays-img-test
+  COOKIE_STORE_KEY: _SquareStaysTestBackEnd_session
+  REDISTOGO_URL: 
