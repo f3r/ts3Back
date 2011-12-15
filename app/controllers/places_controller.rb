@@ -122,7 +122,7 @@ class PlacesController < ApplicationController
   #     Ex: min_price=200
   # [max_price]
   #   Defaults to no maximum, Maximum price per night for the apartment search in the currency selected (no cents)
-  #     Ex: min_price=600
+  #     Ex: max_price=600
   # [sort]
   #   Sorting options: name, price_lowest, price_highest, price_size_lowest, price_size_highest, reviews, most_recent
   #     Ex: sort=price_lowest

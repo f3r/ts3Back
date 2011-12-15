@@ -298,7 +298,7 @@ first_name=John&amp;last_name=Smith&amp;email=user@example.com&amp;password=pass
                     <span class="ruby-value">:email</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>], 
                     <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>], 
                     <span class="ruby-value">:password_confirmation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>],
-                    <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;agent&quot;</span> } <span class="ruby-comment"># FIXME: set all user to agent (should be user)</span>
+                    <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;user&quot;</span> }
     <span class="ruby-identifier">resource</span> = <span class="ruby-identifier">resource_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parameters</span>)
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:oauth_token</span>][<span class="ruby-string">'credentials'</span>]

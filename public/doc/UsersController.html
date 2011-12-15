@@ -190,9 +190,12 @@
     <span class="ruby-value">:birthdate</span>, 
     <span class="ruby-value">:timezone</span>, 
     <span class="ruby-value">:phone_mobile</span>, 
+    <span class="ruby-value">:passport_number</span>, 
     <span class="ruby-value">:avatar_file_name</span>,
     <span class="ruby-value">:pref_language</span>,
-    <span class="ruby-value">:pref_currency</span>
+    <span class="ruby-value">:pref_currency</span>,
+    <span class="ruby-value">:pref_size_unit</span>,
+    <span class="ruby-value">:role</span>
   ]
 
   <span class="ruby-ivar">@transaction_fields</span> = [
@@ -270,7 +273,7 @@ access_token=access_token&amp;role=admin</p>
 
           
           <div class="method-source-code" id="change_role-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 145</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 160</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">change_role</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>] <span class="ruby-operator">!=</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">role</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">update_attributes</span>({<span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>]})
@@ -339,7 +342,7 @@ href="https://backend-heypal.heroku.com/users/:id/info.json">backend-heypal.hero
 
           
           <div class="method-source-code" id="info-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 47</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">info</span>
   <span class="ruby-identifier">fields</span> = [<span class="ruby-value">:id</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:avatar_file_name</span>, <span class="ruby-value">:role</span>]
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;user_info_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">to_s</span>) { <span class="ruby-constant">User</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">fields</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]) }
@@ -399,7 +402,8 @@ access_token=access_token</p>
 <dl class="rdoc-list label-list"><dt>user
 <dd>
 <p>{:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone,
-:phone_mobile, :avatar_file_name, :pref_language, :pref_currency}</p>
+:phone_mobile, :passport_number, :avatar_file_name, :pref_language,
+:pref_currency}</p>
 
 <h3 id="method-i-show-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>105
@@ -411,10 +415,16 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 73</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">permitted_to?</span> <span class="ruby-value">:read</span>, <span class="ruby-ivar">@user</span>)
-    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@user</span>,<span class="ruby-ivar">@fields</span>)})
+    <span class="ruby-comment"># TODO: add to additional_fields method, caching</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-identifier">address</span> = <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">first</span>,[<span class="ruby-value">:street</span>, <span class="ruby-value">:city</span>, <span class="ruby-value">:country</span>, <span class="ruby-value">:zip</span>])
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">address</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">return_message</span>(<span class="ruby-value">200</span>, <span class="ruby-value">:ok</span>, {<span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">filter_fields</span>(<span class="ruby-ivar">@user</span>,<span class="ruby-ivar">@fields</span>).<span class="ruby-identifier">merge!</span>({<span class="ruby-value">:address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">address</span>})})
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">attribute_authorization_error</span>
   <span class="ruby-keyword">end</span>
@@ -473,7 +483,7 @@ access_token=access_token</p>
 
           
           <div class="method-source-code" id="transactions-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 171</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 186</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">transactions</span>
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>]
   <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;active&quot;</span>
@@ -568,6 +578,9 @@ href="http://tzinfo.rubyforge.org/doc/classes/TZInfo/Timezone.html#M000048">tzin
 </dd><dt>phone_mobile
 <dd>
 <p>String, Mobile Phone number, including country code</p>
+</dd><dt>passport_number
+<dd>
+<p>String, Passport number</p>
 </dd><dt>avatar_url
 <dd>
 <p>String, avatar picture from url, i.e. <a
@@ -578,13 +591,17 @@ href="http://url/image_file">url/image_file</a></p>
 </dd><dt>pref_currency
 <dd>
 <p>String, Preferred Currency. ie “USD”</p>
+</dd><dt>pref_size_unit
+<dd>
+<p>String, Preferred Size unit. ie “sqm”</p>
 </dd></dl>
 
 <h3 id="method-i-update-label-Response">Response</h3>
 <dl class="rdoc-list label-list"><dt>user
 <dd>
 <p>{:id, :first_name, :last_name, :gender, :birthdate, :timezone,
-:phone_mobile, :avatar_file_name, :pref_language, :pref_currency}</p>
+:phone_mobile, passport_number, :avatar_file_name, :pref_language,
+:pref_currency, :pref_size_unit}</p>
 
 <h3 id="method-i-update-label-Error+codes">Error codes</h3>
 <dl class="rdoc-list label-list"><dt>105
@@ -605,7 +622,7 @@ href="http://url/image_file">url/image_file</a></p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 110</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 121</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">fields</span> = [
     <span class="ruby-value">:id</span>,
@@ -615,10 +632,14 @@ href="http://url/image_file">url/image_file</a></p>
     <span class="ruby-value">:birthdate</span>, 
     <span class="ruby-value">:timezone</span>, 
     <span class="ruby-value">:phone_mobile</span>, 
+    <span class="ruby-value">:passport_number</span>, 
     <span class="ruby-value">:avatar</span>,
     <span class="ruby-value">:avatar_url</span>,
     <span class="ruby-value">:pref_language</span>,
-    <span class="ruby-value">:pref_currency</span>
+    <span class="ruby-value">:pref_currency</span>,
+    <span class="ruby-value">:pref_size_unit</span>,
+    <span class="ruby-value">:password</span>,
+    <span class="ruby-value">:password_confirmation</span>
   ]
   <span class="ruby-identifier">new_params</span> = <span class="ruby-identifier">filter_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">fields</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">new_params</span>)
@@ -659,7 +680,7 @@ href="http://url/image_file">url/image_file</a></p>
 
           
           <div class="method-source-code" id="get_user-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 201</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 216</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_user</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
     <span class="ruby-identifier">id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
