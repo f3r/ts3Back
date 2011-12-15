@@ -1,6 +1,7 @@
 # LOAD LOCAL CONFIGURATION
 if Rails.env.test? or Rails.env.development?
   APP_CONFIG = YAML.load_file("#{Rails.root}/config/local.yml")[Rails.env]
+  MAIL_INTERCEPTOR_ADDRESS = APP_CONFIG['MAIL_INTERCEPTOR_ADDRESS']
 end
 
 # SET VARIABLES, DEVELOPMENT, TEST FALLBACKS
