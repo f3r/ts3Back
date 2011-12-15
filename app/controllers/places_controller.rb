@@ -583,7 +583,9 @@ class PlacesController < ApplicationController
   
   def confirm_rental
    @place = Place.with_permissions_to(:read).find(params[:place_id])
-   RentalMailer.rental_confirmed(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
+   RentalMailer.rental_confirmed_renter(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
+   RentalMailer.rental_confirmed_owner(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
+   RentalMailer.rental_confirmed_admin(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
    return_message(200, :ok)
   end
 

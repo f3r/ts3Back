@@ -1,0 +1,5 @@
+<%= @renter.full_name %> <%= "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent <%= @place.title %> <%= "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> starting on <%= @check_in %>.
+
+Please click here to <accept or deny> their rental and send messages to <%= @renter.full_name %> <%= "#{FRONTEND_PATH}/messages/#{@renter.id}" %>.
+
+P.S. Questions? Please click <here> to contact us for assistance.
