@@ -7,5 +7,4 @@ doc/app
 .DS_Store
 config/database.yml
 app/assets/
-config/heroku.yml
 config/local.yml
