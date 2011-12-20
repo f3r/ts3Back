@@ -136,7 +136,7 @@ class User < ActiveRecord::Base
         client   = OAuth2::Client.new(FB_APP_ID, FB_APP_SECRET, :site => "https://graph.facebook.com")
         facebook = OAuth2::AccessToken.new(client, authentication.token)
         info     = JSON.parse(facebook.get("/#{authentication.uid}"))
-        birthday = Date.strptime(info['birthday'], "%m/%d/%Y")
+        birthday = Date.strptime(info['birthday'], "%m/%d/%Y") if info['birthday'] rescue nil
         info = {
           :first_name => info['first_name'],
           :last_name => info['last_name'],
