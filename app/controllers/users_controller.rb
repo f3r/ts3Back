@@ -133,6 +133,7 @@ class UsersController < ApplicationController
       :pref_language,
       :pref_currency,
       :pref_size_unit,
+      :email,
       :password,
       :password_confirmation
     ]

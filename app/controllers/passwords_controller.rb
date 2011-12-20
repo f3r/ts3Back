@@ -19,7 +19,7 @@ class PasswordsController < Devise::PasswordsController
   def create
     without_access_control do
       self.resource = resource_class.send_reset_password_instructions({:email => params[:email]})
-      if successful_and_sane?(resource)
+      if successfully_sent?(resource)
         return_message(200, :ok)
       else
         return_message(200, :fail, {:err => { :email => "106" }})

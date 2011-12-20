@@ -16,7 +16,7 @@ class ConfirmationsController < Devise::ConfirmationsController
   def create
     without_access_control do
       self.resource = resource_class.send_confirmation_instructions({:email => params[:email]})
-      if successful_and_sane?(resource)
+      if successfully_sent?(resource)
         return_message(200, :ok)
       else
         return_message(200, :fail, {:err => { :email => "106" }})
@@ -45,7 +45,7 @@ class ConfirmationsController < Devise::ConfirmationsController
       self.resource = resource_class.confirm_by_token(params[:confirmation_token])
       if resource.errors.empty?
         # New user! Now we send them a nice welcome email
-        UserMailer.welcome_note(resource).deliver
+        UserMailer.welcome_note(resource).deliver if resource.last_sign_in_at.nil? # do not send if user already sign in (email reconfirmation)
         return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
       else
         return_message(401, :fail, {:err => {:confirmation_token => "103"}})

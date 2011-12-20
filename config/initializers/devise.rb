@@ -84,13 +84,14 @@ Devise.setup do |config|
   # You can use this to let your user access some features of your application
   # without confirming the account, but blocking it after a certain period
   # (ie 2 days).
-  # config.confirm_within = 2.days
+  # config.allow_unconfirmed_access_for = 2.days
 
   # Defines which key will be used when confirming an account
   config.confirmation_keys = [ :email ]
 
   #########################################################################################
   # OFF ==> Configuration for :rememberable
+  config.use_salt_as_remember_token = true
   #########################################################################################
 
   #########################################################################################
@@ -142,7 +143,7 @@ Devise.setup do |config|
 
   # If true, authentication through token does not store user in session and needs
   # to be supplied on each request. Useful if you are using the token as API token.
-  config.stateless_token = true
+  config.skip_session_storage << :token_auth
 
   #########################################################################################
   # NO ==> Scopes configuration
@@ -187,4 +188,6 @@ Devise.setup do |config|
   config.warden do |manager|
     manager.failure_app = CustomFailure
   end
+  
+  config.reconfirmable = true
 end
