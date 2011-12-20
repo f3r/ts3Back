@@ -279,7 +279,7 @@ class Place < ActiveRecord::Base
   # Adds validation errors if published column is affected and the place doesn't meet the requirements
   def validate_publishing
     if published_changed? && published == true
-      errors.add(:publish, "123") if self.photos.blank? or self.photos.count < 1 # 1 picture
+      errors.add(:publish, "123") if self.photos.blank? or self.photos.count < 3 # 3 pictures
       errors.add(:publish, "124") if self.description.blank? or self.description.split.size < 5 # 5 words
       errors.add(:publish, "126") if self.price_per_night.blank?
       errors.add(:publish, "127") if self.currency.blank?
