@@ -18,7 +18,7 @@ class PlacesTest < ActionController::IntegrationTest
       @place_type = Factory(:place_type)
       @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
       @availability = Factory(:availability, :place => @place )
-      @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
+      @photos = [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
       @place_new_info = { 
         :title => "Test title", 
         :amenities_kitchen => true, 

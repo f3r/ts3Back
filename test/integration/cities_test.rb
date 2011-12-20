@@ -13,7 +13,7 @@ class CitiesTest < ActionController::IntegrationTest
           :user_id => @agent_user.id,
           :description => Faker::Lorem.sentence(20),
           :title => Faker::Lorem.sentence(2),
-          :photos => [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json,
+          :photos => [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json,
           :place_type_id => (1..7).to_a.sample,
           :num_bedrooms => (1..6).to_a.sample,
           :max_guests => (1..10).to_a.sample,

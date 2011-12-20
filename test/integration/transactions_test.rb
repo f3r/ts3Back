@@ -12,7 +12,7 @@ class TransactionsTest < ActionController::IntegrationTest
                                   :city => Factory(:city),
                                   :amenities_kitchen => true, 
                                   :amenities_tennis => true, 
-                                  :photos => [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json,
+                                  :photos => [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json,
                                   :currency => "JPY",
                                   :price_per_night => "8000",
                                   :price_per_week => "51000",

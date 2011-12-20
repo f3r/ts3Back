@@ -20,7 +20,7 @@ class AvailabilitiesTest < ActionController::IntegrationTest
       )
       @agent_place = Factory(:place, :user => @agent_user, :place_type => @place_type, :city => @city)
 
-      @photos = [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
+      @photos = [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
       @published_place = Factory( :place, 
                                   :user => @agent_user, 
                                   :place_type => @place_type, 
