@@ -9,10 +9,11 @@ class CitiesTest < ActionController::IntegrationTest
       Authorization.current_user = @agent_user
 
       10.times do
-        Place.create(
+        place = Place.create(
           :user_id => @agent_user.id,
           :description => Faker::Lorem.sentence(20),
           :title => Faker::Lorem.sentence(2),
+          :photos => [{:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json,
           :place_type_id => (1..7).to_a.sample,
           :num_bedrooms => (1..6).to_a.sample,
           :max_guests => (1..10).to_a.sample,
@@ -22,9 +23,9 @@ class CitiesTest < ActionController::IntegrationTest
           :price_per_month => (300..3000).to_a.sample,
           :currency => "USD",
           :size_unit => ["meters","feet"].to_a.sample,
-          :size => (50..200).to_a.sample,
-          :published => true
+          :size => (50..200).to_a.sample
         )
+        place.publish!
       end
 
     end
