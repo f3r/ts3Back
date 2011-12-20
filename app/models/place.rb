@@ -88,7 +88,7 @@ class Place < ActiveRecord::Base
       price_per_night = self.price_per_month / 31 if self.price_per_month && total_days > 28
       price_final_cleanup = self.price_final_cleanup
       price_security_deposit = self.price_security_deposit
-      currency = self.currency      
+      currency = self.currency
 
       availabilities_all = self.availabilities.all.map{|x| x}
       unavailabilities = availabilities_all.map{|x| x if x.availability_type == 1 }.compact
@@ -124,25 +124,24 @@ class Place < ActiveRecord::Base
     
       if unavailable_dates.blank?
 
-        # exchange currency if new_currency param is present
-        if new_currency && valid_currency?(new_currency)
-          price_per_night = exchange_currency(price_per_night, self.currency, new_currency)
-          price_final_cleanup = exchange_currency(price_final_cleanup, self.currency, new_currency)
-          price_security_deposit = exchange_currency(price_security_deposit, self.currency, new_currency)
-          currency = new_currency
-        end
-
         dates = []
         for date in requested_dates
-          dates << { :date => date, :price_per_night => price_per_night }
+          # exchange currency if new_currency param is present
+          if new_currency && valid_currency?(new_currency)
+            requested_currency_price_per_night = exchange_currency(price_per_night, self.currency, new_currency)
+          end
+          foo = { :date => date, :price_per_night => price_per_night }
+          foo.merge!({:requested_currency_price_per_night => requested_currency_price_per_night}) if requested_currency_price_per_night
+          dates << foo
         end
         
         if availabilities
           # replaces regular price with the availability price on the affected dates
           for availability in availabilities
 
+            # exchange currency if new_currency param is present
             if new_currency && valid_currency?(new_currency)
-              availability.price_per_night = exchange_currency(availability.price_per_night, self.currency, new_currency)
+              requested_currency_price_per_night = exchange_currency(availability.price_per_night, self.currency, new_currency)
             end
 
             availability_dates = (availability.date_start..availability.date_end).to_a
@@ -150,7 +149,9 @@ class Place < ActiveRecord::Base
             if !intersections.blank?
               for date in intersections
                 dates.delete_if {|hash| hash[:date] == date}
-                dates << {:date => date, :price_per_night => availability.price_per_night, :comment => availability.comment}
+                foo = {:date => date, :price_per_night => availability.price_per_night, :comment => availability.comment}
+                foo.merge!({:requested_currency_price_per_night => requested_currency_price_per_night}) if requested_currency_price_per_night
+                dates << foo
               end
             end
           end
@@ -163,15 +164,28 @@ class Place < ActiveRecord::Base
         dates.map{|hash| sub_total += hash[:price_per_night]}
         avg_price_per_night = sub_total.to_f/total_days
 
-        return {
+        if new_currency && valid_currency?(new_currency)
+          requested_currency = {
+            :requested_currency_avg_price_per_night => exchange_currency(avg_price_per_night, self.currency, new_currency),
+            :requested_currency_price_final_cleanup => exchange_currency(price_final_cleanup, self.currency, new_currency),
+            :requested_currency_price_security_deposit => exchange_currency(price_security_deposit, self.currency, new_currency),
+            :requested_currency => new_currency,
+            :requested_currency_sub_total => exchange_currency(sub_total, self.currency, new_currency),
+          }
+        end
+
+        results = {
           :total_days => total_days, 
-          :avg_price_per_night => avg_price_per_night.ceil, # FIXME: integer or decimals?
+          :avg_price_per_night => avg_price_per_night.ceil,
           :price_final_cleanup => price_final_cleanup,
           :price_security_deposit => price_security_deposit,
           :currency => currency,
           :sub_total => sub_total,
           :dates => dates
         }
+        results.merge!(requested_currency) if requested_currency
+
+        return results
 
       elsif unavailable_dates
         return { :err => {:place => [136]}, :dates => unavailable_dates }

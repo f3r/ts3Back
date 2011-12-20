@@ -69,10 +69,10 @@ class TransactionsTest < ActionController::IntegrationTest
         assert_kind_of Hash, json
         assert_equal "ok", json['stat']
         assert_equal 10, json['total_days']
-        assert_equal "USD", json['currency']
+        assert_equal "USD", json['requested_currency']
         # something between 100 and 140 (exchange rate changes!)
-        assert_operator json['avg_price_per_night'], :>=, 100
-        assert_operator json['avg_price_per_night'], :<=, 140
+        assert_operator json['requested_currency_avg_price_per_night'], :>=, 100
+        assert_operator json['requested_currency_avg_price_per_night'], :<=, 140
         assert_not_nil json['dates']
       end
 
