@@ -60,7 +60,8 @@ class User < ActiveRecord::Base
     :invalid_date_message => "113", 
     :on => :update, 
     :unless => lambda { (self.password && self.password_confirmation) or role_changed? },
-    :before => lambda { Date.current }
+    :before => lambda { Date.current },
+    :allow_nil => true
 
   has_many :authentications, :dependent => :destroy
   has_many :addresses,       :dependent => :destroy
