@@ -16,6 +16,7 @@ class PlacesTest < ActionController::IntegrationTest
       @user = Factory(:user, :role => "user")
       @user.confirm!
       @place_type = Factory(:place_type)
+      @place_type2 = Factory(:place_type)
       @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
       @availability = Factory(:availability, :place => @place )
       @photos = [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
@@ -315,6 +316,16 @@ class PlacesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "fail", json['stat']
     assert (json['err']['size_unit'].include? 129)
+  end
+
+  should "update place type (json)" do
+    put "/places/#{@place.id}.json", {:access_token => @admin_user.authentication_token, :place_type_id => @place_type2.id}
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal @place_type2.id, json['place']['place_type']['id']
   end
   
   should "update place with valid US zip code (json)" do
