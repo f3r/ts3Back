@@ -357,6 +357,7 @@ class PlacesController < ApplicationController
   def update
     @place = Place.with_permissions_to(:read).find(params[:id])
     place = filter_params(params, @fields)
+    place = place.merge({:place_type_id => params['place_type_id']}) if !params['place_type_id'].nil?
     if @place.update_attributes(place)
       place_return = filter_fields(@place,@fields, { :additional_fields => {
         :user => @user_fields,
