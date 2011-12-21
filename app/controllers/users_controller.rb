@@ -118,6 +118,7 @@ class UsersController < ApplicationController
   # [101] can't be blank
   # [103] is invalid
   # [113] invalid date
+  # [139] date must be on the past
   def update
     fields = [
       :id,

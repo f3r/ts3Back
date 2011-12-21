@@ -56,10 +56,12 @@ class User < ActiveRecord::Base
   validates_inclusion_of  :role, :in => ["superadmin", "admin", "agent", "user"], :message => "103"
   validates_inclusion_of  :pref_size_unit, :in => ["sqm", "sqf"], :allow_blank => true, :message => "103"
 
+  # FIXME: should display error on invalid date. Seems to be a Rails issue.
   validates_date :birthdate, 
     :invalid_date_message => "113", 
+    :before_message => "139",
     :on => :update, 
-    :unless => lambda { (self.password && self.password_confirmation) or role_changed? },
+    # :unless => lambda { (self.password && self.password_confirmation) or role_changed? },
     :before => lambda { Date.current },
     :allow_nil => true
 

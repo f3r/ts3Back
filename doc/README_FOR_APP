@@ -40,6 +40,7 @@
 [136] occupied
 [137] invalid place request, check availability
 [138] already cancelled
+[139] date must be on the past
 
 #== Notifications
 # Type - Event - Parameters - Sample Message
