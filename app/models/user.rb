@@ -52,7 +52,6 @@ class User < ActiveRecord::Base
 
   validates_presence_of   :email, :message => "101"
   validates_uniqueness_of :email, :message => "100"
-  validates_format_of     :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :message => "103"
   validates_inclusion_of  :role, :in => ["superadmin", "admin", "agent", "user"], :message => "103"
   validates_inclusion_of  :pref_size_unit, :in => ["sqm", "sqf"], :allow_blank => true, :message => "103"
 
