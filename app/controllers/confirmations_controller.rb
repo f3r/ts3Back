@@ -38,18 +38,42 @@ class ConfirmationsController < Devise::ConfirmationsController
   #   Confirmation token sent by email
   # === Response
   # [authentication_token] The user authentication_token
+  # [email_change] True if email was changed
   # === Error codes
   # [103] invalid confirmation_token
   def show
     without_access_control do
       self.resource = resource_class.confirm_by_token(params[:confirmation_token])
       if resource.errors.empty?
-        # New user! Now we send them a nice welcome email
-        UserMailer.welcome_note(resource).deliver if resource.last_sign_in_at.nil? # do not send if user already sign in (email reconfirmation)
-        return_message(200, :ok, {:authentication_token => resource.authentication_token, :role => resource.role})
+        if resource.last_sign_in_at.nil?
+          # New user! Now we send them a nice welcome email
+          UserMailer.welcome_note(resource).deliver
+          response = {:authentication_token => resource.authentication_token, :role => resource.role}
+        else
+          # do not send if user signed in before (email reconfirmation)
+          response = {:authentication_token => resource.authentication_token, :email_change => true, :role => resource.role}
+        end
+        return_message(200, :ok, response)
       else
         return_message(401, :fail, {:err => {:confirmation_token => "103"}})
       end
+    end
+  end
+
+  # ==Description
+  # Cancels email change, clears token and temporal new email
+  # ==Resource URL
+  # /users/confirmation.format
+  # ==Example
+  # DELETE https://backend-heypal.heroku.com/users/confirmation.json authentication_token=authentication_token
+  # === Parameters
+  # [authentication_token]
+  #   Authentication token
+  def cancel
+    if current_user.cancel_email_change!
+      return_message(200, :ok)
+    else
+      return_message(200, :fail)
     end
   end
 

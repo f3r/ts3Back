@@ -67,6 +67,7 @@ class User < ActiveRecord::Base
 
   has_many :authentications, :dependent => :destroy
   has_many :addresses,       :dependent => :destroy
+  # has_many :bank_accounts,   :dependent => :destroy
   has_many :places,          :dependent => :destroy
   # TODO: Do we really want to destroy comments or nullify them?
   has_many :comments,        :dependent => :destroy
@@ -166,6 +167,20 @@ class User < ActiveRecord::Base
   # gets users twitter authentication object, if exists
   def twitter
     Rails.cache.fetch("user_#{self.id.to_s}_provider_twitter") { self.authentications.find_by_provider("twitter") }
+  end
+  
+  def cancel_email_change!
+    if !self.confirmed_at.blank? && !self.unconfirmed_email.blank? && !self.confirmation_token.blank?
+      self.unconfirmed_email = nil
+      self.confirmation_token = nil
+      if self.save
+        true
+      else
+        false
+      end
+    else
+      false
+    end
   end
   
   private  

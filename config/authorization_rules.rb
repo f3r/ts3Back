@@ -6,7 +6,7 @@ authorization do
 
   role :admin do
     includes [:default]
-    has_permission_on [:users, :places, :place_types, :addresses, :availabilities, :comments], :to => [:manage]
+    has_permission_on [:users, :places, :place_types, :addresses, :bank_accounts, :availabilities, :comments], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish, :user_places, :transactions]
     has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
@@ -24,6 +24,9 @@ authorization do
     has_permission_on :transactions, :to => [:cancel, :decline, :confirm_rental, :decline] do
       if_permitted_to :manage, :place
     end
+    has_permission_on :bank_accounts, :to => [:manage] do
+      if_attribute :user => is { user }
+    end
   end
 
   role :user do
@@ -36,7 +39,7 @@ authorization do
       if_attribute :id => is { user.id }
     end
     has_permission_on :registrations, :to => :destroy
-    has_permission_on :addresses, :to => [:read, :manage] do
+    has_permission_on :addresses, :to => [:manage] do
       if_attribute :user => is { user }
     end
     has_permission_on :comments, :to => :create do
@@ -53,6 +56,9 @@ authorization do
     end
     has_permission_on :transactions, :to => [:cancel, :pay] do
       if_attribute :user => is { user }
+    end
+    has_permission_on :confirmations, :to => [:cancel] do
+      if_attribute :confirmed_at => is_not { blank? }
     end
   end
   

@@ -9,6 +9,7 @@ class UsersController < ApplicationController
     @fields = [
       :id,
       :email,
+      :unconfirmed_email,
       :first_name, 
       :last_name, 
       :gender, 
