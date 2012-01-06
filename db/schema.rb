@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111220220821) do
+ActiveRecord::Schema.define(:version => 20111224213430) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -50,6 +50,24 @@ ActiveRecord::Schema.define(:version => 20111220220821) do
 
   add_index "availabilities", ["place_id"], :name => "index_availabilities_on_place_id"
   add_index "availabilities", ["transaction_id"], :name => "index_availabilities_on_transaction_id"
+
+  create_table "bank_accounts", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "holder_name"
+    t.string   "holder_street"
+    t.string   "holder_zip"
+    t.string   "holder_state_name"
+    t.string   "holder_city_name"
+    t.string   "holder_country_name"
+    t.string   "holder_country_code"
+    t.string   "account_number"
+    t.string   "bank_code"
+    t.string   "branch_code"
+    t.string   "iban"
+    t.string   "swift"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "cities", :force => true do |t|
     t.string "name"

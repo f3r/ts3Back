@@ -17,6 +17,16 @@ FactoryGirl.define do
     user    { @user }
   end
 
+  factory :bank_account do
+    holder_name           { Faker::Name.name }
+    holder_street         { Faker::Address.street_address }
+    holder_zip            { Faker::Address.zip }
+    holder_city_name      { Faker::Address.city }
+    holder_country_name   { Faker::Address.country }
+    holder_country_code   { Faker::Address.country_code }
+    user                  { @user }
+  end
+
   factory :place_type do
     name { Faker::Lorem.words(2).to_sentence }
   end

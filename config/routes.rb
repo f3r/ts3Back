@@ -11,6 +11,7 @@ HeyPalBackEnd::Application.routes.draw do
     delete "users",                   :to => "registrations#destroy"
     post   "users/confirmation",      :to => "confirmations#create"
     get    "users/confirmation",      :to => "confirmations#show"
+    delete "users/confirmation",      :to => "confirmations#cancel"
     post   "users/password",          :to => "passwords#create"
     put    "users/password",          :to => "passwords#update"
     ##############################################################################
@@ -29,6 +30,13 @@ HeyPalBackEnd::Application.routes.draw do
     post   "users/:user_id/addresses",         :to => "addresses#create"
     put    "users/:user_id/addresses/:id",     :to => "addresses#update"
     delete "users/:user_id/addresses/:id",     :to => "addresses#destroy"
+    ##############################################################################
+    # BANK ACCOUNTS
+    ##############################################################################
+    get    "users/:user_id/bank_accounts",          :to => "bank_accounts#index"
+    post   "users/:user_id/bank_accounts",          :to => "bank_accounts#create"
+    put    "users/:user_id/bank_accounts/:id",      :to => "bank_accounts#update"
+    delete "users/:user_id/bank_accounts/:id",      :to => "bank_accounts#destroy"
     ##############################################################################
     # PLACE AVAILABILITIES
     ##############################################################################
