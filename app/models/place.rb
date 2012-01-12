@@ -12,7 +12,7 @@ class Place < ActiveRecord::Base
   validates_presence_of   [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id, :user_id], :message => "101"
   validates_inclusion_of  :size_unit, :in => ["meters", "feet"], :allow_nil => true, :if => :size?, :message => "129"
   validates_inclusion_of  :stay_unit, 
-                          :in => ["days", "weeks", "months"], 
+                          :in => STAY_UNITS, 
                           :message => "129", 
                           :if => Proc.new { |user| (user.minimum_stay && user.minimum_stay > 0) or (user.maximum_stay && user.maximum_stay > 0) }
 
@@ -329,7 +329,7 @@ class Place < ActiveRecord::Base
   end
   
   def validate_stays
-    if ((!minimum_stay.blank? && minimum_stay > 0) or (!maximum_stay.blank? && maximum_stay > 0)) && (!stay_unit.blank? && ["days", "weeks", "months"].include?(stay_unit))
+    if ((!minimum_stay.blank? && minimum_stay > 0) or (!maximum_stay.blank? && maximum_stay > 0)) && (!stay_unit.blank? && STAY_UNITS.include?(stay_unit))
 
       case stay_unit
       when "days"

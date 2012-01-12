@@ -509,8 +509,7 @@ class PlacesController < ApplicationController
     @place = Place.with_permissions_to(:read).find(params[:id])
     request = @place.place_availability(params[:check_in], params[:check_out], '', current_user)
     if request[:err].blank?  
-      # TODO: store this elsewhere, create site settings
-      service_percentage = 16
+      service_percentage = SERVICE_PERCENTAGE
       service_fee = request[:sub_total] * (service_percentage * 0.01)
       transaction_data = {
         :user => current_user,

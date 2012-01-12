@@ -88,8 +88,7 @@ class Transaction < ActiveRecord::Base
     # TODO: notify agent
 
     # Unconfirmed transactions expire in 24 hours
-    # TODO: store this elsewhere, create site settings
-    unconfirmed_transaction_timeout = Time.now + 1.day
+    unconfirmed_transaction_timeout = Time.now + UNCONFIRMED_TRANSACTION_TIMEOUT.day
     Delayed::Job.enqueue PurgeUnconfirmedTransactionJob.new(self.id), 0, unconfirmed_transaction_timeout
   end
   
@@ -146,9 +145,8 @@ class Transaction < ActiveRecord::Base
   end
   
   def set_temporary_transaction_timeout
-    # Unpaid transactions expire in 5 minutes
-    # TODO: store this elsewhere, create site settings
-    unpaid_transaction_timeout = Time.now + 5.minutes
+    # Unpaid transactions expiration
+    unpaid_transaction_timeout = Time.now + TRANSACTION_TIMEOUT.minutes
     Delayed::Job.enqueue PurgeUnpaidTransactionJob.new(self.id), 0, unpaid_transaction_timeout
   end
 
