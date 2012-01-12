@@ -17,11 +17,11 @@ class PlacesController < ApplicationController
       :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
       :reviews_checkin_avg,:reviews_communication_avg,:reviews_location_avg,
       :reviews_value_avg, :currency, :price_final_cleanup, 
-      :price_security_deposit, :price_per_night, :price_per_week, :price_per_month,
-      :published,
+      :price_security_deposit, :published,
       :country_name, :country_code, :state_name, :city_name,
-      :price_final_cleanup_usd, :price_security_deposit_usd, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd
+      :price_final_cleanup_usd, :price_security_deposit_usd
     ]
+    @fields = get_price_fields(@fields, STAY_UNITS)
     
     @amenities = [
       :amenities_aircon,:amenities_breakfast,:amenities_buzzer_intercom,:amenities_cable_tv,
@@ -32,13 +32,13 @@ class PlacesController < ApplicationController
       :amenities_pets_allowed,:amenities_pool,:amenities_smoking_allowed,:amenities_suitable_events,
       :amenities_tennis,:amenities_tv,:amenities_washer  
     ]
-    
-    @search_fields = [
-      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :price_per_night_usd, :price_per_week_usd, :price_per_month_usd, :photos,
-      :price_per_night, :price_per_week, :price_per_month, :currency
-    ]
 
     @fields = @fields + @amenities
+    
+    @search_fields = [
+      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :photos, :currency
+    ]    
+    @search_fields = get_price_fields(@search_fields, STAY_UNITS)
 
     # Associations
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
@@ -597,6 +597,19 @@ class PlacesController < ApplicationController
       id = current_user.id
     end
     @user = User.find(id) if id
+  end
+  
+  def get_price_fields(fields, units)
+    if units.include?("days")
+      fields = fields + [:price_per_night_usd, :price_per_night]
+    end
+    if STAY_UNITS.include?("weeks")
+      fields = fields + [:price_per_week_usd, :price_per_week]
+    end
+    if units.include?("months")
+      fields = fields + [:price_per_month_usd, :price_per_month]
+    end
+    return fields
   end
 
 end
