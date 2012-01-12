@@ -30,7 +30,7 @@
 [126] no price
 [127] no currency
 [128] no security deposit
-[129] invalid size unit
+[129] invalid unit
 [130] not activated
 [131] invalid json
 [132] invalid city (not on the cities table)
@@ -41,6 +41,7 @@
 [137] invalid place request, check availability
 [138] already cancelled
 [139] date must be on the past
+[140] must be greater than
 
 #== Notifications
 # Type - Event - Parameters - Sample Message

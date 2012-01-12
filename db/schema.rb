@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111224213430) do
+ActiveRecord::Schema.define(:version => 20120111190656) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -173,8 +173,8 @@ ActiveRecord::Schema.define(:version => 20111224213430) do
     t.integer  "price_per_month_usd"
     t.string   "check_in_after"
     t.string   "check_out_before"
-    t.integer  "minimum_stay_days",                       :default => 0
-    t.integer  "maximum_stay_days",                       :default => 0
+    t.integer  "minimum_stay",                            :default => 0
+    t.integer  "maximum_stay",                            :default => 0
     t.text     "house_rules"
     t.integer  "cancellation_policy",                     :default => 1
     t.float    "reviews_overall",                         :default => 0.0
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(:version => 20111224213430) do
     t.string   "state_name"
     t.string   "country_code",               :limit => 2
     t.float    "price_sqf_usd"
+    t.string   "stay_unit"
   end
 
   add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"

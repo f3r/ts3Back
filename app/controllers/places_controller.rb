@@ -12,8 +12,8 @@ class PlacesController < ApplicationController
       :id, :title, :description, :num_bedrooms, :num_beds, 
       :num_bathrooms, :size, :size_sqm, :size_sqf, :size_unit, :max_guests, :photos, :city_id, :address_1, 
       :address_2, :zip, :lat, :lon, :directions, 
-      :check_in_after, :check_out_before, :minimum_stay_days, 
-      :maximum_stay_days, :house_rules, :cancellation_policy,
+      :check_in_after, :check_out_before, :minimum_stay, :stay_unit, 
+      :maximum_stay, :house_rules, :cancellation_policy,
       :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
       :reviews_checkin_avg,:reviews_communication_avg,:reviews_location_avg,
       :reviews_value_avg, :currency, :price_final_cleanup, 
@@ -341,8 +341,9 @@ class PlacesController < ApplicationController
   # [price_security_deposit] Currency Units, not cents 1=$1, Integer
   # [check_in_after]         String, ie. 11:00 / 11:30 / 13:30
   # [check_out_before]       String, ie. 11:00 / 11:30 / 13:30
-  # [minimum_stay_days]      Integer, 0 means no minimum
-  # [maximum_stay_days]      Integer, 0 means no maximum
+  # [minimum_stay]      Integer, 0 means no minimum
+  # [maximum_stay]      Integer, 0 means no maximum
+  # [stay_unit]         String, days, weeks or months
   # [house_rules]            Text, rules for the user to follow when staying at a place
   # [cancellation_policy]    Integer. Should align with frontend, 1=flexible, 2=moderate, 3=strict
   # 

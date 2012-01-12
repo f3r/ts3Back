@@ -9,8 +9,12 @@ class Place < ActiveRecord::Base
   
   serialize :photos
 
-  validates_presence_of [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id, :user_id], :message => "101"
-  validates_inclusion_of :size_unit, :in => ["meters", "feet"], :allow_nil => true, :if => :size?, :message => "129"
+  validates_presence_of   [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id, :user_id], :message => "101"
+  validates_inclusion_of  :size_unit, :in => ["meters", "feet"], :allow_nil => true, :if => :size?, :message => "129"
+  validates_inclusion_of  :stay_unit, 
+                          :in => ["days", "weeks", "months"], 
+                          :message => "129", 
+                          :if => Proc.new { |user| (user.minimum_stay && user.minimum_stay > 0) or (user.maximum_stay && user.maximum_stay > 0) }
 
   validates_numericality_of [
     :num_bedrooms,
@@ -26,10 +30,12 @@ class Place < ActiveRecord::Base
     :price_per_night_usd,
     :price_per_week_usd,
     :price_per_month_usd,
-    :minimum_stay_days,
-    :maximum_stay_days
+    :minimum_stay,
+    :maximum_stay
   ], :allow_nil => true, :message => "118"
-  
+
+  validates_numericality_of :maximum_stay, :greater_or_equal_than => :minimum_stay, :allow_nil => true, :message => "140"
+
   validates_numericality_of :city_id, :message => "118"
 
   attr_accessor :amenities, :location, :terms_of_offer
@@ -52,7 +58,8 @@ class Place < ActiveRecord::Base
                 :update_location_fields, 
                 :convert_json_photos_to_array,
                 :check_zip,
-                :validate_currency
+                :validate_currency,
+                :validate_stays
   after_commit  :delete_cache
 
   self.per_page = 20
@@ -319,6 +326,37 @@ class Place < ActiveRecord::Base
       end
       errors.add(:zip, "103") if regex && zip && !zip.match(regex)
     end
+  end
+  
+  def validate_stays
+    if ((!minimum_stay.blank? && minimum_stay > 0) or (!maximum_stay.blank? && maximum_stay > 0)) && (!stay_unit.blank? && ["days", "weeks", "months"].include?(stay_unit))
+
+      case stay_unit
+      when "days"
+        min_stay = minimum_stay if minimum_stay
+        max_stay = maximum_stay if maximum_stay
+      when "weeks"
+        min_stay = minimum_stay * 7 if minimum_stay
+        max_stay = maximum_stay * 7 if maximum_stay
+      when "months"
+        min_stay = minimum_stay * 30 if minimum_stay
+        max_stay = maximum_stay * 30 if maximum_stay
+      end
+
+      if min_stay < 7
+        errors.add(:price_per_night, "101") if price_per_night.blank?
+      end
+
+      if min_stay >= 7 && min_stay < 30 && (max_stay && (max_stay > 30 or max_stay == 0))
+        errors.add(:price_per_week, "101") if price_per_week.blank?
+      end
+
+      if min_stay >= 30
+        errors.add(:price_per_month, "101") if price_per_month.blank?
+      end
+
+    end
+
   end
 
 end

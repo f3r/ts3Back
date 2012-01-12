@@ -397,5 +397,64 @@ class PlacesTest < ActionController::IntegrationTest
     assert_not_nil json['places']
     assert_operator json['results'], :>, 0
   end
-  
+
+  should "update place with 1 month minimum_stay and price (json)" do
+    put "/places/#{@place.id}.json", {
+      :access_token => @admin_user.authentication_token, 
+      :minimum_stay => "1", 
+      :stay_unit => "months", 
+      :price_per_month => 100, 
+      :currency => "USD"
+    }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    assert_equal 1, json['place']['minimum_stay']
+    assert_equal "months", json['place']['stay_unit']
+    assert_equal 100, json['place']['price_per_month']
+  end
+
+  should "not update place with 1 month minimum_stay and no monthly price (json)" do
+    put "/places/#{@place.id}.json", {
+      :access_token => @admin_user.authentication_token, 
+      :minimum_stay => "1", 
+      :stay_unit => "months"
+    }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+    assert (json['err']['price_per_month'].include? 101)
+  end
+
+  should "not update place with 3 days minimum_stay and no daily price (json)" do
+    put "/places/#{@place.id}.json", {
+      :access_token => @admin_user.authentication_token, 
+      :minimum_stay => "3", 
+      :stay_unit => "days"
+    }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+    assert (json['err']['price_per_night'].include? 101)
+  end
+
+  should "not update place with 3 weeks minimum_stay and no weekly price (json)" do
+    put "/places/#{@place.id}.json", {
+      :access_token => @admin_user.authentication_token, 
+      :minimum_stay => "3", 
+      :stay_unit => "weeks"
+    }
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = ActiveSupport::JSON.decode(response.body)
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
+    assert (json['err']['price_per_week'].include? 101)
+  end
 end
