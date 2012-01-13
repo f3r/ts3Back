@@ -1,5 +1,9 @@
-<p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <length> starting on <%= @check_in %>.</p>
+<p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
 
-<p>Please click here to <accept or deny> their rental and send messages to <%= link_to @renter.full_name, "#{FRONTEND_PATH}/messages/#{@renter.id}" %>.</p>
+<p>Please log in to SquareStays.com to view the request. You can also send messages to <%= link_to @renter.full_name, "#{FRONTEND_PATH}/messages/#{@renter.id}" %> to ask any follow-up questions.</p>
 
-<p>P.S. Questions? Please click <here> to contact us for assistance.</p>
+<p>P.S. Questions? Please email us at support@squarestays.com</p>
+
+<p>Thanks!</p>
+
+<p>-- The SquareStays team</p>
