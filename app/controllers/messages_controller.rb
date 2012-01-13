@@ -82,6 +82,8 @@ class MessagesController < ApplicationController
   # [106] User not found
   def create
     if Message.to(params['id'], params['message'])
+      user = User.find(params['id'])
+      UserMailer.new_message(user).deliver
       return_message(200, :ok)
     else
       return_message(200, :ok, {:err => {:messages => [106]}})
