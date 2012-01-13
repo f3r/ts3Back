@@ -9,11 +9,10 @@ class RentalMailer < ActionMailer::Base
       @place     = place
       @check_in  = check_in
       @check_out = check_out
-      # recipient = "#{renter.full_name} <#{renter.email}>"
-      recipient = "jorge@heypal.com"
+      recipient = "#{renter.full_name} <#{renter.email}>"
       subject    = "Your Request for rental has been sent"
       mail(:from    => MAILER_SENDER,
-           :to     => recipient, 
+           :to      => recipient, 
            :subject => subject) do |format|
         format.text
         format.html
@@ -31,11 +30,10 @@ class RentalMailer < ActionMailer::Base
       @check_in  = check_in
       @check_out = check_out
       @total_days = (check_out.to_date - check_in.to_date).to_i
-      # recipient = "#{owner.full_name} <#{owner.email}>"
-      recipient = "jorge@heypal.com"
+      recipient = "#{owner.full_name} <#{owner.email}>"
       subject    = "You have received a rental request"
       mail(:from    => MAILER_SENDER,
-           :to     => recipient, 
+           :to      => recipient, 
            :subject => subject) do |format|
         format.text
         format.html
@@ -52,11 +50,10 @@ class RentalMailer < ActionMailer::Base
       @place     = place
       @check_in  = check_in
       @check_out = check_out
-      # recipients = ["jeremy@squarestays.com", "fer@squarestays.com"]
-      recipients = "jorge@heypal.com"
+      recipients = ["jeremy@squarestays.com", "fer@squarestays.com"].join(',')
       subject    = "Rental request"
       mail(:from    => MAILER_SENDER,
-           :bcc     => recipients, 
+           :to      => recipients, 
            :subject => subject) do |format|
         format.text
         format.html
