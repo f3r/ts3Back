@@ -21,6 +21,8 @@ class Transaction < ActiveRecord::Base
 
   validates_date :check_in, :after => :today, :invalid_date_message => "113", :after_message => "119"
   validates_date :check_out, :after => :check_in, :invalid_date_message => "113", :after_message => "120"
+  
+  validate :check_min_max_stay
 
   include Workflow
 
@@ -162,5 +164,28 @@ class Transaction < ActiveRecord::Base
       logger.error { "Error [transaction.rb/transaction_log] #{e.message}" }
     end
   end
+  
+  def check_min_max_stay
+    check_in = self.check_in.to_date
+    check_out = self.check_out.to_date
+    total_days = (check_out - check_in).to_i
+
+    if self.place
+      min_stay = self.place.minimum_stay.send(self.place.stay_unit)
+      max_stay = self.place.maximum_stay.send(self.place.stay_unit)
+      days = total_days.days
+
+      unless days > min_stay
+        errors.add(:check_out, "141") # minimum stay not met
+      end
+
+      unless days < max_stay
+        errors.add(:check_out, "142") # over maximum stay
+      end
+
+    end
+
+  end
+  
   
 end

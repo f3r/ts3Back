@@ -2,6 +2,7 @@ require 'test_helper'
 require 'money'
 require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
+STAY_UNITS = ["days", "weeks", "months"]
 
 class PlacesTest < ActionController::IntegrationTest
 

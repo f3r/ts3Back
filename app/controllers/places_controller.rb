@@ -482,6 +482,8 @@ class PlacesController < ApplicationController
   # [119] date must be future, after today
   # [120] end date must be after initial date
   # [136] occupied
+  # [141] minimum stay not met
+  # [142] over maximum stay
   def check_availability
     @place = Place.with_permissions_to(:read).find(params[:id])
     place_availability = @place.place_availability(params[:check_in], params[:check_out], params[:currency], current_user)

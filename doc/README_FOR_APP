@@ -42,6 +42,8 @@
 [138] already cancelled
 [139] date must be on the past
 [140] must be greater than
+[141] minimum stay not met
+[142] over maximum stay
 
 #== Notifications
 # Type - Event - Parameters - Sample Message

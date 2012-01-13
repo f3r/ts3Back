@@ -80,8 +80,8 @@ class Place < ActiveRecord::Base
   
   def place_availability(check_in, check_out, new_currency=nil, user=nil)
 
-    errors = validate_attributes(Transaction, {:check_in => check_in, :check_out => check_out})
-      
+    errors = validate_attributes(Transaction, {:check_in => check_in, :check_out => check_out, :place => self})
+
     if errors.blank?
       check_in = check_in.to_date
       check_out = check_out.to_date
