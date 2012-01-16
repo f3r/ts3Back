@@ -168,18 +168,18 @@ class Transaction < ActiveRecord::Base
   def check_min_max_stay
     check_in = self.check_in.to_date
     check_out = self.check_out.to_date
-    total_days = (check_out - check_in).to_i
+    total_days = (check_in..check_out).to_a.count
 
-    if self.place
+    if self.place && !self.place.stay_unit.blank?
       min_stay = self.place.minimum_stay.send(self.place.stay_unit)
       max_stay = self.place.maximum_stay.send(self.place.stay_unit)
       days = total_days.days
 
-      unless days > min_stay
+      unless days >= min_stay
         errors.add(:check_out, "141") # minimum stay not met
       end
 
-      unless days < max_stay
+      unless days <= max_stay
         errors.add(:check_out, "142") # over maximum stay
       end
 

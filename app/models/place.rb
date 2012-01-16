@@ -14,7 +14,8 @@ class Place < ActiveRecord::Base
   validates_inclusion_of  :stay_unit, 
                           :in => STAY_UNITS, 
                           :message => "129", 
-                          :if => Proc.new { |user| (user.minimum_stay && user.minimum_stay > 0) or (user.maximum_stay && user.maximum_stay > 0) }
+                          :allow_nil => true,
+                          :if => Proc.new { |place| (place.minimum_stay && place.minimum_stay > 0) or (place.maximum_stay && place.maximum_stay > 0) }
 
   validates_numericality_of [
     :num_bedrooms,
@@ -34,7 +35,7 @@ class Place < ActiveRecord::Base
     :maximum_stay
   ], :allow_nil => true, :message => "118"
 
-  validates_numericality_of :maximum_stay, :greater_or_equal_than => :minimum_stay, :allow_nil => true, :message => "140"
+  validates_numericality_of :maximum_stay, :greater_than_or_equal_to => :minimum_stay, :message => "140", :if => Proc.new { |place| place.minimum_stay > 0 && place.maximum_stay != 0 }
 
   validates_numericality_of :city_id, :message => "118"
 
@@ -86,13 +87,14 @@ class Place < ActiveRecord::Base
       check_in = check_in.to_date
       check_out = check_out.to_date
 
-      total_days = (check_out - check_in).to_i
-      requested_dates = (check_in..check_out).to_a
+      requested_dates = (check_in..check_out).to_a      
+      total_days = requested_dates.count
 
       # set default prices in the original currency
-      price_per_night = self.price_per_night
-      price_per_night = self.price_per_week / 7 if self.price_per_week && total_days > 7 && total_days < 28
-      price_per_night = self.price_per_month / 31 if self.price_per_month && total_days > 28
+      price_per_night = self.price_per_night.to_f rescue nil
+      price_per_night = self.price_per_week.to_f / 7 if self.price_per_week && total_days >= 7 && total_days < 28
+      price_per_night = self.price_per_month.to_f / 31 if self.price_per_month && total_days > 28
+
       price_final_cleanup = self.price_final_cleanup
       price_security_deposit = self.price_security_deposit
       currency = self.currency
@@ -169,11 +171,9 @@ class Place < ActiveRecord::Base
         # get the sum of price_per_night
         sub_total = 0
         dates.map{|hash| sub_total += hash[:price_per_night]}
-        avg_price_per_night = sub_total.to_f/total_days
 
         if new_currency && valid_currency?(new_currency)
           requested_currency = {
-            :requested_currency_avg_price_per_night => exchange_currency(avg_price_per_night, self.currency, new_currency),
             :requested_currency_price_final_cleanup => exchange_currency(price_final_cleanup, self.currency, new_currency),
             :requested_currency_price_security_deposit => exchange_currency(price_security_deposit, self.currency, new_currency),
             :requested_currency => new_currency,
@@ -183,15 +183,15 @@ class Place < ActiveRecord::Base
 
         results = {
           :total_days => total_days, 
-          :avg_price_per_night => avg_price_per_night.ceil,
           :price_final_cleanup => price_final_cleanup,
           :price_security_deposit => price_security_deposit,
           :currency => currency,
-          :sub_total => sub_total,
-          :dates => dates
+          :sub_total => sub_total
         }
         results.merge!(requested_currency) if requested_currency
-
+        results.merge!(:price_per_night => price_per_night) if price_per_night && total_days < 7
+        results.merge!(:price_per_week => price_per_week) if price_per_week && total_days >= 7 && total_days < 28
+        results.merge!(:price_per_month => price_per_month) if price_per_month && total_days >= 28
         return results
 
       elsif unavailable_dates
@@ -274,9 +274,13 @@ class Place < ActiveRecord::Base
   end
   
   def update_price_sqf_field
-    if (self.size_sqf_changed? && !self.size_sqf.blank?) or price_per_night_changed?
+    if (self.size_sqf_changed? && !self.size_sqf.blank?) or price_per_night_changed? or price_per_week_changed? or price_per_month_changed?
       if !price_per_night_usd.blank?
         price = price_per_night_usd
+      elsif !price_per_week_usd.blank?
+        price = price_per_week_usd / 7
+      elsif !price_per_month_usd.blank?
+        price = price_per_month_usd / 31
       end
       price_sqf_usd = price / size_sqf rescue nil
       self.price_sqf_usd = price_sqf_usd
@@ -285,12 +289,29 @@ class Place < ActiveRecord::Base
   
   # Adds validation errors if published column is affected and the place doesn't meet the requirements
   def validate_publishing
-    if published_changed? && published == true
-      errors.add(:publish, "123") if self.photos.blank? or self.photos.count < 3 # 3 pictures
-      errors.add(:publish, "124") if self.description.blank? or self.description.split.size < 5 # 5 words
-      errors.add(:publish, "126") if self.price_per_night.blank?
-      errors.add(:publish, "127") if self.currency.blank?
-      errors.add(:publish, "128") if self.price_security_deposit.blank?
+    if self.published == true
+      unpublish_place = false
+      if self.photos.blank? or self.photos.count < 3 # 3 pictures
+        unpublish_place = true
+        errors.add(:publish, "123") if published_changed?
+      end
+      if self.photos.blank? or self.description.blank? or self.description.split.size < 5 # 5 words
+        unpublish_place = true
+        errors.add(:publish, "124") if published_changed?
+      end
+      if self.price_per_night.blank? && self.price_per_week.blank? && self.price_per_month.blank?
+        unpublish_place = true
+        errors.add(:publish, "126") if published_changed?
+      end
+      if self.currency.blank?
+        unpublish_place = true
+        errors.add(:publish, "127") if published_changed?
+      end
+      if self.price_security_deposit.blank?
+        unpublish_place = true
+        errors.add(:publish, "128") if published_changed?
+      end
+      self.published = false if unpublish_place == true
     end
   end
   
@@ -339,24 +360,28 @@ class Place < ActiveRecord::Base
         min_stay = minimum_stay * 7 if minimum_stay
         max_stay = maximum_stay * 7 if maximum_stay
       when "months"
-        min_stay = minimum_stay * 30 if minimum_stay
-        max_stay = maximum_stay * 30 if maximum_stay
+        min_stay = minimum_stay * 31 if minimum_stay
+        max_stay = maximum_stay * 31 if maximum_stay
       end
 
       if min_stay < 7
         errors.add(:price_per_night, "101") if price_per_night.blank?
       end
 
-      if min_stay >= 7 && min_stay < 30 && (max_stay && (max_stay > 30 or max_stay == 0))
+      if min_stay >= 7 && min_stay < 28# && (max_stay && (max_stay > 28 or max_stay == 0))
         errors.add(:price_per_week, "101") if price_per_week.blank?
       end
 
-      if min_stay >= 30
+      if min_stay > 28
         errors.add(:price_per_month, "101") if price_per_month.blank?
       end
 
+    else
+      self.minimum_stay = 0 unless !self.minimum_stay.blank?
+      self.maximum_stay = 0 unless !self.maximum_stay.blank?
+      self.stay_unit = nil unless !self.stay_unit.blank?
     end
-
+  
   end
-
+  
 end
