@@ -203,11 +203,13 @@ class PlacesController < ApplicationController
       places_search = @search.result(:distinct => true)
       total_results = places_search.count
 
-      check_in = params[:check_in].to_date if params[:check_in]
-      if params[:check_out]
-        check_out = params[:check_out].to_date
-      else
-        check_out = check_in + 1.month # default one month
+      if params[:check_in]
+        check_in = params[:check_in].to_date
+        if params[:check_out]
+          check_out = params[:check_out].to_date
+        else
+          check_out = check_in + 1.month # default one month
+        end
       end
 
       if check_in && check_out
