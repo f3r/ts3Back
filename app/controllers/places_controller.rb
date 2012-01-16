@@ -108,6 +108,12 @@ class PlacesController < ApplicationController
   # [m]
   #   Used to match all the parameters or any. Options: and, or.
   #     Ex: m=or
+  # [check_in]
+  #   Check availability starting this day
+  #     Ex: check_in=2012-02-02
+  # [check_out]
+  #   Check availability ending this day. Defaults to one month
+  #     Ex: check_in=2013-02-02
   # [status]
   #   Defaults to published, Options: published, not_published, all
   #     Ex: status=all
@@ -196,9 +202,35 @@ class PlacesController < ApplicationController
       @search.sorts = sorting if sorting
       places_search = @search.result(:distinct => true)
       total_results = places_search.count
-      places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
+
+      check_in = params[:check_in].to_date if params[:check_in]
+      if params[:check_out]
+        check_out = params[:check_out].to_date
+      else
+        check_out = check_in + 1.month # default one month
+      end
+
+      if check_in && check_out
+        unavailable_places = []
+        for place in places_search
+          place_availability = place.place_availability(check_in, check_out, params[:currency], current_user)
+          if place_availability[:err]
+            unavailable_places << place
+          end
+        end
+        unavailable_places = unavailable_places.map(&:id)
+        if !unavailable_places.blank?
+          places_paginated = places_search.where(["id not in (?)", unavailable_places]).paginate(:page => params[:page], :per_page => per_page)
+          total_results-=1
+        else
+          places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
+        end
+      else
+        places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
+      end
 
       if !places_paginated.blank?
+        
         filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
           :user => @user_fields,
           :place_type => @place_type_fields },
@@ -234,6 +266,7 @@ class PlacesController < ApplicationController
           :amenities_count => amenities_count,
           :total_pages => (total_results/per_page.to_f).ceil
         }
+        response = response.merge!({"check_in" => check_in, "check_out" => check_out}) if check_in && check_out
       else
         response = {:err => {:places => [115]}}
       end
