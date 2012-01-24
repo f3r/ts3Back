@@ -35,7 +35,7 @@ class Place < ActiveRecord::Base
     :maximum_stay
   ], :allow_nil => true, :message => "118"
 
-  validates_numericality_of :maximum_stay, :greater_than_or_equal_to => :minimum_stay, :message => "140", :if => Proc.new { |place| place.minimum_stay > 0 && place.maximum_stay != 0 }
+  validates_numericality_of :maximum_stay, :greater_than_or_equal_to => :minimum_stay, :message => "140", :if => Proc.new { |place| !place.minimum_stay.blank? && place.minimum_stay > 0 && place.maximum_stay != 0 }
 
   validates_numericality_of :city_id, :message => "118"
 
@@ -289,13 +289,13 @@ class Place < ActiveRecord::Base
   
   # Adds validation errors if published column is affected and the place doesn't meet the requirements
   def validate_publishing
-    if self.published == true
+    if self.changed? && self.published == true
       unpublish_place = false
       if self.photos.blank? or self.photos.count < 3 # 3 pictures
         unpublish_place = true
         errors.add(:publish, "123") if published_changed?
       end
-      if self.photos.blank? or self.description.blank? or self.description.split.size < 5 # 5 words
+      if self.description.blank? or self.description.blank? or self.description.split.size < 5 # 5 words
         unpublish_place = true
         errors.add(:publish, "124") if published_changed?
       end
