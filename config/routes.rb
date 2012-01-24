@@ -65,7 +65,7 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id/:status",                 :to => "places#publish"
     # temporal mailers
     post    "/places/:place_id/confirm_rental",   :to => "places#confirm_rental"
-    match   "/places/:place_id/confirm_inquiry",  :to => "places#confirm_inquiry"
+    post    "/places/:place_id/confirm_inquiry",  :to => "places#confirm_inquiry"
     
     ##############################################################################
     # TRANSACTIONS

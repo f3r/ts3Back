@@ -591,15 +591,18 @@ class PlacesController < ApplicationController
   end
 
   def confirm_inquiry
-   # @place = Place.with_permissions_to(:read).find(params[:place_id])
-   logger.error { "#"*80 }
-   logger.error { params.inspect }
-   logger.error { "#"*80 }
-   
-   # InquiryMailer.inquiry_confirmed_renter(@place, params).deliver
-   # InquiryMailer.inquiry_confirmed_owner( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
-   # InquiryMailer.inquiry_confirmed_admin( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
-   return_message(200, :ok)
+   @place = Place.with_permissions_to(:read).find(params[:place_id])
+   begin
+     check_in = params[:date_start].to_date rescue nil
+     check_out = check_in + params[:length_stay].to_i.send(params[:length_stay_type]) rescue nil
+     InquiryMailer.inquiry_confirmed_renter(@place, params).deliver
+     InquiryMailer.inquiry_confirmed_owner(@place, params, check_in, check_out, current_user).deliver
+     InquiryMailer.inquiry_confirmed_admin(@place, params, check_in, check_out, current_user).deliver
+     return_message(200, :ok)
+   rescue Exception => e
+     logger.error { "Error [places_controller.rb/confirm_inquiry] #{e.message}" }
+     return_message(200, :fail, :err => {:place => [] })
+   end
   end
   
   protected
