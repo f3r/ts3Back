@@ -583,12 +583,25 @@ class PlacesController < ApplicationController
   
   def confirm_rental
    @place = Place.with_permissions_to(:read).find(params[:place_id])
+   
    RentalMailer.rental_confirmed_renter(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
    RentalMailer.rental_confirmed_owner( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
    RentalMailer.rental_confirmed_admin( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
    return_message(200, :ok)
   end
 
+  def confirm_inquiry
+   # @place = Place.with_permissions_to(:read).find(params[:place_id])
+   logger.error { "#"*80 }
+   logger.error { params.inspect }
+   logger.error { "#"*80 }
+   
+   # InquiryMailer.inquiry_confirmed_renter(@place, params).deliver
+   # InquiryMailer.inquiry_confirmed_owner( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
+   # InquiryMailer.inquiry_confirmed_admin( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
+   return_message(200, :ok)
+  end
+  
   protected
   def get_user
     if params[:user_id] && params[:user_id].to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) != nil # is numeric
