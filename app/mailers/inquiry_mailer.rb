@@ -31,6 +31,11 @@ class InquiryMailer < ActionMailer::Base
   def inquiry_confirmed_owner(place, params, check_in, check_out, current_user)
     begin
       @owner     = place.user
+      @email     = params['email']
+      @mobile    = params['mobile']
+      @call_me   = params['call_me']
+      @questions = params['questions']
+      
       if current_user
         @renter = current_user
       else

@@ -53,10 +53,29 @@
           <td class="message" valign="top">
             <h2>Dear <%= @owner.full_name %>,</h2>
 
+          <% # If the user is not registered
+             if @renter.id.nil? %>
+              <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
+              <% if !@questions.empty? %>
+                <p>The message from the user is:
+                  <blockquote>
+                    <%= @questions %>
+                  </blockquote>
+                </p>
+              <% end %>
+
+              <p>This user is not yet registered at SquareStays.com, but you can contact him/her via email at <%= @email %> or via telephone at <%= @mobile %>.</p>              
+              
+              <p><i>Note: SquareStays.com cannot confirm the identify of unregistered users. You may want to ask the user to create an account before confirming a rental. We recommend you copy support@squarestays.com on any correspondence with this user.</i></p>
+
+          <% # If the user is registered 
+            else %>
             <p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
 
             <p>Please log in to SquareStays.com to view the request. You can also send messages to <%= link_to @renter.full_name, "#{FRONTEND_PATH}/messages/#{@renter.id}" %> to ask any follow-up questions.</p>
 
+          <% end %>
+            
             <p>P.S. Questions? Please email us at support@squarestays.com</p>
 
             <p>Thanks!</p>
