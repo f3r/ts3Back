@@ -593,7 +593,7 @@ class PlacesController < ApplicationController
   def confirm_inquiry
    @place = Place.with_permissions_to(:read).find(params[:place_id])
    begin
-     check_in = params[:date_start].to_date rescue nil
+     check_in  = params[:date_start].to_date rescue nil
      check_out = check_in + params[:length_stay].to_i.send(params[:length_stay_type]) rescue nil
      InquiryMailer.inquiry_confirmed_renter(@place, params).deliver
      InquiryMailer.inquiry_confirmed_owner(@place, params, check_in, check_out, current_user).deliver
