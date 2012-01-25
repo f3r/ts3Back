@@ -55,7 +55,7 @@
 
           <% # If the user is not registered
              if @renter.id.nil? %>
-              <% if !@check_in.nil? %>
+              <% if !@check_in.blank? and !@total_days.blank? %>
                 <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
               <% else %>
                 <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %>.</p>
