@@ -55,7 +55,12 @@
 
           <% # If the user is not registered
              if @renter.id.nil? %>
-              <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
+              <% if !@check_in.nil? %>
+                <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
+              <% else %>
+                <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %>.</p>
+              <% end %>
+
               <% if !@questions.empty? %>
                 <p>The message from the user is:
                   <blockquote>

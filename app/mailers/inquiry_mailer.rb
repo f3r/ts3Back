@@ -16,7 +16,7 @@ class InquiryMailer < ActionMailer::Base
       @questions     = params['questions']
       
       recipient = "#{@name} <#{@email}>"
-      subject    = "Your Inquiry  has been sent"
+      subject    = "Your Inquiry on SquareStays has been sent"
       mail(:from    => MAILER_SENDER,
            :to      => recipient, 
            :subject => subject) do |format|
@@ -50,7 +50,7 @@ class InquiryMailer < ActionMailer::Base
       end
 
       recipient = "#{@owner.full_name} <#{@owner.email}>"
-      subject    = "You have received an inquiry request"
+      subject    = "You have received an inquiry on SquareStays"
       mail(:from    => MAILER_SENDER,
            :to      => recipient, 
            :subject => subject) do |format|
