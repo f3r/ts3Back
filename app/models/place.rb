@@ -75,8 +75,21 @@ class Place < ActiveRecord::Base
     self.save
   end
   
+  def publish_check!
+    self.published = true
+    self.valid?
+  end
+  
   def full_address
     [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
+  end
+  
+  def amenities_list
+    amenities_list = []
+    self.attributes.each{ |field, v|
+      amenities_list << field if (field.starts_with? 'amenities_') && v==true
+    }
+    return amenities_list
   end
   
   def place_availability(check_in, check_out, new_currency=nil, user=nil)
@@ -295,6 +308,10 @@ class Place < ActiveRecord::Base
         unpublish_place = true
         errors.add(:publish, "123") if published_changed?
       end
+      if self.amenities_list.blank? or self.amenities_list.count < 1 # at least one amenity
+        unpublish_place = true
+        errors.add(:publish, "143") if published_changed?
+      end
       if self.description.blank? or self.description.blank? or self.description.split.size < 5 # 5 words
         unpublish_place = true
         errors.add(:publish, "124") if published_changed?
@@ -379,7 +396,7 @@ class Place < ActiveRecord::Base
     else
       self.minimum_stay = 0 unless !self.minimum_stay.blank?
       self.maximum_stay = 0 unless !self.maximum_stay.blank?
-      self.stay_unit = nil unless !self.stay_unit.blank?
+      self.stay_unit = "months" unless !self.stay_unit.blank?
     end
   
   end

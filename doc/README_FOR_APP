@@ -44,6 +44,7 @@
 [140] must be greater than
 [141] minimum stay not met
 [142] over maximum stay
+[143] no amenities
 
 #== Notifications
 # Type - Event - Parameters - Sample Message

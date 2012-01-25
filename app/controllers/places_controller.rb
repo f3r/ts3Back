@@ -459,9 +459,10 @@ class PlacesController < ApplicationController
   # ==Example
   #   GET https://backend-heypal.heroku.com/places/:id/publish.json access_token=access_token
   #   GET https://backend-heypal.heroku.com/places/:id/unpublish.json access_token=access_token
+  #   GET https://backend-heypal.heroku.com/places/:id/publish_check.json access_token=access_token
   # === Parameters
   # [access_token]  Access token
-  # [status]        Publish status, options: publish, unpublish
+  # [status]        Publish status, options: publish, unpublish, publish_check
   # === Error codes
   # [106] Record not found
   # [123] not enough pictures
@@ -470,7 +471,7 @@ class PlacesController < ApplicationController
   # [127] no currency
   # [128] no security deposit
   def publish
-    if params[:status] == "publish" or params[:status] == "unpublish"
+    if params[:status] == "publish" or params[:status] == "unpublish" or params[:status] == "publish_check"
       method = "#{params[:status]}!"
     else
       raise ActionController::UnknownAction
@@ -478,17 +479,12 @@ class PlacesController < ApplicationController
     @place = Place.with_permissions_to(:read).find(params[:id])
       if method        
         if @place.send(method)
-          place = filter_fields(@place,@fields, { 
-            :additional_fields => {
-              :place_type => @place_type_fields 
-            } 
-          })
-          return_message(200, :ok, {:place => place})
+          return_message(200, :ok)
         else
-          return_message(200, :ok, { :err => format_errors(@place.errors.messages) })
+          return_message(200, :fail, { :err => format_errors(@place.errors.messages) })
         end
       else
-        return_message(200, :ok, { :err => {:status => [103]} } )
+        return_message(200, :fail, { :err => {:status => [103]} } )
       end
   end
 
