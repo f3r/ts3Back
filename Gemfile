@@ -1,12 +1,13 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.2'
-gem 'rack', '1.3.5'
+gem 'rails', '3.2.1'
+# gem 'rack', '1.3.5'
 
 gem 'devise', '2.0.0.rc'          # Account Management
 gem 'oauth2', '0.4.1'             # oAuth providers management
 gem 'paperclip', "~> 2.4"         # Attachements
 gem 'aws-s3'                      # Upload to Amazon S3
+gem 'aws-sdk'
 gem 'money'                       # Currency management
 gem 'google_currency'             # Currency Exchange conversion
 gem 'mysql2', '0.3.11'            # MySQL DB

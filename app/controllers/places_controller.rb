@@ -474,7 +474,7 @@ class PlacesController < ApplicationController
     if params[:status] == "publish" or params[:status] == "unpublish" or params[:status] == "publish_check"
       method = "#{params[:status]}!"
     else
-      raise ActionController::UnknownAction
+      raise ::AbstractController::ActionNotFound 
     end
     @place = Place.with_permissions_to(:read).find(params[:id])
       if method        
