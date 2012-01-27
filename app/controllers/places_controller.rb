@@ -268,7 +268,7 @@ class PlacesController < ApplicationController
           :amenities_count => amenities_count,
           :total_pages => (total_results/per_page.to_f).ceil
         }
-        response = response.merge!({"check_in" => check_in, "check_out" => check_out}) if check_in && check_out
+        response = response.merge!({"check_in" => check_in, "check_out" => check_out, "total_days" => (check_in..check_out).to_a.count}) if check_in && check_out
       else
         response = {:err => {:places => [115]}}
       end
