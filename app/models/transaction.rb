@@ -175,11 +175,11 @@ class Transaction < ActiveRecord::Base
       max_stay = self.place.maximum_stay.send(self.place.stay_unit)
       days = total_days.days
 
-      unless days >= min_stay
+      unless days >= min_stay or min_stay == 0
         errors.add(:check_out, "141") # minimum stay not met
       end
 
-      unless days <= max_stay
+      unless days <= max_stay or max_stay == 0
         errors.add(:check_out, "142") # over maximum stay
       end
 

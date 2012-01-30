@@ -329,30 +329,37 @@ class Place < ActiveRecord::Base
           min_stay = minimum_stay * 31 if minimum_stay
           max_stay = maximum_stay * 31 if maximum_stay
         end
-        puts min_stay
-        puts max_stay
 
         if min_stay < 7 && price_per_night.blank?
-          puts "# price per night required"
           unpublish_place = true
           errors.add(:publish, "126") if published_changed?
         end
         if min_stay >= 7 && min_stay < 28 && price_per_week.blank?
-          puts "# price per week required"
           unpublish_place = true
           errors.add(:publish, "126") if published_changed?
         end
         if (min_stay > 28 or max_stay > 28) && price_per_month.blank?
-          puts "# price per month required"
+          unpublish_place = true
+          errors.add(:publish, "126") if published_changed?
+        end
+      end
+      
+      empty_price = true
+      for stay_unit in STAY_UNITS
+        case stay_unit
+        when "days"
+          unit = "night"
+        when "weeks"
+          unit = "week"
+        when "months"
+          unit = "month"
+        end
+        if self.send("price_per_" + unit).blank?
           unpublish_place = true
           errors.add(:publish, "126") if published_changed?
         end
       end
 
-      if self.price_per_night.blank? && self.price_per_week.blank? && self.price_per_month.blank?
-        unpublish_place = true
-        errors.add(:publish, "126") if published_changed?
-      end
       if self.currency.blank?
         unpublish_place = true
         errors.add(:publish, "127") if published_changed?
