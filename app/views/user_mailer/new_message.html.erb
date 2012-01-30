@@ -53,15 +53,15 @@
           <td class="message" valign="top">
             <h2>Dear <%= @user.first_name %>,</h2>
 
-            <p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
+            <p>You have a new message waiting for you!</p>
 
-            <p>Please log in to SquareStays.com to view the request. You can also send messages to <%= link_to @renter.full_name, "#{FRONTEND_PATH}/messages/#{@renter.id}" %> to ask any follow-up questions.</p>
+            <p>You have new messages on SquareStays.com! <a href="<%=FRONTEND_PATH%>/messages/<%= msg_id %>">Click here</a> to read this message.</p>
+              
+            <p>Or, you can log in to view and respond to your messages. When you log in, you'll see a number with a green background in the top navigation bar. Click there to see your messages and to answer them.</p>
 
-            <p>P.S. Questions? Please email us at support@squarestays.com</p>
+            <p>--The SquareStays.com Team</p>
 
-            <p>Thanks!</p>
-
-            <p>-- The SquareStays team</p>
+            <p>P.S.  Do you want to list properties for rent on SquareStays? Please contact us at info@squarestays.com and become an approved property owner on SquareStays!</p>
           </td>
         </tr>
 

@@ -51,15 +51,13 @@
         #########################################################################################################-->
         <tr>
           <td class="message" valign="top">
-            <h2>Dear <%= @user.first_name %>,</h2>
+            <h2>Dear <%= @name %>,</h2>
 
-            <p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
+            <p>Your inquiry <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> has been sent.</p>
 
-            <p>Please log in to SquareStays.com to view the request. You can also send messages to <%= link_to @renter.full_name, "#{FRONTEND_PATH}/messages/#{@renter.id}" %> to ask any follow-up questions.</p>
+            <p>Please email support@squarestays.com if you need assistance. The property owner or listing agent will get a copy of your request. Normally, your request will be handled within 24-48 hours.</p>
 
-            <p>P.S. Questions? Please email us at support@squarestays.com</p>
-
-            <p>Thanks!</p>
+            <p>Thank you!</p>
 
             <p>-- The SquareStays team</p>
           </td>

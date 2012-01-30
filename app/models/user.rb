@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, # Encrypting Password and validating authenticity of user
          :registerable,             # Users can sign up :)
          :recoverable,              # Reset user password
-         :rememberable,             # Generating/Clearing token for remember user from cookie
          :trackable,                # Tracks:
                                     #   * sign_in_count      - Increased every time a sign in is made (by form, openid, oauth)
                                     #   * current_sign_in_at - A tiemstamp updated when the user signs in
