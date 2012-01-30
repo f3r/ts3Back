@@ -22,9 +22,10 @@ class UserMailer < ActionMailer::Base
   
   # ==Description
   # Email sent when the user receives a message
-  def new_message(user)
+  def new_message(user, msg_id)
     begin
       @user      = user
+      @msg_id    = msg_id
       recipients = "#{user.full_name} <#{user.email}>"
       subject    = 'You have a new message!'
       sent_on    =  Time.now

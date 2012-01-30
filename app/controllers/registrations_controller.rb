@@ -33,12 +33,12 @@ class RegistrationsController < Devise::RegistrationsController
   # [104] doesn't match
   def create
     without_access_control do
-      parameters = {  :first_name => params[:first_name], 
-                      :last_name => params[:last_name], 
-                      :email => params[:email], 
-                      :password => params[:password], 
+      parameters = {  :first_name            => params[:first_name], 
+                      :last_name             => params[:last_name], 
+                      :email                 => params[:email], 
+                      :password              => params[:password], 
                       :password_confirmation => params[:password],
-                      :role => "user" }
+                      :role                  => "user" }
       resource = resource_class.new(parameters)
       if resource.save
         if params[:oauth_token] && params[:oauth_token]['credentials']
