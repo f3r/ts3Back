@@ -90,6 +90,7 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    mail_view (1.0.2)
     mime-types (1.17.2)
     minitest (2.11.0)
     money (3.7.1)
@@ -197,6 +198,7 @@ DEPENDENCIES
   heroku_san
   hirb
   linecache19 (= 0.5.13)
+  mail_view
   minitest
   money
   mysql2 (= 0.3.11)

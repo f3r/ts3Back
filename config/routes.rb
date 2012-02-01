@@ -1,5 +1,8 @@
 HeyPalBackEnd::Application.routes.draw do
-
+  if Rails.env.development?
+    mount Preview => 'mail_view'
+  end
+  
   devise_for :users, :skip => [ :registrations, :sessions, :passwords, :confirmations ] do
     match "/" => "home#not_found"
     ##############################################################################

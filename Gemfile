@@ -23,7 +23,8 @@ gem 'heroku_san'                  # Manages multiple production environments
 gem 'validates_timeliness', '~> 3.0.2'
 
 group :development do
- gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
+  gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
+  gem 'mail_view' 
 end
 
 group :test do
