@@ -64,9 +64,13 @@ module GeneralHelper
     
     for field in fields
       if field == :avatar_file_name
-        style = options[:style].blank? ? :thumb : options[:style]
-        avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
-        filtered_object.merge!({:avatar => avatar })
+        if !object.avatar_file_name.blank?
+          style = options[:style].blank? ? :thumb : options[:style]
+          avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
+          filtered_object.merge!({:avatar => avatar })
+        else
+          filtered_object.merge!({:avatar => nil })
+        end
       else
         filtered_object.merge!({field => object["#{field}"]})
       end

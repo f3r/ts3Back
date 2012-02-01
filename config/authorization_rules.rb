@@ -35,7 +35,7 @@ authorization do
 
   role :default do
     includes [:guest]
-    has_permission_on [:users], :to => [:read, :update, :info, :delete, :transactions] do
+    has_permission_on [:users], :to => [:read, :update, :delete, :transactions] do
       if_attribute :id => is { user.id }
     end
     has_permission_on :registrations, :to => :destroy

@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   # [106] no user exists
   def info
     fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
-    @user = Rails.cache.fetch("user_info_" + params[:id].to_s) { User.select(fields).find(params[:id]) }
+    @user = Rails.cache.fetch("user_info_" + params[:id].to_s) { User.find(params[:id]) }
     if permitted_to? :info, @user
       return_message(200, :ok, {:user => filter_fields(@user, fields, {:style => :thumb})})
     else
