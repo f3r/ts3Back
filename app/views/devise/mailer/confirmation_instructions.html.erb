@@ -54,8 +54,8 @@
             <h2>Welcome <%= @resource.email %>!</h2>
 
             <p>Thank you for signing up on  Squarestays - your site for trusted stays worldwide. Before you can start finding the best places for your upcoming stays, please confirm your email address:</p>
-            <p><a class="btn" href="#{FRONTEND_PATH}/users/confirmation/#{@resource.confirmation_token}">Confirm your email address</a></p>
-            <p>--The SquareStays Team
+            <p><%= link_to 'Confirm your email address', frontend_url("/users/confirmation/#{@resource.confirmation_token}"), :class => 'btn' %></p>
+            <p>--The SquareStays Team</p>
           </td>
         </tr>
 
