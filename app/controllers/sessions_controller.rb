@@ -47,14 +47,13 @@ class SessionsController < Devise::SessionsController
   # [110] Must sign up
   def oauth_create
     if params[:oauth_token]
-      authentication = Authentication.find_by_provider_and_token(
+      authentication = Authentication.check_and_update(
         params[:oauth_token]['provider'], 
         params[:oauth_token]['credentials']['token']
       )
     end
 
     if authentication
-      
       return_message(200, :ok, {:authentication_token => authentication.user.authentication_token, :role => authentication.user.role})
     else
       return_message(401, :fail, {:err => {:user => [110]}})
