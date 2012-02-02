@@ -8,6 +8,9 @@ FactoryGirl.find_definitions
 
 require 'declarative_authorization/maintenance'
 
+require 'action_dispatch/testing/test_process'
+include ActionDispatch::TestProcess
+
 class ActionController::TestCase
   include Devise::TestHelpers
 end

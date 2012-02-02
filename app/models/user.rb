@@ -75,15 +75,9 @@ class User < ActiveRecord::Base
      :styles => {
        :thumb  => "100x100#",
        :medium => "300x300#",
-       :large  => "600x600>" },
-     :storage => :s3,
-     :s3_protocol => 'https',
-     :s3_credentials => {
-       :access_key_id => S3_ACCESS_KEY_ID,
-       :secret_access_key => S3_SECRET_ACCESS_KEY
-     },
-     :bucket => S3_BUCKET,
-     :path => "avatars/:id_partition/:style.:extension",
+       :large  => "600x600>" 
+      },
+     :url => "/avatars/:id_partition/:style.:extension",
      :default_url => "none",
      :convert_options => { 
        :large => "-quality 80", 
