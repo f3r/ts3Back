@@ -149,16 +149,16 @@ class PlacesController < ApplicationController
       if !params[:currency].blank? or params[:currency] != "USD"
         if params[:min_price]
           min_price = params[:min_price].to_money(params[:currency]).exchange_to(:USD).cents 
-          params[:q].merge!({"price_per_night_usd_gteq" => "#{min_price}"})
+          params[:q].merge!({"price_per_month_usd_gteq" => "#{min_price}"})
         end
         if params[:max_price]
           max_price = params[:max_price].to_money(params[:currency]).exchange_to(:USD).cents if params[:max_price]
-          params[:q].merge!({"price_per_night_usd_lteq" => "#{max_price}"})
+          params[:q].merge!({"price_per_month_usd_lteq" => "#{max_price}"})
         end
       # defaults to USD and checks against usd precalculated rates
       else
-        params[:q].merge!({"price_per_night_usd_gteq" => "#{params[:min_price]}"}) if params[:min_price]
-        params[:q].merge!({"price_per_night_usd_lteq" => "#{params[:max_price]}"}) if params[:max_price]
+        params[:q].merge!({"price_per_month_usd_gteq" => "#{params[:min_price]}"}) if params[:min_price]
+        params[:q].merge!({"price_per_month_usd_lteq" => "#{params[:max_price]}"}) if params[:max_price]
       end
       
 
@@ -186,9 +186,9 @@ class PlacesController < ApplicationController
       when "name"
         sorting = ["title asc"]
       when "price_lowest"
-        sorting = ["price_per_night_usd asc"]
+        sorting = ["price_per_month_usd asc"]
       when "price_highest"
-        sorting = ["price_per_night_usd desc"]
+        sorting = ["price_per_month_usd desc"]
       when "price_size_lowest"
         sorting = ["price_sqf_usd asc"]
       when "price_size_highest"
