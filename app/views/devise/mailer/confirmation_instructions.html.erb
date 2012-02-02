@@ -4,27 +4,7 @@
   <title>
     SquareStays
   </title>
-  <style type="text/css">
-    /* Main page elements*/
-    body {margin: 0; padding: 0; background: #3977b0;}
-    a:hover  { text-decoration: none !important; }
-    .wrapper {margin: 35px auto !important; font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; -moz-box-shadow: 0 0px 10px #1a4a75; -webkit-box-shadow: 0 0px 10px #1a4a75; box-shadow: 0 0px 10px #1a4a75;   -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; width:560px}
-    /* Header */
-    .content p {color:#767676; font-weight: normal; margin: 0; padding: 0; line-height: 20px; font-size: 12px;font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica; }    
-    .content a {color: #2e9ac7; text-decoration: none;}
-    .content a.btn { float: left; margin: 20px 0 5px; background: #469fe1; display: block; padding: 10px 20px; text-align: center; font-size: 14px; font-weight: bold; color: #fff;  -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;text-decoration: none;}
-    .content p.foot a{ color: #888 !important;}
-    /* Message */
-    .message    {padding: 20px; background: #e6e6e6; margin-bottom: 30px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;}
-    .message h2 {color:#636363; font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; margin: 0 0 20px 0; padding: 0; line-height: 24px; font-size: 24px;}
-    .message p  {color:#767676; font-weight: normal; margin: 0; padding: 0; line-height: 20px; font-size: 12px;font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-    .message p a {color: #2e9ac7; text-decoration: none;}
-    /* Footer */
-    .footer {padding: 20px 0 0 0;}
-    .footer p {font-size: 10px; color:#808080; margin: 0; padding: 0;font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;}
-    .footer a {color: #2e9ac7; text-decoration: none;}
-    .links_footer a:not(:last-child):after { content: " / ";}
-  </style>
+  <%= render :partial => 'style' %>
 </head>
 <body>
   <table class="wrapper" cellpadding="10" cellspacing="0">
