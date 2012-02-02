@@ -1,6 +1,8 @@
 # LOAD LOCAL CONFIGURATION
 if Rails.env.test? or Rails.env.development?
   APP_CONFIG = YAML.load_file("#{Rails.root}/config/local.yml")[Rails.env]
+else
+  APP_CONFIG = {}
 end
 
 # SET VARIABLES, DEVELOPMENT, TEST FALLBACKS
