@@ -50,7 +50,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "fail", json['stat']
   end
-
+  
   should "show full user information as admin (xml)" do
     get "/users/#{@user.id}.xml", {:access_token => @admin_user.authentication_token}
     assert_response(200)
@@ -58,7 +58,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_tag 'rsp', :child => { :tag => "stat", :content => "ok" }
     assert_tag 'user', :child => { :tag => "first_name", :content => @user.first_name }
   end
-
+  
   should "not show full user information as user (xml)" do
     get "/users/#{@admin_user.id}.xml", {:access_token => @user.authentication_token}
     assert_response(403)
@@ -114,7 +114,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_tag 'user', :child => { :tag => "first_name", :content => "Test Name" }
     assert_tag 'user', :child => { :tag => "gender", :content => "male" }
   end
-
+  
   should "update user profile information as admin (xml)" do
     put "/users/#{@user.id}.xml", {:access_token => @admin_user.authentication_token, :first_name => "Test Name", :gender => "male" }
     assert_response(200)
@@ -123,7 +123,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_tag 'user', :child => { :tag => "first_name", :content => "Test Name" }
     assert_tag 'user', :child => { :tag => "gender", :content => "male" }
   end
-
+  
   should "not update admin user profile information as user (xml)" do
     put "/users/#{@admin_user.id}.xml", {:access_token => @user.authentication_token, :first_name => "Test Name", :gender => "male" }
     assert_response(403)
@@ -142,7 +142,7 @@ class UsersTest < ActionController::IntegrationTest
   #   assert_equal "fail", json['stat']
   #   assert (json['err']['birthdate'].include? 113)
   # end
-
+  
   should "not update current user profile information, future birthdate (json)" do
     put "/users.json", {:access_token => @admin_user.authentication_token, :birthdate => "2020/01/01" }
     assert_response(200)
@@ -186,7 +186,7 @@ class UsersTest < ActionController::IntegrationTest
     assert_equal "ok", json['stat']
     assert_not_nil json['user']['avatar']
   end
-
+  
   should "change users role (json)" do
     put "/users/#{@user.id}/change_role.json", {:access_token => @admin_user.authentication_token, :role => "admin" }
     assert_response(200)

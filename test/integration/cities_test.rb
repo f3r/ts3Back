@@ -9,7 +9,7 @@ class CitiesTest < ActionController::IntegrationTest
       Authorization.current_user = @agent_user
 
       10.times do
-        place = Place.create(
+        place = Place.create!(
           :user_id => @agent_user.id,
           :description => Faker::Lorem.sentence(20),
           :title => Faker::Lorem.sentence(2),
@@ -18,12 +18,13 @@ class CitiesTest < ActionController::IntegrationTest
           :num_bedrooms => (1..6).to_a.sample,
           :max_guests => (1..10).to_a.sample,
           :city_id => @city.id,
-          :price_per_night => (100..1000).to_a.sample,
-          :price_per_week => (200..2000).to_a.sample,
-          :price_per_month => (300..3000).to_a.sample,
+          # :price_per_night => (100..1000).to_a.sample,
+          # :price_per_week => (200..2000).to_a.sample,
+          :price_per_month => (1000..10000).to_a.sample,
           :currency => "USD",
           :size_unit => ["meters","feet"].to_a.sample,
-          :size => (50..200).to_a.sample
+          :size => (50..200).to_a.sample,
+          :amenities_tv => true
         )
         place.publish!
       end
@@ -38,8 +39,8 @@ class CitiesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_operator json['min_price'], :>=, 100
-    assert_operator json['max_price'], :<=, 1000
+    assert_operator json['min_price'], :>=, 1000
+    assert_operator json['max_price'], :<=, 10000
   end
 
   should "show city price range with SGD currency (json)" do
@@ -49,10 +50,10 @@ class CitiesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_operator json['min_price'], :>=, 75
-    assert_operator json['max_price'], :<=, 2500
+    assert_operator json['min_price'], :>=, 1000
+    assert_operator json['max_price'], :<=, 12000
   end
-
+  
   should "show city price range with JPY currency (json)" do
     get "/geo/cities/#{@city.id}/price_range.json", {:currency => "JPY" }
     assert_response(200)
@@ -60,8 +61,8 @@ class CitiesTest < ActionController::IntegrationTest
     json = ActiveSupport::JSON.decode(response.body)
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
-    assert_operator json['min_price'], :>=, 6000
-    assert_operator json['max_price'], :<=, 80000
+    assert_operator json['min_price'], :>=, 70000
+    assert_operator json['max_price'], :<=, 800000
   end
 
 end

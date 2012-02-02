@@ -2,6 +2,9 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
+include ActionDispatch::TestProcess
+require 'action_dispatch/testing/test_process'
+
 require 'shoulda'
 require 'factory_girl'
 FactoryGirl.find_definitions

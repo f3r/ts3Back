@@ -126,19 +126,24 @@ class GeoController < ApplicationController
   # === Error codes
   # [115] no results
   def price_range
-    max_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").maximum('price_per_night_usd')
-    min_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").minimum('price_per_night_usd')
+    max_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").maximum('price_per_month_usd')
+    min_price_usd = Place.where("published=1").where("city_id=#{params[:id]}").minimum('price_per_month_usd')
 
     if !max_price_usd.nil? && !min_price_usd.nil?
       if params[:currency] && valid_currency?(params[:currency])
-      max_price = exchange_currency(max_price_usd/100, :USD, params[:currency]).ceil
-      min_price = exchange_currency(min_price_usd/100, :USD, params[:currency]).floor
+        max_price = exchange_currency(max_price_usd/100, :USD, params[:currency]).ceil
+        min_price = exchange_currency(min_price_usd/100, :USD, params[:currency]).floor
       else
         max_price = (max_price_usd/100).ceil
         min_price = (min_price_usd/100).floor
       end
+      max_price = (max_price/100.0).ceil * 100
+      min_price = (min_price/100.0).floor * 100
+    else
+      min_price = 0
+      max_price = 0
     end
-
+    
     if !max_price.blank?
       return_message(200, :ok, {:min_price => min_price, :max_price => max_price})
     else

@@ -43,6 +43,7 @@ FactoryGirl.define do
     place_type   { @place_type }
     user         { @user }
     currency     { "JPY"}
+    amenities_tv { true }
   end
   
   factory :comment do
