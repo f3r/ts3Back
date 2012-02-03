@@ -77,7 +77,7 @@ class User < ActiveRecord::Base
        :medium => "300x300#",
        :large  => "600x600>" 
       },
-     :url => "/avatars/:id_partition/:style.:extension",
+     :path => "/avatars/:id_partition/:style.:extension",
      :default_url => "none",
      :convert_options => { 
        :large => "-quality 80", 
