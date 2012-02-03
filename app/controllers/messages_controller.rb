@@ -21,11 +21,7 @@ class MessagesController < ApplicationController
     @conversations = []
     Message.conversations.each{|with_user|
       last_message = ActiveSupport::JSON::decode(Message.last_message_with(with_user)[0])
-      if Message.is_read?(last_message['to'].to_i)
-        @conversations << last_message.merge!({:isread => true})
-      else
-        @conversations << last_message.merge!({:isread => false})
-      end
+      @conversations << last_message.merge!({:isread => Message.is_read?(last_message['to'].to_i)})
     }
     if @conversations
       @foo = []
@@ -125,7 +121,7 @@ class MessagesController < ApplicationController
     if Message.mark_as_read(params[:user_id])
       return_message(200, :ok)
     else
-      return_message(200, :ok, {:err => {:messages => [106]}})
+      return_message(200, :fail, {:err => {:messages => [106]}})
     end
   end
 
@@ -145,7 +141,7 @@ class MessagesController < ApplicationController
     if Message.mark_as_unread(params[:user_id])
       return_message(200, :ok)
     else
-      return_message(200, :ok, {:err => {:messages => [106]}})
+      return_message(200, :fail, {:err => {:messages => [106]}})
     end
   end
   

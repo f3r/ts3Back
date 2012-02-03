@@ -122,7 +122,13 @@ class Message
 
   # Returns true if a conversation has been read
   def self.is_read?(user)
-    return REDIS.sismember Message.ConversationReadKey, user
+    if REDIS.sismember Message.ConversationReadKey, user
+      return true
+    elsif !(REDIS.smembers Message.ConversationReadKey).blank? && Message.ConversationReadKey == "conversations:read:#{user.to_s}"
+      return true
+    else
+      return false
+    end
   end
   
   # Marks a conversation as read
