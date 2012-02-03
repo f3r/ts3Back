@@ -3,7 +3,7 @@ class ConfirmationsTest < ActionController::IntegrationTest
 
   setup do
     without_access_control do
-      @user = Factory(:user)
+      @user = Factory(:user, :confirmed_at => nil)
     end
   end
 

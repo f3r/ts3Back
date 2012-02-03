@@ -101,6 +101,7 @@ HeyPalBackEnd::Application.routes.draw do
     put     "users/:id",              :to => "users#update"
     put     "users",                  :to => "users#update"
     get     "users",                  :to => "users#show"
+    post    "users/feedback",         :to => "users#feedback"
     ##############################################################################
     # NOTIFICATIONS
     ##############################################################################

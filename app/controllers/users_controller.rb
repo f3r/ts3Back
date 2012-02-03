@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token
   respond_to :xml, :json
 
-  before_filter :get_user, :only => [:update, :show, :change_role, :transactions]
+  before_filter :get_user, :only => [:update, :show, :change_role, :transactions, :feedback]
   filter_access_to :all, :attribute_check => false
   
   def initialize
@@ -213,6 +213,21 @@ class UsersController < ApplicationController
       return_message(200, :ok, {:err=>{:transactions => [115]}} )
     end
 
+  end
+
+  # == Description
+  # Requests a place
+  # ==Resource URL
+  #   /users/feedback.format
+  # ==Example
+  #   POST https://backend-heypal.heroku.com/users/feedback.json access_token=access_token
+  # === Parameters
+  # [access_token] Access token
+  # [type] Feedback category: city_suggestion, ...
+  # [message] The message
+  def feedback
+    SystemMailer.user_feedback(current_user, params[:type], params[:message]).deliver!
+    return_message(200, :ok)
   end
 
   protected

@@ -63,7 +63,7 @@ authorization do
   end
   
   role :guest do
-    has_permission_on :users,       :to => [:info]
+    has_permission_on :users,       :to => [:info, :feedback]
     has_permission_on :place_types, :to => :read
     has_permission_on :places,      :to => [:search, :user_places, :confirm_inquiry]
     has_permission_on :places,      :to => :read do
