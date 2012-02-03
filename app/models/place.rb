@@ -318,6 +318,22 @@ class Place < ActiveRecord::Base
         errors.add(:publish, "143") if published_changed?
       end
 
+      # general fields
+      if self.size.blank?
+        unpublish_place = true
+        errors.add(:publish, "146") if published_changed?
+      end
+
+      if self.address_1.blank?
+        unpublish_place = true
+        errors.add(:publish, "144") if published_changed?
+      end
+
+      if self.zip.blank?
+        unpublish_place = true
+        errors.add(:publish, "145") if published_changed?
+      end
+
       # Description must have at least 5 words
       # if self.description.blank? or self.description.blank? or self.description.split.size < 5
       #   unpublish_place = true
