@@ -30,6 +30,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.6)
     ansi (1.4.1)
+    archive-tar-minitar (0.5.2)
     arel (3.0.0)
     aws-s3 (0.6.2)
       builder
@@ -43,6 +44,7 @@ GEM
     bcrypt-ruby (3.0.1)
     builder (3.0.0)
     cocaine (0.2.1)
+    columnize (0.3.6)
     dalli (1.1.4)
     declarative_authorization (0.5.5)
     delayed_job (3.0.1)
@@ -82,6 +84,8 @@ GEM
     json (1.6.5)
     launchy (2.0.5)
       addressable (~> 2.2.6)
+    linecache19 (0.5.13)
+      ruby_core_source (>= 0.1.4)
     mail (2.4.1)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -140,6 +144,16 @@ GEM
     redis (2.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    ruby-debug-base19 (0.11.26)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.5)
+      archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.5)
     shoulda (2.11.3)
     shoulda-matchers (1.0.0)
@@ -182,6 +196,7 @@ DEPENDENCIES
   google_currency
   heroku_san
   hirb
+  linecache19 (= 0.5.13)
   minitest
   money
   mysql2 (= 0.3.11)
@@ -191,6 +206,8 @@ DEPENDENCIES
   rails (= 3.2.1)
   ransack
   redis
+  ruby-debug-base19 (= 0.11.26)
+  ruby-debug19
   shoulda
   shoulda-matchers
   turn
