@@ -48,7 +48,7 @@ class UserMailer < ActionMailer::Base
       @from_user = from_user
       @to_user   = to_user
       @message   = message
-      recipients = "wenwen@heypal.com, jeremy@heypal.com, fer@heypal.com"
+      recipients = "jeremy@heypal.com, fer@heypal.com"
       subject    = "#{@to_user.full_name} has a new message!"
       sent_on    =  Time.now
       mail(:from    => MAILER_SENDER, 
