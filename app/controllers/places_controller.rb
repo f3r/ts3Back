@@ -141,141 +141,45 @@ class PlacesController < ApplicationController
   # === Error codes
   # [115] no results
   def search
-    !params[:per_page].blank? ? per_page = params[:per_page] : per_page = Place.per_page
-
-    if !params[:q].blank?
-
-      # Currency conversion
-      if !params[:currency].blank? or params[:currency] != "USD"
-        if params[:min_price]
-          min_price = params[:min_price].to_money(params[:currency]).exchange_to(:USD).cents 
-          params[:q].merge!({"price_per_month_usd_gteq" => "#{min_price}"})
-        end
-        if params[:max_price]
-          max_price = params[:max_price].to_money(params[:currency]).exchange_to(:USD).cents if params[:max_price]
-          params[:q].merge!({"price_per_month_usd_lteq" => "#{max_price}"})
-        end
-      # defaults to USD and checks against usd precalculated rates
-      else
-        params[:q].merge!({"price_per_month_usd_gteq" => "#{params[:min_price]}"}) if params[:min_price]
-        params[:q].merge!({"price_per_month_usd_lteq" => "#{params[:max_price]}"}) if params[:max_price]
-      end
-      
-
-      # Filter by number of guests
-      if !params[:guests].blank?
-        params[:q].merge!({"max_guests_gteq" => "#{params[:guests]}"})
-      end
-      
-      places = Place.with_permissions_to(:read)
-      
-      # Filter by status
-      case params[:status]
-      when "all"
-        @search = places.search(params[:q])
-      when "published"
-        @search = places.where(:published => true).search(params[:q])
-      when "not_published"
-        @search = places.where(:published => false).search(params[:q])
-      else
-        @search = places.where(:published => true).search(params[:q])
-      end
-
-      # Sorting column
-      case params[:sort]
-      when "name"
-        sorting = ["title asc"]
-      when "price_lowest"
-        sorting = ["price_per_month_usd asc"]
-      when "price_highest"
-        sorting = ["price_per_month_usd desc"]
-      when "price_size_lowest"
-        sorting = ["price_sqf_usd asc"]
-      when "price_size_highest"
-        sorting = ["price_sqf_usd desc"]
-      when "reviews_overall"
-        sorting = ["reviews_overall desc"]
-      when "most_recent"
-        sorting = ["updated_at desc"]
-      end
-
-      @search.sorts = sorting if sorting
-      places_search = @search.result(:distinct => true)
-      total_results = places_search.count
-
-      if params[:check_in]
-        check_in = params[:check_in].to_date
-        if params[:check_out]
-          check_out = params[:check_out].to_date
-        else
-          check_out = check_in + 1.month # default one month
-        end
-      end
-
-      if check_in && check_out
-        unavailable_places = []
-        for place in places_search
-          place_availability = place.place_availability(check_in, check_out, params[:currency], current_user)
-          if place_availability[:err]
-            unavailable_places << place
-          end
-        end
-        unavailable_places = unavailable_places.map(&:id)
-        if !unavailable_places.blank?
-          places_paginated = places_search.where(["id not in (?)", unavailable_places]).paginate(:page => params[:page], :per_page => per_page)
-          total_results-=1
-        else
-          places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
-        end
-      else
-        places_paginated = places_search.paginate(:page => params[:page], :per_page => per_page)
-      end
-
-      if !places_paginated.blank?
-        
-        filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
-          :user => @user_fields,
-          :place_type => @place_type_fields },
-        :currency => params[:currency]
-        })
-
-        place_types = PlaceType.all_cached
-
-        place_type_count = {}
-        for place_type in place_types
-          count = 0
-          for place in places_paginated
-            count+=1 if place.place_type_id == place_type.id
-          end
-          place_type_count.merge!({place_type.name.parameterize(sep = '_').to_sym => count}) 
-        end
-
-        amenities_count = {}
-        for amenity in @amenities
-          count = 0
-          for place in places_paginated
-            count+=1 if place.send(amenity) == true
-          end
-          amenities_count.merge!({amenity.to_s.gsub("amenities_", "") => count}) 
-        end
-
-        response = {
-          :places => filtered_places, 
-          :results => total_results, 
-          :per_page => per_page, 
-          :current_page => params[:page], 
-          :place_type_count => place_type_count,
-          :amenities_count => amenities_count,
-          :total_pages => (total_results/per_page.to_f).ceil
-        }
-      else
-        response = {:err => {:places => [115]}}
-      end
-      response = response.merge!({"check_in" => check_in, "check_out" => check_out, "total_days" => (check_in..check_out).to_a.count}) if check_in && check_out
-      return_message(200, :ok, response)
-    else
+    if params[:q].blank?
       return_message(200, :ok, {:err => {:query => [101]}})
+      return
     end
+    
+    place_search = PlaceSearch.new(current_user, params)
+    places_paginated = place_search.results
+    total_results = place_search.count_results
+    per_page = place_search.per_page
+    
+    if !places_paginated.blank?  
+      filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
+        :user => @user_fields,
+        :place_type => @place_type_fields },
+      :currency => params[:currency]
+      })
+
+      place_type_count = place_search.place_type_counts
+      amenities_count = place_search.amenities_counts
+
+      response = {
+        :places => filtered_places, 
+        :results => total_results, 
+        :per_page => per_page, 
+        :current_page => params[:page], 
+        :place_type_count => place_type_count,
+        :amenities_count => amenities_count,
+        :total_pages => (total_results/per_page.to_f).ceil
+      }
+    else
+      response = {:err => {:places => [115]}}
+    end
+
+    #response = response.merge!({"check_in" => check_in, "check_out" => check_out, "total_days" => (check_in..check_out).to_a.count}) if check_in && check_out
+    return_message(200, :ok, response)
+
+    #else
+    #  return_message(200, :ok, {:err => {:query => [101]}})
+    #end
 
   end
 

@@ -25,6 +25,7 @@ gem 'validates_timeliness', '~> 3.0.2'
 group :development do
   gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
   gem 'mail_view' 
+  gem 'taps'
 end
 
 group :test do

@@ -111,6 +111,7 @@ module GeneralHelper
   end
   
   def exchange_currency(price, old_currency, new_currency)
+    return unless price
     price.to_money(old_currency).exchange_to(new_currency).to_f
   end
 
