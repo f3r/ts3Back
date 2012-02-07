@@ -36,7 +36,7 @@ class PlacesController < ApplicationController
     @fields = @fields + @amenities
     
     @search_fields = [
-      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :photos, :currency
+      :id, :title, :size_sqf, :size_sqm, :reviews_overall, :photos, :currency, :num_bedrooms, :num_bathrooms
     ]    
     @search_fields = get_price_fields(@search_fields, STAY_UNITS)
 
