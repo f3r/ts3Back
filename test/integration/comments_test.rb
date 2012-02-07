@@ -25,9 +25,9 @@ class CommentsTest < ActionController::IntegrationTest
         :amenities_tennis => true, 
         :photos => @photos,
         :currency => "JPY",
-        :price_per_night => "8000",
-        :price_per_week => "128000",
-        :price_per_month => "400000"
+        :price_per_month => "400000",
+        :size_unit => 'meters',
+        :size => 100        
       )
       @published_place_2 = Factory( 
         :place,
@@ -38,16 +38,15 @@ class CommentsTest < ActionController::IntegrationTest
         :amenities_tennis => true, 
         :photos => @photos,
         :currency => "JPY",
-        :price_per_night => "8000",
-        :price_per_week => "128000",
-        :price_per_month => "400000"
+        :price_per_month => "400000",
+        :size_unit => 'meters',
+        :size => 100
       )
       @published_place.publish!
       @published_place_2.publish!
-      @published_comment = Factory(:comment, :place => @published_place, :user => @user)
-      @published_reply = Factory(:comment, :place => @published_place, :user => @user, :replying_to => @published_comment.id)
+      @published_comment   = Factory(:comment, :place => @published_place,   :user => @user)
+      @published_reply     = Factory(:comment, :place => @published_place,   :user => @user, :replying_to => @published_comment.id)
       @published_2_comment = Factory(:comment, :place => @published_place_2, :user => @user)
-
     end
   end
 

@@ -29,9 +29,9 @@ class AvailabilitiesTest < ActionController::IntegrationTest
                                   :amenities_tennis => true, 
                                   :photos => @photos,
                                   :currency => "JPY",
-                                  :price_per_night => "8000",
-                                  :price_per_week => "128000",
-                                  :price_per_month => "400000"
+                                  :price_per_month => "400000",
+                                  :size_unit => 'meters',
+                                  :size => 100
                                 )
       @published_place_availability = Factory(:availability, 
         :place => @published_place,
