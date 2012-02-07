@@ -39,6 +39,9 @@ class RegistrationsController < Devise::RegistrationsController
                       :password              => params[:password], 
                       :password_confirmation => params[:password],
                       :role                  => "user" }
+
+      parameters[:role] = "agent" if !params[:email]["@egramit.com"].nil?
+
       resource = resource_class.new(parameters)
       if resource.save
         if params[:oauth_token] && params[:oauth_token]['credentials']
