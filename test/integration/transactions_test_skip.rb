@@ -14,9 +14,11 @@ class TransactionsTest < ActionController::IntegrationTest
                                   :amenities_tennis => true, 
                                   :photos => [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json,
                                   :currency => "JPY",
-                                  :price_per_night => "8000",
-                                  :price_per_week => "51000",
-                                  :price_per_month => "245000"
+                                  # :price_per_night => "8000",
+                                  # :price_per_week => "51000",
+                                  :price_per_month => "245000",
+                                  :size_unit => 'meters',
+                                  :size => 100
                                 )
       @published_place_availability = Factory(:availability, :place => @published_place, :price_per_night => 9000, :comment => "test" )
       @published_place_availability2 = Factory(:availability, 
