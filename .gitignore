@@ -8,3 +8,4 @@ doc/app
 config/database.yml
 app/assets/
 config/local.yml
+public/system

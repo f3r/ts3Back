@@ -10,6 +10,8 @@ class UsersTest < ActionController::IntegrationTest
       Authorization.current_user = @admin_user
       @birthday = "1981/01/01"
     end
+    
+    User.attachment_definitions[:avatar][:path] = "public/system/avatars/:id_partition/:style.:extension"
   end
 
   should "show full current user information (json)" do
