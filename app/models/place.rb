@@ -307,7 +307,7 @@ class Place < ActiveRecord::Base
       unpublish_place = false
 
       # Place must have 3 pictures            
-      if self.photos.blank? || self.photos.count < 3
+      if self.photos.blank? || self.photos.size < 3
         unpublish_place = true
         errors.add(:publish, "123") if published_changed?
       end

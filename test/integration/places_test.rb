@@ -29,7 +29,9 @@ class PlacesTest < ActionController::IntegrationTest
         :currency => "JPY",
         # :price_per_night => "8000",
         # :price_per_week => "128000",
-        :price_per_month => "400000"
+        :price_per_month => "400000",
+        :size_unit => 'meters',
+        :size => 100
       }
       @new_place = { :title => "test title", :place_type_id => @place_type.id, :num_bedrooms => 3, :max_guests => 5, :city_id => @city.id }
       @published_place = Factory( :place, 
@@ -42,7 +44,9 @@ class PlacesTest < ActionController::IntegrationTest
                                   :currency => "JPY",
                                   # :price_per_night => "8000",
                                   # :price_per_week => "128000",
-                                  :price_per_month => "400000"
+                                  :price_per_month => "400000",
+                                  :size_unit => 'meters',
+                                  :size => 100
                                 )
       @published_place_availability = Factory(:availability, :place => @published_place )
       @published_place.publish!
@@ -191,19 +195,16 @@ class PlacesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']    
     get "/places/#{@place.id}/publish.json", {:access_token => @admin_user.authentication_token }
-    assert_response(200)
-    assert_equal 'application/json', @response.content_type
-    json = ActiveSupport::JSON.decode(response.body)
-    assert_kind_of Hash, json
-    assert_equal "ok", json['stat']
-    assert_equal true, json['place']['published']
+    assert_ok
+
+    @place.reload
+    assert @place.published
+
     get "/places/#{@place.id}/unpublish.json", {:access_token => @admin_user.authentication_token }
-    assert_response(200)
-    assert_equal 'application/json', @response.content_type
-    json = ActiveSupport::JSON.decode(response.body)
-    assert_kind_of Hash, json
-    assert_equal "ok", json['stat']    
-    assert_equal false, json['place']['published']
+    assert_ok
+    
+    @place.reload
+    assert !@place.published
   end
   
   should "not publish place with incomplete information as admin" do
@@ -414,6 +415,19 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal 1, json['place']['minimum_stay']
     assert_equal "months", json['place']['stay_unit']
     assert_equal 100, json['place']['price_per_month']
+  end
+  
+  def json_response
+    ActiveSupport::JSON.decode(response.body)
+  end
+  
+  def assert_ok
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = json_response
+    assert_kind_of Hash, json
+    assert_equal "ok", json['stat']
+    json
   end
   
   # should "not update place with 1 month minimum_stay and no monthly price (json)" do
