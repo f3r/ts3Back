@@ -49,7 +49,7 @@ class Place < ActiveRecord::Base
   has_many   :availabilities, :dependent => :destroy
   has_many   :comments, :dependent => :destroy
   has_many   :transactions, :dependent => :destroy
-
+  
   before_save   :save_amenities, 
                 :convert_prices_in_usd_cents, 
                 :update_size_fields,
@@ -62,6 +62,8 @@ class Place < ActiveRecord::Base
                 :validate_currency,
                 :validate_stays
   after_commit  :delete_cache
+  
+  before_validation :check_hong_kong_zipcode
 
   self.per_page = 20
 
@@ -473,4 +475,9 @@ class Place < ActiveRecord::Base
   
   end
   
+  def check_hong_kong_zipcode
+    if self.city_id == 2
+      self.zip ||= '999077'
+    end
+  end
 end
