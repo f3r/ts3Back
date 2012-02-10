@@ -2,7 +2,9 @@ require 'test_helper'
 
 class PlaceSearchTest < ActiveSupport::TestCase
   setup do
-    @user = Factory(:user)
+    without_access_control do
+      @user = Factory(:user)
+    end
   end
   
   test "empty search" do
@@ -11,8 +13,8 @@ class PlaceSearchTest < ActiveSupport::TestCase
   end
   
   test "country conditions" do
-    ps = PlaceSearch.new(@user, {:country_code_eq => 'SG'})
+    ps = PlaceSearch.new(@user, :q => {:country_code_eq => 'SG'})
     conditions = ps.send(:prepare_conditions)
-    assert_equal conditions, {:country_code_eq => 'SG'}
+    assert_equal({:country_code_eq => 'SG'}, conditions)
   end
 end

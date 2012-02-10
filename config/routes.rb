@@ -3,6 +3,13 @@ HeyPalBackEnd::Application.routes.draw do
     mount Preview => 'mail_view'
   end
   
+  
+  ##############################################################################
+  # ADMIN INTERFACE
+  ##############################################################################
+  ActiveAdmin.routes(self)
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  
   devise_for :users, :skip => [ :registrations, :sessions, :passwords, :confirmations ] do
     match "/" => "home#not_found"
     ##############################################################################

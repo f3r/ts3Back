@@ -21,6 +21,8 @@ class CustomFailure < Devise::FailureApp
     method = "to_#{request_format}"
     if method == "to_xml"
       { :stat => "fail", :err => i18n_message }.to_xml(:root => "rsp")
+    elsif method == "to_html"
+      redirect_to '/admin/login'
     elsif {}.respond_to?(method)
       { :stat => "fail", :err => i18n_message }.send(method)
     else

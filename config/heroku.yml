@@ -17,7 +17,7 @@ production:
     S3_BUCKET: squarestays-img-production
     FB_APP_ID: 201854953233705
     FB_APP_SECRET: 5a773c1f43daaaefb0a169fc388ba1e0
-    FRONTEND_PATH: http://squarestays.com
+    FRONTEND_PATH: http://www.squarestays.com
     SECRET_TOKEN: 4fafcf33a55a5b7d6cd2be869e9f450b65ea004e421c05b459ebb2643e7a6b3201d5f1e2da0ce7310102c7d48368b0d100087f73545fd14aff0de8050f818a61
     COOKIE_STORE_KEY: _SquareStaysProductionBackEnd_session
     MAILER_SENDER: 'SquareStays <noreply@squarestays.com>'
