@@ -84,6 +84,16 @@ class User < ActiveRecord::Base
        :medium => "-quality 80", 
        :thumb => "-quality 80" }
 
+  scope :consumer, where("role = 'user'")
+  scope :agent,  where("role = 'agent'")
+  
+  def agent?
+    role == 'agent'
+  end
+
+  def consumer?
+    role == 'user'
+  end
 
   def role_symbols
     [role.to_sym]

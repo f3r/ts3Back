@@ -1,6 +1,6 @@
 ActiveAdmin.register Place do
   controller do
-    helper :places
+    helper 'admin/places'
   end
   
   scope :all, :default => true
@@ -10,6 +10,7 @@ ActiveAdmin.register Place do
   filter :title
   filter :user
   filter :city
+  filter :created_at
   
   index do |place|
     id_column

@@ -1,4 +1,4 @@
-module PlacesHelper
+module Admin::PlacesHelper
   def public_place_path(place)
     frontend_url("/places/#{place.id}")
   end
