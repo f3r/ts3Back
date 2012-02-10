@@ -1,8 +1,23 @@
 ActiveAdmin::Dashboards.build do
+  #section "Stats" do
+  #  div do
+  #    render('/admin/stats')
+  #  end
+  #end
   
-  section "Stats" do
+  section "Users" do
     div do
-      render('/admin/stats')
+      stats = User.histo_counts(:cummulative => true)
+ 
+      render('/admin/chart', :title => 'Users', :stats => stats)
+    end
+  end
+  
+  section "Places" do
+    div do
+      stats = Place.histo_counts(:cummulative => true)
+ 
+      render('/admin/chart', :title => 'Places', :stats => stats)
     end
   end
 
