@@ -62,5 +62,6 @@ HeyPalBackEnd::Application.configure do
   config.active_support.deprecation = :notify
   
   # config.middleware.use Rack::SslEnforcer
-
+  require 'sass/plugin'
+  Sass::Plugin.options[:never_update] = true
 end
