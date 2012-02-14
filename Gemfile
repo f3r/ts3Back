@@ -26,6 +26,7 @@ gem 'activeadmin'
 gem 'sass-rails'
 gem 'meta_search',    '>= 1.1.0.pre'
 gem 'ransack'                     # Object-based search
+gem "google_visualr", ">= 2.1"
 
 group :development do
   gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb

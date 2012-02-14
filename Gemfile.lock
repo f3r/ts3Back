@@ -82,6 +82,7 @@ GEM
     google_currency (2.0.2)
       money (~> 3.5)
       multi_json (>= 1.0.0)
+    google_visualr (2.1.1)
     has_scope (0.5.1)
     heroku (2.19.0)
       launchy (>= 0.3.2)
@@ -246,6 +247,7 @@ DEPENDENCIES
   faker
   geocoder
   google_currency
+  google_visualr (>= 2.1)
   heroku_san
   hirb
   linecache19 (= 0.5.13)
