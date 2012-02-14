@@ -65,6 +65,9 @@ FactoryGirl.define do
     size         { 100 }
     price_per_month  { 400000 }
     photos       { [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json }
+    user         { @user }
+    currency     { "JPY"}
+    amenities_tv { true }
   end
   
   factory :comment do
@@ -86,6 +89,10 @@ FactoryGirl.define do
     state             { "Illinois" }
     country           { "United States" }
     country_code      { "US" }
+  end
+  
+  factory :photo do
+    photo ActionController::TestCase.fixture_file_upload('test/fixtures/test_image.jpg', 'image/jpg')
   end
 
 end

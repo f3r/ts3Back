@@ -2,8 +2,7 @@ HeyPalBackEnd::Application.routes.draw do
   if Rails.env.development?
     mount Preview => 'mail_view'
   end
-  
-  
+
   ##############################################################################
   # ADMIN INTERFACE
   ##############################################################################
@@ -73,10 +72,17 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id",                         :to => "places#show"   
     delete  "places/:id",                         :to => "places#destroy"
     get     "places/:id/:status",                 :to => "places#publish"
+    
     # temporal mailers
     post    "/places/:place_id/confirm_rental",   :to => "places#confirm_rental"
     post    "/places/:place_id/confirm_inquiry",  :to => "places#confirm_inquiry"
-    
+
+    ##############################################################################
+    # PLACE PHOTOS
+    ##############################################################################
+    get     "places/:place_id/photos",            :to => "photos#index"
+    post    "places/:place_id/photos",            :to => "photos#create"
+    delete  "places/:place_id/photos/:id",        :to => "photos#destroy"
     ##############################################################################
     # TRANSACTIONS
     ##############################################################################

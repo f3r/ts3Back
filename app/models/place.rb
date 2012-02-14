@@ -6,8 +6,6 @@ class Place < ActiveRecord::Base
   using_access_control
 
   geocoded_by :full_address, :latitude  => :lat, :longitude => :lon
-  
-  serialize :photos
 
   validates_presence_of   [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id, :user_id], :message => "101"
   validates_inclusion_of  :size_unit, :in => ["meters", "feet"], :allow_nil => true, :if => :size?, :message => "129"
@@ -49,6 +47,7 @@ class Place < ActiveRecord::Base
   has_many   :availabilities, :dependent => :destroy
   has_many   :comments, :dependent => :destroy
   has_many   :transactions, :dependent => :destroy
+  has_many   :photos, :dependent => :destroy
   
   before_save   :save_amenities, 
                 :convert_prices_in_usd_cents, 
@@ -56,8 +55,7 @@ class Place < ActiveRecord::Base
                 :update_price_sqf_field,
                 :geocode
   validate      :validate_publishing,
-                :update_location_fields, 
-                :convert_json_photos_to_array,
+                :update_location_fields,
                 :check_zip,
                 :validate_currency,
                 :validate_stays
@@ -232,14 +230,6 @@ class Place < ActiveRecord::Base
   
   def delete_cache
     delete_caches([])
-  end
-  
-  def convert_json_photos_to_array
-    begin
-      self.photos = ActiveSupport::JSON.decode(self.photos) if photos_changed? && !self.photos.blank?
-    rescue Exception
-      errors.add(:place, "131")
-    end
   end
   
   def save_amenities

@@ -18,7 +18,7 @@ authorization do
     has_permission_on :places, :to => [:manage, :publish, :user_places, :transactions] do
       if_attribute :user => is { user }
     end
-    has_permission_on [:availabilities, :comments], :to => [:manage] do
+    has_permission_on [:availabilities, :comments, :photos], :to => [:manage] do
       if_permitted_to :manage, :place
     end
     has_permission_on :transactions, :to => [:cancel, :decline, :confirm_rental, :decline] do
