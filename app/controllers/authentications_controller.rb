@@ -1,8 +1,5 @@
-class AuthenticationsController < ApplicationController
-  skip_before_filter :verify_authenticity_token
-  respond_to :xml, :json
-  filter_access_to :all, :attribute_check => false
-  
+class AuthenticationsController < ApiController
+
   def initialize
     @fields = [:id, :provider, :uid]
   end

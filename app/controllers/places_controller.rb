@@ -1,10 +1,7 @@
 require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
-class PlacesController < ApplicationController
-  filter_access_to :all, :attribute_check => false
-  skip_before_filter :verify_authenticity_token
-  respond_to :xml, :json
+class PlacesController < ApiController
   before_filter :get_user, :only => [:user_places]
   
   def initialize

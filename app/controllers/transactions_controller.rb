@@ -1,6 +1,4 @@
-class TransactionsController < ApplicationController
-  filter_access_to :all, :attribute_check => false
-  respond_to :xml, :json
+class TransactionsController < ApiController
 
   # == Description
   # Cancels a transaction

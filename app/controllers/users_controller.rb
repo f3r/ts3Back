@@ -1,9 +1,5 @@
-class UsersController < ApplicationController
-  skip_before_filter :verify_authenticity_token
-  respond_to :xml, :json
-
+class UsersController < ApiController
   before_filter :get_user, :only => [:update, :show, :change_role, :transactions, :feedback]
-  filter_access_to :all, :attribute_check => false
   
   def initialize
     @fields = [

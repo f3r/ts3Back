@@ -1,4 +1,4 @@
-class GeoController < ApplicationController
+class GeoController < ApiController
   filter_access_to :all, :attribute_check => false
   respond_to :xml, :json
   

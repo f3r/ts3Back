@@ -1,7 +1,4 @@
-class MessagesController < ApplicationController
-  filter_access_to :all, :attribute_check => false
-  skip_before_filter :verify_authenticity_token
-  respond_to :xml, :json
+class MessagesController < ApiController
 
   def initialize
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
