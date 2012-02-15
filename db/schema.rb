@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120214071058) do
+ActiveRecord::Schema.define(:version => 20120215030133) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -127,7 +127,6 @@ ActiveRecord::Schema.define(:version => 20120214071058) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
-<<<<<<< HEAD
   create_table "inquiries", :force => true do |t|
     t.integer  "user_id"
     t.integer  "place_id"
@@ -158,7 +157,7 @@ ActiveRecord::Schema.define(:version => 20120214071058) do
     t.integer  "num_bathrooms"
     t.float    "size"
     t.integer  "max_guests"
-    t.text     "photos"
+    t.text     "photos_old"
     t.integer  "city_id"
     t.string   "address_1"
     t.string   "address_2"

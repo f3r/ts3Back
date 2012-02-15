@@ -7,7 +7,7 @@ class PhotosControllerTest < ActionController::TestCase
       @user = Factory(:user, :role => 'agent')
       @place = Factory(:valid_place, :user => @user)
     end
-    Photo.attachment_definitions[:photo][:path] = "public/system/places/:id/photos/:uniq_id/:style.:extension"
+    #Photo.attachment_definitions[:photo][:path] = "public/system/places/:id/photos/:uniq_id/:style.:extension"
   end
   
   test "uploads a photo" do
@@ -15,21 +15,21 @@ class PhotosControllerTest < ActionController::TestCase
       post :create, { :access_token => @user.authentication_token, :place_id => @place.id,
         :photo => fixture_file_upload('test_image.jpg', 'image/jpg')
       }
+      
+      assert_ok
     end
-    
-    assert_ok
   end
   
   test "removes a photo" do
-    @photo = Factory(:photo)
+    @photo = Factory(:photo, :place => @place)
 
     assert_difference('Photo.count', -1) do
       post :destroy, { :access_token => @user.authentication_token, :place_id => @place.id,
         :id => @photo.id 
       }
+      
+      assert_ok
     end
-    
-    assert_ok
   end
   
   test "list photos" do

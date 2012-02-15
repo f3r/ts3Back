@@ -15,7 +15,7 @@ class CommentsTest < ActionController::IntegrationTest
       @place      = Factory(:place, :user => @agent_user, :place_type => @place_type, :city => @city)
       @comment    = Factory(:comment, :place => @place, :user => @agent_user)
 
-      @photos = [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json
+      @photos =  3.times.collect { Factory.build(:photo, :place => nil) }
       @published_place = Factory( 
         :place, 
         :user => @agent_user, 

@@ -147,7 +147,6 @@ class PlacesController < ApiController
     places_paginated = place_search.results
     total_results = place_search.count_results
     per_page = place_search.per_page
-    
     if !places_paginated.blank?  
       filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
         :user => @user_fields,

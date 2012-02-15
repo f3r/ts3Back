@@ -1,5 +1,4 @@
 defaults: &defaults
-  STORAGE: s3
   S3_ACCESS_KEY_ID: AKIAJOJEIAZ6LOVHDFDA
   S3_SECRET_ACCESS_KEY: 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
   FB_APP_ID: 221413484589066
@@ -17,7 +16,8 @@ development:
 
 test:
   <<: *defaults
-  STORAGE: filesystem
+  PAPER_STORAGE: filesystem
+  STORAGE: file
   S3_BUCKET: squarestays-img-test
   COOKIE_STORE_KEY: _SquareStaysTestBackEnd_session
   REDISTOGO_URL: redis://127.0.0.1:6379

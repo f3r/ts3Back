@@ -5,9 +5,6 @@ gem 'rails', '3.2.1'
 
 gem 'devise', '2.0.0.rc'          # Account Management
 gem 'oauth2', '0.4.1'             # oAuth providers management
-gem 'paperclip', "~> 2.4"         # Attachements
-gem 'aws-s3'                      # Upload to Amazon S3
-gem 'aws-sdk'
 gem 'money'                       # Currency management
 gem 'google_currency'             # Currency Exchange conversion
 gem 'mysql2', '0.3.11'            # MySQL DB
@@ -21,12 +18,19 @@ gem 'workflow'                    # State control
 gem 'heroku_san'                  # Manages multiple production environments
 gem 'validates_timeliness', '~> 3.0.2'
 
+# File Uploads
+gem 'paperclip', "~> 2.4"         # Attachements
+gem 'carrierwave'
+gem 'fog'
+gem 'rmagick'
+gem 'aws-s3'                      # Upload to Amazon S3
+gem 'aws-sdk'
+
 # ActiveAdmin
 gem 'activeadmin'
 gem 'sass-rails'
 gem 'meta_search',    '>= 1.1.0.pre'
 gem 'ransack'                     # Object-based search
-gem "google_visualr", ">= 2.1"
 
 group :development do
   gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb

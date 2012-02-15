@@ -9,3 +9,4 @@ config/database.yml
 app/assets/
 config/local.yml
 public/system
+public/uploads

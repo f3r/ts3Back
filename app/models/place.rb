@@ -226,6 +226,11 @@ class Place < ActiveRecord::Base
     transactions.each{|x| x.auto_decline! }
   end
 
+  # Include the photos on serialization
+  # def as_json(opts = {})
+  #   super(opts.merge(:include => [:photos]))
+  # end
+  
   private
   
   def delete_cache
@@ -302,7 +307,7 @@ class Place < ActiveRecord::Base
       unpublish_place = false
 
       # Place must have 3 pictures            
-      if self.photos.blank? || self.photos.size < 3
+      if self.photos.blank? || self.photos.count < 3
         unpublish_place = true
         errors.add(:publish, "123") if published_changed?
       end

@@ -67,17 +67,21 @@ module GeneralHelper
         if !object.avatar_file_name.blank?
           style = options[:style].blank? ? :thumb : options[:style]
           avatar = object.avatar.url(style) if object.avatar.url(style) != "none"
-          filtered_object.merge!({:avatar => avatar })
+          filtered_object[:avatar] = avatar
         else
-          filtered_object.merge!({:avatar => nil })
+          filtered_object[:avatar] = nil
         end
+      elsif field == :photos
+        # I am going to hell because of this line
+        filtered_object[:photos] = object.photos.as_json
       else
-        filtered_object.merge!({field => object["#{field}"]})
+        filtered_object[field] = object["#{field}"]
       end
       if !additional_fields.blank? && additional_fields[field].class == Array
         filtered_object.merge!(get_additional_fields(field, object, additional_fields[field]))
       end
     end
+
     remove_fields.map{|x| filtered_object.delete(x) }
     return filtered_object
   end
