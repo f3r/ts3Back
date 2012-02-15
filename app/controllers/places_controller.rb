@@ -528,7 +528,9 @@ class PlacesController < ApplicationController
   end
 
   def confirm_inquiry
-   @place = Place.with_permissions_to(:read).find(params[:place_id])
+   # Because of SEO params, we no longer receive "16", but "16-place_title_blah_blah"
+   place_id = params[:place_id].split('-').first
+   @place = Place.with_permissions_to(:read).find(place_id)
    begin
      check_in  = params[:date_start].to_date rescue nil
      check_out = check_in + params[:length_stay].to_i.send(params[:length_stay_type]) rescue nil
