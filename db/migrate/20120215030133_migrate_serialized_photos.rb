@@ -5,11 +5,12 @@ class MigrateSerializedPhotos < ActiveRecord::Migration
       if !photos_old.blank?
         photos_old.each do |row|
           photo = row["photo"]
-          Photo.create!(
-            :id => photo["id"],
+          p = Photo.new(
             :place_id => place.id,
             :name => photo["name"],
-            :remote_photo_url => photo["original"])
+            :remote_photo_url => photo["original"].gsub('https', 'http'))
+          p.id = photo['id']
+          #p.save!
         end
       end
     end

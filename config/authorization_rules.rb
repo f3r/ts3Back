@@ -6,7 +6,7 @@ authorization do
 
   role :admin do
     includes [:default]
-    has_permission_on [:users, :places, :place_types, :addresses, :bank_accounts, :availabilities, :comments], :to => [:manage]
+    has_permission_on [:users, :places, :place_types, :addresses, :bank_accounts, :availabilities, :comments, :photos], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish, :transactions]
     has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
@@ -27,6 +27,7 @@ authorization do
     has_permission_on :bank_accounts, :to => [:manage] do
       if_attribute :user => is { user }
     end
+    has_permission_on :photos, :to => [:create]
   end
 
   role :user do

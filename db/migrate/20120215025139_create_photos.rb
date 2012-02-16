@@ -3,7 +3,8 @@ class CreatePhotos < ActiveRecord::Migration
     create_table :photos do |t|
       t.references :place
       t.string :name
-      t.string :photo
+      #t.string :photo
+      t.has_attached_file :photo
     end
   end
 

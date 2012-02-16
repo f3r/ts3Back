@@ -30,6 +30,7 @@ class PhotoUploader < CarrierWave::Uploader::Base
   end
   
   version :large do
+    process :watermark => "#{Rails.root}/public/images/watermark_icon.png"
     process :resize_to_fill => [602,401]
   end
   

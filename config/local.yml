@@ -16,8 +16,8 @@ development:
 
 test:
   <<: *defaults
-  PAPER_STORAGE: filesystem
-  STORAGE: file
+  STORAGE: filesystem
+  CARRIER_STORAGE: file
   S3_BUCKET: squarestays-img-test
   COOKIE_STORE_KEY: _SquareStaysTestBackEnd_session
   REDISTOGO_URL: redis://127.0.0.1:6379
