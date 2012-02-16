@@ -62,7 +62,7 @@ class InquiryMailer < ActionMailer::Base
     end
   end
 
-  def inquiry_confirmed_admin(place, params, check_in, check_out, current_user)
+  def inquiry_confirmed_admin(place, params, check_in, check_out, current_user, inquiry = nil)
     begin
       @owner     = place.user
       if current_user
@@ -71,6 +71,7 @@ class InquiryMailer < ActionMailer::Base
         @renter = User.new(:first_name => params[:name], :email => params[:email], :phone_mobile => params[:mobile])
       end
       @place     = place
+      @inquiry   = inquiry
       if check_in && check_out
         @check_in  = check_in
         @check_out = check_out
@@ -80,7 +81,6 @@ class InquiryMailer < ActionMailer::Base
       mail(:from    => MAILER_SENDER,
            :to      => recipients, 
            :subject => subject) do |format|
-        format.text
         format.html
       end
     rescue Exception => e

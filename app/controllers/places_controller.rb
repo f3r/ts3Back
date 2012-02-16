@@ -534,9 +534,10 @@ class PlacesController < ApplicationController
    begin
      check_in  = params[:date_start].to_date rescue nil
      check_out = check_in + params[:length_stay].to_i.send(params[:length_stay_type]) rescue nil
-     InquiryMailer.inquiry_confirmed_renter(@place, params).deliver
-     InquiryMailer.inquiry_confirmed_owner(@place, params, check_in, check_out, current_user).deliver
-     InquiryMailer.inquiry_confirmed_admin(@place, params, check_in, check_out, current_user).deliver
+     Inquiry.create_and_notify(@place, current_user, check_in, check_out, params)
+     # InquiryMailer.inquiry_confirmed_renter(@place, params).deliver
+     # InquiryMailer.inquiry_confirmed_owner(@place, params, check_in, check_out, current_user).deliver
+     # InquiryMailer.inquiry_confirmed_admin(@place, params, check_in, check_out, current_user).deliver
      return_message(200, :ok)
    rescue Exception => e
      logger.error { "Error [places_controller.rb/confirm_inquiry] #{e.message}" }

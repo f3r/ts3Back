@@ -1,4 +1,5 @@
 ActiveAdmin.register User do
+  menu :priority => 1
   actions :all, :except => [:destroy]
   
   controller do

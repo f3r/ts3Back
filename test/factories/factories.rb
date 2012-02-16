@@ -47,6 +47,26 @@ FactoryGirl.define do
     amenities_tv { true }
   end
   
+  factory :published_place, :class => Place do
+    title        { Faker::Lorem.words(2).to_sentence }
+    description  { Faker::Lorem.paragraph }
+    address_1    { Faker::Address.street_address }
+    address_2    { Faker::Address.secondary_address }
+    zip          { Faker::Address.zip }
+    city
+    num_bedrooms { 2 }
+    max_guests   { 4 }
+    place_type
+    user
+    currency     { "JPY"}
+    amenities_tv { true }
+    published    { true }
+    size_unit    { 'meters' }
+    size         { 100 }
+    price_per_month  { 400000 }
+    photos       { [{:url => "http://example.com/luke.jpg",:description => "Luke"}, {:url => "http://example.com/yoda.jpg",:description => "Yoda"}, {:url => "http://example.com/darthvader.jpg",:description => "Darth Vader"}].to_json }
+  end
+  
   factory :comment do
     place     { @place }
     user      { @user  }

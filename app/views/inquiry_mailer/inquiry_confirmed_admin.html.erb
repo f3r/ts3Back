@@ -8,3 +8,7 @@
 <li>Place id:    <%= @place.id %></li>
 <li>Check in:    <%= @check_in %></li>
 <li>Check out:   <%= @check_out %></li>
+
+<% if false && @inquiry %>
+  <p>Click for details: <%= link_to admin_inquiry_path(@inquiry), admin_inquiry_path(@inquiry) %></p>
+<% end %>

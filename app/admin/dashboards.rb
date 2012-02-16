@@ -5,7 +5,7 @@ ActiveAdmin::Dashboards.build do
   #  end
   #end
   
-  section "Users" do
+  section "Users", :priority => 1 do
     div do
       stats = User.histo_counts(:cummulative => true)
  
@@ -13,7 +13,7 @@ ActiveAdmin::Dashboards.build do
     end
   end
   
-  section "Places" do
+  section "Places", :priority => 1 do
     div do
       stats = Place.histo_counts(:cummulative => true)
  
