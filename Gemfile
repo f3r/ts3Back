@@ -20,9 +20,6 @@ gem 'validates_timeliness', '~> 3.0.2'
 
 # File Uploads
 gem 'paperclip', "~> 2.4"         # Attachements
-gem 'carrierwave'
-gem 'fog'
-gem 'rmagick'
 gem 'aws-s3'                      # Upload to Amazon S3
 gem 'aws-sdk'
 

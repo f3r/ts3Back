@@ -1,8 +1,6 @@
 class Photo < ActiveRecord::Base
   belongs_to :place
   
-  #mount_uploader :photo, PhotoUploader
-  
   has_attached_file :photo, {
      :styles => {
        :large => {
@@ -21,7 +19,7 @@ class Photo < ActiveRecord::Base
   #validates_presence_of :place_id
   
   def as_json(opts = {})
-    photo_hash = {:name => self.name, :original => self.photo.url}
+    photo_hash = {:id => self.id, :name => self.name, :original => self.photo.url}
     [:tiny, :small, :medsmall, :medium, :large].each do |version|
       photo_hash[version] = self.photo.url(version)
     end

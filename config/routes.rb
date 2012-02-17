@@ -82,7 +82,7 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     get     "places/:place_id/photos",            :to => "photos#index"
     post    "places/:place_id/photos",            :to => "photos#create"
-    delete  "places/:place_id/photos/:id",        :to => "photos#destroy"
+    delete  "photos/:id",        :to => "photos#destroy"
     ##############################################################################
     # TRANSACTIONS
     ##############################################################################

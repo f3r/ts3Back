@@ -5,7 +5,7 @@ class PhotosControllerTest < ActionController::TestCase
     @request.accept = 'application/json'
     without_access_control do
       @user = Factory(:user, :role => 'agent')
-      @place = Factory(:valid_place, :user => @user)
+      @place = Factory(:published_place, :user => @user)
     end
     #Photo.attachment_definitions[:photo][:path] = "public/system/places/:id/photos/:uniq_id/:style.:extension"
   end
@@ -15,7 +15,6 @@ class PhotosControllerTest < ActionController::TestCase
       post :create, { :access_token => @user.authentication_token, :place_id => @place.id,
         :photo => fixture_file_upload('test_image.jpg', 'image/jpg')
       }
-      
       assert_ok
     end
   end

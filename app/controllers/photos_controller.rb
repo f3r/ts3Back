@@ -1,9 +1,9 @@
 class PhotosController < ApiController
 
-  before_filter :get_place
+  before_filter :get_place, :except => [:destroy]
   
   def initialize
-    @fields = [:id, :user_id, :place_id, :comment, :owner, :created_at]
+    @fields = [:id, :name, :place_id, :created_at]
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
   end
   
@@ -47,7 +47,7 @@ class PhotosController < ApiController
   # == Description
   # Deletes a photo
   # ==Resource URL
-  # /places/:place_id/photo/:id.format
+  # /photos/:id.format
   # ==Example
   # DELETE https://backend-heypal.heroku.com/places/123/photo/:id.json access_token=access_token
   # === Parameters
