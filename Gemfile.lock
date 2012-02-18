@@ -39,6 +39,7 @@ GEM
     activesupport (3.2.1)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    acts_as_list (0.1.4)
     addressable (2.2.6)
     ansi (1.4.1)
     archive-tar-minitar (0.5.2)
@@ -236,6 +237,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin
+  acts_as_list
   aws-s3
   aws-sdk
   dalli

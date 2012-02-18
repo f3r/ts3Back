@@ -18,6 +18,13 @@ class Photo < ActiveRecord::Base
   
   #validates_presence_of :place_id
   
+  def self.set_positions(photo_ids)
+    photo_ids.each_with_index do |photo_id, idx|
+      self.find(photo_id).update_attribute(:position, idx + 1)
+    end
+    true
+  end
+  
   def as_json(opts = {})
     photo_hash = {:id => self.id, :name => self.name, :original => self.photo.url}
     [:tiny, :small, :medsmall, :medium, :large].each do |version|

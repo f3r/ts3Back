@@ -61,6 +61,33 @@ class PhotosController < ApiController
     end
   end
   
+  def update
+    @photo = Photo.find(params[:id])
+    @photo.name = params[:name]
+    if @photo.save
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => format_errors(@photo.errors.messages)})
+    end
+  end
+
+  # == Description
+  # Changes the order of photos
+  # ==Resource URL
+  # /places/:place_id/photos/sort.format
+  # ==Example
+  # PUT https://backend-heypal.heroku.com/places/123/photos/:sort.json access_token=access_token
+  # === Parameters
+  # [access_token]
+  # [photo_ids]     The ids of the photos in the desired order
+  def sort
+    if @place.photos.set_positions(params[:photo_ids])
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => format_errors(@place.errors.messages)})
+    end
+  end
+  
   protected
   
   def get_place

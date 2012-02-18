@@ -17,6 +17,8 @@ gem 'declarative_authorization'   # Access Control List
 gem 'workflow'                    # State control
 gem 'heroku_san'                  # Manages multiple production environments
 gem 'validates_timeliness', '~> 3.0.2'
+gem 'acts_as_list'				  # Support for sortable associations
+
 
 # File Uploads
 gem 'paperclip', "~> 2.4"         # Attachements

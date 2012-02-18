@@ -6,10 +6,11 @@ authorization do
 
   role :admin do
     includes [:default]
-    has_permission_on [:users, :places, :place_types, :addresses, :bank_accounts, :availabilities, :comments, :photos], :to => [:manage]
+    has_permission_on [:users, :places, :place_types, :addresses, :bank_accounts, :availabilities, :comments], :to => [:manage]
     has_permission_on :users, :to => [:change_role]
     has_permission_on :places, :to => [:user_places, :publish, :transactions]
     has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
+    has_permission_on :photos, :to => [:manage, :sort]
   end
 
   role :agent do
@@ -18,7 +19,7 @@ authorization do
     has_permission_on :places, :to => [:manage, :publish, :user_places, :transactions] do
       if_attribute :user => is { user }
     end
-    has_permission_on [:availabilities, :comments, :photos], :to => [:manage] do
+    has_permission_on [:availabilities, :comments], :to => [:manage] do
       if_permitted_to :manage, :place
     end
     has_permission_on :transactions, :to => [:cancel, :decline, :confirm_rental, :decline] do
@@ -27,7 +28,7 @@ authorization do
     has_permission_on :bank_accounts, :to => [:manage] do
       if_attribute :user => is { user }
     end
-    has_permission_on :photos, :to => [:create]
+    has_permission_on :photos, :to => [:manage, :sort]
   end
 
   role :user do

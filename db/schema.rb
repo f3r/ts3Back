@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(:version => 20120216065438) do
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
+    t.integer  "position"
   end
 
   create_table "place_types", :force => true do |t|

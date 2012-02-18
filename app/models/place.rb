@@ -47,7 +47,7 @@ class Place < ActiveRecord::Base
   has_many   :availabilities, :dependent => :destroy
   has_many   :comments, :dependent => :destroy
   has_many   :transactions, :dependent => :destroy
-  has_many   :photos, :dependent => :destroy
+  has_many   :photos, :dependent => :destroy, :order => :position
   
   before_save   :save_amenities, 
                 :convert_prices_in_usd_cents, 
@@ -306,8 +306,8 @@ class Place < ActiveRecord::Base
 
       unpublish_place = false
 
-      # Place must have 3 pictures            
-      if self.photos.blank? || self.photos.count < 3
+      # Place must have 3 pictures
+      if self.photos.blank? || self.photos.size < 3
         unpublish_place = true
         errors.add(:publish, "123") if published_changed?
       end

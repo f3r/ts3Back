@@ -5,6 +5,7 @@ class CreatePhotos < ActiveRecord::Migration
       t.string :name
       #t.string :photo
       t.has_attached_file :photo
+      t.integer :position
     end
   end
 

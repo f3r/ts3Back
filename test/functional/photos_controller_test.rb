@@ -32,7 +32,6 @@ class PhotosControllerTest < ActionController::TestCase
   end
   
   test "list photos" do
-    3.times.each { Factory(:photo, :place => @place) }
     assert_equal 3, @place.photos.count
     
     get :index, { :access_token => @user.authentication_token, :place_id => @place.id }

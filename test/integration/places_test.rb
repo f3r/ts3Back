@@ -189,23 +189,22 @@ class PlacesTest < ActionController::IntegrationTest
   end
   
   should "update place, publish it and unpublish it as admin (json)" do
-    put "/places/#{@place.id}.json", @place_new_info.merge({:access_token => @admin_user.authentication_token})
-    assert_response(200)
-    assert_equal 'application/json', @response.content_type
-    json = ActiveSupport::JSON.decode(response.body)
-    assert_kind_of Hash, json
-    assert_equal "ok", json['stat']    
-    get "/places/#{@place.id}/publish.json", {:access_token => @admin_user.authentication_token }
+    without_access_control do
+      @published_place = Factory(:published_place)
+      @published_place.update_attribute(:published, false)
+    end
+
+    get "/places/#{@published_place.id}/publish.json", {:access_token => @admin_user.authentication_token }
     assert_ok
 
-    @place.reload
-    assert @place.published
+    @published_place.reload
+    assert @published_place.published
 
-    get "/places/#{@place.id}/unpublish.json", {:access_token => @admin_user.authentication_token }
+    get "/places/#{@published_place.id}/unpublish.json", {:access_token => @admin_user.authentication_token }
     assert_ok
     
-    @place.reload
-    assert !@place.published
+    @published_place.reload
+    assert !@published_place.published
   end
   
   should "not publish place with incomplete information as admin" do
