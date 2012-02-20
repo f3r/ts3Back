@@ -41,4 +41,9 @@ HeyPalBackEnd::Application.configure do
   config.assets.allow_debugging = true
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  
+  config.after_initialize do
+    User.attachment_definitions[:avatar][:path] = "public/system/" + User.attachment_definitions[:avatar][:path]
+    Photo.attachment_definitions[:photo][:path] = "public/system/" + Photo.attachment_definitions[:photo][:path]
+  end
 end
