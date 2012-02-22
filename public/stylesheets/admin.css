@@ -1,3 +1,7 @@
 .dashboard .stats div {
   margin: 10px auto 30px;
 }
+
+#place_published_input {
+  display: none;
+}

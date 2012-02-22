@@ -13,8 +13,8 @@ ActiveAdmin.register Place do
   filter :user
   filter :city
   filter :created_at
-  
-  index do |place|
+
+  index do
     id_column
     column :title
     column :user
@@ -24,13 +24,34 @@ ActiveAdmin.register Place do
     column("Status")      {|place| status_tag(place.published ? 'Published' : 'Unpublished') }
     column("Actions")     {|place| place_links_column(place) }
   end
-  
-  show do |ad|
+
+  show do
     rows = default_attribute_table_rows.reject {|a| a =~ /photos|amenities|review/}
     attributes_table *rows do
       row(:amenties)      {|place| place_amenities_row(place) }
       row(:photos)        {|place| place_photos_row(place)}
     end
     active_admin_comments
+  end
+
+  # Publish/Unpublish
+  action_item :only => :show do
+    if place.published?
+      link_to 'Unpublish', unpublish_admin_place_path(place), :method => :put
+    else
+      link_to 'Publish', publish_admin_place_path(place), :method => :put
+    end
+  end
+
+  member_action :publish, :method => :put do
+    place = Place.find(params[:id])
+    published = place.publish!
+    redirect_to({:action => :show}, :notice => (published ? "The place was published" : "The place cannot be published"))
+  end
+
+  member_action :unpublish, :method => :put do
+    place = Place.find(params[:id])
+    published = place.unpublish!
+    redirect_to({:action => :show}, :notice =>"The place was unpublished")
   end
 end
