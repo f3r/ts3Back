@@ -1,7 +1,7 @@
 class AdminUser < ActiveRecord::Base
   self.table_name= :users
   
-  default_scope where(:role => 'admin')
+  default_scope where(["role = ? or role = ?", "admin", "superadmin"])
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
