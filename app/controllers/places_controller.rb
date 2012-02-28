@@ -92,6 +92,7 @@ class PlacesController < ApiController
   # [blank]
   #   Empty, 1 or 0
   #     Ex: q[description_present]=1
+  #
   # === Parameters
   # The search parameters are received as an array named "q", the paramater itself is composed by the name of the column and the matching option.
   # Do not use this search paramaters for published status.
@@ -129,6 +130,10 @@ class PlacesController < ApiController
   # [sort]
   #   Sorting options: name, price_lowest, price_highest, price_size_lowest, price_size_highest, reviews, most_recent
   #     Ex: sort=price_lowest
+  # [city]
+  #   Defaults to Singapore (1). City id for the places you are looking for
+  #     Ex: city=1
+  #
   # === Response
   # [results]      Total number of results. Used for pagination
   # [current_page] Current page number. Used for pagination
@@ -138,33 +143,34 @@ class PlacesController < ApiController
   # === Error codes
   # [115] no results
   def search
-    if params[:q].blank?
-      return_message(200, :ok, {:err => {:query => [101]}})
-      return
-    end
-    
-    place_search = PlaceSearch.new(current_user, params)
+    # if params[:q].blank?
+    #   return_message(200, :ok, {:err => {:query => [101]}})
+    #   return
+    # end
+    logger.error "---------- #{params}"
+    place_search     = PlaceSearch.new(current_user, params)
     places_paginated = place_search.results
-    total_results = place_search.count_results
-    per_page = place_search.per_page
+    total_results    = place_search.count_results
+    per_page         = place_search.per_page
+
     if !places_paginated.blank?  
       filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
-        :user => @user_fields,
+        :user       => @user_fields,
         :place_type => @place_type_fields },
       :currency => params[:currency]
       })
 
       place_type_count = place_search.place_type_counts
-      amenities_count = place_search.amenities_counts
+      amenities_count  = place_search.amenities_counts
 
       response = {
-        :places => filtered_places, 
-        :results => total_results, 
-        :per_page => per_page, 
-        :current_page => params[:page], 
+        :places           => filtered_places, 
+        :results          => total_results, 
+        :per_page         => per_page, 
+        :current_page     => params[:page], 
         :place_type_count => place_type_count,
-        :amenities_count => amenities_count,
-        :total_pages => (total_results/per_page.to_f).ceil
+        :amenities_count  => amenities_count,
+        :total_pages      => (total_results/per_page.to_f).ceil
       }
     else
       response = {:err => {:places => [115]}}

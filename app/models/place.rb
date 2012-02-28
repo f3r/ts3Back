@@ -65,7 +65,7 @@ class Place < ActiveRecord::Base
 
   self.per_page = 20
 
-  scope :published, where("published")
+  scope :published,    where("published")
   scope :unpublished,  where("not published")
 
   def publish!

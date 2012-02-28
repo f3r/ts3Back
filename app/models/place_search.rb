@@ -70,6 +70,10 @@ class PlaceSearch
       places = all_places.where(:published => true)
     end
     
+    # Filter by City
+    params[:city] = 1 if !params[:city]
+    places = places.where(:city_id => params[:city])   
+
     @source = places
   end
   

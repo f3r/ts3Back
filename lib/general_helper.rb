@@ -115,8 +115,12 @@ module GeneralHelper
   end
   
   def exchange_currency(price, old_currency, new_currency)
+  begin
     return unless price
-    price.to_money(old_currency).exchange_to(new_currency).to_f
+    price.to_money(old_currency).exchange_to(new_currency).to_f    
+  rescue Exception => e
+    0
+  end
   end
 
   # Validates multiple attributes using the validation rules from a model
