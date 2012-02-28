@@ -7,6 +7,7 @@ class MigrateSerializedPhotos < ActiveRecord::Migration
           photo = row["photo"]
           photo_url = photo["original"].gsub('https', 'http')
           unless Photo.exists?(photo['id'])
+            puts "Regenerating photo: #{photo['id']}"
             p = Photo.new(
               :place_id => place.id,
               :name => photo["name"],
