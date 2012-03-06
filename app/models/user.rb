@@ -70,23 +70,23 @@ class User < ActiveRecord::Base
   # TODO: Do we really want to destroy comments or nullify them?
   has_many :comments,        :dependent => :destroy
   has_many :transactions
-  
-  has_attached_file :avatar, 
+
+  has_attached_file :avatar,
      :styles => {
        :thumb  => "100x100#",
        :medium => "300x300#",
-       :large  => "600x600>" 
+       :large  => "600x600>"
       },
-     :path => "/avatars/:id_partition/:style.:extension",
+     :path => "/avatars/:id/:style.:extension",
      :default_url => "none",
      :convert_options => { 
-       :large => "-quality 80", 
-       :medium => "-quality 80", 
+       :large => "-quality 80",
+       :medium => "-quality 80",
        :thumb => "-quality 80" }
 
   scope :consumer, where("role = 'user'")
   scope :agent,  where("role = 'agent'")
-  
+
   def agent?
     role == 'agent'
   end
