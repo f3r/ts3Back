@@ -71,8 +71,9 @@ class PlaceSearch
     end
     
     # Filter by City
-    params[:city] = 1 if !params[:city]
-    places = places.where(:city_id => params[:city])   
+    city_id = params[:city] || params[:city_id]
+    city_id ||= 1
+    places = places.where(:city_id => city_id)
 
     @source = places
   end
@@ -83,7 +84,7 @@ class PlaceSearch
     ignore_filters.each do |filter|
       conditions.delete(filter)
     end
-    
+
     # Filter by conditions
     @search = @source.search(conditions)
   end
