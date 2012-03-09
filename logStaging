@@ -1,0 +1,2 @@
+#!/bin/bash
+heroku logs -t --source app --app squarestage-backend
