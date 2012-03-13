@@ -1,6 +1,8 @@
 class Photo < ActiveRecord::Base
   belongs_to :place
-  
+
+  after_destroy :update_place_status
+
   has_attached_file :photo, {
      :styles => {
        :large => {
@@ -43,5 +45,13 @@ class Photo < ActiveRecord::Base
     self.photo = io.original_filename.blank? ? nil : io
   rescue # catch url errors with validations instead of exceptions (Errno::ENOENT, OpenURI::HTTPError, etc...)
     logger.error "Cannot fetch #{url}"
+  end
+
+  protected
+
+  def update_place_status
+    if self.place && self.place.photos.count < 3
+      self.place.update_attribute(:published, false)
+    end
   end
 end

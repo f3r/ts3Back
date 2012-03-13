@@ -1,12 +1,12 @@
 class PhotosController < ApiController
 
   before_filter :get_place, :except => [:destroy]
-  
+
   def initialize
     @fields = [:id, :name, :place_id, :created_at]
     @user_fields = [:id, :first_name, :last_name, :avatar_file_name, :role]
   end
-  
+
   # == Description
   # Returns all the photos for a place
   # ==Resource URL
@@ -60,7 +60,7 @@ class PhotosController < ApiController
       return_message(200, :fail, {:err => format_errors(@photo.errors.messages)})
     end
   end
-  
+
   def update
     @photo = Photo.find(params[:id])
     @photo.name = params[:name]
@@ -87,9 +87,9 @@ class PhotosController < ApiController
       return_message(200, :fail, {:err => format_errors(@place.errors.messages)})
     end
   end
-  
+
   protected
-  
+
   def get_place
     @place = Place.with_permissions_to(:read).find(params[:place_id])
   end
