@@ -48,6 +48,7 @@
 [144] publish: no address
 [145] publish: no zip code
 [146] publish: no size
+[147] must be a number within 1 and 5
 
 #== Notifications
 # Type - Event - Parameters - Sample Message

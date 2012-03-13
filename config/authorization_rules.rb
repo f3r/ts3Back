@@ -11,6 +11,9 @@ authorization do
     has_permission_on :places, :to => [:user_places, :publish, :transactions]
     has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
     has_permission_on :photos, :to => [:manage, :sort]
+    has_permission_on :reviews, :to => :manage do
+      if_permitted_to :manage, :place
+    end
   end
 
   role :agent do
@@ -29,6 +32,9 @@ authorization do
       if_attribute :user => is { user }
     end
     has_permission_on :photos, :to => [:manage, :sort]
+    has_permission_on :reviews, :to => :read do
+      if_permitted_to :manage, :place
+    end
   end
 
   role :user do
@@ -62,6 +68,10 @@ authorization do
     has_permission_on :confirmations, :to => [:cancel] do
       if_attribute :confirmed_at => is_not { blank? }
     end
+    has_permission_on :reviews, :to => :create do
+      # TODO: Validate if user has a completed transaction with the place
+      if_permitted_to :read, :place
+    end
   end
   
   role :guest do
@@ -85,6 +95,9 @@ authorization do
       if_attribute :comments_count => gt { 0 }
     end
     has_permission_on :geo, :to => [:get_countries, :get_states, :get_cities, :get_city, :city_search, :price_range]
+    has_permission_on :reviews, :to => :read do
+      if_attribute :private => is { false }
+    end
   end
 
 end

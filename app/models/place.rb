@@ -45,6 +45,7 @@ class Place < ActiveRecord::Base
   belongs_to :place_type
   belongs_to :city
   has_many   :availabilities, :dependent => :destroy
+  has_many   :reviews, :dependent => :destroy
   has_many   :comments, :dependent => :destroy
   has_many   :transactions, :dependent => :destroy
   has_many   :photos, :dependent => :destroy, :order => :position
@@ -230,7 +231,26 @@ class Place < ActiveRecord::Base
   # def as_json(opts = {})
   #   super(opts.merge(:include => [:photos]))
   # end
-  
+
+  def update_review_average(fields)
+    for field in fields
+      average = 0
+      reviews = self.reviews.where(["reviews.#{field} > ?", 0])
+      if reviews.length > 0
+        average = reviews.map(&field.to_sym).sum / reviews.length
+        self["reviews_#{field}_avg"] = average if average > 0
+      end
+    end
+    reviews_values = [self["reviews_accuracy_avg"], self["reviews_cleanliness_avg"], self["reviews_checkin_avg"], self["reviews_communication_avg"], self["reviews_location_avg"], self["reviews_value_avg"]]
+    # puts reviews_values.inspect
+    self["reviews_overall"] = reviews_values.sum / reviews_values.size.to_f
+
+    ActiveRecord::Base.record_timestamps = false
+    self.save
+    ActiveRecord::Base.record_timestamps = true
+    return nil
+  end  
+
   private
   
   def delete_cache
@@ -478,4 +498,5 @@ class Place < ActiveRecord::Base
       self.zip ||= '999077'
     end
   end
+
 end

@@ -61,6 +61,12 @@ HeyPalBackEnd::Application.routes.draw do
     put     "places/:place_id/comments/:id", :to => "comments#update"
     delete  "places/:place_id/comments/:id", :to => "comments#destroy"
     ##############################################################################
+    # PLACE REVIEWS
+    ##############################################################################
+    get     "places/:id/reviews",             :to => "reviews#index"
+    post    "places/:id/reviews",             :to => "reviews#create"
+    delete  "places/:id/reviews/:review_id",  :to => "reviews#destroy"
+    ##############################################################################
     # PLACES
     ##############################################################################
     get     "places/:id/request",                 :to => "places#place_request"

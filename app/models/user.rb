@@ -67,6 +67,7 @@ class User < ActiveRecord::Base
   has_many :addresses,       :dependent => :destroy
   has_many :bank_accounts,   :dependent => :destroy
   has_many :places,          :dependent => :destroy
+  has_many :reviews,          :dependent => :destroy
   # TODO: Do we really want to destroy comments or nullify them?
   has_many :comments,        :dependent => :destroy
   has_many :transactions
