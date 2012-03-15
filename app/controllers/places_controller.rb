@@ -2,7 +2,7 @@ require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
 
 class PlacesController < ApiController
-  before_filter :get_user, :only => [:user_places]
+  before_filter :get_user, :only => [:user_places, :favorite_places]
   
   def initialize
     @fields = [
@@ -359,6 +359,31 @@ class PlacesController < ApiController
   end
 
   # == Description
+  # Shows a users favorite places
+  # ==Resource URL
+  #   /users/:id/favorite_places.format
+  #   /users/me/favorite_places.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/users/:id/favorite_places.json access_token=access_token
+  #   GET https://backend-heypal.heroku.com/users/me/favorite_places.json access_token=access_token
+  # === Parameters
+  # [access_token]  Access token
+  # [currency]   ISO Code of the currency to return prices in
+  # === Error codes
+  # [115]           no results
+  def favorite_places
+    @places = @user.get_favorites(:place)
+    if !@places.blank?
+      places_return = filter_fields(@places,@fields, { :additional_fields => {
+        :place_type => @place_type_fields},
+        :currency => params[:currency]})
+      return_message(200, :ok, {:places => places_return})
+    else
+      return_message(200, :ok, { :err => {:places => [115]}})
+    end
+  end
+
+  # == Description
   # Changes a place status
   # ==Resource URL
   #   /places/:id/:status.format
@@ -546,7 +571,66 @@ class PlacesController < ApiController
      return_message(200, :fail, :err => {:place => [] })
    end
   end
+
+  # == Description
+  # Adds a place to the current user's favorite list
+  # ==Resource URL
+  #   /places/:id/add_favorite.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/places/:id/add_favorite.json access_token=access_token
+  # === Parameters
+  # [access_token]  Access token
+  # === Error codes
+  # [106] Record not found
+  # [147] already favorited
+  def add_favorite
+    place = Place.with_permissions_to(:read).find(params[:id])
+    if current_user.add_favorite(place)
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, { :err => {:places => [147]}})
+    end
+  end
   
+  # == Description
+  # Removes a place from the current user's favorite list
+  # ==Resource URL
+  #   /places/:id/remove_favorite.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/places/:id/remove_favorite.json access_token=access_token
+  # === Parameters
+  # [access_token]  Access token
+  # === Error codes
+  # [106] Record not found
+  # [148] not a favorite
+  def remove_favorite
+    place = Place.with_permissions_to(:read).find(params[:id])
+    if current_user.remove_favorite(place)
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, { :err => {:places => [148]}})
+    end
+  end
+  
+  # == Description
+  # Check if place is favorited by user
+  # ==Resource URL
+  #   /places/:id/is_favorite.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/places/:id/is_favorite.json access_token=access_token
+  # === Parameters
+  # [access_token]  Access token
+  # [currency]   ISO Code of the currency to return prices in
+  def is_favorite
+    place = Place.with_permissions_to(:read).find(params[:id])
+    favorited = current_user.favorite?(:place, place.id)
+    if !favorited.blank?
+      return_message(200, :ok, {:is_favorite => true})
+    else
+      return_message(200, :ok, {:is_favorite => false})
+    end
+  end
+
   protected
   def get_user
     if params[:user_id] && params[:user_id].to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) != nil # is numeric

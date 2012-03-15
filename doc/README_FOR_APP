@@ -48,6 +48,8 @@
 [144] publish: no address
 [145] publish: no zip code
 [146] publish: no size
+[147] already favorited
+[148] not a favorite
 
 #== Notifications
 # Type - Event - Parameters - Sample Message

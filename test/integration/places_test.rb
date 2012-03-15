@@ -416,6 +416,41 @@ class PlacesTest < ActionController::IntegrationTest
     assert_equal "months", json['place']['stay_unit']
     assert_equal 100, json['place']['price_per_month']
   end
+
+  should "add and remove place from favorites (json)" do
+    get "/places/#{@place.id}/add_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_ok
+    get "/places/#{@place.id}/remove_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_ok
+  end
+
+  should "add and check favorited? place from favorites (json)" do
+    get "/places/#{@place.id}/add_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_ok
+    get "/places/#{@place.id}/is_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_ok
+    json = json_response
+    assert_equal true, json['is_favorite']
+  end
+
+  should "check not favorited? place from favorites (json)" do
+    get "/places/#{@place.id}/is_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_ok
+    json = json_response
+    assert_equal false, json['is_favorite']
+  end
+
+  should "not add twice place from favorites (json)" do
+    get "/places/#{@place.id}/add_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_ok
+    get "/places/#{@place.id}/add_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_fail
+  end
+
+  should "not remove place from favorites if not favorited (json)" do
+    get "/places/#{@place.id}/remove_favorite.json", {:access_token => @admin_user.authentication_token}
+    assert_fail
+  end
   
   def json_response
     ActiveSupport::JSON.decode(response.body)
@@ -427,6 +462,15 @@ class PlacesTest < ActionController::IntegrationTest
     json = json_response
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
+    json
+  end
+  
+  def assert_fail
+    assert_response(200)
+    assert_equal 'application/json', @response.content_type
+    json = json_response
+    assert_kind_of Hash, json
+    assert_equal "fail", json['stat']
     json
   end
   

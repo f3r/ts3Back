@@ -63,13 +63,14 @@ class User < ActiveRecord::Base
     :before => lambda { Date.current },
     :allow_nil => true
 
-  has_many :authentications, :dependent => :destroy
-  has_many :addresses,       :dependent => :destroy
-  has_many :bank_accounts,   :dependent => :destroy
-  has_many :places,          :dependent => :destroy
+  has_many :authentications,  :dependent => :destroy
+  has_many :addresses,        :dependent => :destroy
+  has_many :bank_accounts,    :dependent => :destroy
+  has_many :places,           :dependent => :destroy
   # TODO: Do we really want to destroy comments or nullify them?
-  has_many :comments,        :dependent => :destroy
+  has_many :comments,         :dependent => :destroy
   has_many :transactions
+  has_many :favorites,        :dependent => :destroy
 
   has_attached_file :avatar,
      :styles => {
@@ -182,6 +183,51 @@ class User < ActiveRecord::Base
       end
     else
       false
+    end
+  end
+
+  # Favorites
+
+  def add_favorite(object)
+    begin
+      favorite = object.favorites.new(:user_id => self.id)
+      favorite.save
+    rescue Exception => e
+      logger.error { "Error [user.rb/add_favorite] #{e.message}" }
+      return false
+    end
+  end
+
+  def remove_favorite(object)
+    begin
+      favorite = object.favorites.where(:user_id => self.id).first
+      favorite && favorite.destroy
+    rescue Exception => e
+      logger.error { "Error [user.rb/remove_favorite] #{e.message}" }
+      return false
+    end
+  end
+
+  def favorite?(type, id)
+    begin
+      favorites = Favorite.where(:favorable_type => type.to_s.capitalize, :favorable_id => id)
+      favorites.length > 0
+    rescue Exception => e
+      logger.error { "Error [user.rb/favorite?] #{e.message}" }
+      return false
+    end
+  end
+
+  def get_favorites(type)
+    begin
+      type = type.to_s.capitalize
+      type_class = type.constantize
+      favorites = self.favorites.where(:favorable_type => type)
+      objects = type_class.find(favorites.map(&:favorable_id))
+      return objects
+    rescue Exception => e
+      logger.error { "Error [user.rb/get_favorites] #{e.message}" }
+      return nil
     end
   end
   

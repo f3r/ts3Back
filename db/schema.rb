@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120219030133) do
+ActiveRecord::Schema.define(:version => 20120313195642) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -126,6 +126,17 @@ ActiveRecord::Schema.define(:version => 20120219030133) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "favorites", :force => true do |t|
+    t.integer  "favorable_id"
+    t.string   "favorable_type"
+    t.integer  "user_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "favorites", ["favorable_id"], :name => "index_favorites_on_favorable_id"
+  add_index "favorites", ["user_id"], :name => "index_favorites_on_user_id"
 
   create_table "inquiries", :force => true do |t|
     t.integer  "user_id"
@@ -269,6 +280,24 @@ ActiveRecord::Schema.define(:version => 20120219030133) do
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
   add_index "places", ["state_name"], :name => "index_places_on_state_name"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
+
+  create_table "reviews", :force => true do |t|
+    t.integer  "place_id"
+    t.integer  "user_id"
+    t.float    "accuracy"
+    t.float    "cleanliness"
+    t.float    "checkin"
+    t.float    "communication"
+    t.float    "location"
+    t.float    "value"
+    t.boolean  "private",       :default => false
+    t.text     "comment"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
+
+  add_index "reviews", ["place_id"], :name => "index_reviews_on_place_id"
+  add_index "reviews", ["user_id"], :name => "index_reviews_on_user_id"
 
   create_table "transaction_logs", :force => true do |t|
     t.integer  "transaction_id"

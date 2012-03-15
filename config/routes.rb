@@ -71,6 +71,9 @@ HeyPalBackEnd::Application.routes.draw do
     put     "places/:id",                         :to => "places#update" 
     get     "places/:id",                         :to => "places#show"   
     delete  "places/:id",                         :to => "places#destroy"
+    get     "places/:id/add_favorite",            :to => "places#add_favorite"
+    get     "places/:id/remove_favorite",         :to => "places#remove_favorite"
+    get     "places/:id/is_favorite",             :to => "places#is_favorite"
     get     "places/:id/:status",                 :to => "places#publish"
     
     # temporal mailers
@@ -111,15 +114,16 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # USER INFO
     ##############################################################################
-    get     "users/:id/transactions", :to => "users#transactions"
-    put     "users/:id/change_role",  :to => "users#change_role"
-    get     "users/:id/info",         :to => "users#info"
-    get     "users/:user_id/places",  :to => "places#user_places"
-    get     "users/:id",              :to => "users#show"
-    put     "users/:id",              :to => "users#update"
-    put     "users",                  :to => "users#update"
-    get     "users",                  :to => "users#show"
-    post    "users/feedback",         :to => "users#feedback"
+    get     "users/:id/transactions",             :to => "users#transactions"
+    put     "users/:id/change_role",              :to => "users#change_role"
+    get     "users/:id/info",                     :to => "users#info"
+    get     "users/:user_id/favorite_places",     :to => "places#favorite_places"
+    get     "users/:user_id/places",              :to => "places#user_places"
+    get     "users/:id",                          :to => "users#show"
+    put     "users/:id",                          :to => "users#update"
+    put     "users",                              :to => "users#update"
+    get     "users",                              :to => "users#show"
+    post    "users/feedback",                     :to => "users#feedback"
     ##############################################################################
     # NOTIFICATIONS
     ##############################################################################
@@ -136,7 +140,6 @@ HeyPalBackEnd::Application.routes.draw do
     put     "conversations/:user_id/mark_as_unread",:to => "messages#mark_as_unread"
     get     "messages/:id",                         :to => "messages#messages"
     post    "messages/:id",                         :to => "messages#create"
-
     ##############################################################################
     # ROUTING ERRORS HACK
     ##############################################################################
