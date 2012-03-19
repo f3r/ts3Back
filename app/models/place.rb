@@ -231,6 +231,10 @@ class Place < ActiveRecord::Base
   # def as_json(opts = {})
   #   super(opts.merge(:include => [:photos]))
   # end
+  def convert_prices_in_usd_cents!
+    convert_prices_in_usd_cents(true)
+    self.save(:validate => false)
+  end
   
   private
   
@@ -243,13 +247,13 @@ class Place < ActiveRecord::Base
   end
   
   # Convert all price fields into USD cents
-  def convert_prices_in_usd_cents
+  def convert_prices_in_usd_cents(force = false)
     if !currency.nil?
       # self.price_per_night_usd        = money_to_usd_cents(self.price_per_night,currency)         if price_per_night_changed? or currency_changed?
       # self.price_per_week_usd         = money_to_usd_cents(self.price_per_week,currency)          if price_per_week_changed? or currency_changed?
-      self.price_per_month_usd        = money_to_usd_cents(self.price_per_month,currency)         if price_per_month_changed? or currency_changed?
-      self.price_final_cleanup_usd    = money_to_usd_cents(self.price_final_cleanup,currency)     if price_final_cleanup_changed? or currency_changed?
-      self.price_security_deposit_usd = money_to_usd_cents(self.price_security_deposit,currency)  if price_security_deposit_changed? or currency_changed?
+      self.price_per_month_usd        = money_to_usd_cents(self.price_per_month,currency)         if force || price_per_month_changed? || currency_changed?
+      self.price_final_cleanup_usd    = money_to_usd_cents(self.price_final_cleanup,currency)     if force || price_final_cleanup_changed? || currency_changed?
+      self.price_security_deposit_usd = money_to_usd_cents(self.price_security_deposit,currency)  if force || price_security_deposit_changed? || currency_changed?
     end
   end
   
