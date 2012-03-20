@@ -3,23 +3,23 @@ Money.default_bank = Money::Bank::GoogleCurrency.new
 
 class PlacesController < ApiController
   before_filter :get_user, :only => [:user_places, :favorite_places]
-  
+
   def initialize
     @fields = [
-      :id, :title, :description, :num_bedrooms, :num_beds, 
-      :num_bathrooms, :size, :size_sqm, :size_sqf, :size_unit, :max_guests, :photos, :city_id, :address_1, 
-      :address_2, :zip, :lat, :lon, :directions, 
-      :check_in_after, :check_out_before, :minimum_stay, :stay_unit, 
+      :id, :title, :description, :num_bedrooms, :num_beds,
+      :num_bathrooms, :size, :size_sqm, :size_sqf, :size_unit, :max_guests, :photos, :city_id, :address_1,
+      :address_2, :zip, :lat, :lon, :directions,
+      :check_in_after, :check_out_before, :minimum_stay, :stay_unit,
       :maximum_stay, :house_rules, :cancellation_policy,
       :reviews_overall,:reviews_accuracy_avg,:reviews_cleanliness_avg,
       :reviews_checkin_avg,:reviews_communication_avg,:reviews_location_avg,
-      :reviews_value_avg, :currency, :price_final_cleanup, 
+      :reviews_value_avg, :currency, :price_final_cleanup,
       :price_security_deposit, :published,
       :country_name, :country_code, :state_name, :city_name,
       :price_final_cleanup_usd, :price_security_deposit_usd
     ]
     @fields = get_price_fields(@fields, STAY_UNITS)
-    
+
     @amenities = [
       :amenities_aircon,:amenities_breakfast,:amenities_buzzer_intercom,:amenities_cable_tv,
       :amenities_dryer,:amenities_doorman,:amenities_elevator,
@@ -27,14 +27,14 @@ class PlacesController < ApiController
       :amenities_handicap,:amenities_heating,:amenities_hot_water,
       :amenities_internet,:amenities_internet_wifi,:amenities_jacuzzi,:amenities_parking_included,
       :amenities_pets_allowed,:amenities_pool,:amenities_smoking_allowed,:amenities_suitable_events,
-      :amenities_tennis,:amenities_tv,:amenities_washer  
+      :amenities_tennis,:amenities_tv,:amenities_washer
     ]
 
     @fields = @fields + @amenities
-    
+
     @search_fields = [
       :id, :title, :city_id, :size_sqf, :size_sqm, :reviews_overall, :photos, :currency, :num_bedrooms, :num_bathrooms
-    ]    
+    ]
     @search_fields = get_price_fields(@search_fields, STAY_UNITS)
 
     # Associations
@@ -45,7 +45,7 @@ class PlacesController < ApiController
       :id, :state, :check_in, :check_out, :transaction_code,
       :currency, :price_per_night, :price_final_cleanup, :price_security_deposit, :service_fee, :service_percentage, :sub_total
     ]
-    
+
     @place_details = [
       :title
     ]
@@ -143,18 +143,19 @@ class PlacesController < ApiController
   # === Error codes
   # [115] no results
   def search
-    # if params[:q].blank?
-    #   return_message(200, :ok, {:err => {:query => [101]}})
-    #   return
-    # end
-    logger.error "---------- #{params}"
     place_search     = PlaceSearch.new(current_user, params)
+
+    if !place_search.valid?
+      return_message(200, :ok, {:err => {:query => [101]}})
+      return
+    end
+
     places_paginated = place_search.results
     total_results    = place_search.count_results
     per_page         = place_search.per_page
 
-    if !places_paginated.blank?  
-      filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => { 
+    if !places_paginated.blank?
+      filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => {
         :user       => @user_fields,
         :place_type => @place_type_fields },
       :currency => params[:currency]
@@ -164,10 +165,10 @@ class PlacesController < ApiController
       amenities_count  = place_search.amenities_counts
 
       response = {
-        :places           => filtered_places, 
-        :results          => total_results, 
-        :per_page         => per_page, 
-        :current_page     => params[:page], 
+        :places           => filtered_places,
+        :results          => total_results,
+        :per_page         => per_page,
+        :current_page     => params[:page],
         :place_type_count => place_type_count,
         :amenities_count  => amenities_count,
         :total_pages      => (total_results/per_page.to_f).ceil
@@ -196,13 +197,13 @@ class PlacesController < ApiController
   # [currency]   ISO Code of the currency to return prices in
   def show
     @place = Place.with_permissions_to(:read).find(params[:id])
-    place = filter_fields(@place, @fields, { :additional_fields => { 
+    place = filter_fields(@place, @fields, { :additional_fields => {
       :user => @user_fields,
       :place_type => @place_type_fields },
     :currency => params[:currency]})
     return_message(200, :ok, {:place => place})
   end
-  
+
   # == Description
   # Crates a new place with basic information
   # ==Resource URL
@@ -220,12 +221,12 @@ class PlacesController < ApiController
   # === Response
   # [place] Array containing the recently created place
   # === Error codes
-  # [101] can't be blank 
+  # [101] can't be blank
   # [103] is invalid
   # [105] invalid access token
   # [132] invalid city (not on the cities table)
   def create
-    place = { 
+    place = {
       :title         => params[:title],
       :place_type_id => params[:place_type_id],
       :num_bedrooms  => params[:num_bedrooms],
@@ -243,7 +244,7 @@ class PlacesController < ApiController
       return_message(200, :fail, {:err => format_errors(@place.errors.messages)})
     end
   end
-  
+
   # == Description
   # Updates a place with additional information
   # ==Resource URL
@@ -287,12 +288,12 @@ class PlacesController < ApiController
   # [stay_unit]         String, days, weeks or months
   # [house_rules]            Text, rules for the user to follow when staying at a place
   # [cancellation_policy]    Integer. Should align with frontend, 1=flexible, 2=moderate, 3=strict
-  # 
+  #
   # === Response
   # [place] Array containing the recently created place
-  # 
+  #
   # === Error codes
-  # [101] can't be blank 
+  # [101] can't be blank
   # [103] is invalid
   # [105] invalid access token
   # [118] must be a number
@@ -308,7 +309,7 @@ class PlacesController < ApiController
       return_message(200, :fail, {:err => format_errors(@place.errors.messages)})
     end
   end
-  
+
   # == Description
   # Deletes a place
   # ==Resource URL
@@ -325,7 +326,7 @@ class PlacesController < ApiController
       return_message(200, :fail, {:err => format_errors(place.errors.messages)})
     end
   end
-  
+
   # == Description
   # Shows a users places
   # ==Resource URL
@@ -405,10 +406,10 @@ class PlacesController < ApiController
     if params[:status] == "publish" or params[:status] == "unpublish" or params[:status] == "publish_check"
       method = "#{params[:status]}!"
     else
-      raise ::AbstractController::ActionNotFound 
+      raise ::AbstractController::ActionNotFound
     end
     @place = Place.with_permissions_to(:read).find(params[:id])
-      if method        
+      if method
         if @place.send(method)
           return_message(200, :ok)
         else
@@ -472,7 +473,7 @@ class PlacesController < ApiController
   def place_request
     @place = Place.with_permissions_to(:read).find(params[:id])
     request = @place.place_availability(params[:check_in], params[:check_out], '', current_user)
-    if request[:err].blank?  
+    if request[:err].blank?
       service_percentage = SERVICE_PERCENTAGE
       service_fee = request[:sub_total] * (service_percentage * 0.01)
       transaction_data = {
@@ -489,12 +490,12 @@ class PlacesController < ApiController
       }
       transaction = @place.transactions.new(transaction_data)
       if transaction.save
-        request_return = { 
+        request_return = {
           :transaction => filter_fields(
             transaction,
             @transaction_fields,
             { :additional_fields => {:user => @user_fields} }
-          ) 
+          )
         }
         transaction.request!
         return_message(200, :ok, request_return)
@@ -531,23 +532,23 @@ class PlacesController < ApiController
     else
       transactions = place.transactions.active
     end
-    
+
     if !transactions.blank?
-      transactions_return = { 
+      transactions_return = {
         :transactions => filter_fields(
           transactions,
           @transaction_fields, { :additional_fields => {:user => @user_fields} }
-        ) 
+        )
       }
       return_message(200, :ok, transactions_return)
     else
       return_message(200, :ok, {:err=>{:transactions => [115]}} )
     end
   end
-  
+
   def confirm_rental
    @place = Place.with_permissions_to(:read).find(params[:place_id])
-   
+
    RentalMailer.rental_confirmed_renter(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
    RentalMailer.rental_confirmed_owner( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
    RentalMailer.rental_confirmed_admin( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
@@ -591,7 +592,7 @@ class PlacesController < ApiController
       return_message(200, :fail, { :err => {:places => [147]}})
     end
   end
-  
+
   # == Description
   # Removes a place from the current user's favorite list
   # ==Resource URL
@@ -611,7 +612,7 @@ class PlacesController < ApiController
       return_message(200, :fail, { :err => {:places => [148]}})
     end
   end
-  
+
   # == Description
   # Check if place is favorited by user
   # ==Resource URL
@@ -640,7 +641,7 @@ class PlacesController < ApiController
     end
     @user = User.find(id) if id
   end
-  
+
   def get_price_fields(fields, units)
     if units.include?("days")
       fields = fields + [:price_per_night_usd, :price_per_night]

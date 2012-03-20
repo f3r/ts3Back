@@ -31,23 +31,19 @@ gem 'sass-rails'
 gem 'meta_search',    '>= 1.1.0.pre'
 gem 'ransack'                     # Object-based search
 
-group :development do
-  gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
-  gem 'mail_view' 
-  gem 'taps'
-end
-
 group :test do
   gem 'turn', :require => false  # Pretty printed test output
   gem 'shoulda'
   gem "shoulda-matchers"
   gem 'factory_girl'
   gem 'faker'
-  gem 'minitest'
 end
 
-group :production do
-  gem 'rack-ssl-enforcer'
+group :development do
+  gem 'hirb'              # Console on Steroids :) https://github.com/cldwalker/hirb
+  gem 'mail_view'
+  gem 'taps'
+  gem 'powder'
 end
 
 group :development, :test do
@@ -55,5 +51,8 @@ group :development, :test do
   gem 'linecache19', '0.5.13'
   gem 'ruby-debug-base19', '0.11.26'
   gem "ruby-debug19", :require => 'ruby-debug'
-  gem 'powder'
+end
+
+group :production do
+  gem 'rack-ssl-enforcer'
 end

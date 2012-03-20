@@ -3,13 +3,13 @@ class PlaceSearch
     @user = user
     @params = params
   end
-  
+
   def search(ignore_filters = [])
     add_base_conditions
     add_filter_conditions(ignore_filters)
     add_order
   end
-  
+
   def results
     unless @results
       search
@@ -18,20 +18,20 @@ class PlaceSearch
 
     @results
   end
-  
+
   def all_results(ignore_filters = [])
     search(ignore_filters)
     results_without_pagination
   end
-  
+
   def count_results
     @search.result(:distinct => true).count
   end
-  
+
   def per_page
     params[:per_page] || Place.per_page
   end
-    
+
   def place_type_counts
     place_types = PlaceType.all_cached
     places = all_results([:place_type_id_eq_any]).to_a
@@ -43,7 +43,7 @@ class PlaceSearch
 
     place_type_count
   end
-  
+
   def amenities_counts
     # amenities_count = {}
     # for amenity in @amenities
@@ -51,15 +51,21 @@ class PlaceSearch
     #   for place in places_paginated
     #     count+=1 if place.send(amenity) == true
     #   end
-    #   amenities_count[amenity.to_s.gsub("amenities_", "")] = count 
+    #   amenities_count[amenity.to_s.gsub("amenities_", "")] = count
     # end
   end
-  
+
+  def valid?
+    # City id is required
+    return false unless city_id
+    return true
+  end
+
   protected
-  
+
   def add_base_conditions
     all_places = Place.with_permissions_to(:read)
-    
+
     # Filter by status
     case params[:status]
     when "all"
@@ -69,18 +75,16 @@ class PlaceSearch
     else
       places = all_places.where(:published => true)
     end
-    
+
     # Filter by City
-    city_id = params[:city] || params[:city_id]
-    city_id ||= 1
     places = places.where(:city_id => city_id)
 
     @source = places
   end
-  
+
   def add_filter_conditions(ignore_filters = [])
     conditions = prepare_conditions
-    
+
     ignore_filters.each do |filter|
       conditions.delete(filter)
     end
@@ -88,11 +92,11 @@ class PlaceSearch
     # Filter by conditions
     @search = @source.search(conditions)
   end
-  
+
   def add_order
     # Sorting column
     sort_map = {
-      "name"               => "title asc", 
+      "name"               => "title asc",
       "price_lowest"       => "price_per_month_usd asc",
       "price_highest"      => "price_per_month_usd desc",
       "price_size_lowest"  => "price_sqf_usd asc",
@@ -102,21 +106,21 @@ class PlaceSearch
     }
 
     sorting = sort_map[params[:sort]]
-    
+
     @search.sorts = sorting if sorting
   end
-  
+
   def results_with_pagination
     @search.result(:distinct => true).paginate(:page => params[:page], :per_page => per_page)
   end
-  
+
   def results_without_pagination
     @search.result(:distinct => true)
   end
-  
+
   def prepare_conditions
     conditions = {}
-    
+
     conditions.merge!(params[:q].symbolize_keys) if params[:q]
 
     # Currency conversion
@@ -126,7 +130,7 @@ class PlaceSearch
       conditions[:price_per_month_usd_lteq] = params[:max_price] if params[:max_price]
     else
       if params[:min_price]
-        min_price = params[:min_price].to_money(params[:currency]).exchange_to(:USD).cents 
+        min_price = params[:min_price].to_money(params[:currency]).exchange_to(:USD).cents
         conditions[:price_per_month_usd_gteq] = min_price
       end
       if params[:max_price]
@@ -137,7 +141,7 @@ class PlaceSearch
 
     # Filter by number of guests
     conditions[:max_guests_gteq] = params[:guests] if !params[:guests].blank?
-    
+
     # Filter by availability
     if params[:check_in]
       check_in = params[:check_in].to_date
@@ -147,7 +151,7 @@ class PlaceSearch
         check_out = check_in + 1.month # default one month
       end
     end
-    
+
     if check_in && check_out
       unavailable_places = []
       @source.each do |place|
@@ -162,8 +166,12 @@ class PlaceSearch
 
     conditions
   end
-  
+
   def params
     @params
+  end
+
+  def city_id
+    params[:city] || params[:city_id]
   end
 end
