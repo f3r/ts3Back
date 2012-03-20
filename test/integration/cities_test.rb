@@ -5,28 +5,10 @@ class CitiesTest < ActionController::IntegrationTest
     without_access_control do
       @city = Factory(:city)
       @agent_user = Factory(:user, :role => "agent")
-      @agent_user.confirm!
       Authorization.current_user = @agent_user
 
       10.times do
-        place = Place.create!(
-          :user_id => @agent_user.id,
-          :description => Faker::Lorem.sentence(20),
-          :title => Faker::Lorem.sentence(2),
-          :photos => 3.times.collect { Factory.build(:photo, :place => nil) },
-          :address_1 => Faker::Lorem.sentence(2),
-          :zip => '123456',
-          :place_type_id => (1..7).to_a.sample,
-          :num_bedrooms => (1..6).to_a.sample,
-          :max_guests => (1..10).to_a.sample,
-          :city_id => @city.id,
-          :price_per_month => (1000..10000).to_a.sample,
-          :currency => "USD",
-          :size_unit => ["meters","feet"].to_a.sample,
-          :size => (50..200).to_a.sample,
-          :amenities_tv => true
-        )
-        place.publish!
+        place = Factory(:published_place, :user => @agent_user, :city => @city)
       end
 
     end

@@ -4,7 +4,6 @@ class TransactionsTest < ActionController::IntegrationTest
   setup do
     without_access_control do
       @admin = Factory(:user, :role => "admin")
-      @admin.confirm!
       Authorization.current_user = @admin
       @published_place = Factory( :place, 
                                   :user => @admin, 
@@ -35,7 +34,6 @@ class TransactionsTest < ActionController::IntegrationTest
     context "logged in as #{role}" do
       setup do
         @user = Factory(:user, :role => role)
-        @user.confirm!
         @access_token = @user.authentication_token
       end
 

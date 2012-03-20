@@ -10,12 +10,9 @@ class PlacesTest < ActionController::IntegrationTest
     without_access_control do
       @city = Factory(:city)
       @admin_user = Factory(:user, :role => "admin")
-      @admin_user.confirm!
       Authorization.current_user = @admin_user
       @agent_user = Factory(:user, :role => "agent")
-      @agent_user.confirm!
       @user = Factory(:user, :role => "user")
-      @user.confirm!
       @place_type = Factory(:place_type)
       @place_type2 = Factory(:place_type)
       @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)

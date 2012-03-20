@@ -5,10 +5,8 @@ class NotificationsTest < ActionController::IntegrationTest
     without_access_control do
       REDIS.flushall
       @agent = Factory(:user, :role => "agent")
-      @agent.confirm!
       Authorization.current_user = @agent
       @user = Factory(:user, :role => "user")
-      @user.confirm!
       @city = Factory(:city)
       @place_type = Factory(:place_type)
       @place = Factory(:place, :user => @agent, :place_type => @place_type, :city => @city)

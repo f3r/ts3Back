@@ -44,6 +44,9 @@ class RegistrationsController < Devise::RegistrationsController
 
       resource = resource_class.new(parameters)
       if resource.save
+        # New user! Now we send them a nice welcome email
+        UserMailer.welcome_note(resource).deliver
+
         if params[:oauth_token] && params[:oauth_token]['credentials']
           authentication = resource.authentications.create(
             :provider => params[:oauth_token]['provider'], 

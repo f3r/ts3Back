@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
                                     #   * current_sign_in_ip - The remote ip updated when the user sign in
                                     #   * last_sign_in_ip    - Holds the remote ip of the previous sign in
          :validatable,              # Email/Pwd validation
-         :confirmable,              # Verify account already confirmed, send email with instructions
+         #:confirmable,              # Verify account already confirmed, send email with instructions
          # :encryptable,            # Encrypts Password (bcript)
          # :invitable,              # Send invites: https://github.com/scambra/devise_invitable
          :token_authenticatable     # Generate auth token and validates it

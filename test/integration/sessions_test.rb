@@ -10,15 +10,10 @@ class SessionsTest < ActionController::IntegrationTest
                       :role => "user", 
                       :password => @parameters[:password], 
                       :password_confirmation => @parameters[:password])
-      @user.confirm!
     end
   end
 
   should "sign in with email and password and get token (xml)" do
-    without_access_control do
-      user = User.first(:order => 'id DESC')
-      user.confirm!
-    end
     post '/users/sign_in.xml', {:email => @user.email, :password => @parameters[:password]}
     assert_response(200)
     assert_equal 'application/xml', @response.content_type

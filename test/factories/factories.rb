@@ -64,7 +64,7 @@ FactoryGirl.define do
     size_unit    { 'meters' }
     size         { 100 }
     price_per_month  { 400000 }
-    photos       { 3.times.collect{ Factory.build(:photo) } }
+    photos       { 3.times.collect{ p = Photo.new; p.save(:validate => false); p } }
   end
   
   factory :comment do

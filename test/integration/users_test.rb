@@ -4,9 +4,7 @@ class UsersTest < ActionController::IntegrationTest
   setup do
     without_access_control do
       @admin_user = Factory(:user, :role => "admin")
-      @admin_user.confirm!
       @user = Factory(:user, :role => "user")
-      @user.confirm!
       Authorization.current_user = @admin_user
       @birthday = "1981/01/01"
     end

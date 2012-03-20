@@ -4,7 +4,7 @@ class AuthenticationsTest < ActionController::IntegrationTest
   setup do
     without_access_control do
       @admin = Factory(:user, :role => "admin")
-      @admin.confirm!
+
       Authorization.current_user = @admin
       @oauth_token = {
         :provider=>"twitter", 
@@ -18,7 +18,6 @@ class AuthenticationsTest < ActionController::IntegrationTest
     context "logged in as #{role}" do
       setup do
         @user = Factory(:user, :role => role)
-        @user.confirm!
         @access_token = @user.authentication_token
       end
 

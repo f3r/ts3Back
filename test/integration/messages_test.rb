@@ -5,7 +5,6 @@ class MessagesTest < ActionController::IntegrationTest
     without_access_control do
       REDIS.flushall
       @admin = Factory(:user, :role => "admin")
-      @admin.confirm!
       Authorization.current_user = @admin
     end
   end
@@ -14,10 +13,8 @@ class MessagesTest < ActionController::IntegrationTest
     context "logged in as #{role}" do
       setup do
         @user = Factory(:user, :role => role)
-        @user.confirm!
         @access_token = @user.authentication_token
         @user_2 = Factory(:user, :role => role)
-        @user_2.confirm!
         @access_token_2 = @user_2.authentication_token
       end
 

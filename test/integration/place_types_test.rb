@@ -5,9 +5,7 @@ class PlaceTypesTest < ActionController::IntegrationTest
     without_access_control do
       @place_type = Factory(:place_type)
       @admin = Factory(:user, :role => "admin")
-      @admin.confirm!
       @agent = Factory(:user, :role => "agent")
-      @agent.confirm!
       Authorization.current_user = @admin
     end
   end

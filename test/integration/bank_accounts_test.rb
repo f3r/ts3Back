@@ -4,9 +4,8 @@ class BankAccountsTest < ActionController::IntegrationTest
   setup do
     without_access_control do
       @admin = Factory(:user, :role => "admin")
-      @admin.confirm!
       @agent = Factory(:user, :role => "agent")
-      @agent.confirm!
+
       Authorization.current_user = @agent
       @fake_bank_account = { 
         :holder_street => Faker::Address.street_address,

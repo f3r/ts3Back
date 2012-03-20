@@ -4,7 +4,6 @@ class RegistrationsTest < ActionController::IntegrationTest
   setup do
     without_access_control do
       @user = Factory(:user, :role => "user")
-      @user.confirm!
       Authorization.current_user = @user
       @parameters = { :first_name => Faker::Name.first_name, 
                       :last_name => Faker::Name.last_name, 

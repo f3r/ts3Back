@@ -3,14 +3,12 @@ class AvailabilitiesTest < ActionController::IntegrationTest
 
   setup do
     without_access_control do
-      @city = Factory(:city)
       @admin_user = Factory(:user, :role => "admin")
-      @admin_user.confirm!
       Authorization.current_user = @admin_user
       @agent_user = Factory(:user, :role => "agent")
-      @agent_user.confirm!
-      @place_type = Factory(:place_type)
-      @place = Factory(:place, :user => @admin_user, :place_type => @place_type, :city => @city)
+
+      @place = Factory(:published_place, :user => @admin_user, :published => false)
+
       @availability = Factory(:availability, 
         :place => @place,
         :availability_type => 2,
@@ -18,21 +16,11 @@ class AvailabilitiesTest < ActionController::IntegrationTest
         :date_start        => (Date.current + 3.year).to_s,
         :date_end          => (Date.current + 3.year + 2.days).to_s
       )
-      @agent_place = Factory(:place, :user => @agent_user, :place_type => @place_type, :city => @city)
 
-      @photos = 3.times.collect { Factory.build(:photo, :place => nil) } 
-      @published_place = Factory( :place, 
-                                  :user => @agent_user, 
-                                  :place_type => @place_type, 
-                                  :city => @city,
-                                  :amenities_kitchen => true, 
-                                  :amenities_tennis => true, 
-                                  :photos => @photos,
-                                  :currency => "JPY",
-                                  :price_per_month => "400000",
-                                  :size_unit => 'meters',
-                                  :size => 100
-                                )
+      @agent_place = Factory(:published_place, :user => @agent_user, :published => false)
+
+      @published_place = Factory(:published_place, :user => @agent_user)
+
       @published_place_availability = Factory(:availability, 
         :place => @published_place,
         :availability_type => 2,
@@ -40,7 +28,6 @@ class AvailabilitiesTest < ActionController::IntegrationTest
         :date_start        => (Date.current + 3.year).to_s,
         :date_end          => (Date.current + 3.year + 2.days).to_s
       )
-      @published_place.publish!
 
       @availability_occupied_new_info = { 
         :availability_type => 1, 

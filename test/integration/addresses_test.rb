@@ -4,9 +4,7 @@ class AddressesTest < ActionController::IntegrationTest
   setup do
     without_access_control do
       @admin = Factory(:user, :role => "admin")
-      @admin.confirm!
       @user = Factory(:user, :role => "user")
-      @user.confirm!
       Authorization.current_user = @user
       @address = Factory(:address, :user => @user)
       @admin_address = Factory(:address, :user => @admin_user)
