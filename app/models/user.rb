@@ -190,6 +190,7 @@ class User < ActiveRecord::Base
 
   def add_favorite(object)
     begin
+      # puts "deleted" if Rails.cache.delete("user_#{self.id.to_s}_favorites")
       favorite = object.favorites.new(:user_id => self.id)
       favorite.save
     rescue Exception => e
@@ -200,6 +201,7 @@ class User < ActiveRecord::Base
 
   def remove_favorite(object)
     begin
+      # puts "deleted" if Rails.cache.delete("user_#{self.id.to_s}_favorites")
       favorite = object.favorites.where(:user_id => self.id).first
       favorite && favorite.destroy
     rescue Exception => e
@@ -210,6 +212,8 @@ class User < ActiveRecord::Base
 
   def favorite?(type, id)
     begin
+      # TODO: find a way to cache this
+      # favorites = Rails.cache.fetch("user_#{self.id.to_s}_favorites") { Favorite.where(:favorable_type => type.to_s.capitalize, :favorable_id => id) }
       favorites = Favorite.where(:favorable_type => type.to_s.capitalize, :favorable_id => id)
       favorites.length > 0
     rescue Exception => e

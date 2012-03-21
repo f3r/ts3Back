@@ -16,7 +16,8 @@ class PlacesController < ApiController
       :reviews_value_avg, :currency, :price_final_cleanup,
       :price_security_deposit, :published,
       :country_name, :country_code, :state_name, :city_name,
-      :price_final_cleanup_usd, :price_security_deposit_usd
+      :price_final_cleanup_usd, :price_security_deposit_usd,
+      :favorited
     ]
     @fields = get_price_fields(@fields, STAY_UNITS)
 
@@ -33,8 +34,9 @@ class PlacesController < ApiController
     @fields = @fields + @amenities
 
     @search_fields = [
-      :id, :title, :city_id, :size_sqf, :size_sqm, :reviews_overall, :photos, :currency, :num_bedrooms, :num_bathrooms
-    ]
+      :id, :title, :city_id, :size_sqf, :size_sqm, :reviews_overall, :photos, :currency, :num_bedrooms, :num_bathrooms, :favorited
+    ]    
+
     @search_fields = get_price_fields(@search_fields, STAY_UNITS)
 
     # Associations
@@ -158,7 +160,8 @@ class PlacesController < ApiController
       filtered_places = filter_fields(places_paginated, @search_fields, { :additional_fields => {
         :user       => @user_fields,
         :place_type => @place_type_fields },
-      :currency => params[:currency]
+      :currency => params[:currency],
+      :current_user => current_user
       })
 
       place_type_count = place_search.place_type_counts
@@ -200,7 +203,8 @@ class PlacesController < ApiController
     place = filter_fields(@place, @fields, { :additional_fields => {
       :user => @user_fields,
       :place_type => @place_type_fields },
-    :currency => params[:currency]})
+    :currency => params[:currency],
+    :current_user => current_user})
     return_message(200, :ok, {:place => place})
   end
 
@@ -352,7 +356,8 @@ class PlacesController < ApiController
     if !@places.blank?
       places_return = filter_fields(@places,@fields, { :additional_fields => {
         :place_type => @place_type_fields},
-        :currency => params[:currency]})
+        :currency => params[:currency],
+        :current_user => current_user})
       return_message(200, :ok, {:places => places_return})
     else
       return_message(200, :ok, { :err => {:places => [115]}})
@@ -377,7 +382,8 @@ class PlacesController < ApiController
     if !@places.blank?
       places_return = filter_fields(@places,@fields, { :additional_fields => {
         :place_type => @place_type_fields},
-        :currency => params[:currency]})
+        :currency => params[:currency],
+        :current_user => current_user})
       return_message(200, :ok, {:places => places_return})
     else
       return_message(200, :ok, { :err => {:places => [115]}})

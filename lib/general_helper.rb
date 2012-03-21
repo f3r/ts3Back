@@ -42,6 +42,7 @@ module GeneralHelper
       additional_fields = options[:additional_fields]
       additional_fields.each_pair{ |field,v| fields << field.to_sym }
     end
+    current_user = options[:current_user] if options[:current_user]
     filtered_object = {}
     remove_fields = []
     
@@ -71,6 +72,8 @@ module GeneralHelper
         else
           filtered_object[:avatar] = nil
         end
+      elsif field == :favorited
+        filtered_object[:favorited] = current_user.favorite?(object.class, object.id) rescue false
       elsif field == :photos
         # I am going to hell because of this line
         filtered_object[:photos] = object.photos.as_json
