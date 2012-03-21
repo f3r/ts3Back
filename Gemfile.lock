@@ -68,8 +68,8 @@ GEM
       orm_adapter (~> 0.0.3)
       warden (~> 1.1)
     erubis (2.7.0)
-    factory_girl (2.5.0)
-      activesupport
+    factory_girl (2.6.4)
+      activesupport (>= 2.3.9)
     faker (1.0.1)
       i18n (~> 0.4)
     faraday (0.6.1)
@@ -245,7 +245,7 @@ DEPENDENCIES
   declarative_authorization
   delayed_job
   devise (= 2.0.0.rc)
-  factory_girl
+  factory_girl (~> 2.6.4)
   faker
   geocoder
   google_currency

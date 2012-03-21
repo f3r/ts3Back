@@ -35,7 +35,7 @@ group :test do
   gem 'turn', :require => false  # Pretty printed test output
   gem 'shoulda'
   gem "shoulda-matchers"
-  gem 'factory_girl'
+  gem 'factory_girl',   '~> 2.6.4'
   gem 'faker'
 end
 
