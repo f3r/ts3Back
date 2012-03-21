@@ -1,3 +1,4 @@
+# This will be replaced by the conversations_controller
 class MessagesController < ApiController
 
   def initialize

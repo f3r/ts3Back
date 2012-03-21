@@ -455,6 +455,10 @@ class PlacesTest < ActionController::IntegrationTest
     json
   end
 
+  def json_response_ok
+    assert_ok
+  end
+
   def assert_fail
     assert_response(200)
     assert_equal 'application/json', @response.content_type
@@ -505,4 +509,23 @@ class PlacesTest < ActionController::IntegrationTest
   #   assert_equal "fail", json['stat']
   #   assert (json['err']['price_per_week'].include? 101)
   # end
+
+  context "Inquiries" do
+    should "send inquiry" do
+      date_start = 1.month.from_now
+      assert_difference 'Inquiry.count', +1 do
+        post "/places/#{@place.id}/inquire.json", {
+          :access_token => @user.authentication_token,
+          :date_start => date_start.to_s,
+          :length_stay => '2',
+          :length_stay_type => 'months',
+          :message => 'Looks like a great place for partying',
+          :extra => {
+            :name => 'michelle', :email => "michelle@mail.com", :mobile => "+85212345"
+          }
+        }
+        json = json_response_ok
+      end
+    end
+  end
 end

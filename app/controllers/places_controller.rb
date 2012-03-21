@@ -565,22 +565,27 @@ class PlacesController < ApiController
    return_message(200, :ok)
   end
 
-  def confirm_inquiry
-   # Because of SEO params, we no longer receive "16", but "16-place_title_blah_blah"
-   place_id = params[:place_id].split('-').first
-   @place = Place.with_permissions_to(:read).find(place_id)
-   begin
-     check_in  = params[:date_start].to_date rescue nil
-     check_out = check_in + params[:length_stay].to_i.send(params[:length_stay_type]) rescue nil
-     Inquiry.create_and_notify(@place, current_user, check_in, check_out, params)
-     # InquiryMailer.inquiry_confirmed_renter(@place, params).deliver
-     # InquiryMailer.inquiry_confirmed_owner(@place, params, check_in, check_out, current_user).deliver
-     # InquiryMailer.inquiry_confirmed_admin(@place, params, check_in, check_out, current_user).deliver
-     return_message(200, :ok)
-   rescue Exception => e
-     logger.error { "Error [places_controller.rb/confirm_inquiry] #{e.message}" }
-     return_message(200, :fail, :err => {:place => [] })
-   end
+  # == Description
+  # Send an inquiry for a place
+  # ==Resource URL
+  #   /places/:id/inquire.format
+  # ==Example
+  #   POST https://backend-heypal.heroku.com/places/:id/inquire.json access_token=access_token
+  # === Parameters
+  # [access_token]        Access token
+  # [check_in]            Check in date
+  # [length_stay]         Stay number
+  # [length_stay_type]    Stay unit (months/weeks/days)
+  # [message]             Optional message
+  def inquire
+    # Because of SEO params, we no longer receive "16", but "16-place_title_blah_blah"
+    place_id = params[:id].split('-').first
+    @place = Place.with_permissions_to(:read).find(place_id)
+    if Inquiry.create_and_notify(@place, current_user, params)
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, :err => {:place => [] })
+    end
   end
 
   # == Description

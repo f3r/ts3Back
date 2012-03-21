@@ -8,7 +8,7 @@ HeyPalBackEnd::Application.routes.draw do
   ##############################################################################
   ActiveAdmin.routes(self)
   devise_for :admin_users, ActiveAdmin::Devise.config
-  
+
   devise_for :users, :skip => [ :registrations, :sessions, :passwords, :confirmations ] do
     match "/" => "home#not_found"
     ##############################################################################
@@ -65,20 +65,18 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     get     "places/:id/request",                 :to => "places#place_request"
     get     "places/:id/check_availability",      :to => "places#check_availability"
-    get     "/places/:id/transactions",           :to => "places#transactions"
+    get     "places/:id/transactions",            :to => "places#transactions"
     get     "places/search",                      :to => "places#search"
-    post    "places",                             :to => "places#create" 
-    put     "places/:id",                         :to => "places#update" 
-    get     "places/:id",                         :to => "places#show"   
+    post    "places",                             :to => "places#create"
+    put     "places/:id",                         :to => "places#update"
+    get     "places/:id",                         :to => "places#show"
     delete  "places/:id",                         :to => "places#destroy"
     get     "places/:id/add_favorite",            :to => "places#add_favorite"
     get     "places/:id/remove_favorite",         :to => "places#remove_favorite"
     get     "places/:id/is_favorite",             :to => "places#is_favorite"
     get     "places/:id/:status",                 :to => "places#publish"
-    
-    # temporal mailers
-    post    "/places/:place_id/confirm_rental",   :to => "places#confirm_rental"
-    post    "/places/:place_id/confirm_inquiry",  :to => "places#confirm_inquiry"
+    post    "places/:id/inquire",                 :to => "places#inquire"
+
     ##############################################################################
     # SAVED SEARCHES
     ##############################################################################
@@ -88,6 +86,7 @@ HeyPalBackEnd::Application.routes.draw do
     put     "users/:user_id/alerts/:id",    :to => "alerts#update"
     delete  "users/:user_id/alerts/:id",    :to => "alerts#destroy"
     get     "alerts/:code",                 :to => "alerts#get_params"
+
     ##############################################################################
     # PLACE PHOTOS
     ##############################################################################
@@ -148,6 +147,12 @@ HeyPalBackEnd::Application.routes.draw do
     put     "conversations/:user_id/mark_as_unread",:to => "messages#mark_as_unread"
     get     "messages/:id",                         :to => "messages#messages"
     post    "messages/:id",                         :to => "messages#create"
+
+    resources :conversations do
+      put :mark_as_unread, :on => :member
+      get :unread_count, :on => :collection
+    end
+
     ##############################################################################
     # ROUTING ERRORS HACK
     ##############################################################################
