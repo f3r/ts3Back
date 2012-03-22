@@ -1,6 +1,6 @@
 HeyPalBackEnd::Application.routes.draw do
   if Rails.env.development?
-    mount Preview => 'mail_view'
+    mount PreviewMails => 'mail_view'
   end
 
   ##############################################################################

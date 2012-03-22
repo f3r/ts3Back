@@ -27,7 +27,7 @@ class Messenger
 
     # Create the conversation
     conversation.save!
-    first_message = conversation.messages.build(:body => conversation.body)
+    first_message = conversation.messages.build(:body => conversation.body, :from => sender)
     first_message.save!
 
     # Insert it into inboxes
@@ -43,6 +43,7 @@ class Messenger
     sender_inbox_entry = InboxEntry.where(:user_id => user.id, :conversation_id => conversation_id).first!
     conversation = sender_inbox_entry.conversation
 
+    message.from = user
     conversation.messages << message
 
     recipient_inbox_entry = sender_inbox_entry.other_party

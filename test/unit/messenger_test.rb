@@ -109,6 +109,9 @@ class MessengerTest < ActiveSupport::TestCase
     should "start with one message" do
       conversation, messages = Messenger.get_conversation_messages(@agent, @conversation.id)
       assert_equal 1, messages.size
+      msg = messages.first
+      assert_equal @conversation.body, msg.body
+      assert_equal @consumer, msg.from
     end
 
     should "add a reply message" do
@@ -124,6 +127,9 @@ class MessengerTest < ActiveSupport::TestCase
 
       conversation, messages = Messenger.get_conversation_messages(@consumer, @conversation.id)
       assert_equal 2, messages.size
+      msg2 = messages.last
+      assert_equal reply.body, msg2.body
+      assert_equal @agent, msg2.from
     end
   end
 

@@ -6,6 +6,8 @@ class Inquiry < ActiveRecord::Base
 
   validates_presence_of :user, :place
 
+  attr_accessor :message
+
   def self.create_and_notify(place, user, params)
     inquiry = self.new(
       :place => place,
@@ -18,8 +20,8 @@ class Inquiry < ActiveRecord::Base
     return false unless inquiry.save
 
     # Sends notification
-    InquiryMailer.inquiry_confirmed_renter(place, params).deliver
-    InquiryMailer.inquiry_confirmed_owner(place, params, inquiry.check_in, inquiry.check_out, user).deliver
+    InquiryMailer.inquiry_confirmed_renter(inquiry).deliver
+    InquiryMailer.inquiry_confirmed_owner(inquiry).deliver
     InquiryMailer.inquiry_confirmed_admin(place, params, inquiry.check_in, inquiry.check_out, user, inquiry).deliver
 
     # Creates a new conversation around the inquiry
@@ -29,21 +31,39 @@ class Inquiry < ActiveRecord::Base
   end
 
   def length=(a_length)
+    if a_length[0] =~ /more/i
+      a_length[0] = -1 # Special value
+    end
     self.length_stay, self.length_stay_type = a_length
 
     return unless self.check_in && self.length_stay && self.length_stay_type
 
-    case self.length_stay_type.to_sym
-    when :days
-      self.check_out = self.check_in + self.length_stay.days
-    when :weeks
-      self.check_out = self.check_in + self.length_stay.weeks
-    when :months
-      self.check_out = self.check_in + self.length_stay.months
+    if self.length_stay == -1
+      self.check_out = nil
+    else
+      case self.length_stay_type.to_sym
+      when :days
+        length = self.length_stay.days
+      when :weeks
+        length = self.length_stay.weeks
+      when :months
+        length = self.length_stay.months
+      end
+
+      self.check_out = self.check_in + length
+    end
+  end
+
+  def length_in_words
+    if self.length_stay == 1
+      "#{self.length_stay} #{self.length_stay_type.singularize}"
+    else
+      "#{self.length_stay} #{self.length_stay_type}"
     end
   end
 
   def start_conversation(message)
+    self.message = message
     conversation = Conversation.new
     conversation = Conversation.new
     conversation.recipient = self.place.user

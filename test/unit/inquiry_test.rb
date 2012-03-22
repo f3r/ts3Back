@@ -42,7 +42,24 @@ class InquiryTest < ActiveSupport::TestCase
 
     should "support weeks" do
       @inquiry.length = ['1', 'weeks']
+      assert_equal 1, @inquiry.length_stay
+      assert_equal 'weeks', @inquiry.length_stay_type
       assert_equal 1.week.from_now.to_date, @inquiry.check_out
+    end
+
+    should "support 'more' length_stay" do
+      @inquiry.length = ['more', 'months']
+      assert_nil @inquiry.check_out
+      assert_equal -1, @inquiry.length_stay
+      assert_equal 'months', @inquiry.length_stay_type
+    end
+
+    should "show the length in words" do
+      @inquiry.length = ['2', 'months']
+      assert_equal '2 months', @inquiry.length_in_words
+
+      @inquiry.length = ['1', 'week']
+      assert_equal '1 week', @inquiry.length_in_words
     end
   end
 end
