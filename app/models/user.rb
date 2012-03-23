@@ -211,15 +211,7 @@ class User < ActiveRecord::Base
   end
 
   def favorite?(type, id)
-    begin
-      # TODO: find a way to cache this
-      # favorites = Rails.cache.fetch("user_#{self.id.to_s}_favorites") { Favorite.where(:favorable_type => type.to_s.capitalize, :favorable_id => id) }
-      favorites = Favorite.where(:favorable_type => type.to_s.capitalize, :favorable_id => id)
-      favorites.length > 0
-    rescue Exception => e
-      logger.error { "Error [user.rb/favorite?] #{e.message}" }
-      return false
-    end
+    self.favorites.exists?(:favorable_type => type.to_s.capitalize, :favorable_id => id)
   end
 
   def get_favorites(type)
