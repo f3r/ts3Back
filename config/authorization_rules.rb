@@ -52,7 +52,7 @@ authorization do
     end
     has_permission_on :notifications, :to => [:index, :unread, :mark_as_read]
     has_permission_on :authentications, :to => [:create, :list, :delete, :get_facebook_oauth_info]
-    has_permission_on :messages, :to => [:index, :messages, :create, :destroy, :mark_as_read, :mark_as_unread, :unread_count]
+    has_permission_on :conversations, :to => [:index, :show, :update, :mark_as_unread, :unread_count]
     has_permission_on :places, :to => [:place_request, :check_availability, :confirm_rental, :add_favorite, :remove_favorite, :is_favorite] do
       if_permitted_to :read, :place
     end
@@ -67,7 +67,7 @@ authorization do
       if_attribute :confirmed_at => is_not { blank? }
     end
   end
-  
+
   role :guest do
     has_permission_on :users,       :to => [:info, :feedback]
     has_permission_on :place_types, :to => :read

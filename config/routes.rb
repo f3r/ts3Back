@@ -140,13 +140,13 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # MESSAGES & CONVERSATIONS
     ##############################################################################
-    get     "conversations",                        :to => "messages#index"
-    get     "conversations/unread_count",           :to => "messages#unread_count"
-    delete  "conversations/:user_id",               :to => "messages#destroy"
-    put     "conversations/:user_id/mark_as_read",  :to => "messages#mark_as_read"
-    put     "conversations/:user_id/mark_as_unread",:to => "messages#mark_as_unread"
-    get     "messages/:id",                         :to => "messages#messages"
-    post    "messages/:id",                         :to => "messages#create"
+    #get     "conversations",                        :to => "messages#index"
+    #get     "conversations/unread_count",           :to => "messages#unread_count"
+    #delete  "conversations/:user_id",               :to => "messages#destroy"
+    #put     "conversations/:user_id/mark_as_read",  :to => "messages#mark_as_read"
+    #put     "conversations/:user_id/mark_as_unread",:to => "messages#mark_as_unread"
+    #get     "messages/:id",                         :to => "messages#messages"
+    #post    "messages/:id",                         :to => "messages#create"
 
     resources :conversations do
       put :mark_as_unread, :on => :member

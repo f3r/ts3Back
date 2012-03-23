@@ -46,7 +46,7 @@ FactoryGirl.define do
     currency     { "JPY"}
     amenities_tv { true }
   end
-  
+
   factory :published_place, :class => Place do
     title        { Faker::Lorem.words(2).to_sentence }
     description  { Faker::Lorem.paragraph }
@@ -66,13 +66,13 @@ FactoryGirl.define do
     price_per_month  { 400000 }
     photos       { 3.times.collect{ p = Photo.new; p.save(:validate => false); p } }
   end
-  
+
   factory :comment do
     place     { @place }
     user      { @user  }
     comment   { Faker::Lorem.paragraph }
   end
-  
+
   factory :availability do
     place               { @place }
     availability_type   { 2 } # new price
@@ -87,9 +87,9 @@ FactoryGirl.define do
     country           { "United States" }
     country_code      { "US" }
   end
-  
+
   factory :photo do
-    name   { Faker::Name.name } 
+    name   { Faker::Name.name }
     photo  ActionController::TestCase.fixture_file_upload('test/fixtures/test_image.jpg', 'image/jpg')
     #association :place, :factory => :valid_place
   end
@@ -101,4 +101,17 @@ FactoryGirl.define do
     query { {:hello => "hello", :bye => "bye"} }
   end
 
+  factory :message do
+    association :from, :factory => :user
+    body        { Faker::Lorem.paragraph }
+  end
+
+  factory :conversation do
+    messages    { [Factory.create(:message)] }
+    sender      { |c| c.messages.first.from }
+  end
+
+  factory :inbox_entry do
+    conversation
+  end
 end

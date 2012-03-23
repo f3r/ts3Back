@@ -1,20 +1,46 @@
 class ConversationsController < ApiController
-  # All the conversations in the user inbox
+
+  # == Description
+  # Returns the inbox conversations for the current user
+  # ==Resource URL
+  # /conversations.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/conversations.json
+  # === Parameters
+  # [access_token]
+  # == Errors
+  # [115] no result
   def index
     @conversations = Messenger.get_conversations(current_user)
-    @conversations.collect do |c|
-      {
-        :name => c.name,
-        :bla => c.super_metodo_loco(current_user.currency)
-      }
+
+    if @conversations.present?
+      render 'conversations/index'
+    else
+      return_message(200, :ok, {:conversations => []})
+      #return_message(200, :ok, {:err => {:conversations => [115]}})
     end
-    # Rabl (?) para renderear JSON
   end
 
-  # All the messages for one conversation
+  # == Description
+  # Returns all the messages with another user and marks conversation as read
+  # ==Resource URL
+  # /conversations/user.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/messages/2.json
+  # === Parameters
+  # [access_token]
+  # [user] The other user in the conversation
+  # == Errors
+  # [106] User not found
+  # [115] no results
   def show
     @conversation, @messages = Messenger.get_conversation_messages(current_user, params[:id])
-    # Rabl (?) para renderear JSON
+    Messenger.mark_as_read(current_user, @conversation.id) if @conversation
+    if @messages
+      render 'conversations/show'
+    else
+      return_message(200, :ok, {:err => {:messages => [115]}})
+    end
   end
 
   # Start a new conversation
@@ -32,14 +58,35 @@ class ConversationsController < ApiController
     Messenger.add_reply(current_user, params[:conversation_id], @message)
   end
 
-  # Mark a conversation as unread
+  # == Description
+  # Marks a conversation with another user as unread
+  # ==Resource URL
+  # /conversations/:id/mark_as_unread.format
+  # ==Example
+  # PUT https://backend-heypal.heroku.com/conversations/2/mark_as_unread.json
+  # === Parameters
+  # [access_token]
+  # [id]    The id of the conversation
+  # == Errors
+  # [106] User not found or already read
   def mark_as_unread
-    Messenger.mark_as_unread(current_user, params[:conversation_id])
+    if Messenger.mark_as_unread(current_user, params[:id])
+      return_message(200, :ok)
+    else
+      return_message(200, :fail, {:err => {:messages => [106]}})
+    end
   end
 
-  # Counts the number of unread messages
+  # == Description
+  # Returns the number of unread conversations for the current user
+  # ==Resource URL
+  # /conversations/:id.format
+  # ==Example
+  # GET https://backend-heypal.heroku.com/conversations/1.json
+  # === Parameters
+  # [access_token]
   def unread_count
     @status = Messenger.inbox_status(current_user)
-    # Rabl (?) para renderear JSON
+    return_message(200, :ok, :count => @status[:unread])
   end
 end

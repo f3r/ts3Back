@@ -58,8 +58,11 @@ class InquiryTest < ActiveSupport::TestCase
       @inquiry.length = ['2', 'months']
       assert_equal '2 months', @inquiry.length_in_words
 
-      @inquiry.length = ['1', 'week']
+      @inquiry.length = ['1', 'weeks']
       assert_equal '1 week', @inquiry.length_in_words
+
+      @inquiry.length = ['1', 'bla']
+      assert_nil @inquiry.length_in_words
     end
   end
 end

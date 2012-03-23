@@ -9,9 +9,9 @@ class Place < ActiveRecord::Base
 
   validates_presence_of   [:title, :place_type_id, :num_bedrooms, :max_guests, :city_id, :user_id], :message => "101"
   validates_inclusion_of  :size_unit, :in => ["meters", "feet"], :allow_nil => true, :if => :size?, :message => "129"
-  validates_inclusion_of  :stay_unit, 
-                          :in => STAY_UNITS, 
-                          :message => "129", 
+  validates_inclusion_of  :stay_unit,
+                          :in => STAY_UNITS,
+                          :message => "129",
                           :allow_nil => true,
                           :if => Proc.new { |place| (place.minimum_stay && place.minimum_stay > 0) or (place.maximum_stay && place.maximum_stay > 0) }
 
@@ -49,9 +49,9 @@ class Place < ActiveRecord::Base
   has_many    :transactions, :dependent => :destroy
   has_many    :photos, :dependent => :destroy, :order => :position
   has_many    :favorites, :as => :favorable, :dependent => :destroy
-  
-  before_save   :save_amenities, 
-                :convert_prices_in_usd_cents, 
+
+  before_save   :save_amenities,
+                :convert_prices_in_usd_cents,
                 :update_size_fields,
                 :update_price_sqf_field,
                 :geocode
@@ -61,13 +61,17 @@ class Place < ActiveRecord::Base
                 :validate_currency,
                 :validate_stays
   after_commit  :delete_cache
-  
+
   before_validation :check_hong_kong_zipcode
 
   self.per_page = 20
 
   scope :published,    where("published")
   scope :unpublished,  where("not published")
+
+  def primary_photo
+    self.photos.first
+  end
 
   def publish!
     self.published = true
@@ -78,16 +82,16 @@ class Place < ActiveRecord::Base
     self.published = false
     self.save
   end
-  
+
   def publish_check!
     self.published = true
     self.valid?
   end
-  
+
   def full_address
     [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
   end
-  
+
   def amenities_list
     amenities_list = []
     self.attributes.each{ |field, v|
@@ -95,7 +99,7 @@ class Place < ActiveRecord::Base
     }
     return amenities_list
   end
-  
+
   def place_availability(check_in, check_out, new_currency=nil, user=nil)
 
     errors = validate_attributes(Transaction, {:check_in => check_in, :check_out => check_out, :place => self})
@@ -104,7 +108,7 @@ class Place < ActiveRecord::Base
       check_in = check_in.to_date
       check_out = check_out.to_date
 
-      requested_dates = (check_in..check_out).to_a      
+      requested_dates = (check_in..check_out).to_a
       total_days = requested_dates.count
 
       # set default prices in the original currency
@@ -133,7 +137,7 @@ class Place < ActiveRecord::Base
           end
         end
       end
-      
+
       # add active transaction dates to unavailable_dates array
       if user
         user_transactions = user.transactions.active.where(:place_id => self.id)
@@ -147,7 +151,7 @@ class Place < ActiveRecord::Base
           end
         end
       end
-    
+
       if unavailable_dates.blank?
 
         dates = []
@@ -160,7 +164,7 @@ class Place < ActiveRecord::Base
           foo.merge!({:requested_currency_price_per_night => requested_currency_price_per_night}) if requested_currency_price_per_night
           dates << foo
         end
-        
+
         if availabilities
           # replaces regular price with the availability price on the affected dates
           for availability in availabilities
@@ -199,7 +203,7 @@ class Place < ActiveRecord::Base
         end
 
         results = {
-          :total_days => total_days, 
+          :total_days => total_days,
           :price_final_cleanup => price_final_cleanup,
           :price_security_deposit => price_security_deposit,
           :currency => currency,
@@ -235,17 +239,17 @@ class Place < ActiveRecord::Base
     convert_prices_in_usd_cents(true)
     self.save(:validate => false)
   end
-  
+
   private
-  
+
   def delete_cache
     delete_caches([])
   end
-  
+
   def save_amenities
     amenities.each_pair{ |field,v| self["amenities_#{field}"] = v } if self.amenities
   end
-  
+
   # Convert all price fields into USD cents
   def convert_prices_in_usd_cents(force = false)
     if !currency.nil?
@@ -256,12 +260,12 @@ class Place < ActiveRecord::Base
       self.price_security_deposit_usd = money_to_usd_cents(self.price_security_deposit,currency)  if force || price_security_deposit_changed? || currency_changed?
     end
   end
-  
+
   # Convert currency/money into USD cents
   def money_to_usd_cents(money, currency)
     money.to_money(currency).exchange_to(:USD).cents if money && currency
   end
-  
+
   def update_location_fields
     if self.city_id_changed? && self.city
       self.city_name = self.city.name
@@ -272,7 +276,7 @@ class Place < ActiveRecord::Base
       errors.add(:city_id, "132")
     end
   end
-  
+
   def update_size_fields
     if (self.size_changed? or self.size_unit_changed?) && !self.size.blank? && !self.size_unit.blank?
       case size_unit
@@ -290,9 +294,9 @@ class Place < ActiveRecord::Base
       self.size_unit = nil
     end
   end
-  
+
   def update_price_sqf_field
-    if (self.size_sqf_changed? && !self.size_sqf.blank?) or price_per_month_changed? #or price_per_night_changed? or price_per_week_changed? 
+    if (self.size_sqf_changed? && !self.size_sqf.blank?) or price_per_month_changed? #or price_per_night_changed? or price_per_week_changed?
       # if !price_per_night_usd.blank?
       #   price = price_per_night_usd
       # elsif !price_per_week_usd.blank?
@@ -304,7 +308,7 @@ class Place < ActiveRecord::Base
       self.price_sqf_usd = price_sqf_usd
     end
   end
-  
+
   # Adds validation errors if published column is affected and the place doesn't meet the requirements
   def validate_publishing
     if self.changed? && self.published
@@ -358,7 +362,7 @@ class Place < ActiveRecord::Base
       #     min_stay = minimum_stay * 31 if minimum_stay
       #     max_stay = maximum_stay * 31 if maximum_stay
       #   end
-      # 
+      #
       #   if min_stay < 7 && price_per_night.blank?
       #     unpublish_place = true
       #     errors.add(:publish, "126") if published_changed?
@@ -372,7 +376,7 @@ class Place < ActiveRecord::Base
       #     errors.add(:publish, "126") if published_changed?
       #   end
       # end
-      #      
+      #
       # empty_price = true
       # for stay_unit in STAY_UNITS
       #   case stay_unit
@@ -404,11 +408,11 @@ class Place < ActiveRecord::Base
       #   unpublish_place = true
       #   errors.add(:publish, "128") if published_changed?
       # end
-      
+
       self.published = false if unpublish_place == true
     end
   end
-  
+
   # Adds validation errors if the currency is not supported
   def validate_currency
     errors.add(:currency, "135") unless valid_currency?(currency)
@@ -442,7 +446,7 @@ class Place < ActiveRecord::Base
       errors.add(:zip, "103") if regex && zip && !zip.match(regex)
     end
   end
-  
+
   def validate_stays
     if ((!minimum_stay.blank? && minimum_stay > 0) or (!maximum_stay.blank? && maximum_stay > 0)) && (!stay_unit.blank? && STAY_UNITS.include?(stay_unit))
 
@@ -461,7 +465,7 @@ class Place < ActiveRecord::Base
       # if min_stay < 7
       #   errors.add(:price_per_night, "101") if price_per_night.blank?
       # end
-      # 
+      #
       # if min_stay >= 7 && min_stay < 28
       #   errors.add(:price_per_week, "101") if price_per_week.blank?
       # end
@@ -475,9 +479,9 @@ class Place < ActiveRecord::Base
       self.maximum_stay = 0 unless !self.maximum_stay.blank?
       self.stay_unit = "months" unless !self.stay_unit.blank?
     end
-  
+
   end
-  
+
   def check_hong_kong_zipcode
     if self.city_id == 2
       self.zip ||= '999077'

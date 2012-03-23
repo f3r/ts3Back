@@ -48,13 +48,16 @@ class Inquiry < ActiveRecord::Base
         length = self.length_stay.weeks
       when :months
         length = self.length_stay.months
+      else
+        self.length_stay_type = nil
       end
 
-      self.check_out = self.check_in + length
+      self.check_out = self.check_in + length if length
     end
   end
 
   def length_in_words
+    return unless self.length_stay && self.length_stay_type
     if self.length_stay == 1
       "#{self.length_stay} #{self.length_stay_type.singularize}"
     else
