@@ -189,25 +189,13 @@ class User < ActiveRecord::Base
   # Favorites
 
   def add_favorite(object)
-    begin
-      # puts "deleted" if Rails.cache.delete("user_#{self.id.to_s}_favorites")
-      favorite = object.favorites.new(:user_id => self.id)
-      favorite.save
-    rescue Exception => e
-      logger.error { "Error [user.rb/add_favorite] #{e.message}" }
-      return false
-    end
+    favorite = object.favorites.new(:user_id => self.id)
+    favorite.save
   end
 
   def remove_favorite(object)
-    begin
-      # puts "deleted" if Rails.cache.delete("user_#{self.id.to_s}_favorites")
-      favorite = object.favorites.where(:user_id => self.id).first
-      favorite && favorite.destroy
-    rescue Exception => e
-      logger.error { "Error [user.rb/remove_favorite] #{e.message}" }
-      return false
-    end
+    favorite = object.favorites.where(:user_id => self.id).first
+    favorite && favorite.destroy
   end
 
   def favorite?(type, id)
@@ -215,16 +203,11 @@ class User < ActiveRecord::Base
   end
 
   def get_favorites(type)
-    begin
-      type = type.to_s.capitalize
-      type_class = type.constantize
-      favorites = self.favorites.where(:favorable_type => type)
-      objects = type_class.find(favorites.map(&:favorable_id))
-      return objects
-    rescue Exception => e
-      logger.error { "Error [user.rb/get_favorites] #{e.message}" }
-      return nil
-    end
+    type = type.to_s.capitalize
+    type_class = type.constantize
+    favorites = self.favorites.where(:favorable_type => type)
+    objects = type_class.find(favorites.map(&:favorable_id))
+    return objects
   end
   
   private  

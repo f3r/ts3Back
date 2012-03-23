@@ -73,7 +73,7 @@ module GeneralHelper
           filtered_object[:avatar] = nil
         end
       elsif field == :favorited
-        filtered_object[:favorited] = current_user.favorite?(object.class, object.id) rescue false
+        filtered_object[:favorited] = current_user.favorite?(object.class, object.id) if current_user
       elsif field == :photos
         # I am going to hell because of this line
         filtered_object[:photos] = object.photos.as_json
