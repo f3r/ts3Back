@@ -12,7 +12,8 @@ class Inquiry < ActiveRecord::Base
     inquiry = self.new(
       :place => place,
       :user => user,
-      :extra => params[:extra]
+      :extra => params[:extra],
+      :guests => params[:guests]
     )
     inquiry.check_in = params[:date_start]
     inquiry.length = [params[:length_stay], params[:length_stay_type]]

@@ -11,6 +11,7 @@ child @conversations => :conversations do
   child :target => :inquiry do
     node(:place_title) {|i| i.place.title }
     node(:place_thumb) {|i| i.place.primary_photo.photo.url(:small) }
-    attributes :name
+    node(:length) {|i| i.length_in_words }
+    attribute :guests, :check_in
   end
 end
