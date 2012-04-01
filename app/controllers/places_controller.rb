@@ -154,6 +154,7 @@ class PlacesController < ApiController
 
     places_paginated = place_search.results
     total_results    = place_search.count_results
+    all_results_ids  = place_search.all_results_ids
     per_page         = place_search.per_page
 
     if !places_paginated.blank?
@@ -169,7 +170,10 @@ class PlacesController < ApiController
 
       response = {
         :places           => filtered_places,
+        :check_in         => params[:check_in],
+        :check_out        => params[:check_out],
         :results          => total_results,
+        :all_results_ids  => all_results_ids,
         :per_page         => per_page,
         :current_page     => params[:page],
         :place_type_count => place_type_count,
@@ -637,7 +641,7 @@ class PlacesController < ApiController
       return_message(200, :ok, {:is_favorite => false})
     end
   end
-
+  
   protected
   def get_user
     if params[:user_id] && params[:user_id].to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) != nil # is numeric

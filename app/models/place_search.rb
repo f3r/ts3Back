@@ -24,6 +24,10 @@ class PlaceSearch
     results_without_pagination
   end
 
+  def all_results_ids
+    all_results.map(&:id)
+  end
+
   def count_results
     @search.result(:distinct => true).count
   end
@@ -43,7 +47,7 @@ class PlaceSearch
 
     place_type_count
   end
-
+  
   def amenities_counts
     # amenities_count = {}
     # for amenity in @amenities
@@ -141,6 +145,12 @@ class PlaceSearch
 
     # Filter by number of guests
     conditions[:max_guests_gteq] = params[:guests] if !params[:guests].blank?
+
+    # Filter by date
+    conditions[:created_at_gteq] = params[:date_from] if !params[:date_from].blank?    
+
+    # exclude places
+    conditions[:id_not_in] = params[:exclude_ids] if !params[:exclude_ids].blank?    
 
     # Filter by availability
     if params[:check_in]

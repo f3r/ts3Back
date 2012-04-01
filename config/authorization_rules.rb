@@ -57,6 +57,9 @@ authorization do
       if_permitted_to :read, :place
     end
     has_permission_on :places, :to => [:favorite_places]
+    has_permission_on :alerts, :to => [:manage] do
+      if_attribute :user => is { user }
+    end
     has_permission_on :transactions, :to => [:cancel, :pay] do
       if_attribute :user => is { user }
     end
@@ -86,6 +89,7 @@ authorization do
       if_attribute :comments_count => gt { 0 }
     end
     has_permission_on :geo, :to => [:get_countries, :get_states, :get_cities, :get_city, :city_search, :price_range]
+    has_permission_on :alerts, :to => [:get_params]
   end
 
 end

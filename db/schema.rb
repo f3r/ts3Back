@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120313195642) do
+ActiveRecord::Schema.define(:version => 20120322212955) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -37,6 +37,23 @@ ActiveRecord::Schema.define(:version => 20120313195642) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "alerts", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "alert_type"
+    t.text     "query"
+    t.text     "results"
+    t.string   "delivery_method", :default => "email"
+    t.string   "schedule",        :default => "daily"
+    t.boolean  "active",          :default => true
+    t.string   "search_code"
+    t.datetime "delivered_at"
+    t.datetime "deleted_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  add_index "alerts", ["user_id"], :name => "index_alerts_on_user_id"
 
   create_table "authentications", :force => true do |t|
     t.integer  "user_id"
@@ -280,6 +297,24 @@ ActiveRecord::Schema.define(:version => 20120313195642) do
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
   add_index "places", ["state_name"], :name => "index_places_on_state_name"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
+
+  create_table "reviews", :force => true do |t|
+    t.integer  "place_id"
+    t.integer  "user_id"
+    t.float    "accuracy"
+    t.float    "cleanliness"
+    t.float    "checkin"
+    t.float    "communication"
+    t.float    "location"
+    t.float    "value"
+    t.boolean  "private",       :default => false
+    t.text     "comment"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
+
+  add_index "reviews", ["place_id"], :name => "index_reviews_on_place_id"
+  add_index "reviews", ["user_id"], :name => "index_reviews_on_user_id"
 
   create_table "transaction_logs", :force => true do |t|
     t.integer  "transaction_id"

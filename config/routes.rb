@@ -79,7 +79,15 @@ HeyPalBackEnd::Application.routes.draw do
     # temporal mailers
     post    "/places/:place_id/confirm_rental",   :to => "places#confirm_rental"
     post    "/places/:place_id/confirm_inquiry",  :to => "places#confirm_inquiry"
-
+    ##############################################################################
+    # SAVED SEARCHES
+    ##############################################################################
+    get     "users/:user_id/alerts",        :to => "alerts#index"
+    get     "users/:user_id/alerts/:id",    :to => "alerts#show"
+    post    "users/:user_id/alerts",        :to => "alerts#create"
+    put     "users/:user_id/alerts/:id",    :to => "alerts#update"
+    delete  "users/:user_id/alerts/:id",    :to => "alerts#destroy"
+    get     "alerts/:code",                 :to => "alerts#get_params"
     ##############################################################################
     # PLACE PHOTOS
     ##############################################################################

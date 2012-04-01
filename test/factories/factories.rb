@@ -94,4 +94,11 @@ FactoryGirl.define do
     #association :place, :factory => :valid_place
   end
 
+  factory :alert do
+    schedule  { "daily" }
+    alert_type  { "Place" }
+    delivery_method    { "sms" }
+    query { {:hello => "hello", :bye => "bye"} }
+  end
+
 end
