@@ -51,7 +51,32 @@
         #########################################################################################################-->
         <tr>
           <td class="message" valign="top">
-            <h2>Dear <%= @user.first_name %>,</h2>
+            <h2>Dear <%= @user.first_name %>, here is your <%= @alert.schedule %> alert</h2>
+
+            <% if !@alert["query"]["city_id"].blank? %>
+              <li><%= @city.cached_complete_name %></li>
+            <% end %>
+            <% if !@alert["query"]["min_price"].blank? %>
+              <li>Minimum price: <%= "#{@alert["query"]["min_price"]}" %></li>
+            <% end %>
+            <% if !@alert["query"]["max_price"].blank? %>
+              <li>Maximum price: <%= "#{@alert["query"]["max_price"]}" %></li>
+            <% end %>
+            <% if !@alert["query"]["guests"].blank? %>
+              <li>Guests: <%= "#{@alert["query"]["guests"]}" %></li>
+            <% end %>
+            <% if !@alert["query"]["check_in"].blank? %>
+              <li>Check in: <%= "#{@alert["query"]["check_in"]}" %></li>
+            <% end %>
+            <% if !@alert["query"]["check_out"].blank? %>
+              <li>Check out: <%= "#{@alert["query"]["check_out"]}" %></li>
+            <% end %>
+
+            <%= link_to "Edit", "#{FRONTEND_PATH}/alerts/#{@alert[:id]}/edit" %>
+            <%= link_to "Pause", "#{FRONTEND_PATH}/alerts/#{@alert[:id]}/pause" %>
+            
+            <%= image_tag "http://www.google.com/staticmap?center=#{@city.lat},#{@city.lon}&markers=#{@city.lat},#{@city.lon},red&zoom=4&size=150x150" %>
+
 
             <% if !@new_results.blank? %>
             <h3>New results</h3>
@@ -70,7 +95,8 @@
               <% end %>
             </ul>
             <% end %>
-
+            
+            <%= link_to "View more results", "#{FRONTEND_PATH}/search/code/#{@alert["search_code"]}" %>
           </td>
         </tr>
 

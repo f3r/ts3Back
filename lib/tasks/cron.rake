@@ -1,3 +1,7 @@
+# TODO: Migrate to scheduler
+# cron has been deprecated 
+# http://devcenter.heroku.com/articles/scheduler
+
 desc "Heroku cron add-on tasks"
 task :cron => :environment do
   # HEROKU SAMPLE CODE
@@ -25,5 +29,9 @@ task :cron => :environment do
     REDIS.zremrangebyscore("notifications:#{user.id}", 0, Notification.score_one_month_ago)
     Rails.logger.info { "[Cron] Deleted old notifications for user #{user.id}" }
   }
+  
+  # FIXME: this should use delayed job, add workers on staging?
+  Alert.send_alerts
+  Alert.purge_deleted
   
 end
