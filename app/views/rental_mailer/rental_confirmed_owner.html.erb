@@ -53,7 +53,7 @@
           <td class="message" valign="top">
             <h2>Dear <%= @user.first_name %>,</h2>
 
-            <p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, "#{FRONTEND_PATH}/places/#{@place.id}" %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
+            <p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, seo_place_path(@place) %> for <%= @total_days %> days starting on <%= @check_in %>.</p>
 
             <p>Please log in to SquareStays.com to view the request. You can also send messages to <%= link_to @renter.full_name, "#{FRONTEND_PATH}/messages/#{@renter.id}" %> to ask any follow-up questions.</p>
 

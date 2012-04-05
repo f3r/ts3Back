@@ -1,4 +1,5 @@
 class AlertMailer < ActionMailer::Base
+  add_template_helper(FrontendHelper)
 
   # ==Description
   # Email alert

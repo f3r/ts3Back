@@ -1,4 +1,5 @@
 class InquiryMailer < ActionMailer::Base  
+  add_template_helper(FrontendHelper)
 
   # ==Description
   # Temporary email sent when the user rents a place..

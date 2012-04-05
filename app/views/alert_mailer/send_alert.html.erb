@@ -82,7 +82,7 @@
             <h3>New results</h3>
             <ul>              
               <% for place in @new_results %>
-                <li><%= link_to place[:title], "#{FRONTEND_PATH}/places/#{place[:id]}" %></li>
+                <li><%= link_to place[:title], seo_place_path(place) %></li>
               <% end %>
             </ul>
             <% end %>
@@ -91,7 +91,7 @@
             <h3>Recently added</h3>
             <ul>
               <% for place in @recently_added %>
-                <li><%= link_to place[:title], "#{FRONTEND_PATH}/places/#{place[:id]}" %></li>
+                <li><%= link_to place[:title], seo_place_path(place) %></li>
               <% end %>
             </ul>
             <% end %>
