@@ -21,4 +21,10 @@ namespace :places do
       end
     end
   end
+
+  desc "Recalculate usd prices"
+  task :send_email_alerts => :environment do
+    Alert.send_alerts
+    Alert.purge_deleted
+  end
 end

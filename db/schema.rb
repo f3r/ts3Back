@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120322212955) do
+ActiveRecord::Schema.define(:version => 20120402044037) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -129,6 +129,14 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
   add_index "comments", ["place_id"], :name => "index_comments_on_place_id"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
+  create_table "conversations", :force => true do |t|
+    t.integer  "target_id"
+    t.string   "target_type"
+    t.integer  "sender_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -155,18 +163,49 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
   add_index "favorites", ["favorable_id"], :name => "index_favorites_on_favorable_id"
   add_index "favorites", ["user_id"], :name => "index_favorites_on_user_id"
 
+  create_table "inbox_entries", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "conversation_id"
+    t.boolean  "read",            :default => false
+    t.datetime "deleted_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
+  add_index "inbox_entries", ["conversation_id"], :name => "index_inbox_entries_on_conversation_id"
+
   create_table "inquiries", :force => true do |t|
     t.integer  "user_id"
     t.integer  "place_id"
     t.date     "check_in"
     t.date     "check_out"
     t.text     "extra"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "length_stay"
+    t.string   "length_stay_type"
+    t.integer  "guests"
   end
 
   add_index "inquiries", ["place_id"], :name => "index_inquiries_on_place_id"
   add_index "inquiries", ["user_id"], :name => "index_inquiries_on_user_id"
+
+  create_table "messages", :force => true do |t|
+    t.integer  "conversation_id"
+    t.integer  "from_id"
+    t.text     "body"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "messages", ["conversation_id"], :name => "index_messages_on_conversation_id"
+
+  create_table "panoramas", :force => true do |t|
+    t.integer "photo_id"
+    t.text    "xml"
+    t.string  "html_file_name"
+    t.string  "swf_file_name"
+  end
 
   create_table "photos", :force => true do |t|
     t.integer  "place_id"
@@ -263,6 +302,10 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
     t.string   "country_code",               :limit => 2
     t.float    "price_sqf_usd"
     t.string   "stay_unit"
+    t.string   "tenure"
+    t.string   "condition"
+    t.string   "developer"
+    t.integer  "top_year"
   end
 
   add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"
@@ -297,24 +340,6 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
   add_index "places", ["state_name"], :name => "index_places_on_state_name"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
-
-  create_table "reviews", :force => true do |t|
-    t.integer  "place_id"
-    t.integer  "user_id"
-    t.float    "accuracy"
-    t.float    "cleanliness"
-    t.float    "checkin"
-    t.float    "communication"
-    t.float    "location"
-    t.float    "value"
-    t.boolean  "private",       :default => false
-    t.text     "comment"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-  end
-
-  add_index "reviews", ["place_id"], :name => "index_reviews_on_place_id"
-  add_index "reviews", ["user_id"], :name => "index_reviews_on_user_id"
 
   create_table "transaction_logs", :force => true do |t|
     t.integer  "transaction_id"
