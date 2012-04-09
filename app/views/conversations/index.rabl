@@ -12,6 +12,7 @@ child @conversations => :conversations do
     node(:place_title) {|i| i.place.title }
     node(:place_thumb) {|i| i.place.primary_photo.photo.url(:small) }
     node(:length) {|i| i.length_in_words }
-    attribute :guests, :check_in
+    attribute :guests
+    node(:check_in) {|i| I18n.l(i.check_in, :format => :human) }
   end
 end

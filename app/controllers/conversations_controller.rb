@@ -54,8 +54,12 @@ class ConversationsController < ApiController
 
   # Add a reply to a conversation
   def update
-    @message = Message.new(params[:message])
-    Messenger.add_reply(current_user, params[:conversation_id], @message)
+    @message = Message.new(:body => params[:message])
+    if Messenger.add_reply(current_user, params[:id], @message)
+      return_message(200, :ok)
+    else
+      return_message(200, :ok, {:err => {:messages => [106]}})
+    end
   end
 
   # == Description

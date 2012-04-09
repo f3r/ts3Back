@@ -1,0 +1,4 @@
+en:
+  date:
+    formats:
+      human: '%d/%b/%y'
