@@ -4,6 +4,7 @@ class CreateMessages < ActiveRecord::Migration
       t.references :conversation
       t.integer :from_id
       t.text :body
+      t.boolean :system
 
       t.timestamps
     end

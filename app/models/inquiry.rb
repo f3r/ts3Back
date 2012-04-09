@@ -68,7 +68,10 @@ class Inquiry < ActiveRecord::Base
 
   def start_conversation(message)
     self.message = message
-    conversation = Conversation.new
+    if self.message.blank?
+      self.message = 'Inquiry sent'
+      self.system = true
+    end
     conversation = Conversation.new
     conversation.recipient = self.place.user
     conversation.body = message

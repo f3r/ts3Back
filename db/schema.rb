@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120402044037) do
+ActiveRecord::Schema.define(:version => 20120322212955) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(:version => 20120402044037) do
     t.integer  "conversation_id"
     t.integer  "from_id"
     t.text     "body"
+    t.boolean  "system"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end

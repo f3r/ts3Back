@@ -5,7 +5,7 @@ class Conversation < ActiveRecord::Base
   has_many :messages
   has_many :inbox_entries
 
-  attr_accessor :recipient, :body, :read
+  attr_accessor :recipient, :body, :read, :from
 
   validates_presence_of :sender
 
@@ -15,6 +15,11 @@ class Conversation < ActiveRecord::Base
 
   def first_message
     self.messages.first
+  end
+
+  def other_party(user)
+    ie = self.inbox_entries.where(['user_id <> ?', user.id]).first
+    ie.user if ie
   end
 
   # def recipient_inbox_entry

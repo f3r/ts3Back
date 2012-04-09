@@ -45,7 +45,7 @@ class MessagesTest < ActionController::IntegrationTest
     assert_kind_of Hash, json
     assert_equal "ok", json['stat']
 
-    get "/conversations/unread_count.json", {:access_token => @access_token}
+    get "/conversations/unread_count.json", {:access_token => @consumer.authentication_token}
     json = ActiveSupport::JSON.decode(response.body)
     assert_operator json['count'], :>=, 1
   end

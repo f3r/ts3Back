@@ -4,6 +4,7 @@ class Messenger
     conversations = []
     inbox_entries.each do |inbox_entry|
       conversation = inbox_entry.conversation
+      conversation.from = conversation.other_party(user)
       conversation.body = conversation.first_message.body
       conversation.read = inbox_entry.read
       conversations << conversation
