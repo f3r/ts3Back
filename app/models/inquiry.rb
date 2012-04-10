@@ -67,16 +67,16 @@ class Inquiry < ActiveRecord::Base
   end
 
   def start_conversation(message)
-    self.message = message
-    if self.message.blank?
-      self.message = 'Inquiry sent'
-      self.system = true
-    end
     conversation = Conversation.new
     conversation.recipient = self.place.user
     conversation.body = message
     conversation.target = self
 
     Messenger.start_conversation(self.user, conversation)
+  end
+
+  # For empty messages about this inquiry
+  def default_message
+    'Inquiry sent'
   end
 end

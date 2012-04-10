@@ -67,6 +67,16 @@ class MessengerTest < ActiveSupport::TestCase
       assert !conversation.read?
     end
 
+    should "include a default message based on the target" do
+      @conversation.body = ''
+      @conversation.target = Inquiry.new
+      assert Messenger.start_conversation(@consumer, @conversation)
+      conversation, messages = Messenger.get_conversation_messages(@consumer, Conversation.last.id)
+      assert_equal 1, messages.size
+      message = messages.first
+      assert_equal 'Inquiry sent', message.body
+      assert message.system
+    end
     # 
     # it "should deliver reply to recipients that deleted the message" do
     #   # Sheldon deletes the message

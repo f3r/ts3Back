@@ -29,6 +29,12 @@ class Messenger
     # Create the conversation
     conversation.save!
     first_message = conversation.messages.build(:body => conversation.body, :from => sender)
+
+    if first_message.body.blank? && conversation.target
+      first_message.body = conversation.target.default_message
+      first_message.system = true
+    end
+
     first_message.save!
 
     # Insert it into inboxes
