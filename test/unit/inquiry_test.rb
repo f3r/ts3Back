@@ -10,28 +10,44 @@ class InquiryTest < ActiveSupport::TestCase
     @emails = ActionMailer::Base.deliveries = []
   end
 
-  test "create_and_notify" do
+  def inquiry_params
     check_in = 1.month.from_now
+    {
+      :extra => {
+        :name => 'Peter Griffin',
+        :email => 'peter@quahog.com',
+        :mobile => '+85 1234 5566'
+      },
+      :date_start => check_in.to_s,
+      :length_stay => '2',
+      :length_stay_type => 'months',
+      :message => 'Pets allowed?'
+    }
+  end
+
+  should "create_and_notify" do
     assert_difference 'Inquiry.count', +1 do
-      Inquiry.create_and_notify(@place, @user, {
-        :extra => {
-          :name => 'Peter Griffin',
-          :email => 'peter@quahog.com',
-          :mobile => '+85 1234 5566'
-        },
-        :date_start => check_in.to_s,
-        :length_stay => '2',
-        :length_stay_type => 'months',
-        :message => 'Pets allowed?'
-      })
+      Inquiry.create_and_notify(@place, @user, inquiry_params)
     end
     assert_equal 3, @emails.size
     inquiry = Inquiry.last
     assert_equal @user, inquiry.user
     assert_equal @place, inquiry.place
-    assert_equal check_in.to_date, inquiry.check_in
     assert_equal 2, inquiry.length_stay
     assert_equal 'months', inquiry.length_stay_type
+  end
+
+  should "create or continue a conversation" do
+    assert_difference 'Conversation.count', +1 do
+      Inquiry.create_and_notify(@place, @user, inquiry_params)
+    end
+
+    # The 2nd time it continues the previous conversation
+    assert_difference 'Conversation.count', 0 do
+      assert_difference 'Message.count', +1 do
+        Inquiry.create_and_notify(@place, @user, inquiry_params)
+      end
+    end
   end
 
   context "#length=" do

@@ -1,10 +1,11 @@
 <h2>Dear <%= @owner.full_name %>,</h2>
 
-<p><%= @renter.anonymized_name %> has sent you an inquiry about renting your place <%= link_to @place.title, seo_place_path(@place) %>
-<% if @inquiry.check_in %>   
+<p>
+<%= @renter.anonymized_name %> has sent you an inquiry about renting your place <%= link_to @place.title, seo_place_path(@place) %>
+<% if @inquiry.check_in %>
 for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatted_s(:long) %>
 <% end %> 
-.</p>
+</p>
 
 <% if @inquiry.message.present? %>
   <p>The message from the user is:

@@ -1,6 +1,15 @@
 class Messenger
-  def self.get_conversations(user)
-    inbox_entries = InboxEntry.where(:user_id => user.id, :deleted_at => nil).order('created_at DESC').all(:include => [:conversation])
+  def self.get_conversations(user, filters = {})
+    conditions = {
+      :user_id => user.id, :deleted_at => nil
+    }
+
+    if filters[:target]
+      target = filters[:target]
+      conditions['conversations'] = {:target_id => target.id, :target_type => target.class}
+    end
+
+    inbox_entries = InboxEntry.where(conditions).order('inbox_entries.created_at DESC').all(:include => [:conversation])
     conversations = []
     inbox_entries.each do |inbox_entry|
       conversation = inbox_entry.conversation

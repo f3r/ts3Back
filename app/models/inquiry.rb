@@ -1,6 +1,7 @@
 class Inquiry < ActiveRecord::Base
   belongs_to :user
   belongs_to :place
+  has_one :conversation, :as => :target
 
   serialize :extra
 
@@ -20,13 +21,13 @@ class Inquiry < ActiveRecord::Base
 
     return false unless inquiry.save
 
+    # Creates a new conversation around the inquiry
+    inquiry.start_conversation(params[:message])
+
     # Sends notification
     InquiryMailer.inquiry_confirmed_renter(inquiry).deliver
     InquiryMailer.inquiry_confirmed_owner(inquiry).deliver
     InquiryMailer.inquiry_confirmed_admin(place, params, inquiry.check_in, inquiry.check_out, user, inquiry).deliver
-
-    # Creates a new conversation around the inquiry
-    inquiry.start_conversation(params[:message])
 
     inquiry
   end
@@ -67,13 +68,20 @@ class Inquiry < ActiveRecord::Base
   end
 
   def start_conversation(message)
-    conversation = Conversation.new
-    conversation.recipient = self.place.user
-    conversation.body = message
-    self.message = message
-    conversation.target = self
+    # Check if there is a previous inquiry
+    prev_inquiry = Inquiry.where(:user_id => self.user.id, :place_id => self.place.id).first
+    if prev_inquiry && prev_inquiry.conversation
+      conversation = prev_inquiry.conversation
+      Messenger.add_reply(self.user, conversation.id, Message.new(:body => message))
+    else
+      conversation = Conversation.new
+      conversation.recipient = self.place.user
+      conversation.body = message
+      self.message = message
+      conversation.target = self
 
-    Messenger.start_conversation(self.user, conversation)
+      Messenger.start_conversation(self.user, conversation)
+    end
   end
 
   # For empty messages about this inquiry

@@ -77,7 +77,7 @@ class MessengerTest < ActiveSupport::TestCase
       assert_equal 'Inquiry sent', message.body
       assert message.system
     end
-    # 
+
     # it "should deliver reply to recipients that deleted the message" do
     #   # Sheldon deletes the message
     #   conversation = Messenger.get_conversations(sheldon, {}).first
@@ -92,19 +92,6 @@ class MessengerTest < ActiveSupport::TestCase
     #   conversation = Messenger.get_conversations(sheldon, {}).first
     #   same_message?(conversation, @conversation).should be_true
     #   conversation.should be_unread
-    # end
-    # 
-    # it "should support target objects" do
-    #   id = 23
-    #   event = mock_model('AthleteEvent', :id => id)
-    #   event.stub(:track_response!)
-    # 
-    #   @conversation.target = event
-    #   Messenger.send_message(leonard, @conversation).should be_true
-    # 
-    #   AthleteEvent.stub(:get)
-    #   AthleteEvent.should_receive(:get).with(id).and_return(event)
-    #   conversation = Messenger.get_conversations(penny, {}).first
     # end
   end
 
@@ -180,5 +167,22 @@ class MessengerTest < ActiveSupport::TestCase
       #assert_equal 0, status[:total]
       #assert_equal 0, status[:unread]
     #end
+  end
+
+  context "Target" do
+    setup do
+      @conversation = Conversation.new
+      @conversation.recipient = @agent
+      @conversation.body = 'I am interested in your apartment'
+    end
+
+    should "support filtering" do
+      inquiry = Inquiry.new(:id => 32)
+
+      @conversation.target = inquiry
+      assert Messenger.start_conversation(@consumer, @conversation)
+
+      Messenger.get_conversations(@agent, :target => inquiry)
+    end
   end
 end
