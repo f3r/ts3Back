@@ -2,7 +2,7 @@ module FrontendHelper
   def frontend_url(path)
     FRONTEND_PATH + path
   end
-  
+
   def seo_place_path(place)
     result = place[:title].dup
     result.gsub!(/[^\x00-\x7F]+/, '') # Remove anything non-ASCII entirely (e.g. diacritics).
@@ -14,5 +14,9 @@ module FrontendHelper
       City.find(place[:city_id])
     }
     "#{FRONTEND_PATH}/#{city[:name].parameterize('_')}/#{place[:id]}-#{result}"
+  end
+
+  def site_name
+    SITE_NAME
   end
 end

@@ -113,6 +113,10 @@ class User < ActiveRecord::Base
     [first_name,last_name].join(' ')
   end
 
+  def anonymized_name
+    "#{first_name[0]}. #{last_name[0]}."
+  end
+
   def age
     now = Time.now.utc.to_date
     now.year - birthdate.year - ((now.month > birthdate.month || (now.month == birthdate.month && now.day >= birthdate.day)) ? 0 : 1)

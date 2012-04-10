@@ -1,40 +1,27 @@
 <h2>Dear <%= @owner.full_name %>,</h2>
 
-<% if @renter.id.nil?  # The user is not registered %>
-  <% if @inquiry.check_in %>
-    <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, seo_place_path(@place) %> for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatted_s(:long) %>.</p>
-  <% else %>
-    <p><%= @renter.full_name %> has sent you a request to rent your place <%= link_to @place.title, seo_place_path(@place) %>.</p>
-  <% end %>
+<p><%= @renter.anonymized_name %> has sent you an inquiry about renting your place <%= link_to @place.title, seo_place_path(@place) %>
+<% if @inquiry.check_in %>   
+for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatted_s(:long) %>
+<% end %> 
+.</p>
 
-  <% if !@questions.empty? %>
-    <p>The message from the user is:
-      <blockquote>
-        <%= @questions %>
-      </blockquote>
-    </p>
-  <% end %>
-
-  <p>This user is not yet registered at SquareStays.com, but you can contact him/her via email at <%= @email %> or via telephone at <%= @mobile %>.</p>              
-    
-  <p><i>Note: SquareStays.com cannot confirm the identify of unregistered users. You may want to ask the user to create an account before confirming a rental. We recommend you copy support@squarestays.com on any correspondence with this user.</i></p>
-<% else # the user is registered %>
-  <% if @inquiry.check_in %>
-    <p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, seo_place_path(@place) %> for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatted_s(:long) %>.</p>
-  <% else %>
-    <p><%= link_to @renter.full_name, "#{FRONTEND_PATH}/users/#{@renter.id}" %> has sent you a request to rent your place <%= link_to @place.title, seo_place_path(@place) %>.</p>
-  <% end %>
-
-  <br />
-
-  <p>Please log in to SquareStays.com to view the request. You can also send messages to <%= link_to @renter.full_name, "#{FRONTEND_PATH}/messages/#{@renter.id}" %> to ask any follow-up questions.</p>
-
+<% if @inquiry.message.present? %>
+  <p>The message from the user is:
+    <blockquote>
+      <%= @inquiry.message %>
+    </blockquote>
+  </p>
 <% end %>
+
+</br>
+
+<p>Please log in to <%= link_to site_name, frontend_url('/login') %> to view the request. You can reply to your inquiries at the <%= link_to 'messages section', frontend_url('/messages') %>.</p>
   
 <br />
 
-<p>P.S. Questions? Please email us at support@squarestays.com</p>
+<p>P.S. Questions? Please email us at <%= mail_to SUPPORT_EMAIL %></p>
 
 <p>Thanks!</p>
 
-<p>-- The SquareStays team</p>
+<p>-- The <%= site_name %> team</p>

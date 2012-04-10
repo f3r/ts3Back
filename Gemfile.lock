@@ -124,7 +124,10 @@ GEM
       activerecord (~> 3.1)
       activesupport (~> 3.1)
       polyamorous (~> 0.5.0)
+    metaclass (0.0.1)
     mime-types (1.17.2)
+    mocha (0.10.5)
+      metaclass (~> 0.0.1)
     money (3.7.1)
       i18n (~> 0.4)
     multi_json (1.0.4)
@@ -257,6 +260,7 @@ DEPENDENCIES
   linecache19 (= 0.5.13)
   mail_view
   meta_search (>= 1.1.0.pre)
+  mocha
   money
   mysql2 (= 0.3.11)
   oauth2 (= 0.4.1)

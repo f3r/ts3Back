@@ -9,9 +9,9 @@ class PreviewMails < MailView
     RegistrationMailer.reset_password_instructions(user)
   end
 
-  def new_message
+  def new_message_reply
     user = User.first
-    UserMailer.new_message(user, 1)
+    UserMailer.new_message_reply(user, Message.first)
   end
 
   def inquiry_confirmed_renter

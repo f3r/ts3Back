@@ -70,6 +70,7 @@ class Inquiry < ActiveRecord::Base
     conversation = Conversation.new
     conversation.recipient = self.place.user
     conversation.body = message
+    self.message = message
     conversation.target = self
 
     Messenger.start_conversation(self.user, conversation)

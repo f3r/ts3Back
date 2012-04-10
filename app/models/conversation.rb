@@ -13,8 +13,8 @@ class Conversation < ActiveRecord::Base
     self.read
   end
 
-  def first_message
-    self.messages.first
+  def last_message
+    self.messages.last
   end
 
   def other_party(user)

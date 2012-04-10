@@ -9,7 +9,8 @@ child @conversation do
   end
   child :target => :inquiry do
     node(:place_title) {|i| i.place.title }
-    node(:place_thumb) {|i| i.place.primary_photo.photo.url(:small) }
+    node(:place_thumb) {|i| i.place.primary_photo.photo.url(:medsmall) }
+    node(:place_url) {|i| seo_place_path(i.place) }
     node(:length) {|i| i.length_in_words }
     attribute :guests
     node(:check_in) {|i| I18n.l(i.check_in, :format => :human) if i.check_in }

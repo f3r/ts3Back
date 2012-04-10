@@ -1,4 +1,5 @@
-class UserMailer < ActionMailer::Base  
+class UserMailer < ActionMailer::Base
+  add_template_helper(FrontendHelper)
 
   # ==Description
   # Email sent when the user confirms the account
@@ -22,16 +23,21 @@ class UserMailer < ActionMailer::Base
 
   # ==Description
   # Email sent when the user receives a message
-  def new_message(user, msg_id)
+  def new_message_reply(user, message)
     @user      = user
-    @msg_id    = msg_id
+    # @conversation = message.conversation
+    @message   = message
+    from = @message.from
+
     recipients = "#{user.full_name} <#{user.email}>"
-    subject    = 'You have a new message!'
+    subject    = "You have a new message from #{from.anonymized_name} on SquareStays.com!"
     sent_on    =  Time.now
     mail(:from    => MAILER_SENDER,
          :to      => recipients,
          :subject => subject,
-         :date    => sent_on)
+         :date    => sent_on) do |format|
+      format.html { render :layout => 'user_email' }
+    end
   end
 
   # ==Description

@@ -127,6 +127,8 @@ class MessengerTest < ActiveSupport::TestCase
     should "add a reply message" do
       conversation = Messenger.get_conversations(@agent).first
 
+      UserMailer.expects(:new_message_reply).returns(mock(:deliver => true))
+
       # Agent replies
       conversation = Messenger.get_conversations(@agent).first
       reply = Message.new(:body => "It is interesting, I know")

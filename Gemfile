@@ -37,6 +37,7 @@ group :test do
   gem "shoulda-matchers"
   gem 'factory_girl',   '~> 2.6.4'
   gem 'faker'
+  gem 'mocha'
 end
 
 group :development do

@@ -1,11 +1,11 @@
 class Messenger
   def self.get_conversations(user)
-    inbox_entries = InboxEntry.where(:user_id => user.id, :deleted_at => nil).all(:include => [:conversation])
+    inbox_entries = InboxEntry.where(:user_id => user.id, :deleted_at => nil).order('created_at DESC').all(:include => [:conversation])
     conversations = []
     inbox_entries.each do |inbox_entry|
       conversation = inbox_entry.conversation
       conversation.from = conversation.other_party(user)
-      conversation.body = conversation.first_message.body
+      conversation.body = conversation.last_message.body
       conversation.read = inbox_entry.read
       conversations << conversation
     end
@@ -33,6 +33,7 @@ class Messenger
     if first_message.body.blank? && conversation.target
       first_message.body = conversation.target.default_message
       first_message.system = true
+      conversation.body = first_message.body
     end
 
     first_message.save!
@@ -56,6 +57,10 @@ class Messenger
     recipient_inbox_entry = sender_inbox_entry.other_party
     recipient_inbox_entry.mark_as_unread
     recipient_inbox_entry.save!
+
+    # Notifiy recipient
+    recipient = recipient_inbox_entry.user
+    UserMailer.new_message_reply(recipient, message).deliver
   end
 
   def self.mark_as_read(user, conversation_id)
