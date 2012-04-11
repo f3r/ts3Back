@@ -1,4 +1,4 @@
-<h2>Dear <%= @name %>,</h2>
+<h2>Dear <%= @user.full_name %>,</h2>
 
 <p>Your inquiry on <%= link_to @place.title, seo_place_path(@place) %> has been sent.</p>
 <br />

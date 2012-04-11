@@ -511,21 +511,34 @@ class PlacesTest < ActionController::IntegrationTest
   # end
 
   context "Inquiries" do
-    should "send inquiry" do
+    setup do
       date_start = 1.month.from_now
+      @inquiry_params = {
+        :date_start => date_start.to_s,
+        :length_stay => '2',
+        :length_stay_type => 'months',
+        :message => 'Looks like a great place for partying',
+      }
+    end
+    should "send inquiry for registered user" do
       assert_difference 'Inquiry.count', +1 do
-        post "/places/#{@place.id}/inquire.json", {
-          :access_token => @user.authentication_token,
-          :date_start => date_start.to_s,
-          :length_stay => '2',
-          :length_stay_type => 'months',
-          :message => 'Looks like a great place for partying',
-          :extra => {
-            :name => 'michelle', :email => "michelle@mail.com", :mobile => "+85212345"
-          }
-        }
+        post "/places/#{@place.id}/inquire.json", @inquiry_params.merge(
+          :access_token => @user.authentication_token
+        )
         json = json_response_ok
       end
+    end
+
+    should "send inquiry and create a new user" do
+      post "/places/#{@place.id}/inquire.json", @inquiry_params.merge(
+        :name => 'michelle',
+        :email => 'michelle@mail.com'
+      )
+      user = User.last
+      assert_equal 'michelle', user.full_name
+      assert_equal 'michelle@mail.com', user.email
+
+      json = json_response_ok
     end
   end
 end

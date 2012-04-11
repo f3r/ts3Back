@@ -78,7 +78,7 @@ class MessagesController < ApiController
     if Message.to(params['id'], params['message'])
       user = User.find(params['id'])
       UserMailer.new_message(user, params['id']).deliver
-      UserMailer.new_message_admin(current_user, user, params['message']).deliver
+      SystemMailer.new_message_admin(current_user, user, params['message']).deliver
       return_message(200, :ok)
     else
       return_message(200, :ok, {:err => {:messages => [106]}})

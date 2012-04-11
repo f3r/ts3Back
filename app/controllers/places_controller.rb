@@ -601,8 +601,27 @@ class PlacesController < ApiController
     # Because of SEO params, we no longer receive "16", but "16-place_title_blah_blah"
     place_id = params[:id].split('-').first
     @place = Place.with_permissions_to(:read).find(place_id)
-    if Inquiry.create_and_notify(@place, current_user, params)
-      return_message(200, :ok)
+
+    user = current_user
+
+    unless user
+      user = User.auto_signup(params[:name], params[:email])
+      @just_created = true
+    end
+
+    unless user
+      return_message(200, :fail, :err => {:user => [100] })
+      return
+    end
+
+    if Inquiry.create_and_notify(@place, user, params)
+      if @just_created
+        params[:user] = { :email => params[:email], :password => params[:password] }
+        user = warden.authenticate!(:scope => :user)
+        return_message(200, :ok, {:authentication_token => user.authentication_token})
+      else
+        return_message(200, :ok)
+      end
     else
       return_message(200, :fail, :err => {:place => [] })
     end

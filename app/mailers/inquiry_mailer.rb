@@ -8,10 +8,9 @@ class InquiryMailer < ActionMailer::Base
     @place         = inquiry.place
     @owner         = @place.user
     # TODO: use inquiry.user
-    @name          = inquiry.extra[:name]
-    @email         = inquiry.extra[:email]
+    @user          = inquiry.user
 
-    recipient = "#{@name} <#{@email}>"
+    recipient = "#{@user.full_name} <#{@user.email}>"
     subject    = "Your Inquiry on SquareStays has been sent"
     mail(:from    => MAILER_SENDER,
          :to      => recipient,
@@ -25,11 +24,6 @@ class InquiryMailer < ActionMailer::Base
     @inquiry   = inquiry
     @place     = inquiry.place
     @owner     = @place.user
-    @name      = inquiry.extra[:name]
-    @email     = inquiry.extra[:email]
-    @mobile    = inquiry.extra[:mobile]
-    @call_me   = inquiry.extra[:call_me]
-    @questions = inquiry.message
 
     if inquiry.user
       @renter = inquiry.user

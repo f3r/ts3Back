@@ -22,10 +22,15 @@ class PreviewMails < MailView
     InquiryMailer.inquiry_confirmed_owner(an_inquiry)
   end
 
-  #def welcome
-  #  user = User.first
-  #  Devise::Mailer.welcome_instructions(user)
-  #end
+  def signup_welcome
+    user = User.first
+    UserMailer.signup_welcome(user)
+  end
+
+  def auto_welcome
+    user = User.first
+    UserMailer.auto_welcome(user)
+  end
 
   private
 

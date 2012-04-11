@@ -1,10 +1,16 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-
-  # should validate_presence_of :email
-  # 
-  # should_not allow_value("blah").for(:email)
-  # TODO: broken, must check custom error messages.
-
+  context "auto_signup" do
+    should "create a new user account" do
+      name = "Stewie Griffin"
+      email = "ste@gmail.com"
+      user = nil
+      assert_difference 'User.count', +1 do
+        user = User.auto_signup(name, email)
+      end
+      assert !user.new_record? # saved
+      assert user.reset_password_token
+    end
+  end
 end

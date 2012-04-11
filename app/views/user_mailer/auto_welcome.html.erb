@@ -1,0 +1,11 @@
+<h2>Dear <%= @user.first_name %>, Welcome to SquareStays!</h2>
+<p>Welcome to Squarestays!</p>
+
+<p>Squarestays helps you find the best short-term and flexible accommodation for your business and personal travel.</p> 
+<br/>
+<p>We created an account for you WIP WIP</p>
+<p>Click <%= link_to 'here', frontend_url("/users/password/#{@user.reset_password_token}") %> to set a password and activate your account.</p>
+<br/>
+<p>--The SquareStays.com Team</p>
+<p>P.S.  Do you want to list properties for rent on SquareStays? Please contact us at info@squarestays.com and become an approved property owner on SquareStays!</p>
+</p>

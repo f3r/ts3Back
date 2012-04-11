@@ -90,6 +90,28 @@ class User < ActiveRecord::Base
   scope :consumer, where("role = 'user'")
   scope :agent,  where("role = 'agent'")
 
+  # Creates a new user with a random password automatically
+  def self.auto_signup(name, email)
+    first_name, last_name = name.split(' ', 2)
+    password = Devise.friendly_token[0,20]
+    user = self.new(
+      :first_name => first_name,
+      :last_name => last_name,
+      :email => email,
+      :password => password,
+      :password_confirmation => password
+    )
+
+    user.reset_password_token = User.reset_password_token
+
+    Authorization::Maintenance::without_access_control do
+      if user.save
+        UserMailer.auto_welcome(user).deliver
+        return user
+      end
+    end
+  end
+
   def agent?
     role == 'agent'
   end
@@ -111,11 +133,14 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    [first_name,last_name].join(' ')
+    [first_name,last_name].compact.join(' ')
   end
 
   def anonymized_name
-    "#{first_name[0]}. #{last_name[0]}."
+    initials = []
+    initials << "#{first_name[0]}." if first_name
+    initials << "#{last_name[0]}." if last_name
+    initials.join(' ')
   end
 
   def age
