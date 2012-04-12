@@ -63,7 +63,6 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # PLACES
     ##############################################################################
-    get     "places/:id/request",                 :to => "places#place_request"
     get     "places/:id/check_availability",      :to => "places#check_availability"
     get     "places/:id/transactions",            :to => "places#transactions"
     get     "places/search",                      :to => "places#search"
@@ -76,6 +75,8 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id/is_favorite",             :to => "places#is_favorite"
     get     "places/:id/:status",                 :to => "places#publish"
     post    "places/:id/inquire",                 :to => "places#inquire"
+    get     "places/:id/request",                 :to => "places#place_request"
+    post    "places/:id/confirm_rental",          :to => "places#confirm_rental"
 
     ##############################################################################
     # SAVED SEARCHES

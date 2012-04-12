@@ -36,6 +36,7 @@ class ConversationsController < ApiController
   def show
     @conversation, @messages = Messenger.get_conversation_messages(current_user, params[:id])
     Messenger.mark_as_read(current_user, @conversation.id) if @conversation
+    @transaction = current_user.transactions.where(:place_id => @conversation.target.place_id).first
     if @messages
       render 'conversations/show'
     else

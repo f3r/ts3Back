@@ -59,10 +59,12 @@ GEM
     builder (3.0.0)
     cocaine (0.2.1)
     columnize (0.3.6)
+    daemons (1.1.8)
     dalli (1.1.4)
     declarative_authorization (0.5.5)
-    delayed_job (3.0.1)
+    delayed_job (2.1.4)
       activesupport (~> 3.0)
+      daemons
     devise (2.0.0.rc)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -249,7 +251,7 @@ DEPENDENCIES
   aws-sdk
   dalli
   declarative_authorization
-  delayed_job
+  delayed_job (= 2.1.4)
   devise (= 2.0.0.rc)
   factory_girl (~> 2.6.4)
   faker

@@ -10,7 +10,7 @@ gem 'google_currency'             # Currency Exchange conversion
 gem 'mysql2', '0.3.11'            # MySQL DB
 gem 'redis'                       # Redis NoSQL DB
 gem 'dalli'                       # Memcached
-gem 'delayed_job'                 # Background Jobs
+gem 'delayed_job', '2.1.4'                 # Background Jobs
 gem 'will_paginate'               # Paginating results
 gem 'geocoder'                    # Geocoding Google-based
 gem 'declarative_authorization'   # Access Control List

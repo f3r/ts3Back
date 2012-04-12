@@ -480,42 +480,42 @@ class PlacesController < ApiController
   # === Error codes
   # [106] Record not found
   # [137] invalid place request, check availability
-  def place_request
-    @place = Place.with_permissions_to(:read).find(params[:id])
-    request = @place.place_availability(params[:check_in], params[:check_out], '', current_user)
-    if request[:err].blank?
-      service_percentage = SERVICE_PERCENTAGE
-      service_fee = request[:sub_total] * (service_percentage * 0.01)
-      transaction_data = {
-        :user => current_user,
-        :check_in => params[:check_in],
-        :check_out => params[:check_out],
-        :currency => request[:currency],
-        :price_per_night => request[:avg_price_per_night],
-        :price_final_cleanup => request[:price_final_cleanup],
-        :price_security_deposit => request[:price_security_deposit],
-        :service_fee => service_fee,
-        :service_percentage => service_percentage,
-        :sub_total => request[:sub_total]
-      }
-      transaction = @place.transactions.new(transaction_data)
-      if transaction.save
-        request_return = {
-          :transaction => filter_fields(
-            transaction,
-            @transaction_fields,
-            { :additional_fields => {:user => @user_fields} }
-          )
-        }
-        transaction.request!
-        return_message(200, :ok, request_return)
-      else
-        return_message(200, :fail, {:err => format_errors(transaction.errors.messages)})
-      end
-    else
-      return_message(200, :fail, :err=>{:place => [137]})
-    end
-  end
+  # def place_request
+  #   @place = Place.with_permissions_to(:read).find(params[:id])
+  #   request = @place.place_availability(params[:check_in], params[:check_out], '', current_user)
+  #   if request[:err].blank?
+  #     service_percentage = SERVICE_PERCENTAGE
+  #     service_fee = request[:sub_total] * (service_percentage * 0.01)
+  #     transaction_data = {
+  #       :user => current_user,
+  #       :check_in => params[:check_in],
+  #       :check_out => params[:check_out],
+  #       :currency => request[:currency],
+  #       :price_per_night => request[:avg_price_per_night],
+  #       :price_final_cleanup => request[:price_final_cleanup],
+  #       :price_security_deposit => request[:price_security_deposit],
+  #       :service_fee => service_fee,
+  #       :service_percentage => service_percentage,
+  #       :sub_total => request[:sub_total]
+  #     }
+  #     transaction = @place.transactions.new(transaction_data)
+  #     if transaction.save
+  #       request_return = {
+  #         :transaction => filter_fields(
+  #           transaction,
+  #           @transaction_fields,
+  #           { :additional_fields => {:user => @user_fields} }
+  #         )
+  #       }
+  #       transaction.request!
+  #       return_message(200, :ok, request_return)
+  #     else
+  #       return_message(200, :fail, {:err => format_errors(transaction.errors.messages)})
+  #     end
+  #   else
+  #     return_message(200, :fail, :err=>{:place => [137]})
+  #   end
+  # end
 
   # == Description
   # Shows place transactions
@@ -557,12 +557,32 @@ class PlacesController < ApiController
   end
 
   def confirm_rental
-   @place = Place.with_permissions_to(:read).find(params[:place_id])
 
-   RentalMailer.rental_confirmed_renter(@place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
-   RentalMailer.rental_confirmed_owner( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
-   RentalMailer.rental_confirmed_admin( @place.user, current_user, @place, params[:check_in], params[:check_out]).deliver
-   return_message(200, :ok)
+    @place = Place.with_permissions_to(:read).find(params[:id])
+    @inquiry = current_user.inquiries.where(:place_id => @place.id).first    
+
+    transaction_data = {
+      :user => current_user,
+      :check_in => @inquiry[:check_in],
+      :check_out => @inquiry[:check_out],
+    }
+    transaction = @place.transactions.new(transaction_data)
+    
+    if transaction.save
+      request_return = {
+        :transaction => filter_fields(
+          transaction,
+          @transaction_fields,
+          { :additional_fields => {:user => @user_fields} }
+        )
+      }
+      transaction.request!
+      return_message(200, :ok, request_return)
+    else
+      return_message(200, :fail, {:err => format_errors(transaction.errors.messages)})
+    end
+
+
   end
 
   # == Description

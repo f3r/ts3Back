@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120322212955) do
+ActiveRecord::Schema.define(:version => 20120405225320) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -102,13 +102,14 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
   end
 
   create_table "cities", :force => true do |t|
-    t.string "name"
-    t.float  "lat"
-    t.float  "lon"
-    t.string "state"
-    t.string "country"
-    t.string "country_code"
-    t.string "cached_complete_name"
+    t.string  "name"
+    t.float   "lat"
+    t.float   "lon"
+    t.string  "state"
+    t.string  "country"
+    t.string  "country_code"
+    t.string  "cached_complete_name"
+    t.boolean "active",               :default => false
   end
 
   add_index "cities", ["country"], :name => "index_cities_on_country"
@@ -200,13 +201,6 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
   end
 
   add_index "messages", ["conversation_id"], :name => "index_messages_on_conversation_id"
-
-  create_table "panoramas", :force => true do |t|
-    t.integer "photo_id"
-    t.text    "xml"
-    t.string  "html_file_name"
-    t.string  "swf_file_name"
-  end
 
   create_table "photos", :force => true do |t|
     t.integer  "place_id"
@@ -303,10 +297,6 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
     t.string   "country_code",               :limit => 2
     t.float    "price_sqf_usd"
     t.string   "stay_unit"
-    t.string   "tenure"
-    t.string   "condition"
-    t.string   "developer"
-    t.integer  "top_year"
   end
 
   add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"
@@ -341,6 +331,24 @@ ActiveRecord::Schema.define(:version => 20120322212955) do
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
   add_index "places", ["state_name"], :name => "index_places_on_state_name"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
+
+  create_table "reviews", :force => true do |t|
+    t.integer  "place_id"
+    t.integer  "user_id"
+    t.float    "accuracy"
+    t.float    "cleanliness"
+    t.float    "checkin"
+    t.float    "communication"
+    t.float    "location"
+    t.float    "value"
+    t.boolean  "private",       :default => false
+    t.text     "comment"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
+
+  add_index "reviews", ["place_id"], :name => "index_reviews_on_place_id"
+  add_index "reviews", ["user_id"], :name => "index_reviews_on_user_id"
 
   create_table "transaction_logs", :force => true do |t|
     t.integer  "transaction_id"

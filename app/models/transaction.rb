@@ -14,10 +14,10 @@ class Transaction < ActiveRecord::Base
   serialize :additional_data
   
   before_create :set_transaction_code
-  after_create :set_temporary_transaction_timeout
+  after_create :set_temporary_transaction_timeout, :add_inquiry_message
 
-  validates_presence_of :check_in, :check_out, :user_id, :place_id, :state, 
-    :currency, :price_per_night, :service_fee, :service_percentage, :sub_total, :message => "101"
+  validates_presence_of :check_in, :check_out, :user_id, :place_id, :state, :message => "101"
+    # :currency, :price_per_night, :service_fee, :service_percentage, :sub_total    
 
   validates_date :check_in, :after => :today, :invalid_date_message => "113", :after_message => "119"
   validates_date :check_out, :after => :check_in, :invalid_date_message => "113", :after_message => "120"
@@ -185,6 +185,12 @@ class Transaction < ActiveRecord::Base
 
     end
 
+  end
+  
+  def add_inquiry_message
+    inquiry = self.user.inquiries.where(:place_id => self.place_id).first
+    conversation = Conversation.where(:target_id => inquiry.id).first
+    Messenger.add_reply(self.user, conversation.id, Message.new(:body => "transaction_confirmed_rental"))
   end
   
   
