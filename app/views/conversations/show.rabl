@@ -7,13 +7,14 @@ child @conversation do
     attributes :id, :email, :first_name, :last_name
     node(:avatar) {|u| u.avatar.url(:thumb) if u.avatar? }
   end
-  if @transaction
-    child :target => :transaction do
-      node(:id) { @transaction.id }
-      node(:state) { @transaction.state }
-    end
-  end
+  # if @transaction
+  #     child :target => :transaction do
+  #       node(:id) { @transaction.id }
+  #       node(:state) { @transaction.state }
+  #     end
+  #   end
   child :target => :inquiry do
+    attributes :id, :user_id
     node(:place_id) {|i| i.place.id }
     node(:place_title) {|i| i.place.title }
     node(:place_thumb) {|i| i.place.primary_photo.photo.url(:medsmall) }

@@ -88,4 +88,17 @@ class Inquiry < ActiveRecord::Base
   def default_message
     'Inquiry sent'
   end
+
+  def transaction
+    t = Transaction.where(:place_id => self.place_id, :user_id => self.user_id).first
+    unless t
+      t = Transaction.create(
+        :place_id => self.place_id,
+        :user_id => self.user_id,
+        :check_in => self.check_in,
+        :check_out => self.check_out
+      )
+    end
+    t
+  end
 end

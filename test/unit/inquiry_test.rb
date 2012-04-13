@@ -81,4 +81,21 @@ class InquiryTest < ActiveSupport::TestCase
       assert_nil @inquiry.length_in_words
     end
   end
+
+  context "#transaction" do
+    setup do
+      @inquiry = Factory(:inquiry)
+    end
+    should "return a new transaction for an inquiry" do
+      transaction = @inquiry.transaction
+      assert transaction
+      assert_equal @inquiry.user, transaction.user
+      assert_equal @inquiry.place, transaction.place
+      assert_equal @inquiry.check_in, transaction.check_in
+      assert_equal @inquiry.check_out, transaction.check_out
+
+      transaction2 = @inquiry.transaction
+      assert_equal transaction, transaction2
+    end
+  end
 end

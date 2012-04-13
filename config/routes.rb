@@ -99,10 +99,7 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # TRANSACTIONS
     ##############################################################################
-    get     "/places/:place_id/transactions/:id/cancel",  :to => "transactions#cancel"
-    get     "/places/:place_id/transactions/:id/pay",     :to => "transactions#pay"
-    get     "/places/:place_id/transactions/:id/confirm", :to => "transactions#confirm_rental"
-    get     "/places/:place_id/transactions/:id/decline", :to => "transactions#decline"
+    post     "/transactions/:id/request_rental",  :to => "transactions#request_rental"
     ##############################################################################
     # PLACE TYPES
     ##############################################################################

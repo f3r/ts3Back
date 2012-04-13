@@ -60,9 +60,7 @@ authorization do
     has_permission_on :alerts, :to => [:manage] do
       if_attribute :user => is { user }
     end
-    has_permission_on :transactions, :to => [:cancel, :pay] do
-      if_attribute :user => is { user }
-    end
+    has_permission_on :transactions, :to => [:request_rental]
     has_permission_on :confirmations, :to => [:cancel] do
       if_attribute :confirmed_at => is_not { blank? }
     end
