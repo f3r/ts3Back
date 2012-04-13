@@ -35,17 +35,17 @@ class Transaction < ActiveRecord::Base
     end
     state :requested do
       event :process_payment, :transitions_to => :processing_payment
-      event :cancel, :transitions_to => :cancelled
-      event :auto_cancel, :transitions_to => :auto_cancelled
+      event :cancel,          :transitions_to => :cancelled
+      event :auto_cancel,     :transitions_to => :auto_cancelled
     end
     state :processing_payment do
-      event :cancel, :transitions_to => :cancelled
+      event :cancel,          :transitions_to => :cancelled
       event :confirm_payment, :transitions_to => :confirmed_payment
     end
     state :confirmed_payment do
-      event :decline, :transitions_to => :declined
-      event :confirm_rental, :transitions_to => :confirmed_rental
-      event :auto_decline, :transitions_to => :auto_declined
+      event :decline,         :transitions_to => :declined
+      event :confirm_rental,  :transitions_to => :confirmed_rental
+      event :auto_decline,    :transitions_to => :auto_declined
     end
     state :cancelled
     state :auto_cancelled
@@ -57,6 +57,7 @@ class Transaction < ActiveRecord::Base
   
     before_transition do |from, to, triggering_event, *event_args|
       # check user permissions
+      debugger
       halt! unless check_transaction_permissions(triggering_event)
     end
   

@@ -1,11 +1,11 @@
 include GeneralHelper
 class ApplicationController < ActionController::Base
 
-  rescue_from Exceptions::UnauthorizedAccess, :with => :unauthorized_access
-  rescue_from Exceptions::NotActivated, :with => :not_activated
-  rescue_from ActiveRecord::RecordNotFound, :with => :not_found
-  rescue_from ActiveRecord::RecordInvalid, :with => :not_found
-  rescue_from ::AbstractController::ActionNotFound , :with => :not_found
+  rescue_from Exceptions::UnauthorizedAccess,             :with => :unauthorized_access
+  rescue_from Exceptions::NotActivated,                   :with => :not_activated
+  rescue_from ActiveRecord::RecordNotFound,               :with => :not_found
+  rescue_from ActiveRecord::RecordInvalid,                :with => :not_found
+  rescue_from ::AbstractController::ActionNotFound ,      :with => :not_found
   rescue_from Authorization::AttributeAuthorizationError, :with => :attribute_authorization_error
 
   protect_from_forgery

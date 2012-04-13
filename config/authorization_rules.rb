@@ -22,7 +22,7 @@ authorization do
     has_permission_on [:availabilities, :comments], :to => [:manage] do
       if_permitted_to :manage, :place
     end
-    has_permission_on :transactions, :to => [:cancel, :decline, :confirm_rental, :decline] do
+    has_permission_on :transactions, :to => [:cancel, :decline, :preapprove_rental, :process_payment, :decline] do
       if_permitted_to :manage, :place
     end
     has_permission_on :bank_accounts, :to => [:manage] do

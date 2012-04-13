@@ -1,15 +1,40 @@
 class TransactionsController < ApiController
+
+  # == Description
+  # Guest requests to rent a place, and agent must preapprove
   def request_rental
     @inquiry = current_user.inquiries.find(params[:id])
     @transaction = @inquiry.transaction
 
-    #@transaction.request!
-
-    return_message(200, :ok, :inquiry => {:id => @inquiry.id, :user_id => @inquiry.user_id, :state => @transaction.state})
+    if @transaction.request!
+      return_message(200, :ok, :inquiry => {:id => @inquiry.id, :user_id => @inquiry.user_id, :state => @transaction.state})
+     else
+      return_message(200, :fail)
+    end   
   end
 
-  #
-  # 
+
+  # == Description
+  # Agent preapproves the guest to rent the place
+  # ==Resource URL
+  #   /transactions/:id/preapprove_rental.format
+  # ==Example
+  #   GET https://backend-heypal.heroku.com/transactions/:id/preapprove_rental.json access_token=access_token
+  # === Parameters
+  # [access_token]  Access token
+  # === Error codes
+  # [106] Record not found
+  def preapprove_rental
+    @inquiry = Inquiry.find(params[:id])
+    @transaction = @inquiry.transaction
+ 
+    if @transaction.process_payment!
+      return_message(200, :ok, :inquiry => {:id => @inquiry.id, :user_id => @inquiry.user_id, :state => @transaction.state})
+    else
+      return_message(200, :fail)
+    end
+  end
+
   # # == Description
   # # Cancels a transaction
   # # ==Resource URL

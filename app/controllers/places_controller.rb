@@ -556,7 +556,15 @@ class PlacesController < ApiController
     end
   end
 
-  def confirm_rental
+  # == Description
+  # Agent approves guest request
+  # ==Resource URL
+  #   /places/:id/confirm_rental.format
+  # ==Example
+  #   POST https://backend-heypal.heroku.com/places/:id/confirm_rental.json access_token=access_token
+  # === Parameters
+  # [access_token]        Access token
+  def txn_process_payment
 
     @place = Place.with_permissions_to(:read).find(params[:id])
     @inquiry = current_user.inquiries.where(:place_id => @place.id).first    
@@ -581,8 +589,6 @@ class PlacesController < ApiController
     else
       return_message(200, :fail, {:err => format_errors(transaction.errors.messages)})
     end
-
-
   end
 
   # == Description
