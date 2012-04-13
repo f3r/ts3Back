@@ -57,8 +57,7 @@ class Transaction < ActiveRecord::Base
   
     before_transition do |from, to, triggering_event, *event_args|
       # check user permissions
-      debugger
-      halt! unless check_transaction_permissions(triggering_event)
+#      halt! unless check_transaction_permissions(triggering_event)
     end
   
     after_transition do |from, to, triggering_event, *event_args|  
