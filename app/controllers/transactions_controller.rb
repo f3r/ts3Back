@@ -3,7 +3,7 @@ class TransactionsController < ApiController
     @inquiry = current_user.inquiries.find(params[:id])
     @transaction = @inquiry.transaction
 
-    @transaction.request!
+    #@transaction.request!
 
     return_message(200, :ok, :inquiry => {:id => @inquiry.id, :user_id => @inquiry.user_id, :state => @transaction.state})
   end

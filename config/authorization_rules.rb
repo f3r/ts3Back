@@ -7,10 +7,10 @@ authorization do
   role :admin do
     includes [:default]
     has_permission_on [:users, :places, :place_types, :addresses, :bank_accounts, :availabilities, :comments], :to => [:manage]
-    has_permission_on :users, :to => [:change_role]
-    has_permission_on :places, :to => [:user_places, :publish, :transactions]
+    has_permission_on :users,        :to => [:change_role]
+    has_permission_on :places,       :to => [:user_places, :publish, :transactions]
     has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
-    has_permission_on :photos, :to => [:manage, :sort]
+    has_permission_on :photos,       :to => [:manage, :sort]
   end
 
   role :agent do
@@ -50,17 +50,17 @@ authorization do
     has_permission_on :comments, :to => :read do
       if_attribute :user => is { user }
     end
-    has_permission_on :notifications, :to => [:index, :unread, :mark_as_read]
+    has_permission_on :notifications,   :to => [:index, :unread, :mark_as_read]
     has_permission_on :authentications, :to => [:create, :list, :delete, :get_facebook_oauth_info]
-    has_permission_on :conversations, :to => [:index, :show, :update, :mark_as_unread, :unread_count]
-    has_permission_on :places, :to => [:place_request, :check_availability, :confirm_rental, :add_favorite, :remove_favorite, :is_favorite] do
+    has_permission_on :conversations,   :to => [:index, :show, :update, :mark_as_unread, :unread_count]
+    has_permission_on :places,          :to => [:place_request, :check_availability, :confirm_rental, :add_favorite, :remove_favorite, :is_favorite] do
       if_permitted_to :read, :place
     end
     has_permission_on :places, :to => [:favorite_places]
     has_permission_on :alerts, :to => [:manage] do
       if_attribute :user => is { user }
     end
-    has_permission_on :transactions, :to => [:request_rental]
+    has_permission_on :transactions,  :to => [:request_rental, :request]
     has_permission_on :confirmations, :to => [:cancel] do
       if_attribute :confirmed_at => is_not { blank? }
     end
@@ -79,8 +79,8 @@ authorization do
     has_permission_on :places, :to => :check_availability do
       if_permitted_to :read, :place
     end
-    has_permission_on :passwords, :to => [:update, :create]
-    has_permission_on :sessions, :to => [:create, :oauth_create]
+    has_permission_on :passwords,     :to => [:update, :create]
+    has_permission_on :sessions,      :to => [:create, :oauth_create]
     has_permission_on :confirmations, :to => [:show, :create]
     has_permission_on :registrations, :to => [:create, :check_email]
     has_permission_on :comments, :to => :read do
