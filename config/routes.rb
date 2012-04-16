@@ -64,7 +64,6 @@ HeyPalBackEnd::Application.routes.draw do
     # PLACES
     ##############################################################################
     get     "places/:id/check_availability",      :to => "places#check_availability"
-    get     "places/:id/transactions",            :to => "places#transactions"
     get     "places/search",                      :to => "places#search"
     post    "places",                             :to => "places#create"
     put     "places/:id",                         :to => "places#update"
@@ -75,7 +74,6 @@ HeyPalBackEnd::Application.routes.draw do
     get     "places/:id/is_favorite",             :to => "places#is_favorite"
     get     "places/:id/:status",                 :to => "places#publish"
     post    "places/:id/inquire",                 :to => "places#inquire"
-    post    "places/:id/process_payment",         :to => "places#process_payment"
 
     ##############################################################################
     # SAVED SEARCHES
@@ -98,8 +96,7 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # TRANSACTIONS
     ##############################################################################
-    post    "/transactions/:id/request_rental",    :to => "transactions#request_rental"
-    post    "/transactions/:id/preapprove_rental", :to => "transactions#preapprove_rental"
+    put    "/transactions/:id",                   :to => "transactions#update"
     ##############################################################################
     # PLACE TYPES
     ##############################################################################

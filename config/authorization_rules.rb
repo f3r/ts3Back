@@ -9,20 +9,20 @@ authorization do
     has_permission_on [:users, :places, :place_types, :addresses, :bank_accounts, :availabilities, :comments], :to => [:manage]
     has_permission_on :users,        :to => [:change_role]
     has_permission_on :places,       :to => [:user_places, :publish, :transactions]
-    has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
+    #has_permission_on :transactions, :to => [:cancel, :pay, :decline, :confirm_rental]
     has_permission_on :photos,       :to => [:manage, :sort]
   end
 
   role :agent do
     includes [:default]
     has_permission_on :places, :to => [:create]
-    has_permission_on :places, :to => [:manage, :publish, :user_places, :transactions] do
+    has_permission_on :places, :to => [:manage, :publish, :user_places] do
       if_attribute :user => is { user }
     end
     has_permission_on [:availabilities, :comments], :to => [:manage] do
       if_permitted_to :manage, :place
     end
-    has_permission_on :transactions, :to => [:cancel, :decline, :preapprove_rental, :process_payment, :decline] do
+    has_permission_on :transactions, :to => [:update, :decline, :pre_approve] do
       if_permitted_to :manage, :place
     end
     has_permission_on :bank_accounts, :to => [:manage] do
@@ -60,7 +60,9 @@ authorization do
     has_permission_on :alerts, :to => [:manage] do
       if_attribute :user => is { user }
     end
-    has_permission_on :transactions,  :to => [:request_rental, :request]
+    has_permission_on :transactions,  :to => [:update, :request, :pay] do
+      if_attribute :user_id => is { user.id }
+    end
     has_permission_on :confirmations, :to => [:cancel] do
       if_attribute :confirmed_at => is_not { blank? }
     end
