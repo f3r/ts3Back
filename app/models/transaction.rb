@@ -56,6 +56,11 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  # Special method for handling paypal payment, in the future in can log more details about the transfer
+  def received_payment!(params)
+    self.pay!
+  end
+
   private
 
   def generate_transaction_code

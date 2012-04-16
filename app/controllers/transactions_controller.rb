@@ -1,4 +1,5 @@
 class TransactionsController < ApiController
+  protect_from_forgery :except => [:pay]
 
   # == Description
   # Applies an event to a transaction
@@ -15,7 +16,17 @@ class TransactionsController < ApiController
     @transaction = @inquiry.transaction
 
     if @transaction.change_state!(params[:event])
-      return_message(200, :ok, :inquiry => {:id => @inquiry.id, :user_id => @inquiry.user_id, :state => @transaction.state})
+      return_message(200, :ok, :inquiry => {:id => @inquiry.id, :user_id => @inquiry.user_id, :state => @transaction.state, :code => @transaction.transaction_code})
+     else
+      return_message(200, :fail)
+    end
+  end
+
+  def pay
+    @transaction = Transaction.find_by_transaction_code(params[:code])
+
+    if @transaction.received_payment!(params.slice(:amount))
+      return_message(200, :ok, :inquiry => {:state => @transaction.state})
      else
       return_message(200, :fail)
     end

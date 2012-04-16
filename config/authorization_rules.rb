@@ -90,6 +90,7 @@ authorization do
     end
     has_permission_on :geo, :to => [:get_countries, :get_states, :get_cities, :get_city, :city_search, :price_range]
     has_permission_on :alerts, :to => [:get_params]
+    has_permission_on :transactions,  :to => [:pay]
   end
 
 end

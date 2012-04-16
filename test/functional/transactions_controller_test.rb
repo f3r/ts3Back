@@ -48,5 +48,13 @@ class TransactionsControllerTest < ActionController::TestCase
         put :update, :id => @inquiry.id, :event => 'pre_approve', :access_token => @agent2.authentication_token
       end
     end
+
+    should "handle paypal payment" do
+      @transaction.update_attribute(:state, 'ready_to_pay')
+      post :pay, :code => @transaction.transaction_code, :amount => 299
+
+      json = assert_ok
+      assert_equal 'paid', json['inquiry']['state']
+    end
   end
 end

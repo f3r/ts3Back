@@ -93,10 +93,13 @@ HeyPalBackEnd::Application.routes.draw do
     delete  "photos/:id",                         :to => "photos#destroy"
     put     "places/:place_id/photos/sort",       :to => "photos#sort"
     put     "places/:place_id/photos/:id",        :to => "photos#update"
+
     ##############################################################################
     # TRANSACTIONS
     ##############################################################################
     put    "/transactions/:id",                   :to => "transactions#update"
+    post   "/transactions/:code/pay",             :to => "transactions#pay"
+
     ##############################################################################
     # PLACE TYPES
     ##############################################################################
