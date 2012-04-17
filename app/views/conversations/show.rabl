@@ -15,6 +15,7 @@ child @conversation do
     node(:place_url)   {|i| seo_place_path(i.place) }
     node(:length)      {|i| i.length_in_words }
     node(:state)       {|i| i.transaction.state }
+    node(:code)        {|i| i.transaction.transaction_code }
     attribute :guests
     node(:check_in) {|i| I18n.l(i.check_in, :format => :human) if i.check_in }
   end
