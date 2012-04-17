@@ -69,12 +69,12 @@ class MessengerTest < ActiveSupport::TestCase
 
     should "include a default message based on the target" do
       @conversation.body = ''
-      @conversation.target = Inquiry.new
+      @conversation.target = Factory(:inquiry)
       assert Messenger.start_conversation(@consumer, @conversation)
       conversation, messages = Messenger.get_conversation_messages(@consumer, Conversation.last.id)
       assert_equal 1, messages.size
       message = messages.first
-      assert_equal 'Inquiry sent', message.body
+      assert_equal :send, message.system_msg_id
       assert message.system
     end
 
@@ -129,6 +129,17 @@ class MessengerTest < ActiveSupport::TestCase
       msg2 = messages.last
       assert_equal reply.body, msg2.body
       assert_equal @agent, msg2.from
+    end
+
+    should "send system message" do
+      Messenger.add_system_message(@conversation.id, :inquiry_sent)
+      conversation, messages = Messenger.get_conversation_messages(@consumer, @conversation.id)
+
+      assert_equal 2, messages.size
+      msg = messages.last
+
+      assert msg.system?
+      assert_equal :inquiry_sent, msg.system_msg_id.to_sym
     end
   end
 

@@ -37,15 +37,14 @@ class Messenger
 
     # Create the conversation
     conversation.save!
+
     first_message = conversation.messages.build(:body => conversation.body, :from => sender)
 
-    if first_message.body.blank? && conversation.target
-      first_message.body = conversation.target.default_message
-      first_message.system = true
-      conversation.body = first_message.body
+    if first_message.body.present?
+      first_message.save!
+    elsif conversation.target
+      conversation.target.add_default_message
     end
-
-    first_message.save!
 
     # Insert it into inboxes
     InboxEntry.create!(:conversation => conversation, :user => sender, :read => true)
@@ -70,6 +69,13 @@ class Messenger
     # Notifiy recipient
     recipient = recipient_inbox_entry.user
     UserMailer.new_message_reply(recipient, message).deliver
+  end
+
+  def self.add_system_message(conversation_id, system_msg_id)
+    message = Message.new(:system => true, :system_msg_id => system_msg_id)
+    conversation = Conversation.find(conversation_id)
+
+    conversation.messages << message
   end
 
   def self.mark_as_read(user, conversation_id)

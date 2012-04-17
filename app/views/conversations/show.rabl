@@ -21,7 +21,7 @@ child @conversation do
   end
 end
 child @messages => :messages do
-  attributes :body, :system
+  attributes :body, :system, :system_msg_id
   attribute :created_at => :date
   child :from => :from do
     attributes :id, :email, :first_name, :last_name

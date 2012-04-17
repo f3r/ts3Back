@@ -20,6 +20,10 @@ class TransactionsControllerTest < ActionController::TestCase
       assert_equal 'requested', json['inquiry']['state']
     end
 
+    should 'alert inquiry' do
+      put :update, :id => @inquiry.id, :event => 'request', :access_token => @guest.authentication_token
+    end
+
     should 'transition to ready_to_pay' do
       @transaction.update_attribute(:state, 'requested')
       put :update, :id => @inquiry.id, :event => 'pre_approve', :access_token => @agent.authentication_token

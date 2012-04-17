@@ -7,6 +7,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :place
   has_many :transaction_logs, :dependent => :destroy
   #has_one :availability, :dependent => :destroy
+  belongs_to :inquiry
 
   before_create :set_transaction_code
   #after_create :add_inquiry_message
@@ -46,6 +47,8 @@ class Transaction < ActiveRecord::Base
     after_transition do |from, to, triggering_event, *event_args|
       # log every transaction
       log_transaction(:from => from, :to => to, :triggering_event => triggering_event, :additional_data => event_args[0])
+      # add a system message
+      self.add_system_message(triggering_event.to_sym)
     end
   end
 
@@ -59,6 +62,11 @@ class Transaction < ActiveRecord::Base
   # Special method for handling paypal payment, in the future in can log more details about the transfer
   def received_payment!(params)
     self.pay!(params)
+  end
+
+  def add_system_message(msg_id)
+    c = self.inquiry.conversation
+    Messenger.add_system_message(c.id, msg_id) if c
   end
 
   private
@@ -106,12 +114,5 @@ class Transaction < ActiveRecord::Base
       end
 
     end
-
   end
-
-  # def add_inquiry_message
-  #   inquiry = self.user.inquiries.where(:place_id => self.place_id).first
-  #   conversation = Conversation.where(:target_id => inquiry.id).first
-  #   Messenger.add_reply(self.user, conversation.id, Message.new(:body => "transaction_confirmed_rental"))
-  # end
 end

@@ -85,14 +85,15 @@ class Inquiry < ActiveRecord::Base
   end
 
   # For empty messages about this inquiry
-  def default_message
-    'Inquiry sent'
+  def add_default_message
+    self.transaction.add_system_message(:send)
   end
 
   def transaction
-    t = Transaction.where(:place_id => self.place_id, :user_id => self.user_id).first
+    t = Transaction.where(:inquiry_id => self.id).first
     unless t
       t = Transaction.create(
+        :inquiry_id => self.id,
         :place_id => self.place_id,
         :user_id => self.user_id,
         :check_in => self.check_in,
@@ -100,5 +101,9 @@ class Inquiry < ActiveRecord::Base
       )
     end
     t
+  end
+
+  def conversation
+    Conversation.find_by_target(self)
   end
 end

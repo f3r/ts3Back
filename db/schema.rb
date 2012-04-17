@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120413075619) do
+ActiveRecord::Schema.define(:version => 20120417133850) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -197,6 +197,7 @@ ActiveRecord::Schema.define(:version => 20120413075619) do
     t.boolean  "system"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "system_msg_id"
   end
 
   add_index "messages", ["conversation_id"], :name => "index_messages_on_conversation_id"
@@ -380,6 +381,7 @@ ActiveRecord::Schema.define(:version => 20120413075619) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "transaction_code"
+    t.integer  "inquiry_id"
   end
 
   add_index "transactions", ["place_id"], :name => "index_transactions_on_place_id"

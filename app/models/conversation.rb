@@ -9,6 +9,10 @@ class Conversation < ActiveRecord::Base
 
   validates_presence_of :sender
 
+  def self.find_by_target(a_target)
+    self.where(:target_id => a_target.id, :target_type => a_target.class).first
+  end
+
   def read?
     self.read
   end
