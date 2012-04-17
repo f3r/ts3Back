@@ -45,6 +45,7 @@ class PasswordsController < Devise::PasswordsController
   # [103] invalid reset_password_token
   def update
     without_access_control do
+      debugger
       if params[:reset_password_token] && params[:password]
         self.resource = resource_class.reset_password_by_token({
           :reset_password_token => params[:reset_password_token],
