@@ -31,7 +31,7 @@ class SessionsController < Devise::SessionsController
     end
   end
   # Error message override is at /lib/custom_failure.rb
-  
+
   # ==Description
   # Given an provider and provider token, this method returns the authentication token of the user so you can
   # send requests on their behalf

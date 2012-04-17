@@ -1,11 +1,12 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
+require 'declarative_authorization/maintenance'
 
 # Initialize the rails application
 HeyPalBackEnd::Application.initialize!
 
 HeyPalBackEnd::Application.configure do
-  
+
   Paperclip::Attachment.default_options.merge!({
     :storage => APP_CONFIG['STORAGE'] || :s3,
     :s3_protocol => 'https',

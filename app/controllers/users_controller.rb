@@ -193,7 +193,7 @@ class UsersController < ApiController
     else
       transactions = @user.transactions.active
     end
-    
+
     if !transactions.blank?
       transactions_return = { 
         :transactions => filter_fields(

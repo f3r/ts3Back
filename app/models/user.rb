@@ -93,7 +93,7 @@ class User < ActiveRecord::Base
   # Creates a new user with a random password automatically
   def self.auto_signup(name, email)
     first_name, last_name = name.split(' ', 2)
-    password = Devise.friendly_token[0,20]
+    password = 'nicolas' #Devise.friendly_token[0,20]
     user = self.new(
       :first_name => first_name,
       :last_name => last_name,

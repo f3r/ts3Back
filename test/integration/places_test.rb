@@ -508,11 +508,13 @@ class PlacesTest < ActionController::IntegrationTest
         :name => 'michelle',
         :email => 'michelle@mail.com'
       )
+
+      json = json_response_ok
+      assert json['authentication_token']
+
       user = User.last
       assert_equal 'michelle', user.full_name
       assert_equal 'michelle@mail.com', user.email
-
-      json = json_response_ok
     end
   end
 end

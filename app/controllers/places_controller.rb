@@ -548,9 +548,7 @@ class PlacesController < ApiController
 
     if Inquiry.create_and_notify(@place, user, params)
       if @just_created
-        params[:user] = { :email => params[:email], :password => params[:password] }
-        user = warden.authenticate!(:scope => :user)
-        return_message(200, :ok, {:authentication_token => user.authentication_token})
+        return_message(200, :ok, {:authentication_token => user.authentication_token, :role => user.role})
       else
         return_message(200, :ok)
       end
