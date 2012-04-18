@@ -12,7 +12,7 @@ defaults: &defaults
   SITE_NAME: SquareStays.com
 development:
   <<: *defaults
-  S3_BUCKET: squarestays-img-production
+  S3_BUCKET: squarestays-img-dev
   COOKIE_STORE_KEY: _SquareStaysDevelopmentBackEnd_session
   REDISTOGO_URL: redis://127.0.0.1:6379
 

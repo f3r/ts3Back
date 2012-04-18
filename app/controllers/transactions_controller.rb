@@ -25,7 +25,7 @@ class TransactionsController < ApiController
   def pay
     @transaction = Transaction.find_by_transaction_code(params[:code])
 
-    if @transaction.received_payment!(params.slice(:amount))
+    if @transaction.received_payment!(params)
       return_message(200, :ok, :inquiry => {:state => @transaction.state})
      else
       return_message(200, :fail)
