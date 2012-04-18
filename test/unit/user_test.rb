@@ -11,6 +11,7 @@ class UserTest < ActiveSupport::TestCase
       end
       assert !user.new_record? # saved
       assert user.reset_password_token
+      assert user.reset_password_sent_at
     end
   end
 end

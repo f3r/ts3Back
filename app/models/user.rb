@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
       :password_confirmation => password
     )
 
-    user.reset_password_token = User.reset_password_token
+    user.generate_set_password_token
 
     Authorization::Maintenance::without_access_control do
       if user.save
@@ -240,7 +240,12 @@ class User < ActiveRecord::Base
     objects = type_class.find(favorites.map(&:favorable_id))
     return objects
   end
-  
+
+  def generate_set_password_token
+    # We use the saeme mechanism as password reset
+    self.generate_reset_password_token
+  end
+
   private  
 
   # Expires the cache when the user info is updated
