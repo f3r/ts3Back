@@ -1,4 +1,4 @@
-class RegistrationMailer < Devise::Mailer
+class BaseMailer < ActionMailer::Base
   add_template_helper(FrontendHelper)
   layout 'user_email'
 

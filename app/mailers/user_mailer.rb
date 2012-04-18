@@ -1,7 +1,4 @@
-class UserMailer < ActionMailer::Base
-  layout 'user_email'
-  add_template_helper(FrontendHelper)
-  default :from => MAILER_SENDER
+class UserMailer < BaseMailer
 
   # ==Description
   # Email sent when the user signups for an account
@@ -14,7 +11,7 @@ class UserMailer < ActionMailer::Base
   end
 
   # ==Description
-  # Email sent when we create an user account automatically
+  # Email sent when we create an user account automatically (from an inquiry)
   def auto_welcome(user)
     @user      = user
     recipients = "#{user.full_name} <#{user.email}>"
@@ -27,13 +24,11 @@ class UserMailer < ActionMailer::Base
   # Email sent when the user receives a message
   def new_message_reply(user, message)
     @user      = user
-    # @conversation = message.conversation
     @message   = message
-    from = @message.from
-
+    from       = @message.from
     recipients = "#{user.full_name} <#{user.email}>"
     subject    = "You have a new message from #{from.anonymized_name} on SquareStays.com!"
 
-    mail(:to      => recipients, :subject => subject)
+    mail(:to => recipients, :subject => subject)
   end
 end

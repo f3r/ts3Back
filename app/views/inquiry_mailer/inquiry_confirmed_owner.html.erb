@@ -18,11 +18,3 @@ for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatt
 </br>
 
 <p>Please log in to <%= link_to site_name, frontend_url('/login') %> to view the request. You can reply to your inquiries at the <%= link_to 'messages section', frontend_url('/messages') %>.</p>
-  
-<br />
-
-<p>P.S. Questions? Please email us at <%= mail_to SUPPORT_EMAIL %></p>
-
-<p>Thanks!</p>
-
-<p>-- The <%= site_name %> team</p>

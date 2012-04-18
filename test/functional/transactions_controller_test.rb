@@ -20,7 +20,9 @@ class TransactionsControllerTest < ActionController::TestCase
       assert_equal 'requested', json['inquiry']['state']
     end
 
-    should 'alert inquiry' do
+    should 'send email notifications' do
+      TransactionMailer.expects(:request_renter)
+      TransactionMailer.expects(:request_owner)
       put :update, :id => @inquiry.id, :event => 'request', :access_token => @guest.authentication_token
     end
 

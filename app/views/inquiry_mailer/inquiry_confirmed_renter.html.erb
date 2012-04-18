@@ -1,13 +1,7 @@
 <h2>Dear <%= @user.full_name %>,</h2>
 
 <p>Your inquiry on <%= link_to @place.title, seo_place_path(@place) %> has been sent.</p>
-<br />
+<br>
 <p>You can manage your inquiries at the <%= link_to 'messages section', frontend_url('/messages') %>.</p>
-<br />
-<p>Please email <%= mail_to SUPPORT_EMAIL %> if you need assistance. The property owner or listing agent will get a copy of your request. Normally, your request will be handled within 24-48 hours.</p>
-
-<br />
-
-<p>Thank you!</p>
-
-<p>-- The <%= site_name %> team</p>
+<br>
+<p>The property owner or listing agent will get a copy of your request. Normally, your request will be handled within 24-48 hours.</p>

@@ -39,16 +39,18 @@ class Transaction < ActiveRecord::Base
     #state :auto_cancelled
     state :declined
 
+    # Check user permissions before every transition
     before_transition do |from, to, triggering_event, *event_args|
-      # check user permissions
+      
       halt! unless permitted_to?(triggering_event)
     end
 
+    # After transition: log transactions, send system msgs and notification emails to renter and owner
     after_transition do |from, to, triggering_event, *event_args|
-      # log every transaction
       log_transaction(:from => from, :to => to, :triggering_event => triggering_event, :additional_data => event_args[0])
-      # add a system message
-      self.add_system_message(triggering_event.to_sym)
+      event = triggering_event.to_sym
+      self.add_system_message(event)
+      TransactionMailer.mail_dispatcher(event, self.inquiry)
     end
   end
 

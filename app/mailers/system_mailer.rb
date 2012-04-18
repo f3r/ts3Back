@@ -1,7 +1,8 @@
-class SystemMailer < ActionMailer::Base
-  default :from => MAILER_SENDER,
-          :to => ["jeremy@squarestays.com", "fer@squarestays.com"].join(',')
+class SystemMailer < BaseMailer
+  default :to => ["jeremy@squarestays.com", "fer@squarestays.com"].join(',')
 
+  # ==Description
+  # Email sent when the user sends feedback
   def user_feedback(user, type, message)
     @user = user
     @type = type

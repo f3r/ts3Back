@@ -19,4 +19,8 @@ module FrontendHelper
   def site_name
     SITE_NAME
   end
+
+  def support_email
+    mail_to SUPPORT_EMAIL
+  end
 end
