@@ -24,7 +24,7 @@ class TransactionMailer < BaseMailer
   def request_renter(inquiry)
     @user      = inquiry.user
     recipients = "#{@user.full_name} <#{@user.email}>"
-    subject    = 'Request confirmed!'
+    subject    = 'Request Confirmed!'
     
     mail(:to => recipients, :subject => subject)
   end
@@ -35,7 +35,7 @@ class TransactionMailer < BaseMailer
     @user      = inquiry.place.user
     @renter    = inquiry.user
     recipients = "#{@user.full_name} <#{@user.email}>"
-    subject    = 'Request confirmed!'
+    subject    = 'Request Confirmed!'
     
     mail(:to => recipients, :subject => subject)
   end

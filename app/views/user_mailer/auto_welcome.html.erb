@@ -1,7 +1,7 @@
-<h2>Dear <%= @user.first_name %>, Welcome to SquareStays!</h2>
+<h2>Dear <%= @user.first_name %>,</h2>
 <p>Welcome to Squarestays!</p>
 
 <p>Squarestays helps you find the best short-term and flexible accommodation for your business and personal travel.</p> 
 <br/>
-<p>We created an account for you WIP WIP</p>
-<p>Click <%= link_to 'here', frontend_url("/users/password/#{@user.reset_password_token}?welcome=true") %> to set a password and activate your account.</p>
+<p>We automatically created an account for you so you can easily manage your inquiries, favorites and alerts.
+Click <%= link_to 'here', frontend_url("/users/password/#{@user.reset_password_token}?welcome=true") %> to set a password and activate your account.</p>

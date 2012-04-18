@@ -27,7 +27,6 @@ class Inquiry < ActiveRecord::Base
     # Sends notification
     InquiryMailer.inquiry_confirmed_renter(inquiry).deliver
     InquiryMailer.inquiry_confirmed_owner(inquiry).deliver
-    InquiryMailer.inquiry_confirmed_admin(place, params, inquiry.check_in, inquiry.check_out, user, inquiry).deliver
 
     inquiry
   end

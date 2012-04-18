@@ -1,5 +1,5 @@
 <h2>Dear <%= @user.first_name %>,</h2>
 
-<p><%= @renter.full_name %> has submitted a rental request, confirming their intent to rent this property!</p>
+<p><%= @renter.anonymized_name %> has submitted a rental request, confirming their intent to rent this property!</p>
 
 <p>Please double-check the terms of the rental, including the payment schedule, property availability and other considerations and requirements you may have. When you are ready, please go to our <%= link_to "Inquiry Center", frontend_url('/messages') %> to confirm the tenant's rental request. The tenant will then be prompted to pay the rental confirmation fee.</p>
