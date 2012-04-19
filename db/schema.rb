@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120417133850) do
+ActiveRecord::Schema.define(:version => 20120419143620) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -102,13 +102,14 @@ ActiveRecord::Schema.define(:version => 20120417133850) do
   end
 
   create_table "cities", :force => true do |t|
-    t.string "name"
-    t.float  "lat"
-    t.float  "lon"
-    t.string "state"
-    t.string "country"
-    t.string "country_code"
-    t.string "cached_complete_name"
+    t.string  "name"
+    t.float   "lat"
+    t.float   "lon"
+    t.string  "state"
+    t.string  "country"
+    t.string  "country_code"
+    t.string  "cached_complete_name"
+    t.boolean "active",               :default => false
   end
 
   add_index "cities", ["country"], :name => "index_cities_on_country"
@@ -201,13 +202,6 @@ ActiveRecord::Schema.define(:version => 20120417133850) do
   end
 
   add_index "messages", ["conversation_id"], :name => "index_messages_on_conversation_id"
-
-  create_table "panoramas", :force => true do |t|
-    t.integer "photo_id"
-    t.text    "xml"
-    t.string  "html_file_name"
-    t.string  "swf_file_name"
-  end
 
   create_table "payment_notifications", :force => true do |t|
     t.integer  "user_id"
@@ -314,10 +308,6 @@ ActiveRecord::Schema.define(:version => 20120417133850) do
     t.string   "country_code",               :limit => 2
     t.float    "price_sqf_usd"
     t.string   "stay_unit"
-    t.string   "tenure"
-    t.string   "condition"
-    t.string   "developer"
-    t.integer  "top_year"
   end
 
   add_index "places", ["amenities_aircon"], :name => "index_places_on_amenities_aircon"

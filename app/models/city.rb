@@ -3,7 +3,20 @@ class City < ActiveRecord::Base
   has_many :places
 
   before_save :update_cached_complete_name
-  
+
+  scope :active,    where("active")
+  scope :inactive,  where("not active")
+
+  def activate!
+    self.active = true
+    self.save
+  end
+
+  def deactivate!
+    self.active = false
+    self.save
+  end
+
   def complete_name
     "#{self.name}, #{self.state}, #{self.country}".gsub(", ,",",")
   end
