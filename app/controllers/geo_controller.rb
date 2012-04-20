@@ -49,23 +49,32 @@ class GeoController < ApiController
   # === Parameters
   # [country_code]
   # [state]
+  # [active]
   # === Error codes
   # [115] No results
   def get_cities
     country_code = params[:country_code] if params[:country_code]
     state = params[:state] if params[:state]
-    @fields = [:id, :name, :lat, :lon]
+    @fields = [:id, :name, :country_code, :lat, :lon, :active]
     if country_code
       @cities = Rails.cache.fetch('geo_cities_' + country_code) { 
         City.select(@fields).where(:country_code => country_code).all
       }
     elsif state
-      @cities = Rails.cache.fetch('geo_cities_' + state.parameterize) { 
+      @cities = Rails.cache.fetch('geo_cities_' + country_code + '_' + state.parameterize) { 
         City.select(@fields).where(:state => state).all
+      }
+    elsif params[:active]
+      @cities = Rails.cache.fetch('geo_cities_all_active') { 
+        City.active.select(@fields).all
+      }
+    else
+      @cities = Rails.cache.fetch('geo_cities_all') { 
+        City.select(@fields).all
       }
     end
     if @cities && !@cities.blank?
-      return_message(200, :ok, {:states => filter_fields(@cities,@fields)})
+      return_message(200, :ok, {:cities => filter_fields(@cities,@fields)})
     elsif @cities && @cities.blank?
       return_message(200, :ok, {:err => {:cities => [115]}})
     else
