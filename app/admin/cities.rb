@@ -3,6 +3,9 @@ ActiveAdmin.register City do
   
   controller do
     helper 'admin/cities'
+    def scoped_collection
+      City.unscoped
+    end
   end
   
   scope :all, :default => true

@@ -40,7 +40,7 @@ class City < ActiveRecord::Base
       "geo_cities_all_active", 
       "geo_cities_all", 
       'geo_cities_' + country_code, 
-      'geo_cities_' + country_code + '_' + state.parameterize
+      'geo_cities_' + country_code + '_' + (state ? state.parameterize : "")
     ])
   end
 
