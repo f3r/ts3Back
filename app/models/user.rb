@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
                   :pref_language,
                   :pref_currency,
                   :pref_size_unit,
+                  :pref_city,
                   :role,
                   :passport_number
 

@@ -17,6 +17,7 @@ class UsersController < ApiController
       :pref_language,
       :pref_currency,
       :pref_size_unit,
+      :pref_city,
       :role
     ]
 
@@ -67,7 +68,7 @@ class UsersController < ApiController
   # [id] Optional user id
   # === Response
   # [user]
-  # {:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :passport_number, :avatar_file_name, :pref_language, :pref_currency}
+  # {:id, :email, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, :passport_number, :avatar_file_name, :pref_language, :pref_currency, :pref_city}
   # === Error codes
   # [105] invalid access token
   def show
@@ -107,9 +108,10 @@ class UsersController < ApiController
   # [pref_language] String, Preferred Language. ie "en"
   # [pref_currency] String, Preferred Currency. ie "USD"
   # [pref_size_unit] String, Preferred Size unit. ie "sqm"
+  # [pref_city]     Integer, Preferred city_id. ie "1"
   # === Response
   # [user]
-  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, passport_number, :avatar_file_name, :pref_language, :pref_currency, :pref_size_unit}
+  # {:id, :first_name, :last_name, :gender, :birthdate, :timezone, :phone_mobile, passport_number, :avatar_file_name, :pref_language, :pref_currency, :pref_size_unit, :pref_city}
   # === Error codes
   # [105] invalid access token
   # [101] can't be blank
@@ -131,6 +133,7 @@ class UsersController < ApiController
       :pref_language,
       :pref_currency,
       :pref_size_unit,
+      :pref_city,
       :email,
       :password,
       :password_confirmation
