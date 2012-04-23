@@ -26,5 +26,18 @@ class InquiryMailer < BaseMailer
     
     mail(:to => recipient, :subject => subject)
   end
+  
+  def inquiry_spam(inquiry)
+    @inquiry   = inquiry
+    @place     = inquiry.place
+    @owner     = @place.user
+    @renter      = inquiry.user
+    
+    recipient = "#{@owner.full_name} <#{@owner.email}>"
+    subject = "You have received a spam inquiry on SquareStays"
+    
+    mail(:to => recipient, :subject => subject)
+    
+  end
 
 end
