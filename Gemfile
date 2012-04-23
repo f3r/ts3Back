@@ -31,6 +31,9 @@ gem 'sass-rails'
 gem 'meta_search',    '>= 1.1.0.pre'
 gem 'ransack'                     # Object-based search
 
+#rakismet
+gem 'rakismet'
+
 group :test do
   gem 'turn', :require => false  # Pretty printed test output
   gem 'shoulda'
