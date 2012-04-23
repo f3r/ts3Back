@@ -8,6 +8,9 @@ class Inquiry < ActiveRecord::Base
   validates_presence_of :user, :place
 
   attr_accessor :message
+  
+  # Include the Rakismet model
+  include Rakismet::Model
 
   def self.create_and_notify(place, user, params)
     inquiry = self.new(
@@ -18,11 +21,21 @@ class Inquiry < ActiveRecord::Base
     )
     inquiry.check_in = params[:date_start]
     inquiry.length = [params[:length_stay], params[:length_stay_type]]
-
+    
     return false unless inquiry.save
 
     # Creates a new conversation around the inquiry
     inquiry.start_conversation(params[:message])
+
+    # Set the content for the rakismet to check for spam
+    # TODO: May need to set the other params too as per https://github.com/joshfrench/rakismet
+    self.rakismet_attrs(:content => params[:message])
+    
+    # Check if this inquiry is spam?
+    if inquiry.spam?
+      InquiryMailer.inquiry_spam(inquiry).deliver
+    end
+    
 
     # Sends notification
     InquiryMailer.inquiry_confirmed_renter(inquiry).deliver
