@@ -1,5 +1,6 @@
 ActiveAdmin.register Comment, :as => "Question" do
   menu :priority => 5
+  #We don't need new question button
   actions :all, :except => :new
   
   filter :comment
@@ -10,6 +11,7 @@ ActiveAdmin.register Comment, :as => "Question" do
     column 'Question', :comment
     column :user
     column :created_at
+    column("Type") {|question| status_tag(question.owner ? 'ANSWER': 'QUESTION')} 
     default_actions
   end
   
@@ -18,7 +20,13 @@ ActiveAdmin.register Comment, :as => "Question" do
       row :id    
       row :place
       row("QUESTION") {question.comment}
-      row :user      
+      row :user
+      row('REPLYING TO') do
+          if question.replying_to.present?
+            reply_to_question = Comment.find(question.replying_to)
+            link_to 'View', admin_question_path(reply_to_question)
+          end
+        end
       row :created_at
     end
   end
