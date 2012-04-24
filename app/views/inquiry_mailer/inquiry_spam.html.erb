@@ -6,8 +6,9 @@
 for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatted_s(:long) %>
 <% end %> 
 </p>
-
+<p>
 The system feels this is a spam due to the message with the inquiry.
+</p>
 
 <% if @inquiry.message.present? %>
   <p>The message from the user is:

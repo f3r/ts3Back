@@ -53,7 +53,7 @@ class Messenger
     return true
   end
 
-  def self.add_reply(user, conversation_id, message)
+  def self.add_reply(user, conversation_id, message,on_inquiry=false)
     return false unless message.valid?
 
     sender_inbox_entry = InboxEntry.where(:user_id => user.id, :conversation_id => conversation_id).first!
@@ -66,9 +66,11 @@ class Messenger
     recipient_inbox_entry.mark_as_unread
     recipient_inbox_entry.save!
 
-    # Notifiy recipient
-    recipient = recipient_inbox_entry.user
-    UserMailer.new_message_reply(recipient, message).deliver
+    # Notifiy recipient only on message not on message with inquiry
+    if !on_inquiry
+      recipient = recipient_inbox_entry.user
+      UserMailer.new_message_reply(recipient, message).deliver
+    end
   end
 
   def self.add_system_message(conversation_id, system_msg_id)
