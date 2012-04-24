@@ -1,5 +1,5 @@
 class City < ActiveRecord::Base
-  default_scope :order => 'name ASC'
+  default_scope :order => 'position ASC'
   has_many :places
 
   before_save :update_cached_complete_name

@@ -1,6 +1,7 @@
 ActiveAdmin.register City do
   menu :priority => 6
-  
+  config.sort_order = 'position_asc'  
+
   controller do
     helper 'admin/cities'
     def scoped_collection
@@ -38,6 +39,13 @@ ActiveAdmin.register City do
     column :country_code
     column("Status")      {|city| status_tag(city.active ? 'Active' : 'Inactive') }
     column("Actions")     {|city| city_links_column(city) }
+  end
+
+  collection_action :sort, :method => :post do
+    params[:city].each_with_index do |id, index|
+      City.update_all(['position=?', index+1], ['id=?', id])
+    end
+    render :nothing => true
   end
 
   # Activate/Deactivate
