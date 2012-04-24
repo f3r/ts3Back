@@ -10,7 +10,9 @@ class Comment < ActiveRecord::Base
 
   validate :validates_replying_to
 
-  default_scope :order => 'comments.created_at ASC'
+  default_scope :order => 'created_at desc'
+  scope :all, :order => 'created_at desc'
+  scope :questions, where("replying_to is NULL")
 
   # Checks if the replying_to id exists or not
   def validates_replying_to
