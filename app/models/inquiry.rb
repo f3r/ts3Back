@@ -8,6 +8,9 @@ class Inquiry < ActiveRecord::Base
   validates_presence_of :user, :place
 
   attr_accessor :message
+  
+  # Include the Rakismet model
+  include Rakismet::Model
 
   def self.create_and_notify(place, user, params)
     inquiry = self.new(
@@ -18,16 +21,26 @@ class Inquiry < ActiveRecord::Base
     )
     inquiry.check_in = params[:date_start]
     inquiry.length = [params[:length_stay], params[:length_stay_type]]
-
+    
     return false unless inquiry.save
 
     # Creates a new conversation around the inquiry
     inquiry.start_conversation(params[:message])
 
+    # Set the content for the rakismet to check for spam
+    # TODO: May need to set the other params too as per https://github.com/joshfrench/rakismet
+    self.rakismet_attrs(:content => params[:message])
+
     # Sends notification
     InquiryMailer.inquiry_confirmed_renter(inquiry).deliver
-    InquiryMailer.inquiry_confirmed_owner(inquiry).deliver
-
+    
+    # Check if this inquiry is spam?
+    if inquiry.spam?
+      InquiryMailer.inquiry_spam(inquiry).deliver
+    else
+      InquiryMailer.inquiry_confirmed_owner(inquiry).deliver  
+    end
+    
     inquiry
   end
 
@@ -67,16 +80,17 @@ class Inquiry < ActiveRecord::Base
   end
 
   def start_conversation(message)
+    
+    self.message = message
     # Check if there is a previous inquiry
     prev_inquiry = Inquiry.where(:user_id => self.user.id, :place_id => self.place.id).first
     if prev_inquiry && prev_inquiry.conversation
       conversation = prev_inquiry.conversation
-      Messenger.add_reply(self.user, conversation.id, Message.new(:body => message))
+      Messenger.add_reply(self.user, conversation.id, Message.new(:body => message),true)
     else
       conversation = Conversation.new
       conversation.recipient = self.place.user
       conversation.body = message
-      self.message = message
       conversation.target = self
 
       Messenger.start_conversation(self.user, conversation)
