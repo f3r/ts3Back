@@ -15,7 +15,6 @@ gem 'will_paginate'               # Paginating results
 gem 'geocoder'                    # Geocoding Google-based
 gem 'declarative_authorization'   # Access Control List
 gem 'workflow'                    # State control
-gem 'heroku_san'                  # Manages multiple production environments
 gem 'validates_timeliness', '~> 3.0.2'
 gem 'acts_as_list'				        # Support for sortable associations
 gem 'rabl'                        # JSON Views
@@ -48,6 +47,7 @@ group :development do
   gem 'mail_view'
   gem 'taps'
   gem 'powder'
+  gem 'heroku_san', "~> 2.1.4"  # Manages multiple production environments
 end
 
 group :development, :test do
