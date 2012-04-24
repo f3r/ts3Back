@@ -45,6 +45,10 @@ ActiveAdmin.register City do
     params[:city].each_with_index do |id, index|
       City.update_all(['position=?', index+1], ['id=?', id])
     end
+    delete_caches([
+      "geo_cities_all_active", 
+      "geo_cities_all", 
+    ])
     render :nothing => true
   end
 
