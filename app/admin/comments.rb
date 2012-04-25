@@ -10,9 +10,9 @@ ActiveAdmin.register Comment, :as => "Question" do
   
   index do
     id_column
-    column :place
+    column :place, :sortable => :place_id
     column 'Question', :comment
-    column :user
+    column :user, :sortable => :user_id
     column :created_at
     column("Type") {|question| status_tag(question.owner ? 'ANSWER': 'QUESTION')} 
     default_actions

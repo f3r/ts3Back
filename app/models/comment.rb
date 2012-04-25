@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
 
   validate :validates_replying_to
 
-  default_scope :order => 'created_at desc'
+  #default_scope :order => 'created_at desc'
   scope :all, :order => 'created_at desc'
   scope :questions, where("replying_to is NULL")
 
