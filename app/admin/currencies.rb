@@ -1,6 +1,8 @@
 ActiveAdmin.register Currency do
   menu :priority => 7
   
+  config.sort_order = 'position_asc'
+  
    controller do
     helper 'admin/currencies'
     def scoped_collection
@@ -59,6 +61,13 @@ ActiveAdmin.register Currency do
     currency = Currency.find(params[:id])
     activated = currency.deactivate!
     redirect_to({:action => :show}, :notice =>"The Currency was deactivated")
+  end
+  
+   collection_action :sort, :method => :post do
+    params[:currency].each_with_index do |id, index|
+      Currency.update_all(['position=?', index+1], ['id=?', id])
+    end
+    render :nothing => true
   end
   
 end
