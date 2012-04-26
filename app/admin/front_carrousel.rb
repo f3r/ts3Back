@@ -1,6 +1,7 @@
 ActiveAdmin.register FrontCarrousel do
   menu :priority => 5
-
+  actions :all, :except => :new
+  
   filter :label
   
   index do
@@ -34,5 +35,19 @@ ActiveAdmin.register FrontCarrousel do
     end
     f.buttons
   end  
+  
+  action_item :except=> :new_set do
+    link_to 'New Set', "/admin/front_carrousels/new_set"
+  end
+  
+  collection_action :new_set, :method => :get do
+  end
+  
+  collection_action :new_set_upload, :method => :post do
+    new_fc = FrontCarrousel.new(:photo => params[:Filedata]) 
+    new_fc.save
+    render :nothing => true
+  end
+  
   
 end
