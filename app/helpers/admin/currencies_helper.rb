@@ -7,7 +7,6 @@ module Admin::CurrenciesHelper
     html = link_to('Details', admin_currency_path(currency), :class => 'member_link')
     html << link_to('Edit', edit_admin_currency_path(currency), :class => 'member_link')
     html << link_to('Delete', admin_currency_path(currency),:method => :delete ,:class => 'member_link',:confirm => 'Are you sure?')
-    #html << link_to_if(currency.active, 'View Public', public_currency_path(currency), :class => 'member_link', :target => '_blank')
   end
   
 end

@@ -23,7 +23,6 @@ ActiveAdmin.register Currency do
       f.input :symbol
       f.input :currency_code
       f.input :country
-      #f.input :currency_position     #some of having symbol on left side ,others have right
       f.input :active
     end
     f.buttons
@@ -37,7 +36,6 @@ ActiveAdmin.register Currency do
     column :symbol
     column :currency_code
     column :country
-    #column("Postion")     {|currency| status_tag(currency.currency_position == "l"? "Left" : "Right" ,  :style => 'float:left !important') }
     column("Status")      {|currency| status_tag(currency.active ? 'Active' : 'Inactive') }
     column("Actions")     {|currency| currency_links_column(currency) }
   end
