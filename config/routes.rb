@@ -145,7 +145,11 @@ HeyPalBackEnd::Application.routes.draw do
     #put     "conversations/:user_id/mark_as_unread",:to => "messages#mark_as_unread"
     #get     "messages/:id",                         :to => "messages#messages"
     #post    "messages/:id",                         :to => "messages#create"
-
+    ##############################################################################
+    # CURRENCY
+    ##############################################################################
+    get     "currencies",                  :to => "currencies#get_currencies"
+    
     resources :conversations do
       put :mark_as_unread, :on => :member
       get :unread_count, :on => :collection
