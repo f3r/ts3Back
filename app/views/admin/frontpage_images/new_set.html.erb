@@ -24,7 +24,7 @@
 			  'uploader'        : "<%=admin_frontpage_images_path%>/new_set_upload",
 			  'formData'        : {'_method' : 'post', 'auth_token' : token, 'authenticity_token' : encodeURI(csrf_token), 'csrf_token' : encodeURI(csrf_param), '<%=Rails.application.config.session_options[:key]%>' : '<%=cookies[Rails.application.config.session_options[:key]]%>', 'format': 'json' },
 			  'onQueueComplete' : function(queueData) {
-			  		window.location.href = "<%=admin_frontpage_images_path%>";
+			  		window.location.href = "<%=admin_frontpage_images_path%>?order=id_desc";
 			  }
 			}
 		);

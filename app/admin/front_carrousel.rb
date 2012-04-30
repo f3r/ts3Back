@@ -2,14 +2,19 @@ ActiveAdmin.register FrontCarrousel, :as => "Frontpage image" do
   menu :priority => 5, :label => "Frontpage image gallery"
   actions :all, :except => :new
   
+  config.sort_order = 'active_desc'
   filter :label
   
   index :title => 'Frontpage image gallery' do
     id_column
     column :link
     column :label
-    column('IMAGE') {|fc| image_tag(fc.photo.url('tiny'))}
-    column("Visible") {|fc| status_tag(fc.active ? 'Yes' : 'No') } 
+    column 'IMAGE', :sortable => false  do 
+      |fc| image_tag(fc.photo.url('tiny'))
+      end
+    column "Visible", :sortable => :active do
+      |fc| status_tag(fc.active ? 'Yes' : 'No')
+      end
     column :created_at 
     default_actions
   end  
@@ -51,6 +56,12 @@ ActiveAdmin.register FrontCarrousel, :as => "Frontpage image" do
     new_fc.save
     render :nothing => true
   end
-  
+
+  collection_action :sort, :method => :post do
+    params[:front_carrousel].each_with_index do |id, index|
+      FrontCarrousel.update_all(['position=?', index+1], ['id=?', id])
+    end
+    render :nothing => true
+  end
   
 end
