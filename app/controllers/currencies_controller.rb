@@ -13,7 +13,7 @@ class CurrenciesController < ApiController
   # === Error codes
   # [115] No results
   def get_currencies
-    @fields = [:id, :symbol, :currency_code, :active]
+    @fields = [:id, :symbol, :currency_code, :active , :currency_abbreviation]
     if params[:active]
       @currencies = Rails.cache.fetch('currencies_all_active') { 
         Currency.active.select(@fields).all

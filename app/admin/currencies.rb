@@ -22,6 +22,7 @@ ActiveAdmin.register Currency do
       f.input :name
       f.input :symbol
       f.input :currency_code
+      f.input :currency_abbreviation, :label => "Currency Short Name", :hint => "Ex: If currency is USD , the Short name Like US" 
       f.input :country
       f.input :active
     end
@@ -35,6 +36,7 @@ ActiveAdmin.register Currency do
     column :name
     column :symbol
     column :currency_code
+    column :currency_abbreviation
     column :country
     column("Status")      {|currency| status_tag(currency.active ? 'Active' : 'Inactive') }
     column("Actions")     {|currency| currency_links_column(currency) }
