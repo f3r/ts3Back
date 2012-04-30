@@ -1,15 +1,15 @@
-ActiveAdmin.register FrontCarrousel do
-  menu :priority => 5
+ActiveAdmin.register FrontCarrousel, :as => "Frontpage image" do
+  menu :priority => 5, :label => "Frontpage image gallery"
   actions :all, :except => :new
   
   filter :label
   
-  index do
+  index :title => 'Frontpage image gallery' do
     id_column
     column :link
     column :label
     column('IMAGE') {|fc| image_tag(fc.photo.url('tiny'))}
-    column :active
+    column("Visible") {|fc| status_tag(fc.active ? 'Yes' : 'No') } 
     column :created_at 
     default_actions
   end  
@@ -21,7 +21,9 @@ ActiveAdmin.register FrontCarrousel do
       row("IMAGE") do
          image_tag(fc.photo.url)
       end
-      row :active 
+      row("Visible") do
+         status_tag(fc.active ? 'Yes' : 'No')
+      end 
       row :created_at
     end
   end  
@@ -31,16 +33,17 @@ ActiveAdmin.register FrontCarrousel do
       f.input :link
       f.input :label
       f.input :photo
-      f.input :active
+      f.input :active, :label => "Visible?"
     end
     f.buttons
   end  
   
   action_item :except=> :new_set do
-    link_to 'New Set', "/admin/front_carrousels/new_set"
+    link_to 'Add photos', "/admin/frontpage_images/new_set"
   end
   
   collection_action :new_set, :method => :get do
+    @page_title = "Add photos"
   end
   
   collection_action :new_set_upload, :method => :post do

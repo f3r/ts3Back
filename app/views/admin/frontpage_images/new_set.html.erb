@@ -8,8 +8,6 @@
 		var csrf_param = $('meta[name=csrf-param]').attr('content');
 		
 		var token = '<%=current_user.authentication_token%>';
-		
-		console.log(csrf_token);
 
 		$('#file_upload').uploadify({
 			  'debug'           : false,
@@ -23,9 +21,11 @@
 			  'wmode'           : 'transparent',
 			  'fileTypeExts'         : '*.jpg;*.png',
 			  'method'          : 'post',
-			  'uploader'        : "<%=admin_front_carrousel_path%>/new_set_upload",
-			  'formData'        : {'_method' : 'post', 'auth_token' : token, 'authenticity_token' : encodeURI(csrf_token), 'csrf_token' : encodeURI(csrf_param), '<%=Rails.application.config.session_options[:key]%>' : '<%=cookies[Rails.application.config.session_options[:key]]%>', 'format': 'json' }
-			
+			  'uploader'        : "<%=admin_frontpage_images_path%>/new_set_upload",
+			  'formData'        : {'_method' : 'post', 'auth_token' : token, 'authenticity_token' : encodeURI(csrf_token), 'csrf_token' : encodeURI(csrf_param), '<%=Rails.application.config.session_options[:key]%>' : '<%=cookies[Rails.application.config.session_options[:key]]%>', 'format': 'json' },
+			  'onQueueComplete' : function(queueData) {
+			  		window.location.href = "<%=admin_frontpage_images_path%>";
+			  }
 			}
 		);
 		
