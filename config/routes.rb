@@ -145,6 +145,11 @@ HeyPalBackEnd::Application.routes.draw do
     #put     "conversations/:user_id/mark_as_unread",:to => "messages#mark_as_unread"
     #get     "messages/:id",                         :to => "messages#messages"
     #post    "messages/:id",                         :to => "messages#create"
+    ##############################################################################
+    # Front-end images
+    ##############################################################################
+    get     "frontpageimages/visible",     :to => "frontpage_images#get_visible_images"
+    
 
     resources :conversations do
       put :mark_as_unread, :on => :member
