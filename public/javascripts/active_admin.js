@@ -41,6 +41,19 @@ jQuery(function($) {
       cursor: 'move',
       update: function(event, ui) {
         return sendSortRequestOfModel("frontpage_images");
+       }
+    });
+   }
+});
+  
+jQuery(function($) {
+  if ($('body.admin_currencies.index').length) {
+    $("#currencies tbody").disableSelection();
+    return $("#currencies tbody").sortable({
+      axis: 'y',
+      cursor: 'move',
+      update: function(event, ui) {
+        return sendSortRequestOfModel("currencies");
       }
     });
   }

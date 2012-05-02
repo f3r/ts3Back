@@ -92,6 +92,7 @@ authorization do
     has_permission_on :alerts, :to => [:get_params]
     has_permission_on :transactions,  :to => [:pay]
     has_permission_on :frontpage_images, :to => [:get_visible_images]
+    has_permission_on :currencies,  :to => [:get_currencies]
   end
 
 end
