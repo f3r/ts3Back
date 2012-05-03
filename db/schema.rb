@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120424032328) do
+ActiveRecord::Schema.define(:version => 20120430070954) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -139,6 +139,16 @@ ActiveRecord::Schema.define(:version => 20120424032328) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "currencies", :force => true do |t|
+    t.string  "name"
+    t.string  "symbol"
+    t.string  "country"
+    t.string  "currency_code"
+    t.boolean "active",                :default => false
+    t.integer "position"
+    t.string  "currency_abbreviation"
+  end
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -203,6 +213,13 @@ ActiveRecord::Schema.define(:version => 20120424032328) do
   end
 
   add_index "messages", ["conversation_id"], :name => "index_messages_on_conversation_id"
+
+  create_table "panoramas", :force => true do |t|
+    t.integer "photo_id"
+    t.text    "xml"
+    t.string  "html_file_name"
+    t.string  "swf_file_name"
+  end
 
   create_table "payment_notifications", :force => true do |t|
     t.integer  "user_id"

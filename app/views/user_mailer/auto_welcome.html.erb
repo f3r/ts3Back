@@ -4,4 +4,4 @@
 <p>Squarestays helps you find the best short-term and flexible accommodation for your business and personal travel.</p> 
 <br/>
 <p>We automatically created an account for you so you can easily manage your inquiries, favorites and alerts.
-Click <%= link_to 'here', frontend_url("/users/password/#{@user.reset_password_token}?welcome=true") %> to set a password and activate your account.</p>
+Click <%= link_to 'here', frontend_url("/password/edit?reset_password_token=#{@user.reset_password_token}&welcome=true") %> to set a password and activate your account.</p>
