@@ -5,3 +5,11 @@
 #place_published_input {
   display: none;
 }
+
+.admin_settings .breadcrumb {
+  display: none;
+}
+
+.admin_settings .buttons .cancel {
+  display: none;
+}

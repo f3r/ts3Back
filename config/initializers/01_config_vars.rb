@@ -21,3 +21,5 @@ SITE_NAME =             ENV['SITE_NAME']              || APP_CONFIG['SITE_NAME']
 SUPPORT_EMAIL =         ENV['SUPPORT_EMAIL']          || APP_CONFIG['SUPPORT_EMAIL']
 RAKISMET_KEY =          ENV['RAKISMET_KEY']           || APP_CONFIG['RAKISMET_KEY']
 RAKISMET_URL =          ENV['RAKISMET_URL']           || APP_CONFIG['RAKISMET_URL']
+MAIL_BCC =              ''
+GAE_TRACKING_CODE =     ''
