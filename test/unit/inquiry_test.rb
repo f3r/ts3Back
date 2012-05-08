@@ -26,10 +26,11 @@ class InquiryTest < ActiveSupport::TestCase
   end
 
   should "create_and_notify" do
+    Inquiry.any_instance.stubs(:spam?).returns(false)
     assert_difference 'Inquiry.count', +1 do
       Inquiry.create_and_notify(@place, @user, inquiry_params)
     end
-    assert_equal 3, @emails.size
+    assert_equal 2, @emails.size
     inquiry = Inquiry.last
     assert_equal @user, inquiry.user
     assert_equal @place, inquiry.place
@@ -38,6 +39,7 @@ class InquiryTest < ActiveSupport::TestCase
   end
 
   should "create or continue a conversation" do
+    Inquiry.any_instance.stubs(:spam?).returns(false)
     assert_difference 'Conversation.count', +1 do
       Inquiry.create_and_notify(@place, @user, inquiry_params)
     end
