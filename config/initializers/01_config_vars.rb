@@ -23,3 +23,4 @@ RAKISMET_KEY =          ENV['RAKISMET_KEY']           || APP_CONFIG['RAKISMET_KE
 RAKISMET_URL =          ENV['RAKISMET_URL']           || APP_CONFIG['RAKISMET_URL']
 MAIL_BCC =              ''
 GAE_TRACKING_CODE =     ''
+SITE_URL =              FRONTEND_PATH

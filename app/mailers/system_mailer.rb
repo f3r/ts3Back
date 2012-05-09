@@ -1,5 +1,5 @@
 class SystemMailer < BaseMailer
-  default :to => ["jeremy@squarestays.com", "fer@squarestays.com"].join(',')
+  default :to => SiteConfig.mail_bcc
 
   # ==Description
   # Email sent when the user sends feedback

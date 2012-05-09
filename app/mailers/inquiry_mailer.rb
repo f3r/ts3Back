@@ -1,4 +1,4 @@
-class InquiryMailer < BaseMailer 
+class InquiryMailer < BaseMailer
 
   # ==Description
   # Email sent to the renter when the user inquires about a place
@@ -8,8 +8,8 @@ class InquiryMailer < BaseMailer
     @owner     = @place.user
     @user      = inquiry.user
     recipient  = "#{@user.full_name} <#{@user.email}>"
-    subject    = "Your Inquiry on SquareStays has been sent"
-    
+    subject    = t('inquiries.confirmed_renter_subject')
+
     mail(:to => recipient, :subject => subject)
   end
 
@@ -20,24 +20,24 @@ class InquiryMailer < BaseMailer
     @place     = inquiry.place
     @owner     = @place.user
     @renter    = inquiry.user ? inquiry.user : User.new(:first_name => params[:name], :email => params[:email], :phone_mobile => params[:mobile])
-  
-    recipient = "#{@owner.full_name} <#{@owner.email}>"
-    subject    = "You have received an inquiry on SquareStays"
-    
+
+    recipient  = "#{@owner.full_name} <#{@owner.email}>"
+    subject    = t('inquiries.confirmed_owner_subject')
+
     mail(:to => recipient, :subject => subject)
   end
-  
+
   def inquiry_spam(inquiry)
     @inquiry   = inquiry
     @place     = inquiry.place
     @owner     = @place.user
     @renter      = inquiry.user
-    
+
     recipient = "#{@owner.full_name} <#{@owner.email}>"
-    subject = "You have received a spam inquiry on SquareStays"
-    
+    subject   = t('inquiries.received_spam_subject')
+
     mail(:to => recipient, :subject => subject)
-    
+
   end
 
 end
