@@ -31,7 +31,22 @@ jQuery(function($) {
       }
     });
   }
+});
+
+jQuery(function($) {
+  if ($('body.admin_frontpage_images.index').length) {
+    $("#frontpage_images tbody").disableSelection();
+    return $("#frontpage_images tbody").sortable({
+      axis: 'y',
+      cursor: 'move',
+      update: function(event, ui) {
+        return sendSortRequestOfModel("frontpage_images");
+       }
+    });
+   }
+});
   
+jQuery(function($) {
   if ($('body.admin_currencies.index').length) {
     $("#currencies tbody").disableSelection();
     return $("#currencies tbody").sortable({
