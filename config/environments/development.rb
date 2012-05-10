@@ -31,8 +31,7 @@ HeyPalBackEnd::Application.configure do
   # Mailer configuration
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
-  
+
   # Local memcached
   config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "squarestays", :expires_in => 1.minute, :compress => false }
-
 end

@@ -5,6 +5,10 @@ class SiteConfig < ActiveRecord::Base
     @instance ||= SiteConfig.first || SiteConfig.new
   end
 
+  def self.mail_sysadmins
+    %w(fer@heypal.com nico@heypal.com).join(', ')
+  end
+
   def self.method_missing(name, *args)
     if self.instance.attributes.has_key?(name.to_s)
       val = self.instance.attributes[name.to_s]
