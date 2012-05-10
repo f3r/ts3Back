@@ -495,6 +495,7 @@ class PlacesTest < ActionController::IntegrationTest
       }
     end
     should "send inquiry for registered user" do
+      Inquiry.any_instance.stubs(:spam?).returns(false)
       assert_difference 'Inquiry.count', +1 do
         post "/places/#{@place.id}/inquire.json", @inquiry_params.merge(
           :access_token => @user.authentication_token
@@ -504,6 +505,7 @@ class PlacesTest < ActionController::IntegrationTest
     end
 
     should "send inquiry and create a new user" do
+      Inquiry.any_instance.stubs(:spam?).returns(false)
       post "/places/#{@place.id}/inquire.json", @inquiry_params.merge(
         :name => 'michelle',
         :email => 'michelle@mail.com'

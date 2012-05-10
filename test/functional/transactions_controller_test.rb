@@ -21,8 +21,8 @@ class TransactionsControllerTest < ActionController::TestCase
     end
 
     should 'send email notifications' do
-      TransactionMailer.expects(:request_renter)
-      TransactionMailer.expects(:request_owner)
+      TransactionMailer.expects(:request_renter).returns(mock(:deliver! => true))
+      TransactionMailer.expects(:request_owner).returns(mock(:deliver! => true))
       put :update, :id => @inquiry.id, :event => 'request', :access_token => @guest.authentication_token
     end
 

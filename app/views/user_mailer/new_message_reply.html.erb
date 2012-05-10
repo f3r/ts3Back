@@ -2,4 +2,4 @@
 <p>You have a new message from <%= @message.from.anonymized_name %> waiting for you on <%= site_name %>!</p>
 <p><%= link_to 'Click here', frontend_url('/messages') %> to read and respond to this message.</p>
 <br />
-<p>You can always check your inbox from your account at <%= link_to 'SquareStays.com', frontend_url('/login') %> to view and respond to your messages. You'll see an alert on the top navigation bar when there are new messages for you.</p>
+<p>You can always check your inbox from your account at <%= link_to site_name, frontend_url('/login') %> to view and respond to your messages. You'll see an alert on the top navigation bar when there are new messages for you.</p>

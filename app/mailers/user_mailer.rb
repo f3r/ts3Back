@@ -5,7 +5,7 @@ class UserMailer < BaseMailer
   def signup_welcome(user)
     @user      = user
     recipients = "#{user.full_name} <#{user.email}>"
-    subject    = 'Welcome to SquareStays'
+    subject    = t('devise.registrations.signed_up')
 
     mail(:to => recipients, :subject => subject)
   end
@@ -15,7 +15,7 @@ class UserMailer < BaseMailer
   def auto_welcome(user)
     @user      = user
     recipients = "#{user.full_name} <#{user.email}>"
-    subject    = 'Welcome to SquareStays'
+    subject    = t('devise.registrations.signed_up')
 
     mail(:to => recipients, :subject => subject)
   end
@@ -27,7 +27,7 @@ class UserMailer < BaseMailer
     @message   = message
     from       = @message.from
     recipients = "#{user.full_name} <#{user.email}>"
-    subject    = "You have a new message from #{from.anonymized_name} on SquareStays.com!"
+    subject    = t('messages.new_reply_subject', :sender => from.anonymized_name)
 
     mail(:to => recipients, :subject => subject)
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120430070954) do
+ActiveRecord::Schema.define(:version => 20120508021019) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -360,6 +360,32 @@ ActiveRecord::Schema.define(:version => 20120430070954) do
   add_index "places", ["place_type_id"], :name => "index_places_on_place_type_id"
   add_index "places", ["state_name"], :name => "index_places_on_state_name"
   add_index "places", ["user_id"], :name => "index_places_on_user_id"
+
+  create_table "settings", :force => true do |t|
+    t.string   "var",                       :null => false
+    t.text     "value"
+    t.integer  "target_id"
+    t.string   "target_type", :limit => 30
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "settings", ["target_type", "target_id", "var"], :name => "index_settings_on_target_type_and_target_id_and_var", :unique => true
+
+  create_table "site_configs", :force => true do |t|
+    t.string   "site_name"
+    t.string   "site_url"
+    t.string   "mailer_sender"
+    t.string   "support_email"
+    t.string   "gae_tracking_code"
+    t.string   "fb_app_id"
+    t.string   "fb_app_secret"
+    t.string   "tw_app_id"
+    t.string   "tw_app_secret"
+    t.string   "mail_bcc"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "transaction_logs", :force => true do |t|
     t.integer  "transaction_id"
