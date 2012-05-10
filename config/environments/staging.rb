@@ -66,7 +66,7 @@ HeyPalBackEnd::Application.configure do
   Sass::Plugin.options[:never_update] = true
 end
 
-HeyPalFrontEnd::Application.config.middleware.use ExceptionNotifier,
+HeyPalBackEnd::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[Staging] ",
   :sender_address => 'alert@exception.com',
   :exception_recipients => SiteConfig.mail_sysadmins
