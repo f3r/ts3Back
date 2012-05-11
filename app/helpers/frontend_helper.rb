@@ -17,10 +17,10 @@ module FrontendHelper
   end
 
   def site_name
-    SITE_NAME
+    SiteConfig.site_name
   end
 
   def support_email
-    mail_to SUPPORT_EMAIL
+    mail_to SiteConfig.support_email
   end
 end

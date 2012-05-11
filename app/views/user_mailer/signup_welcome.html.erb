@@ -1,6 +1,6 @@
 <h2>Dear <%= @user.first_name %>,</h2>
-<p>Welcome to Squarestays!</p>
+<p><%= t('devise.registrations.title') %></p>
 
-<p>Squarestays helps you find the best short-term and flexible accommodation for your business and personal travel.</p> 
+<p><%= site_name %> helps you find the best short-term and flexible accommodation for your business and personal travel.</p> 
 <br/>
 <p>We focus on quality stays in major cities worldwide. Browse properties <a href="<%= frontend_url('/') %>">here</a>. When you’ve found the right place for you, click the “Inquire” button to get in touch with the property owner. We’re here to help you find your home away from home.</p>

@@ -91,6 +91,7 @@ authorization do
     has_permission_on :geo, :to => [:get_countries, :get_states, :get_cities, :get_city, :city_search, :price_range]
     has_permission_on :alerts, :to => [:get_params]
     has_permission_on :transactions,  :to => [:pay]
+    has_permission_on :frontpage_images, :to => [:get_visible_images]
     has_permission_on :currencies,  :to => [:get_currencies]
     has_permission_on :cmspages,    :to => [:get_pagecontent]
   end

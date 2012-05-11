@@ -30,7 +30,6 @@ ActiveAdmin.register Currency do
   end
 
   
-  
   index do
     id_column
     column :name

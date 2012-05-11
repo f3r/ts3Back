@@ -1549,7 +1549,7 @@ a:hover {
   letter-spacing: 0.15em;
   padding: 3px 5px 2px 5px;
   font-size: 0.8em; }
-  .status.active, .status.ok, .status.published, .status.complete, .status.completed, .status.green, .status.answer {
+  .status.active, .status.ok, .status.published, .status.complete, .status.completed, .status.green, .status.yes, .status.answer {
     background: #8daa92; }
   .status.warn, .status.warning, .status.orange {
     background: #e29b20; }
