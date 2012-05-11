@@ -10,17 +10,28 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def self.method_missing(name, *args)
+    if self.running_migrations?
+      return self.default_to_constant(name)
+    end
     if self.instance.attributes.has_key?(name.to_s)
-      val = self.instance.attributes[name.to_s]
+      val = self.instance.attributes[name.to_s] if self.instance
       if val.present?
         val
       else
         # Backward compatibility with config constants
-        name.to_s.upcase.constantize
+       self.default_to_constant(name)
       end
     else
       super
     end
+  end
+
+  def self.running_migrations?
+    @migrating ||= !self.table_exists?
+  end
+
+  def self.default_to_constant(name)
+    name.to_s.upcase.constantize
   end
 
   protected
