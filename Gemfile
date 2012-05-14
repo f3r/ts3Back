@@ -59,6 +59,6 @@ group :development, :test do
   gem "ruby-debug19", :require => 'ruby-debug'
 end
 
-group :production do
+group :production, :staging do
   gem 'rack-ssl-enforcer'
 end
