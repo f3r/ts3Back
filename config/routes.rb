@@ -154,7 +154,11 @@ HeyPalBackEnd::Application.routes.draw do
     # CURRENCY
     ##############################################################################
     get     "currencies",                  :to => "currencies#get_currencies"
-    
+    ##############################################################################
+    # STATIC PAGES
+    ##############################################################################
+    get     "staticpage/content",  :to => "cmspages#get_pagecontent"
+
     resources :conversations do
       put :mark_as_unread, :on => :member
       get :unread_count, :on => :collection
