@@ -69,4 +69,4 @@ end
 HeyPalBackEnd::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[Production] ",
   :sender_address => 'alert@exception.com',
-  :exception_recipients => SiteConfig.mail_sysadmins
+  :exception_recipients => 'fer@heypal.com, nico@heypal.com'
