@@ -157,7 +157,8 @@ HeyPalBackEnd::Application.routes.draw do
     ##############################################################################
     # STATIC PAGES
     ##############################################################################
-    get     "staticpage/content",  :to => "cmspages#get_pagecontent"
+    get     "staticpage/content",         :to => "cmspages#get_pagecontent"
+    get     "staticpage/getdynamicroutes",           :to => "cmspages#get_dynamicroutes"
 
     resources :conversations do
       put :mark_as_unread, :on => :member
