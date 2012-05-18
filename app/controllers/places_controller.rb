@@ -34,7 +34,7 @@ class PlacesController < ApiController
     @fields = @fields + @amenities
 
     @search_fields = [
-      :id, :title, :city_id, :size_sqf, :size_sqm, :reviews_overall, :photos, :currency, :num_bedrooms, :num_bathrooms, :favorited
+      :id, :title, :city_id, :size_sqf, :size_sqm, :reviews_overall, :lat, :lon,:photos, :currency, :num_bedrooms, :num_bathrooms, :favorited
     ]    
 
     @search_fields = get_price_fields(@search_fields, STAY_UNITS)

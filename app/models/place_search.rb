@@ -81,10 +81,11 @@ class PlaceSearch
     end
 
     # Filter by City
-    places = places.where(:city_id => city_id)
-
+    places = places.where(:city_id => city_id)  
+    
     @source = places
   end
+  
 
   def add_filter_conditions(ignore_filters = [])
     conditions = prepare_conditions
@@ -142,6 +143,12 @@ class PlaceSearch
         conditions[:price_per_month_usd_lteq] = max_price
       end
     end
+    
+    conditions[:lat_gteq] = params[:min_lat] if !params[:min_lat].blank?
+    conditions[:lat_lteq] = params[:max_lat] if !params[:max_lat].blank?
+    
+    conditions[:lon_gteq] = params[:min_lng] if !params[:min_lng].blank?
+    conditions[:lon_lteq] = params[:max_lng] if !params[:max_lng].blank?
 
     # Filter by number of guests
     conditions[:max_guests_gteq] = params[:guests] if !params[:guests].blank?
