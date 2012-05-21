@@ -131,6 +131,11 @@ class Inquiry < ActiveRecord::Base
     Conversation.find_by_target(self)
   end
 
+  def recipient
+    self.place.user if self.place
+  end
+
   def send_reminder
+    InquiryMailer.inquiry_reminder_owner(self).deliver
   end
 end

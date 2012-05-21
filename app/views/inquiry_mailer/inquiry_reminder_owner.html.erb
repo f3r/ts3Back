@@ -9,7 +9,7 @@ for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatt
 
 </br>
 
-<p>You still haven't replied to this inquiry.</p>
+<p>It's been <%= time_ago_in_words(@inquiry.created_at) %> and you still haven't replied to this inquiry.</p>
 <p>Please remember to respond to your messages and inquiries promptly. Many people's accommodation needs are urgent, so the quicker you reply, the quicker you can get your properties rented out.</p>
 
 </br>
