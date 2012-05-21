@@ -638,5 +638,4 @@ class PlacesController < ApiController
     end
     return fields
   end
-
 end

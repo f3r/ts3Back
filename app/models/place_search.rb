@@ -79,6 +79,10 @@ class PlaceSearch
     else
       places = all_places.where(:published => true)
     end
+    
+    if !params[:min_lat].blank? && !params[:max_lat].blank? && !params[:min_lng].blank? &&  !params[:max_lng].blank?
+      places = all_places.where(:lat => (params[:min_lat]) .. (params[:max_lat]), :lon => (params[:min_lng]) .. (params[:max_lng]))
+    end
 
     # Filter by City
     places = places.where(:city_id => city_id)  
@@ -122,7 +126,7 @@ class PlaceSearch
   def results_without_pagination
     @search.result(:distinct => true)
   end
-
+  
   def prepare_conditions
     conditions = {}
 
@@ -144,12 +148,6 @@ class PlaceSearch
       end
     end
     
-    conditions[:lat_gteq] = params[:min_lat] if !params[:min_lat].blank?
-    conditions[:lat_lteq] = params[:max_lat] if !params[:max_lat].blank?
-    
-    conditions[:lon_gteq] = params[:min_lng] if !params[:min_lng].blank?
-    conditions[:lon_lteq] = params[:max_lng] if !params[:max_lng].blank?
-
     # Filter by number of guests
     conditions[:max_guests_gteq] = params[:guests] if !params[:guests].blank?
 
