@@ -8,7 +8,7 @@ class Inquiry < ActiveRecord::Base
   validates_presence_of :user, :place
 
   attr_accessor :message
-  
+
   # Include the Rakismet model
   include Rakismet::Model
 
@@ -21,7 +21,7 @@ class Inquiry < ActiveRecord::Base
     )
     inquiry.check_in = params[:date_start]
     inquiry.length = [params[:length_stay], params[:length_stay_type]]
-    
+
     return false unless inquiry.save
 
     # Creates a new conversation around the inquiry
@@ -33,15 +33,27 @@ class Inquiry < ActiveRecord::Base
 
     # Sends notification
     InquiryMailer.inquiry_confirmed_renter(inquiry).deliver
-    
+
     # Check if this inquiry is spam?
     if inquiry.spam?
       InquiryMailer.inquiry_spam(inquiry).deliver
     else
-      InquiryMailer.inquiry_confirmed_owner(inquiry).deliver  
+      InquiryMailer.inquiry_confirmed_owner(inquiry).deliver
     end
-    
+
     inquiry
+  end
+
+  def self.without_reply(since = nil)
+    conversations = Conversation.select('conversations.id, conversations.target_id, count(messages.id) replies').joins(:messages)
+      .where(:target_type => 'Inquiry')
+      .group('conversations.id').having('replies <= 1')
+    if since
+      conversations = conversations.where(['conversations.created_at > ?', since])
+    end
+
+    inquiry_ids = conversations.collect(&:target_id)
+    Inquiry.where(:id => inquiry_ids)
   end
 
   def length=(a_length)
@@ -80,7 +92,6 @@ class Inquiry < ActiveRecord::Base
   end
 
   def start_conversation(message)
-    
     self.message = message
     # Check if there is a previous inquiry
     prev_inquiry = Inquiry.where(:user_id => self.user.id, :place_id => self.place.id).first
@@ -118,5 +129,8 @@ class Inquiry < ActiveRecord::Base
 
   def conversation
     Conversation.find_by_target(self)
+  end
+
+  def send_reminder
   end
 end

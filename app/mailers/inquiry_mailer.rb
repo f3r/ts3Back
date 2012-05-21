@@ -19,7 +19,7 @@ class InquiryMailer < BaseMailer
     @inquiry   = inquiry
     @place     = inquiry.place
     @owner     = @place.user
-    @renter    = inquiry.user ? inquiry.user : User.new(:first_name => params[:name], :email => params[:email], :phone_mobile => params[:mobile])
+    @renter    = inquiry.user
 
     recipient  = "#{@owner.full_name} <#{@owner.email}>"
     subject    = t('inquiries.confirmed_owner_subject')
@@ -37,7 +37,18 @@ class InquiryMailer < BaseMailer
     subject   = t('inquiries.received_spam_subject')
 
     mail(:to => recipient, :subject => subject)
-
   end
 
+  # Email sent to the owner to remind abount an inquiry that hasn't been replied
+  def inquiry_reminder_owner(inquiry)
+    @inquiry   = inquiry
+    @place     = inquiry.place
+    @owner     = @place.user
+    @renter    = inquiry.user
+
+    recipient  = "#{@owner.full_name} <#{@owner.email}>"
+    subject    = t('inquiries.reminder_owner_subject')
+
+    mail(:to => recipient, :subject => subject)
+  end
 end

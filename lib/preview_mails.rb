@@ -49,6 +49,10 @@ class PreviewMails < MailView
     InquiryMailer.inquiry_confirmed_owner(an_inquiry)
   end
 
+  def inquiry_reminder_owner
+    InquiryMailer.inquiry_reminder_owner(an_inquiry)
+  end
+
   ###############################################################
   # TRANSACTION_MAILER
   ###############################################################

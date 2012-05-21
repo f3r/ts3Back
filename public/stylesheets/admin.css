@@ -13,3 +13,10 @@
 .admin_settings .buttons .cancel {
   display: none;
 }
+
+.stat .value {
+  color: #000000;
+  display: block;
+  font-size: 36px;
+  font-weight: bold;
+}

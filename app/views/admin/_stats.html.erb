@@ -1,9 +1,15 @@
-<div class="stat">
-  <span class="name">Users:</span>
-  <span class="value"><%= User.count %></span>
-</div>
-
-<div class="stat">
-  <span class="name">Places:</span>
-  <span class="value"><%= Place.count %></span>
-</div>
+<h4>Last 7 days</h4>
+<ul class="stats">
+  <li>
+    <span class="value"><%= User.count %></span>
+    <span class="name">New Users</span>
+  </li>
+  <li>
+    <span class="value"><%= Place.count %></span>
+    <span class="name">New Places</span>
+  </li>
+  <li>
+    <span class="name">New Questions:</span>
+    <span class="value">5</span>
+  </li>
+</ul>
