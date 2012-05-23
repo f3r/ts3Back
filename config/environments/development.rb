@@ -34,4 +34,6 @@ HeyPalBackEnd::Application.configure do
 
   # Local memcached
   config.cache_store = :dalli_store, 'localhost:11211', { :namespace => "squarestays", :expires_in => 1.minute, :compress => false }
+  config.i18n_cache_store = ActiveSupport::Cache.lookup_store(:dalli_store)
+  config.i18n.fallbacks = false
 end

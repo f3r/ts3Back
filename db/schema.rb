@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120508021019) do
+ActiveRecord::Schema.define(:version => 20120523230922) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -421,6 +421,18 @@ ActiveRecord::Schema.define(:version => 20120508021019) do
   add_index "transactions", ["place_id"], :name => "index_transactions_on_place_id"
   add_index "transactions", ["state"], :name => "index_transactions_on_state"
   add_index "transactions", ["user_id"], :name => "index_transactions_on_user_id"
+
+  create_table "translations", :force => true do |t|
+    t.string   "locale"
+    t.string   "key"
+    t.text     "value"
+    t.text     "interpolations"
+    t.boolean  "is_proc",        :default => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  add_index "translations", ["locale", "key"], :name => "index_translations_on_locale_and_key", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                                     :null => false

@@ -5,7 +5,7 @@ defaults: &defaults
   FB_APP_SECRET: 719daf903365b4bab445a2ef5c54c2ea
   TW_APP_ID: HYFCbVk0FUoxg3f3bi3lA
   TW_APP_SECRET: YpzH8iTJU5BXmid3cm3i1I9xC57qmQM5Z0kWqpkHA
-  FRONTEND_PATH: 'http://localhost:3005'
+  FRONTEND_PATH: 'http://localhost:5000'
   SECRET_TOKEN: 4fafcf33a55a5b7d6cd2be869e9f450b65ea004e421c05b459ebb2643e7a6b3201d5f1e2da0ce7310102c7d48368b0d100087f73545fd14aff0de8050f818a61
   MAILER_SENDER: SquareStays.com <noreply@squarestays.com>
   PEPPER_TOKEN: Z8TxukxAnyxxjRgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUuYgTcaWywccE3CA8Gdgs6jSB3Y3v4AzHjFvPFxpaENsJCnrkDUWywccE3CA8Gdgs6jSB3YAnyxxjRgs6jS

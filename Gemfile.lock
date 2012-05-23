@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/svenfuchs/i18n-active_record.git
+  revision: 4628202f676aecfbc00d404342e61f75078d9439
+  branch: rails-3.2
+  specs:
+    i18n-active_record (0.0.2)
+      i18n (>= 0.6.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -267,6 +275,7 @@ DEPENDENCIES
   google_currency
   heroku_san (~> 2.1.4)
   hirb
+  i18n-active_record!
   linecache19 (= 0.5.13)
   mail_view
   meta_search (>= 1.1.0.pre)

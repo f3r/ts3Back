@@ -1,0 +1,12 @@
+<% for lang in I18n::Backend::ActiveRecord::Translation.available_locales %>
+  <% if lang.to_s != locale %>
+    <h5><%= lang %>:</h5>
+    <% if t(key, :locale => lang).include? 'translation_missing' %>
+    <p>Translation missing</p>
+    <p><%= link_to "Create translation", new_admin_translation_path(:locale => lang, :key => key) %></p>
+    <% else %>
+    <div class="other_translation_text"><%= t(key, :locale => lang) %></div>
+    <p><%= link_to "Edit", redirect_edit_admin_translations_path(:locale => lang, :key => key) %> or <%= link_to "View", redirect_view_admin_translations_path(:locale => lang, :key => key) %></p>
+    <% end %>    
+  <% end %>
+<% end %>

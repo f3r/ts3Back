@@ -32,6 +32,12 @@ gem 'sass-rails'
 gem 'meta_search',    '>= 1.1.0.pre'
 gem 'ransack'                     # Object-based search
 
+# i18n stored in active record
+gem 'i18n-active_record',
+    :git => 'git://github.com/svenfuchs/i18n-active_record.git',
+    :branch => 'rails-3.2',
+    :require => 'i18n/active_record'
+
 #rakismet
 gem 'rakismet'
 
