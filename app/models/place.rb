@@ -89,7 +89,7 @@ class Place < ActiveRecord::Base
   end
 
   def full_address
-    [address_1, address_2, city_name, state_name, country_code].join(' ').gsub("  "," ")
+    [address_1, address_2, city_name, state_name, country_name].compact.join(', ').squeeze
   end
 
   def amenities_list
