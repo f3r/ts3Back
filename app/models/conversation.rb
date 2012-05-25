@@ -13,6 +13,14 @@ class Conversation < ActiveRecord::Base
     self.where(:target_id => a_target.id, :target_type => a_target.class).first
   end
 
+  def self.without_reply(since = nil)
+    conversations = self.select('conversations.*, count(messages.id) replies').joins(:messages).group('conversations.id').having('replies <= 1')
+    if since
+      conversations = conversations.where(['conversations.created_at > ?', since])
+    end
+    conversations
+  end
+
   def read?
     self.read
   end

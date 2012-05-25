@@ -1,0 +1,21 @@
+<h2>Dear <%= @owner.full_name %>,</h2>
+
+<p>
+<%= @renter.anonymized_name %> has sent you an inquiry about renting your place <%= link_to @place.title, seo_place_path(@place) %>
+<% if @inquiry.check_in %>
+for <%= @inquiry.length_in_words %> starting on <%= @inquiry.check_in.to_formatted_s(:long) %>
+<% end %> 
+</p>
+
+</br>
+
+<p>It's been <%= time_ago_in_words(@inquiry.created_at) %> and you still haven't replied to this inquiry.</p>
+<p>Please remember to respond to your messages and inquiries promptly. Many people's accommodation needs are urgent, so the quicker you reply, the quicker you can get your properties rented out.</p>
+
+</br>
+
+<p>Log in to <%= link_to site_name, frontend_url('/login') %> to view the request. You can reply to your inquiries at the <%= link_to 'messages section', frontend_url('/messages') %>.</p>
+
+<% content_for(:footer_ps) do %>
+  <p></p>
+<% end %>

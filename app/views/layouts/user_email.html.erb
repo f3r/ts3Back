@@ -48,8 +48,13 @@
             <br>
             <p>Thanks,</p>
             <p><i>-- The <%= site_name %> team</i></p>
-            <br>
-            <p>P.S.  Do you want to list properties for rent on <%= site_name %>? Please contact us at <%= support_email %> and become an approved property owner on <%= site_name %>!</p>
+            <% if content_for?(:footer_ps) %>
+              <br>
+              <%= content_for(:footer_ps) %>
+            <% else %>
+              <br>
+              <p>P.S.  Do you want to list properties for rent on <%= site_name %>? Please contact us at <%= support_email %> and become an approved property owner on <%= site_name %>!</p>
+            <% end %>
           </td>
         </tr>
 
