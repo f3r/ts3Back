@@ -1,14 +1,14 @@
 ActiveAdmin.register Place do
   menu :priority => 2
-  
+
   controller do
     helper 'admin/places'
   end
-  
+
   scope :all, :default => true
   scope :published
   scope :unpublished
-  
+
   filter :title
   filter :user
   filter :city
@@ -32,6 +32,32 @@ ActiveAdmin.register Place do
       row(:photos)        {|place| place_photos_row(place)}
     end
     active_admin_comments
+  end
+
+  form do |f|
+    f.inputs 'General' do
+      [:user, :place_type, :city, :title].each do |i|
+        f.input i
+      end
+      f.input :description
+    end
+    f.inputs 'Details' do
+      [:num_bedrooms, :num_beds, :num_bathrooms, :max_guests].each do |i|
+        f.input i
+      end
+      f.input :size
+    end
+    f.inputs 'Location' do
+      [:address_1, :address_2, :zip, :lat, :lon].each do |i|
+        f.input i
+      end
+      f.input :directions
+    end
+    f.inputs 'Pricing' do
+      f.input :price_per_month, :input_html => { :maxlength => 10 }
+      f.input :currency,  :as => :select,      :collection => Currency.all.collect(&:currency_code)
+    end
+    f.buttons
   end
 
   # Publish/Unpublish
